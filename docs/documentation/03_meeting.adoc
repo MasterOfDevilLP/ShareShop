@@ -1,0 +1,76 @@
+= ShareShop Projekt – Meetingprotokoll
+Kevin
+2025-04-16
+
+== Teilnehmer
+* Kevin
+* Emil
+* Verena
+* Anni 
+* Florian
+
+
+== Datum und Uhrzeit
+16.04.2025, 18 Uhr
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Zielsetzung des Meetings
+* Weiterentwicklung der Aufgabenaufteilung im ersten Sprint.
+* Erstellung konkreter Aufgaben basierend auf bestehenden User Stories.
+* Vorbereitung des nächsten Meetings zur Aufgabenverteilung.
+
+=== 2. Besprechung der User Stories
+* Idee zur Rezeptvorschlags-Funktion inkl. zugehöriger Artikel – als optionales Extrafeature eingeordnet.
+* Fokus auf **Grundfunktionalität** im ersten Sprint.
+* Wichtigkeit einer schnellen und einfachen Benutzerführung wurde betont (z.B. Artikel mit wenigen Klicks hinzufügen).
+* Konzeptidee: Startscreen direkt mit Einkaufsliste.
+
+=== 3. Modellierung & Wireframes
+* Erste Modelle bereits in Miro vorhanden.
+* Weitere Ausarbeitung der Wireframes geplant (z. B. Accountverwaltung ergänzen).
+* Diskussion zu: UI-Design, Reduktion auf Wesentliches, optionale Detailansicht (ähnlich wie Anzeigeoptionen in Windows).
+* Wireframes sollen benutzerfreundlich und reduziert gehalten werden (Beispiel: Artikel schnell abhaken).
+
+=== 4. Backend-Entscheidungen
+* Programmiersprache: **Java**
+* Datenbank: **PostgreSQL** (Open Source, teamweit bekannt)
+* Schnittstelle: **REST API**
+* Erste Aufgaben:
+  ** Grundlegende API-Funktionen (Artikel hinzufügen/löschen)
+  ** Datenbankschema vorbereiten
+  ** Framework-Recherche (z. B. Spring Boot)
+  ** Testumgebung prüfen (lokal, ggf. über VPS)
+
+=== 5. Frontend-Entscheidungen
+* Technologien: **HTML**, **CSS**, **JavaScript**
+* Aufgaben:
+  ** Farbpalette (max. 3 Farben)
+  ** Schriftart definieren
+  ** Mockups erstellen (Startansicht / Liste)
+  ** Erste klickbare Wireframes (Prototyp)
+
+=== 6. Aufgabenfindung für Sprint 1
+* Aufgaben sollen nächste Woche Dienstag verteilt werden.
+* Aufgabenideen:
+  ** Wireframes finalisieren
+  ** Farben & Schriftart auswählen
+  ** Datenbankschema vorbereiten
+  ** Grundfunktionen in API definieren
+  ** Framework-Vergleich (Backend)
+  ** Mockup-Entwürfe für UI
+* Fokus auf Minimalprinzip zur schnellen Testbarkeit.
+
+=== 7. Organisatorisches
+* Zentrale Ablage für Meeting-Dokumentationen wird eingerichtet.
+* Vorschlag: Donnerstagsmeeting ggf. nach hinten verschieben (20:30), da Anreise einiger Mitglieder spät möglich ist.
+* Diskutiert: Termine und Meetingzeiten gemeinsam abstimmen.
+
+== Nächste Schritte
+* Erstellung & Sammlung konkreter Aufgaben auf Basis der User Stories
+* Finalisierung der Wireframes
+* Technologiewahl: Frontend/Backend-Frameworks
+* *Aufgabenverteilung beim nächsten Treffen am Dienstag!*

@@ -1,0 +1,59 @@
+= ShareShop Projekt – Meetingprotokoll
+Kevin
+2025-04-15
+
+== Teilnehmer
+* Kevin
+* Benni
+* Anni
+
+== Datum und Uhrzeit
+15.04.2025, 18 Uhr
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+
+=== 1. Planung der ersten Iteration (Sprint 1)
+* Die ersten Aufgaben für die Iteration:
+  ** Wireframes
+  ** Anforderungsanalyse
+  ** User Stories inkl. Akzeptanzkriterien
+  ** (Optional) Use Case Diagramme
+* Fokus liegt auf gut nachvollziehbaren und teamübergreifend umsetzbaren Aufgaben.
+* Wireframes und User Stories werden priorisiert um mit diesen die Aufgabenerstellung auf Jira zu erstellen.
+
+=== 2. Aufgabenplanung/ Termine
+
+* Aufgaben sollen in Jira angelegt und dort priorisiert & zugewiesen werden.
+* Gemeinsame Planung bevorzugt, um technische Abhängigkeiten früh zu erkennen (z.B. Frontend/Backend).
+* Klare Unterscheidung:
+  ** Aufgabenplanung (Was wird gemacht?):
+    *** Alle: **Donnerstag**, ca. **17:00 Uhr** – Allgemeine Aufgabensammlung und Analyse
+  ** Sprint-Planning (Wer macht was?)
+    *** Benni, Anni, Kevin: **Dienstag, 22.04.**, ca. **18:00 Uhr** – Sprint-Planning
+
+=== 3. Aufgaben bis Donnerstag
+* Jede:r überlegt sich **5–6 User Stories** auf Basis der Projektbeschreibung.
+* Alternativ oder ergänzend: Mitarbeit an Wireframes.
+* Sammlung der Ergebnisse in **Miro**.
+
+=== 4. Organisatorisches
+* Kevin erstellt:
+  ** Einzelprotokolle in ADoc-Format für jedes Meeting
+  ** Eine Gesamtzusammenfassung pro Iteration mit Verlinkung zu Einzelprotokollen
+* Fortschritte und Änderungen werden über Discord kommuniziert.
+
+=== 5. Sonstiges
+* Team ist im Vergleich zu anderen Gruppen gut im Zeitplan.
+* Wichtigkeit gemeinsamer Absprachen betont (z.B. API-Kompatibilität Frontend/Backend).
+* Alle Teammitglieder werden gebeten sich auf Miro zu beteiligen (Anni hat bereits gute Vorarbeiten geleistet)
+
+== Nächste Schritte
+* Vorbereitung individueller User Stories
+* Optional: Wireframe-Entwürfe
+* *Beteiligung an Miro-Dokumentation!*
+* Gemeinsame Aufgabenplanung am Donnerstag
+

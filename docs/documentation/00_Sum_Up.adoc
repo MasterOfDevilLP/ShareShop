@@ -1,0 +1,81 @@
+= 📘 Dokumentation - Zusammenfassung – ShareShop
+Kevin (Teamlead Frontend, Dokumentation)
+Stand: 2025-04-15
+:doctype: book
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: coderay
+:description: Übersicht und Verlinkung aller Besprechungsprotokolle und Projektfortschritte im Rahmen der ShareShop-Web-App.
+:keywords: ShareShop, SE1, Projektübersicht, Meeting-Links, Protokolle, Sprintplanung
+
+== 🧭 Überblick
+
+Dieses Dokument dient als **zentrale Zusammenfassung** des Projekts *ShareShop*.  
+Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umrissen und auf die **ausführlichen Einzelprotokolle** verwiesen.
+
+== 00. Kick-Off Meeting, 11.04.2025:
+ 
+* `xref:./01_kickoff.adoc[Zur Vollständigen Dokumentation]`
+
+* Ziel des Meetings:
+    ** Kennenlernen und Rollenverteilung
+    ** Festlegung der Projektidee, Zielsetzung und Arbeitsweise
+    ** Kommunikationsmittel definiert: Discord
+* Team:
+    ** 7 Mitglieder mit Fokus auf Frontend, Backend, Design und Organisation
+    ** Teamleader: Kevin (Frontend), Benni (Backend)
+* Tools & Methode:
+    ** Arbeitsweise: Agil, Sprintlänge 3 Wochen
+    ** Tools: Discord (Kommunikation), Jira (Aufgabenmanagement)
+* Projektstruktur:
+    ** Technologiestack: Java (Backend), HTML/CSS/JS (Frontend), REST-API (Schnittstelle)
+    ** Meetingzeiten: Dienstag 18:00 Uhr, Donnerstag 20:00 Uhr
+* Geplante Features:
+    ** Gemeinsame Einkaufsliste, Rechnungsteilung, Templates, Uploads
+* Design/UX-Ziele:
+    ** Mobile first, Tabs, Dark Mode, Priorisierung & Budgets
+* Nächste Schritte:
+    ** Erstellung von Spezifikationen (User Stories, Use Cases, Modelle)
+    ** Aufgabenverteilung, Meilensteine und Zeitplanung
+
+== 01. Meeting, 15.04.2025:
+
+* `xref:./02_meeting.adoc[Zur Vollständigen Dokumentation]`
+
+* Teamleader haben sich getroffen und Jira als Software vorgestellt
+* Planung der nächsten Schritte:
+    ** Allgemeine Stakeholdersimulierung:
+        *** Vorher denkt sich jeder anhand der Aufgabenstellung ein paar User Stories aus
+    ** Aufgabenplanung für den Sprint (ohne die anderen, mithilfe des Aufgabenblatts):
+        *** Aufgaben werden angelegt, priorisiert und zugewiesen
+        *** Erste Sprintplanung findet am Dienstag, 22.04., um ca. 18 Uhr statt
+* Aufgaben bis Donnerstag:
+    ** Jeder erstellt 5–6 User Stories oder alternativ erste Wireframes
+    ** Ergebnisse werden in Miro gesammelt
+* Organisation & Dokumentation:
+    ** Kevin erstellt ADoc-Protokolle je Meeting
+    ** Zusätzlich eine Iterations-Zusammenfassung mit Verlinkung auf Einzelprotokolle
+    ** Fortschritt und Änderungen werden transparent über Discord kommuniziert
+
+== 02. Meeting, 16.04.2025:
+
+* `xref:./03_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Treffen zur Aufgabenfindung auf Basis der bestehenden/erstellten User Stories
+* Fokus auf Grundfunktionalität im ersten Sprint:
+    ** Keine komplexen Features, sondern einfache Nutzung & Kernfunktionen
+    ** Erste Mockups und Modellierungen besprochen (Einkaufsliste als zentrale Ansicht)
+* Technologiewahl & Infrastruktur:
+    ** Backend: Java + PostgreSQL + REST API
+    ** Frontend: HTML, CSS, JavaScript (Web-App als PWA gedacht)
+    ** Framework-Recherche angestoßen (z. B. Spring Boot)
+* Aufgabenideen für den Sprint:
+    ** Wireframes finalisieren & Farben/Schriftarten wählen
+    ** API-Grundfunktionen planen (Artikel CRUD)
+    ** Datenbankschema skizzieren
+    ** Mockups/Prototypen entwickeln
+* Organisation & Ausblick:
+    ** Aufgabenverteilung findet am Dienstag, 22.04., statt
+    ** Besprechung möglicher neuer Meetingzeit (Do ab 20:30 Uhr)
+    ** Zentrale Ablage für Meetingprotokolle wird erstellt

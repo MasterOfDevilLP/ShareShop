@@ -1,0 +1,128 @@
+= 📄 Kick-Off Meeting – Projektdokumentation
+ShareShop
+11.04.2025
+:doctype: book
+:toc: left
+:toclevels: 3
+:icons: font
+
+ShareShop  
+11.04.2025  
+Teilnehmerzahl: 7  
+Format: Präsenz
+
+== 🔍 Ziel des Meetings
+
+* Gegenseitiges Kennenlernen
+* Ermittlung individueller Stärken und Schwächen
+* Festlegung der Rollenverteilung im Team
+* Besprechung der grundsätzlichen Projektidee und Zielsetzung
+* Definition der Arbeitsweise und Kommunikationsmittel
+
+== 👥 Team & Rollenverteilung (Vorläufig)
+
+[cols="1,1,1", options="header"]
+|===
+| Name    | Stärken                         | Rolle im Projekt
+
+| Emil
+| Backend (C/C++, Python)
+| Entwickler (Backend)
+
+| Florian
+| Backend (C/C++, Java, SQL)
+| Entwickler (Backend)
+
+| Han
+| Webentwicklung (HTML, JS, SQL)
+| Entwicklerin (Frontend und Webentwicklung), Design-Unterstützung
+
+| Val
+| Webentwicklung (HTML, JS, SQL)
+| Entwicklerin (Frontend und Webentwicklung)
+
+| Annie
+| Kommunikation, Design
+| Entwicklerin/Designerin (Frontend und Webentwicklung)
+
+| Benni
+| Organisation, Backend
+| Teamleader (Gesamt, Backend), Entwickler (Backend)
+
+| Kevin
+| Organisation, Kommunikation, Frontend
+| Teamleader (Frontend), Dokumentation, Ansprechpartner für Teamkommunikation
+|===
+
+Hinweis: Aufgaben sind vorläufig und noch nicht spezifiziert.
+
+== 🛠 Arbeitsweise & Tools
+
+=== 📌 Arbeitsmethode
+
+Agil – Sprintbasiert
+
+* **Sprintdauer:** 3 Wochen
+* **Sprintende:**
+  ** Kurzes Review-Meeting
+  ** Feedback zur Teamarbeit & Arbeitsweise
+  ** Überprüfung und ggf. Anpassung der Spezifikation
+
+=== 🧰 Tools & Plattformen
+
+[cols="1,1", options="header"]
+|===
+| Zweck                | Tool
+
+| Kommunikation
+| Discord
+
+| Aufgabenmanagement
+| Jira
+|===
+
+== 📞 Team-Calls:
+
+* Dienstag: 18:00 Uhr
+* Donnerstag: 20:00 Uhr
+
+== 🧩 Technische Übersicht
+
+[cols="1,1", options="header"]
+|===
+| Bereich        | Technologien
+
+| Backend
+| Java
+
+| Frontend
+| HTML, CSS, JavaScript
+
+| Schnittstellen
+| REST-API
+|===
+
+== 📦 Grundfunktionen der Web-App
+
+* Objekte (z.B. Artikel) erstellen, speichern und löschen
+* Gemeinsame, kategorisierte Einkaufsliste
+* Change Tracking
+* Einkaufslisten- und Artikel-Templates
+* Automatische Rechnungsteilung nach individuellem Bedarf (prozentual)
+* Kategorisierung innerhalb von Templates
+* _Kassenzettel hochladen durch Einkaufende_
+
+== 🎨 Design- und UX-Vorstellungen
+
+* Mobile App-Fähigkeit
+* Navigationsstruktur mit Reitern/Tabs
+* Optionale Features/Ideen:
+  ** Budget-Definition für Listen
+  ** Priorisierung einzelner Listeneinträge
+  ** Dark Mode
+
+== Das steht an:
+
+* **Erstellung detaillierter Spezifikationen:** Ausarbeitung aller funktionalen und nicht-funktionalen Anforderungen inklusive User Stories, Use Cases, Datenmodellen und Schnittstellendefinition.
+* **Aufgabenverteilung und Zeitplanung:** Festlegen der einzelnen Aufgabenpakete, Priorisierung, Meilensteine und Deadlines.
+* **Erstellung von Modellen:** Entwicklung von Systemarchitekturdiagrammen, Ablaufmodellen und Prozessskizzen zur Visualisierung der geplanten App-Funktionalität.

@@ -62,6 +62,7 @@ Online-Meeting (Discord)
   ** Grundfunktionen in API definieren
   ** Framework-Vergleich (Backend)
   ** Mockup-Entwürfe für UI
+  ** Github repository organisieren
 * Fokus auf Minimalprinzip zur schnellen Testbarkeit.
 
 === 7. Organisatorisches

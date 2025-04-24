@@ -79,3 +79,22 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
     ** Aufgabenverteilung findet am Dienstag, 22.04., statt
     ** Besprechung möglicher neuer Meetingzeit (Do ab 20:30 Uhr)
     ** Zentrale Ablage für Meetingprotokolle wird erstellt
+
+== 03. Meeting, 22.04.2025:
+
+* `xref:./04_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* GitHub Projects wird als zentrale Projektverwaltungsplattform genutzt (statt Jira)
+* Einrichtung des Boards inkl. Labels (`Story`, `Task`, `Analyse`, `Programmierung`, `Modellierung`)
+* Aufgaben für Sprint 1 strukturiert:
+    ** Frontend:
+        *** Wireframes analysieren & erstellen
+        *** Mockups vorbereiten
+        *** Farbpalette & Schriftart wählen
+        *** Tool-Recherche für Webdesign
+    ** Backend:
+        *** Datenbankmodell erstellen (PostgreSQL)
+        *** Grundstruktur für REST-API definieren
+* Sprintdauer: 4 Wochen (24.04.–21.05.)
+* Aufgaben werden am Donnerstag, 25.04., final zugewiesen
+* Besprechung von Ordnung und Relevanz vorhandener Dateien im Repository (z. B. Test-Ordner)

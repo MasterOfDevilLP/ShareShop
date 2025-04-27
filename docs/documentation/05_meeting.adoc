@@ -1,0 +1,47 @@
+= ShareShop Projekt – Meetingprotokoll
+Kevin
+2025-04-24
+
+== Teilnehmer
+* (Namen anonymisiert)
+
+== Datum und Uhrzeit
+24.04.2025, 20:30 Uhr
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Struktur und Aufbau des GitHub-Projekts
+* Review der im Meeting am 22.04. definierten Aufgaben
+* Klare Zuordnung von Stories (Eltern-Issues) und Tasks (Sub-Issues)
+* Einführung und Nutzung der Labels: `Story`, `Task`, `Analyse`, `Modellierung`, `Programmierung`
+* GitHub-Board eingerichtet für Aufgabenverwaltung (To Do → In Progress → Review → Done)
+
+=== 2. Aufgabenklärung und Verteilung für Sprint 1
+* Aufgaben aus dem letzten Meeting wurden detailliert erklärt und zugeordnet:
+  ** Frontend:
+    *** Wireframes erstellen: Recherche (Analyse) und konkrete Modellierung
+    *** Design der Weboberfläche: Farbpalette, Schriftarten, Mockups (Clickable Prototypen)
+  ** Backend:
+    *** Datenmodellierung (Datenbankstruktur, ER-Modell)
+    *** Analyse und Integration von JDBC
+    *** Aufbau der REST-API (Analyse, Modellierung, Programmierung)
+  ** Übergreifend:
+    *** Recherche zu Java-Buildsystemen (z. B. Gradle)
+
+=== 3. Organisation und Arbeitsweise
+* Sprintdauer: **24.04.2025 bis 21.05.2025** (4 Wochen)
+* GitHub-Board zur Statusüberwachung:
+  ** Aufgabenstatus von To Do → In Progress → Review → Done verschieben
+  ** Mehrere Bearbeiter pro Task möglich
+* Dokumentation der Ergebnisse an Issues anhängen (z. B. Wireframes, Entwürfe)
+* Nutzung von Discord für Projektkommunikation (separate Channels für Frontend/Backend)
+* Kurze Check-up-Meetings ("Dailies") jeden Dienstag, ca. **18:00 Uhr**
+
+== Nächste Schritte
+* Aufgaben selbstständig aus dem Sprintboard auswählen und bearbeiten
+* Ergebnisse dokumentieren und regelmäßig den Status im GitHub-Board aktualisieren
+* Teilnahme am Check-up-Meeting am **Dienstag, 29.04.2025, 18:00 Uhr**
+* *Ziel: Erste Zwischenergebnisse in der 2. Sprintwoche sichtbar machen*

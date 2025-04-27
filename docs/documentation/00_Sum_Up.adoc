@@ -98,3 +98,24 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Sprintdauer: 4 Wochen (24.04.–21.05.)
 * Aufgaben werden am Donnerstag, 25.04., final zugewiesen
 * Besprechung von Ordnung und Relevanz vorhandener Dateien im Repository (z. B. Test-Ordner)
+
+== 04. Meeting, 24.04.2025:
+
+* `xref:./05_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Aufgaben aus dem Meeting am 22.04. wurden detailliert erklärt und im GitHub-Board verteilt
+* Stories und Tasks sind sauber strukturiert, inklusive Labels (`Story`, `Task`, `Analyse`, `Modellierung`, `Programmierung`)
+* Zugeteilte Aufgaben Sprint 1:
+  ** Frontend:
+    *** Wireframes erstellen (Recherche und Modellierung)
+    *** Webdesign entwickeln (Farben, Schriftarten, Mockups)
+  ** Backend:
+    *** Datenmodellierung (ER-Modell)
+    *** JDBC-Integration
+    *** Aufbau der REST-API
+  ** Übergreifend:
+    *** Recherche zu Java-Buildsystemen (z. B. Gradle)
+* Organisation:
+  ** Nutzung des GitHub-Boards (To Do → In Progress → Review → Done)
+  ** Wöchentliche Check-up-Meetings (dienstags um 18:00 Uhr)
+  ** Kommunikation primär über Discord

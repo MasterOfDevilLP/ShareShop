@@ -1,0 +1,131 @@
+openapi: 3.0.4
+info:
+  title: ShareShop API
+  description: ShareShop API
+  version: 0.1.0
+
+tags:
+  - name: users
+    description: user management
+  - name: list
+    description: operations regarding individual shopping lists
+  - name: items
+    description: items/products
+  - name: wg
+    description: wg management
+  
+
+paths:
+  /user/create:
+    post:
+      summary: create a new user
+      tags: 
+        - users
+
+  /user:
+    get:
+      summary: get information for the currently authorized user
+      tags: 
+        - users
+    post:
+      summary: perform an action on the currently authorized user
+      tags: 
+        - users
+
+  /wg/create:
+    post:
+      summary: create new WG
+      tags: 
+        - wg
+  
+  /wg/{wid}:
+    get:
+      summary: retrieve information on WG id
+      tags: 
+        - wg
+    delete:
+      summary: delete WG
+      tags: 
+        - wg
+    patch:
+      summary: change settings for WG
+      tags: 
+        - wg
+
+  /wg/{wid}/user:
+    get:
+      summary: get users in WG
+      tags: 
+        - wg
+    post:
+      summary: add user to WG
+      tags: 
+        - wg
+
+  /wg/{wid}/user/{uid}:
+    get:
+      summary: get information on this user for this WG
+      tags: 
+        - wg
+    delete:
+      summary: remove user from WG
+      tags: 
+        - wg
+
+  /wg/{wid}/list:
+    get:
+      summary: get lists in WG
+      tags: 
+        - wg
+    post:
+      summary: create a new list
+      tags: 
+        - list
+
+  /wg/{wid}/list/{lid}:
+    get:
+      summary: get current list state
+      tags: 
+        - list
+    post:
+      summary: add a change to the list
+      description: a change can either be adding an item, deleting an item, marking
+        an item as bought, or modifying an entry (could also be split up into more endpoints
+        for everything that references existing entries)
+      tags: 
+        - list
+    delete:
+      summary: delete list
+      tags: 
+        - list
+
+  /wg/{wid}/list/{lid}/audit:
+    get:
+      summary: get the audit log for this list
+      tags: 
+        - list
+
+  /wg/{wid}/item:
+    summary: Items refer to things that can be bought
+    get:
+      summary: get information on item(s)
+      tags: 
+        - items
+    post:
+      summary: create new item
+      tags: 
+        - items
+
+  /wg/{wid}/item/{iid}:
+    get:
+      summary: get information for an item (redundant)
+      tags: 
+        - items
+    delete: 
+      summary: delete the item
+      tags: 
+        - items
+    patch:
+      summary: modify an item
+      tags: 
+        - items

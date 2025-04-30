@@ -14,6 +14,20 @@ tags:
   - name: wg
     description: wg management
   
+components:
+  responses:
+    unauthorized:
+      description: unauthorized
+    forbidden:
+      description: the current user is not allowed to perform this action
+
+  schemas:
+    userWGInfo:
+      type: object
+    itemInfo:
+      type: object
+    categoryInfo:
+      type: object
 
 paths:
   /user/create:
@@ -21,72 +35,260 @@ paths:
       summary: create a new user
       tags: 
         - users
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+        "200":
+          description: account created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          description: something went wrong
+
+
 
   /user:
     get:
       summary: get information for the currently authorized user
       tags: 
         - users
+      responses:
+        "200":
+          description: return user data
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          description: unauthorized, not logged in
     post:
       summary: perform an action on the currently authorized user
       tags: 
         - users
+      responses:
+        "200":
+          description: action performed, might also return data
+        "401":
+          description: unauthorized
 
   /wg/create:
     post:
       summary: create new WG
       tags: 
         - wg
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: WG created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "401":
+          description: unauthorized, either not logged in or not allowed to create new WGs
   
   /wg/{wid}:
     get:
       summary: retrieve information on WG id
       tags: 
         - wg
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+        "401": 
+          $ref: "#/components/responses/unauthorized"
+
     delete:
       summary: delete WG
       tags: 
         - wg
+      responses:
+        "200":
+          description: deleted successfully
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
     patch:
       summary: change settings for WG
       tags: 
         - wg
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: modified successfully
+        "400":
+          description: bad request
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
 
   /wg/{wid}/user:
     get:
       summary: get users in WG
       tags: 
         - wg
+      responses:
+        "200":
+          description: information on users in the WG
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/userWGInfo"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
     post:
       summary: add user to WG
       tags: 
         - wg
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                id: 
+                  type: string
+        responses:
+        "201":
+          description: user added
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
 
   /wg/{wid}/user/{uid}:
     get:
       summary: get information on this user for this WG
       tags: 
         - wg
+      responses:
+        "200":
+          description: information on the specified user for this wg
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/userWGInfo"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
     delete:
       summary: remove user from WG
       tags: 
         - wg
+      responses:
+        "200":
+          description: user has been removed
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
 
   /wg/{wid}/list:
     get:
       summary: get lists in WG
       tags: 
         - wg
+      responses:
+        "200":
+          description: get IDs of lists in this WG
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
     post:
       summary: create a new list
       tags: 
         - list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: id of the newly created list
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
 
   /wg/{wid}/list/{lid}:
     get:
       summary: get current list state
       tags: 
         - list
+      responses:
+        "200":
+          description: list state
+          content:
+            application/json:
+              schema:
+                type: object
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
     post:
       summary: add a change to the list
       description: a change can either be adding an item, deleting an item, marking
@@ -94,16 +296,48 @@ paths:
         for everything that references existing entries)
       tags: 
         - list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: added change
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
     delete:
       summary: delete list
       tags: 
         - list
+      responses:
+        "200":
+          description: list deleted
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
 
   /wg/{wid}/list/{lid}/audit:
     get:
       summary: get the audit log for this list
       tags: 
         - list
+      responses:
+        "200":
+          description: recorded actions for the list, probably add paging (might require changing response from array to object)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
 
   /wg/{wid}/item:
     summary: Items refer to things that can be bought
@@ -111,21 +345,178 @@ paths:
       summary: get information on item(s)
       tags: 
         - items
+      parameters:
+        - in: query
+          name: iid
+          schema:
+            type: string
+          description: look up an item by id
+        - in: query
+          name: q
+          schema: 
+            type: string
+          description: search query
+        - in: query
+          name: category
+          schema: 
+            type: string
+          description: name or ID of the category to search in
+
+      responses:
+        "200":
+          description: search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/itemInfo"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
     post:
       summary: create new item
       tags: 
         - items
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/itemInfo"
+      responses:
+        "200":
+          description: item created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
+  /wg/{wid}/category:
+    post:
+      summary: create a new item category
+      tags:
+        - items
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/categoryInfo"
+      responses:
+        "200":
+          description: category created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
+  /wg/{wid}/category/{cid}:
+    delete:
+      summary: delete category
+      tags:
+        - items
+      responses:
+        "200":
+          description: category deleted
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+      
+    patch:
+      summary: modify category
+      tags:
+        - items
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/categoryInfo"
+      responses:
+        "200":
+          description: category modified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
 
   /wg/{wid}/item/{iid}:
     get:
       summary: get information for an item (redundant)
       tags: 
         - items
+      responses:
+        "200":
+          description: search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/itemInfo"
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+      
     delete: 
       summary: delete the item
       tags: 
         - items
+    responses:
+        "200":
+          description: item deleted
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
     patch:
       summary: modify an item
       tags: 
         - items
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/itemInfo"
+      responses:
+        "200":
+          description: item created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"

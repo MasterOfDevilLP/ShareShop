@@ -8,15 +8,17 @@ include::../_includes/default-attributes.inc.adoc[]
 == Einführung
 In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fachdomäne) der <Projektthema-Systems> definiert. Zur besseren Übersichtlichkeit sind Begriffe, Abkürzungen und Datendefinitionen gesondert aufgeführt.
 
+[#begriffe]
 == Begriffe
 [%header]
 |===
 | Begriff | Definition und Erläuterung | Synonyme
 //| Kommissionierung | Bereitstellung von Waren aus einem Lager entsprechend eines Kundenauftrags | (keine)
-| xx | xx | xx
+| Arbeitsverzeichnis | Das aktuelle verzeichnis von welchem aus man im Moment arbeitet (bzw ein programm aufruft) | "." / Current working directory
 |===
 
 
+[#abkürzungenakronyme]
 == Abkürzungen und Akronyme
 [%header]
 |===
@@ -25,6 +27,7 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | xx | xx | xx
 |===
 
+[#verzeichnisdatenstruktur]
 == Verzeichnis der Datenstrukturen
 [%header]
 |===

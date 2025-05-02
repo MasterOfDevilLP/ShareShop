@@ -1,6 +1,6 @@
 // Meta
-:project-name: Projektthema (T00)
-:project-system-name: Software-Name
+:project-name: ShareShop (T00)
+:project-system-name: ShareShop
 // Settings:
 :toc:
 :toc-title: Inhaltsverzeichnis
@@ -8,7 +8,7 @@
 :sectnums:
 :icons: font
 //:source-highlighter: highlightjs
-:source-highlighter: rouge
+:source-highlighter: highlight.js
 :rouge-style: github
 :xrefstyle: full
 :figure-caption: Abbildung

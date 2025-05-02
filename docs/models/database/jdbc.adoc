@@ -1,0 +1,37 @@
+= ShareShop Projekt - JDBC analyse
+Florian Süßmann <s86423@htw-dresden.de>
+{localdatetime}
+include::../../_includes/default-attributes.inc.adoc[]
+
+== Allgemeine Dokumentation
+Die allgemeine Dokumentation zu JDBC ist link:https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/[hier] zu finden
+
+== Installation
+Da wir mit Java arbeiten muss nichts direkt "installiert" werden. Der Treiber wird als .jar file geliefert und muss im Classpath abgelegt werden.
+
+=== Classpath
+Der Classpath ist in java Standartmäßig das link:../../requirements/glossary.adoc#begriffe[Arbeitsverzeichnis].
+// der link muss vlt bei änderungen geändert werden, ich weiß jetz gerade nicht, wie man einen universellen link zu den Begriffen hinbekommt (vorallem, wenn sie dann gebuildet werden. Für hilfe gerne auf discord schreiben oder ein Kommentar im issue schreiben)
+Über das commandline-argument `-classpath` bzw `-cp` kann der Classpath auch geändert werden.
+
+[#classpathänderung]
+.Beispiel: Classpath änderung
+`java -classpath ./classes MeinProgramm`
+
+== Anwendungsbeispiele
+Die src-file zu den Anwendungsbeispielen ist link:../../anwendungsbeispiele/jdbc/JDBC_Example.java[hier] zu finden
+
+[#verbindungsaufbau]
+=== Verbindungsaufbau
+.JDBC_Example.java - createConnection()
+[source, java]
+----
+include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=createConnection()]
+----
+
+=== Query
+.JDBC_Example.java - exampleQuery()
+[source, java]
+----
+include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=exampleQuery()]
+----

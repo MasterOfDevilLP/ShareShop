@@ -1,4 +1,6 @@
 import java.sql.*;
+
+import com.microsoft.sqlserver.jdbc.*;
 /*
 wichtig: das Beispiel nutzt statt PostgreSQL MSSQL
 um als testdatenbank die Datenbank aus dem Modul Datenbanksysteme I und II
@@ -28,13 +30,16 @@ private static Connection conn;
 
 public static Connection createConnection(String url, String username, String password) throws SQLException
 {
-    return DriverManager.getConnection(url); // establish connection
+    return DriverManager.getConnection(url, username, password); // establish connection
 }
 
-public static void exampleCreateConnection()
+public static void exampleCreateConnection() throws Exception
 {
-    //String url = new String("jdbc:sqlserver://" + HOST + ":" + PORT + ";databaseName=" + DBNAME);
-    String url = "jdbc:sqlserver://141.56.2.45:1433;databaseName=ii23s86423;user=s86423;password=s86423";
+    String url = new String("jdbc:sqlserver://" +
+                            HOST + ":" + PORT + ";" +
+                            "databaseName=" + DBNAME + ";" +
+                            "encrypt=true;" +
+                            "trustServerCertificate=true;");
     try
     {
         conn = createConnection(url, username, password);   // conn is an object from class 'Connection' -> close connection with conn.close() 
@@ -77,6 +82,14 @@ public static void exampleQuery()
 
     public static void main(String[] args) throws Exception
     {
+        try
+        {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            return;
+        }
         exampleCreateConnection();
         exampleQuery();
         conn.close(); // closes the connection to the Database Server

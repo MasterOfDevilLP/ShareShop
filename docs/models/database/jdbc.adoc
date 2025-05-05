@@ -7,19 +7,55 @@ include::../../_includes/default-attributes.inc.adoc[]
 Die allgemeine Dokumentation zu JDBC ist link:https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/[hier] zu finden
 
 == Installation
-Da wir mit Java arbeiten muss nichts direkt "installiert" werden. Der Treiber wird als .jar file geliefert und muss im Classpath abgelegt werden.
+Da wir ein buildsystem verwenden muss kein Treiber vorher installiert werden, es ist jedoch wichtig den Treiber als depency in der build-configuration hinzuzufügen.
 
-=== Classpath
-Der Classpath ist in java Standartmäßig das link:../../requirements/glossary.adoc#begriffe[Arbeitsverzeichnis].
-// der link muss vlt bei änderungen geändert werden, ich weiß jetz gerade nicht, wie man einen universellen link zu den Begriffen hinbekommt (vorallem, wenn sie dann gebuildet werden. Für hilfe gerne auf discord schreiben oder ein Kommentar im issue schreiben)
-Über das commandline-argument `-classpath` bzw `-cp` kann der Classpath auch geändert werden.
+=== Installation über maven
+.pom.xml - PostgreSQL Driver dependency
+[#dependencymaven]
+[source, xml]
+----
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.7.5</version>
+</dependency>
+----
 
-[#classpathänderung]
-.Beispiel: Classpath änderung
-`java -classpath ./classes MeinProgramm`
+=== Installation über gradlew
+.build.gradle - PostgreSQL Driver dependency
+[source, gradle]
+----
+dependencies {
+    implementation 'org.postgresql:postgresql:42.7.5'
+}
+----
 
 == Anwendungsbeispiele
 Die src-file zu den Anwendungsbeispielen ist link:../../anwendungsbeispiele/jdbc/JDBC_Example.java[hier] zu finden
+
+[#setup]
+=== Setup
+Der Treiber muss im code selber noch importiert werden als import und als Klasse
+.Beispiel: setup sachen für den Treiber
+[source, java]
+----
+import com.microsoft.sqlserver.jdbc.*;
+
+public class mainclass
+{
+    public static void main(String[] args)
+    {
+        try
+        {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+    }
+}
+----
 
 [#verbindungsaufbau]
 === Verbindungsaufbau
@@ -29,6 +65,7 @@ Die src-file zu den Anwendungsbeispielen ist link:../../anwendungsbeispiele/jdbc
 include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=createConnection()]
 ----
 
+[#query]
 === Query
 .JDBC_Example.java - exampleQuery()
 [source, java]

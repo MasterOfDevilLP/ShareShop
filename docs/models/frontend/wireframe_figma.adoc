@@ -1,0 +1,37 @@
+= Einführung in das Figma-Projekt – WG-/Einkaufsliste-App
+Huyen Bao Han Nguyen  <s87044@htw-dresden.de>
+{localdatetime}
+
+== Link zum Figma-Projekt
+
+Du kannst das Figma-Projekt über folgenden Link aufrufen:
+
+https://www.figma.com/design/tPMhkiZtvIjjC1mEde0giE/huyenbaohan.nguyen-s-team-library?node-id=0-1&t=Tk6UnmLOeUMQu4GO-1
+
+_Stelle sicher, dass du bei Figma eingeloggt bist, um Zugriff zu erhalten._
+
+==  Ziel des Projekts
+
+Dieses Projekt dient der Gestaltung der App ShareShop. Laut Product Backlog sind die **5 Hauptfunktionen** der App, die in der unteren Navigationsleiste (Tab-Leiste) erscheinen:
+
+- **Rechnungen** 
+- **Rezepte** 
+- **Listen/WG/Übersicht** 
+- **Kalender** 
+- **Profil**
+
+== So kannst du das Wireframe ansehen
+
+Um die Wireframes **interaktiv** und **klickbar** zu betrachten:
+
+1. Öffne den oben stehenden Figma-Link.
+2. Klicke oben rechts auf den Button **„Present“** ▶️.
+3. Du gelangst in den **Präsentationsmodus**, in dem du durch die Screens navigieren kannst.
+4. Benutze die **Pfeiltasten ← / →**, um durch die Seiten zu blättern.
+5. Wenn es Interaktionen gibt, kannst du direkt auf Buttons klicken, als ob du die App benutzt.
+
+== Speicherort der Dateien \
+
+Exportierte Designs findest du im Repository unter:
+
+`docs/models/frontend/wireframe.pdf`

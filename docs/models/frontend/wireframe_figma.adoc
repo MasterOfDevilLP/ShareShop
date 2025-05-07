@@ -30,7 +30,7 @@ Um die Wireframes **interaktiv** und **klickbar** zu betrachten:
 4. Benutze die **Pfeiltasten ← / →**, um durch die Seiten zu blättern.
 5. Wenn es Interaktionen gibt, kannst du direkt auf Buttons klicken, als ob du die App benutzt.
 
-== Speicherort der Dateien \
+== Speicherort der Dateien
 
 Exportierte Designs findest du im Repository unter:
 

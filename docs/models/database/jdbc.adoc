@@ -72,3 +72,13 @@ include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=createConnection()
 ----
 include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=exampleQuery()]
 ----
+
+[#parameterquery]
+=== Parametrisierte Query
+.JDBC_Example.java - exampleParameterQuery()
+[source, java]
+----
+include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=exampleParameterQuery()]
+----
+Durch die "?" im Query String, können Parameter gesetzt werden. +
+Extra: das Prepared Statement wird auf dem SQL Server bereits pre-compiled. Dies verhindert ebenfalls SQL Injections durch malicious user inputs (z.B. `Passwort: pw' OR '1'='1`)

@@ -1,0 +1,172 @@
+= Generelle Modellierung Backend
+
+Das Backend lässt sich grob in 3 Teile unterteilen
+
+- REST-API
+- Datenbankanbindung
+- Logik
+
+Die REST-API und Datenbank sind hauptsächlich in anderen Dokumenten beschrieben, und die Datenbankanbindung ergibt sich großteils aus dem Datenbankmodell.
+
+Logik und Datenbankanbindung lassen sich aktuell nicht ganz klar in separate Module trennen (zumindest finde ich dies nicht sinnvoll). Im weiteren Verlauf mit mehr Auswertungsfunktionen und mehr Verarbeitung der vorliegenden Daten sollte sich eine klarere Trennung im Code herausbilden, dies muss aber nicht separate Klassen bedeuten.
+
+
+== 1. REST-API
+Der Code für die REST-API muss unter den spezifizierten Endpoints die angegebenen Funktionen bereitstellen. Dabei werden in diesem Teil nur die nötigen Parameter entgegengenommen und so wie benötigt umgeformt, gegebenfalls Validiert oder bereinigt, und an die weiteren Teile des Backends weitergegeben. Die Ergebnisse werden (wenn es welche gibt) entsprechend serialisiert und zurückgegeben.  
+
+Authentifizierung wird hier geprüft, die Implementierung davon erfolg aber in anderen Teilen (es werden dann also nur Aufrufe wie `getUser(<auth parameters>)` oder `Liste.userCanRead(user)` genutzt)
+
+Serialization und Deserialization kann entweder manuell implementiert werden (lässt sich an einigen Stellen nicht vermeiden), kann aber Teilweise auch mit Bibliotheken wie gson vereinfacht werden (hier ist dann aktuell noch fraglich, wie sich am besten verschiedene Zugriffslevel umsetzen lassen wenn nötig, es scheint aber über abgeleitete Klassen relativ einfach zu gehen). gson müsste im weiteren Backendcode integriert werden, oder dies kann alternativ über abgeleitete Klassen im API-Code gemacht werden (bessere Codetrennung, aber mehr Aufwand).
+
+=== Beispiel
+Pseudocode Beispiel für `GET /wg/{wid}/list/{lid}`, wie die Implementierung in etwa aussehen könnte
+```
+int wgGetListState(<args>){
+    User user = getAuthenticatedUser(<auth parameters>);    // impl im weiteren Backend
+    if(user == null){
+        return 401;
+    }
+    WG wg = getWG(wgId);
+    if(wg == null || !wg.hasUser(user)){
+        return 401;
+    }
+    ShoppingList slist = wg.getShoppingList(listId);   // impl im weiteren Backend
+    if(slist == null){
+        return 401;
+    }
+
+    ShoppingListItem[] items = slist.getCurrentState(); // impl im weiteren Backend
+    sendBody(serialize(items)); // impl. im API code
+    return 200;
+}
+```
+
+== 2. Datenbankanbindung
+Nach aktuellem Stand ist die Datenbankanbindung nicht wirklich von der Logik getrennt, sondern wird in diese eingebaut (zum aktuellen Stand ist das Ergebnis ähnlich einem ORM).
+
+Falls eine Trennung trotzdem gewünscht ist, würde dies erstmal viel doppelten Code bedeuten (getter und setter, sowie create und remove für die jeweiligen Objekte). Im späteren Verlauf kann dies sinnvoll sein, muss es aber nicht (hauptsächlich nur, wenn bei der verwendeten Datenbank mehr Flexibilität nötig ist).
+
+== 3. Logik
+Der Logiklayer umfasst alles zwischen der Datenbank und der REST-API.
+
+Die angegebenen Funktionen sind nur ein Überblick darüber, was die Klassen können müssen und stellen keine genaue Schnittstelle dar. Es können in der Implementierung auch, wenn es sich anbietet, mehrere Funktionen in einer vereint werden, oder (wahrscheinlicher) eine Funktion auf mehrere aufgeteilt werden. Zur Veranschaulichung werden sie hier aber wie Methoden gehandhabt.
+Properties werden nur angegeben, wenn diese nicht anderweitig (z.B. aus der DB) einfach ersichtlich sind.
+
+Um generelle Anforderungen an Klassen anzuzeigen werden Tags zugewiesen:
+
+- `gson`: Klasse benötigt gson-Funktionalität
+- `DB`: Klasse kommuniziert mit der Datenbank
+- `internal`: Klasse soll nur in einem beschränkten Scope genutzt werden
+
+=== UserManager
+Verwaltet Nutzer. Unterstützt Aktionen, bei welchen noch kein Handle für den User vorliegt. Alles andere wird direkt über den User gemacht.
+
+==== benötigte Funktionen
+- `create`
+- `login`
+- `getUser`
+
+==== Tags
+- `DB`
+
+=== User
+Klasse, welche einen Nutzer repräsentiert.
+
+==== benötigte Funktionen
+- `remove`
+- `set...` (umfasst alle Änderungen, die an dem Nutzer vorgenommen werden können. Aufspalten!)
+- `get...` Informationen abfragen (zugehörige WGs, verschiedener Status)
+
+==== Tags
+- `DB`
+- `gson`
+
+=== SessionsManager
+Verwaltet aktive Sessions (eingeloggte User). Zuordnung User <--> Session Token.
+
+Erstmal nur in-memory, kann eventuell auch noch mit in die Datenbank aufgenommen werden, damit Sessions länger gültig bleiben können.
+
+==== benötigte Funktionen
+- `registerSession -> token` (durch `UserManager.login`)
+- `getUser(token)` (aktualisiert `lastUsed`)
+- `checkExpireds` (regelmäßige Prüfung auf abgelaufene Sessions)
+
+==== Tags
+- `DB`
+
+=== Session
+Repräsentiert eine Session
+
+==== benötigte Funktionen
+- `close` (logout oder expired)
+- `boop` (hatte jetzt keinen besseren Namen, aktualisiert, wann die Session zuletzt genutzt wurde; für Session expiration)
+
+==== Properties
+- `lastUsed` (Timestamp)
+- `usedId`/`user`
+
+==== Tags
+- `internal`: soll nur im `SessionManager` genutzt werden, außerhalb werden Sessions immer über Token identifiziert
+
+=== WGManager
+
+==== Funktionen
+- `create`
+- `getWG`
+
+==== Tags
+- `DB`
+
+=== WG
+TODO: WG-spezifische Nutzerinformationen könnten entweder über `User` oder `WG` abgefragt werden, `WG` ist m.M.n sinnvoller.
+
+==== Funktionen
+- `set...`
+- `get...`
+- `hasUser` (Nutzerzugehörigkeit prüfen, ggf. noch auf weitere Permissions ausweiten wie RO-Nutzer, Admins)
+- `getList`
+- `createList`
+- `remove`
+- `addUser`
+- `removeUser`
+- lists irgendwie enumerable
+
+==== Tags
+- `DB`
+- `gson`
+
+=== ShoppingList
+
+==== Funktionen
+- `set...`
+- `get...`
+- `getCurrentList` (aktueller Stand der Liste)
+- `getListLog`  (Änderungen, ideal noch mit pagination)
+- `updateCache` (Änderungen auf gecachten Zustand übertragen, erst sinnvoll, wenn die Änderungsliste geführt wird)
+- `addChange(user, change...)` (Listenänderung eintragen)
+- `remove`
+
+==== Tags
+- `DB`
+- `gson`
+
+=== ItemManager
+
+==== Funktionen
+- `createItem(WG)`
+- `getItem(id)`
+- `search(wg, query) -> Item[]`
+
+==== Tags
+- `DB`
+
+=== Item
+
+==== Funktionen
+- `get...`
+- `set...`
+- `remove`
+
+==== Tags
+- `DB`
+- `gson`

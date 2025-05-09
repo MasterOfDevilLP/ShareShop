@@ -24,7 +24,8 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 |===
 | Abkürzung | Bedeutung | Erläuterung
 //| UP | Unified Process | Vorgehensmodell für die Softwareentwicklung
-| xx | xx | xx
+| DB | Datenbank | xx
+| ORM | Objektrelationaler Mapper | 
 |===
 
 [#verzeichnisdatenstruktur]
@@ -44,6 +45,7 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | xx
 | xx
 | xx
+| ID | 128bit Identifikatoren für verschiedene Objekte | UUID, Stringdarstellung als URN | muss eine gültige UUID sein nach RFC4122 | |
 |===
 
 == Domänenmodell

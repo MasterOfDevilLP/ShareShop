@@ -1,0 +1,68 @@
+= ShareShop Projekt – Meetingprotokoll
+Kevin (Project Owner)
+2025-05-02
+
+== Teilnehmer
+* Benni
+* Kevin
+
+== Datum
+02.05.2025
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Definition neuer Epics und Features
+* Erarbeitung neuer **Epics/User Stories** für zukünftige Features in Miro:
+  ** Kollaborative Einkaufsliste mit Änderungsverlauf
+  ** Personalisiertes Tagging-System für individuelle Bedarfe
+  ** Flexible Kostenverteilung innerhalb der WG
+  ** Multi-Haushalt-Unterstützung
+  ** Haltbarkeits- und CO₂-Tracking (vorerst nur geplant, nicht priorisiert)
+  ** Intelligente Wiedererkennung von Einkaufszyklen
+  ** Inventarmanagement mit Haltbarkeitswarnung
+  ** Rezeptvorschläge & Verknüpfung mit Inventar
+
+=== 2. Diskussion und Priorisierung geplanter Features
+* Reflexion: Was ist **Kernfunktionalität**, was eher **Nice-to-have**
+* Templates & Tagging nur optional für späteren Sprint
+* Feature-Definitionen im Format: „Als Nutzer möchte ich …, um …“
+
+=== 3. Wireframe-Planung für Frontend
+* Geplante Reiter:
+  ** `Liste`
+  ** `Rechnungen`
+  ** `Kalender`
+  ** `Rezepte`
+  ** `Profil`
+* Einkäufe starten über „Play“-Button in der Einkaufsliste
+* Template-Listen können separat erstellt und geplant werden
+* Inventarmanagement wird mit Rezeptlogik kombiniert
+* Wunsch nach intuitivem UI/UX-Design (z. B. durch Plus-Buttons, Scroll-Bereiche etc.)
+
+=== 4. Aufgabenverteilung
+* Kevin & Benni arbeiten an Feature-Spezifikationen
+* Wireframes werden aktualisiert (inkl. Reiter-Layout, Navigation)
+* Ideen werden im Frontend-Channel geteilt zur Weiterverarbeitung
+
+=== 5. Erweiterte Feature-Diskussion & User Stories
+* Neue User Stories mit Nutzenfokus ausgearbeitet:
+  ** Schuldenausgleichssystem mit automatischer Berechnung
+  ** Offline-Funktionalität im Einkaufsmodus
+  ** Saisonale Einkaufsplanung
+  ** Detaillierte Ausgabenanalytik
+  ** Vergleichsfunktion für Produkte
+* Abgrenzung zwischen Hauptfunktionen und Add-ons
+* Diskussion zur UI-Umsetzung von Templates, Inventar, und Kalenderintegration
+
+=== 6. Github Repo und Backlog-Pflege
+* Tasks und Epics im Github Repository angelegt und verknüpft
+* Verweis auf Parent-Epics genutzt für bessere Zuordnung
+
+
+== Nächste Schritte
+* Erweiterung des Product Backlogs durch detaillierte Stories & Acceptance Criteria
+* UI-Ideen ins Frontend-Team überführen
+* Review der Struktur in den Tools (Miro/GitHub) für bessere Übersicht

@@ -1,0 +1,70 @@
+= ShareShop Projekt – Meetingprotokoll
+Kevin (Project Owner)
+2025-04-29
+
+== Teilnehmer
+* Anni
+* Benni
+* Emil
+* Florian
+* Han
+* Valencia
+
+== Datum und Uhrzeit
+29.04.2025, 18:00 Uhr
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Diskussion über Meetingzeiten
+* Vorschlag zur Anpassung der Meetingzeit auf 18:30 Uhr wegen Terminkollisionen
+* Idee: Feste Zeiten im Projektplan dokumentieren
+
+=== 2. Backend Überblick und Einarbeitung
+* Einführung für Nachzügler:innen zu aktuellen Backend-Fortschritten:
+  ** Entscheidung für Maven statt Gradle (einfachere Konfiguration, besser für kleinere Projekte)
+  ** Bereitstellung der `pom.xml` mit Erklärungen zur Nutzung und Konfiguration
+* Vorstellung und Aktualisierung des Datenmodells (ER-Modell in Draw.io)
+* REST-API Modellierung durch Emil:
+  ** YAML-Datei mit OpenAPI-Definition verfügbar
+  ** Viewer-Tool Empfehlung für Visualisierung (z. B. Swagger, VSCode-Plugins)
+
+=== 3. Review REST-API und Aufgabenvergabe
+* REST-API geht in den Review-Prozess, keine kritischen Änderungen nötig
+* Diskussion zur Backend-Modellierung:
+  ** Ziel: Abbildung des Datenbankschemas im Code
+  ** Idee: Trennung von Datenobjekten und Worker-Klassen zur besseren Logikstruktur
+  ** Florian beginnt mit Modellierungskonzepten im Code
+
+=== 4. Frontend-Status (Wireframes)
+* Überblick über erstellte Wireframes:
+  ** Profilansicht fertig
+  ** Einkaufsmodus teilweise umgesetzt
+* Probleme bei der Synchronisation und Abgabe von Ergebnissen
+* Aufgabenverteilung:
+  ** Hann übernimmt Einkaufsliste
+  ** Valencia kümmert sich weiter um Einkaufsmodus
+  ** Anni soll Profil-Wireframe reviewen
+
+=== 5. GitHub-Organisation
+* Diskussion über Struktur des Repositories
+* Ticket soll erstellt werden für mögliche Umstrukturierung
+
+=== 6. Templates-Funktion (Datenbank)
+* Diskussion über Templates (z. B. Hygiene-Vorlagen mit Standard-Artikeln)
+* Entscheidung:
+  ** Templates werden **nicht** im aktuellen Sprint implementiert
+  ** Tabellen und Datenbankstruktur hierzu werden gelöscht bzw. ausgeklammert
+
+=== 7. Allgemeine Organisation
+* Klärung offener Aufgaben im Sprintboard
+* Erinnerung: Tasks im To-Do-Tab eigenständig wählen, Fortschritt dokumentieren
+
+== Nächste Schritte
+* Backend-Team: REST-API reviewen und ggf. verbessern
+* Backend-Modellierung starten (inkl. Worker-Klassen)
+* Frontend-Team: Wireframes finalisieren und gegenseitig reviewen
+* Kevin und Benni: Definition des letzten Reiters im UI für Einkaufsliste
+* Neues Meeting am **Donnerstag, 01.05.2025 um 20:30 Uhr**

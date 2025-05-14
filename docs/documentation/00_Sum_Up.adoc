@@ -1,5 +1,5 @@
 = 📘 Dokumentation - Zusammenfassung – ShareShop
-Kevin (Teamlead Frontend, Dokumentation)
+Kevin (Project Owner, Dokumentation)
 Stand: 2025-04-15
 :doctype: book
 :toc: left
@@ -119,3 +119,16 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
   ** Nutzung des GitHub-Boards (To Do → In Progress → Review → Done)
   ** Wöchentliche Check-up-Meetings (dienstags um 18:00 Uhr)
   ** Kommunikation primär über Discord
+
+
+== 05. Meeting, 29.04.2025:
+
+* `xref:./06_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Anpassung der Meetingzeit auf 18:30 Uhr diskutiert
+* Einführung zu Maven, JDBC und REST-API für neue Teammitglieder
+* REST-API in Review-Phase überführt
+* Erste Schritte zur Backend-Modellierung eingeleitet
+* Frontend-Fortschritte: Profil- und Einkaufsmodus-Wireframes
+* Aufgabenverteilung angepasst und Review-Prozesse angestoßen
+* Templates-Funktionalität vorerst aus dem Sprint ausgeklammert

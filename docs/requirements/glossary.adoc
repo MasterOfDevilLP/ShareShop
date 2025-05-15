@@ -15,6 +15,22 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 | Begriff | Definition und Erläuterung | Synonyme
 //| Kommissionierung | Bereitstellung von Waren aus einem Lager entsprechend eines Kundenauftrags | (keine)
 | Arbeitsverzeichnis | Das aktuelle verzeichnis von welchem aus man im Moment arbeitet (bzw ein programm aufruft) | "." / Current working directory
+
+| Startseite
+| Zentrale Übersicht mit WG-Auswahl, Listen, Templates und Möglichkeit zum Erstellen neuer Listen. 
+| Übersicht / WG-Liste
+
+| Einkaufsliste
+| Liste mit Produkten, die eine WG/Gruppe gemeinsam einkaufen möchte.
+| 
+
+| Einkaufsmodus
+| Sperrt die Einkaufsliste für andere, während jemand aktiv im Laden einkauft, um Doppelkäufe zu vermeiden.
+|
+
+| Verrechnen
+| Funktion zum Ausgleichen von Rechnungen, indem Einnahmen und Ausgaben gegeneinander aufgerechnet werden.
+| 
 |===
 
 

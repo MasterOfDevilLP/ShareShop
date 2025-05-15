@@ -20,7 +20,7 @@ Serialization und Deserialization kann entweder manuell implementiert werden (l�
 
 === Beispiel
 Pseudocode Beispiel für `GET /wg/{wid}/list/{lid}`, wie die Implementierung in etwa aussehen könnte
-```
+----
 int wgGetListState(<args>){
     User user = getAuthenticatedUser(<auth parameters>);    // impl im weiteren Backend
     if(user == null){
@@ -39,7 +39,7 @@ int wgGetListState(<args>){
     sendBody(serialize(items)); // impl. im API code
     return 200;
 }
-```
+----
 
 == 2. Datenbankanbindung
 Nach aktuellem Stand ist die Datenbankanbindung nicht wirklich von der Logik getrennt, sondern wird in diese eingebaut (zum aktuellen Stand ist das Ergebnis ähnlich einem ORM).

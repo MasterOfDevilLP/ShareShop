@@ -14,7 +14,7 @@ Stand: 2025-04-15
 Dieses Dokument dient als **zentrale Zusammenfassung** des Projekts *ShareShop*.  
 Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umrissen und auf die **ausführlichen Einzelprotokolle** verwiesen.
 
-== 00. Kick-Off Meeting, 11.04.2025:
+== 01. Kick-Off Meeting, 11.04.2025:
  
 * `xref:./01_kickoff.adoc[Zur Vollständigen Dokumentation]`
 
@@ -39,7 +39,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
     ** Erstellung von Spezifikationen (User Stories, Use Cases, Modelle)
     ** Aufgabenverteilung, Meilensteine und Zeitplanung
 
-== 01. Meeting, 15.04.2025:
+== 02. Meeting, 15.04.2025:
 
 * `xref:./02_meeting.adoc[Zur Vollständigen Dokumentation]`
 
@@ -58,7 +58,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
     ** Zusätzlich eine Iterations-Zusammenfassung mit Verlinkung auf Einzelprotokolle
     ** Fortschritt und Änderungen werden transparent über Discord kommuniziert
 
-== 02. Meeting, 16.04.2025:
+== 03. Meeting, 16.04.2025:
 
 * `xref:./03_meeting.adoc[Zur vollständigen Dokumentation]`
 
@@ -80,7 +80,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
     ** Besprechung möglicher neuer Meetingzeit (Do ab 20:30 Uhr)
     ** Zentrale Ablage für Meetingprotokolle wird erstellt
 
-== 03. Meeting, 22.04.2025:
+== 04. Meeting, 22.04.2025:
 
 * `xref:./04_meeting.adoc[Zur vollständigen Dokumentation]`
 
@@ -99,7 +99,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Aufgaben werden am Donnerstag, 25.04., final zugewiesen
 * Besprechung von Ordnung und Relevanz vorhandener Dateien im Repository (z. B. Test-Ordner)
 
-== 04. Meeting, 24.04.2025:
+== 05. Meeting, 24.04.2025:
 
 * `xref:./05_meeting.adoc[Zur vollständigen Dokumentation]`
 
@@ -121,7 +121,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
   ** Kommunikation primär über Discord
 
 
-== 05. Meeting, 29.04.2025:
+== 06. Meeting, 29.04.2025:
 
 * `xref:./06_meeting.adoc[Zur vollständigen Dokumentation]`
 
@@ -132,3 +132,32 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Frontend-Fortschritte: Profil- und Einkaufsmodus-Wireframes
 * Aufgabenverteilung angepasst und Review-Prozesse angestoßen
 * Templates-Funktionalität vorerst aus dem Sprint ausgeklammert
+
+== 07. Meeting, 02.05.2025:
+
+* `xref:./07_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Besprochene Features u. a.:
+  ** Einkaufsliste mit Änderungsverlauf
+  ** Tagging-System, Kostenverteilung, Multi-Haushalte
+  ** Inventarverwaltung, Rezepte, CO₂-Tracking
+* Frontend-Reiterstruktur festgelegt (`Liste`, `Rechnungen`, `Kalender`, `Rezepte`, `Profil`)
+* UI-Ideen und Feature-Verhalten (z. B. Play-Button, Dropdowns) konkretisiert
+* Add-ons wie saisonale Einkaufsmodelle, Vergleichsfunktionen und Offline-Modus eingeplant
+* GitHub-Backlog überarbeitet: Epics und Tasks neu zugewiesen und strukturiert
+* Nächste Schritte: Stories detaillieren, Struktur in Tools abstimmen, Reiter ins UI übertragen
+
+== 08. Meeting, 08.05.2025:
+
+* `xref:./08_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Wireframes für Rechnungen & Einkaufsmodus sind fertig und wurden ins Review geschoben
+* Rückmeldung von Hann und Anni: Frontend fast vollständig, kleinere Nachbesserungen
+* Backend:
+  ** Emil verschiebt Backend-Modellierung (Graphen) und REST-Stocks auf kommende Woche
+  ** C4-Modell soll mit Kevin abgestimmt und dokumentiert werden
+  ** Florian startet erste Backend-Programmierung, Basisstruktur eingerichtet
+* Branching-Regeln und Pull-Request-Workflow besprochen (ab Sprint 2 verbindlich)
+* Coding-Guidelines (Java) werden zentral gesammelt (inkl. Linter-Vorlage)
+* Sprintboards sollen so gefiltert werden, dass Storys nicht mehr in den Task-Fokus fallen
+* Vision-Dokument steht bald zur Review bereit

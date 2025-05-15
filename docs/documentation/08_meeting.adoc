@@ -1,0 +1,59 @@
+= ShareShop Projekt – Meetingprotokoll
+Kevin (Product Owner)
+2025-05-08
+
+== Teilnehmer
+* Kevin
+* Benni
+* Anni
+* Han
+* Valencia
+* Emil
+* Florian
+
+== Datum und Uhrzeit
+15.05.2025, ca. 20:30 Uhr
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Frontend-Status (Wireframes)
+* Wireframes für Rechnungen und Einkaufsmodus (Valencia) sind fertig → in Review geschoben
+* Rücksprache zwischen Anni und Han → Wireframes weitestgehend abgeschlossen
+* Valencia und Hann regeln gegenseitiges Review der Wireframes selbstständig
+
+=== 2. Backend-Status
+* Emil: Aufgaben wie Backend-Modellierung (Graphen) und REST-Stocks verschoben auf nächste Woche
+* Geplante Architektur-Visualisierung gemäß C4-Modell
+* Reminder: Offene Tickets möglichst bis Donnerstag abschließen (Sprintwechsel)
+* Empfehlung: Nicht begonnene Tasks (To-Do) besser als In-Progress-Tasks in den nächsten Sprint übertragbar
+
+=== 3. Programmierbeginn im Backend
+* Florian: Grundstruktur für Java-Projekt eingerichtet (Mainstruktur, erste Dateien, JSON-Config)
+* ConnectionHandler zur Datenbank vorbereitet, Dockerisierung geplant
+* Erste Commits gemacht, Probleme mit Java-Konfiguration gelöst
+* Hinweis auf Einhaltung von Java-Standards (Ordnerstruktur, Kommentare, Parameterdoku)
+
+=== 4. Branching & Zusammenarbeit
+* Empfehlung: Beim Start von Feature-Arbeit → neue Branches anlegen
+* Main-Branch soll stabil bleiben, Feature-Branches über Pull Requests einpflegen
+* Einhaltung von Namenskonventionen für Branches wird ab nächstem Sprint eingeführt
+* GitHub-Features wie „Blame“ und Review sollen aktiv genutzt werden
+
+=== 5. Dokumentation & Coding Guidelines
+* Florian hat sich zu Java-Coding-Guidelines informiert und umgesetzt
+* Link zu Guidelines wird ins Backend-Channel gepostet
+* Dokumentationstechnische Ergänzung: adoc-Datei für Linter- und Stilrichtlinien soll erstellt werden
+
+=== 6. Tool-Verbesserung und Boardfilter
+* GitHub-Board soll so gefiltert werden, dass Storys im Sprint-View nicht angezeigt werden
+* Nutzung von Labels (`Story`, `Task`) und Filterlogik (`!Story`) empfohlen
+* Label „Story“ wurde bereits verwendet, Filteroptionen im Praktikum erfolgreich getestet
+
+== Nächste Schritte
+* Backend: Emil beendet Architekturdiagramm (C4), REST-Stocks starten
+* Florian erweitert Java-Grundstruktur, erste Testverbindungen zu PostgreSQL
+* Frontend: Letzte Wireframes reviewen, finale Uploads bis Sprintende
+* Kevin: Vision-Dokument bereitstellen und zur Review freigeben

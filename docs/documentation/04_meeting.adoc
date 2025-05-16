@@ -18,68 +18,79 @@ Online-Meeting (Discord)
 
 === 1. Rückblick & Tooling
 
-Feedback zum vorherigen Protokoll (ausführlich und hilfreich)
+* Feedback zum vorherigen Protokoll (ausführlich und hilfreich)
 
-Diskussion über offene Begriffe (z. B. "Frameworks-Vergleich Spec-End")
+* Diskussion über offene Begriffe (z. B. "Frameworks-Vergleich Spec-End")
 
-Entscheidung, GitHub Projects anstelle von Jira zu nutzen
+* Entscheidung, GitHub Projects anstelle von Jira zu nutzen
 
-Einrichtung des GitHub-Projekts mit Boards, Issues und Labels
+* Einrichtung des GitHub-Projekts mit Boards, Issues und Labels
 
 === 2. Strukturierung der Aufgaben
 
-Aufgaben aus dem Protokoll vom letzten Mal werden in GitHub-Issues übernommen
+* Aufgaben aus dem Protokoll vom letzten Mal werden in:
 
-Verknüpfung von Issues mit Sub-Issues (z. B. "Wireframes" als Story, Unteraufgaben für Analyse & Umsetzung)
+** GitHub-Issues übernommen
 
-Labels zur Kategorisierung erstellt:
+** Verknüpfung von Issues mit Sub-Issues (z. B. "Wireframes" als Story, Unteraufgaben für Analyse & Umsetzung)
+
+* Labels zur Kategorisierung erstellt:
+
 ** Story, Task, Analyse, Programmierung, Modellierung
 
 === 3. Aufgaben für Sprint 1 (Frontend)
 
-Erstellung von Wireframes:
+* Erstellung von Wireframes:
+
 ** Analyse geeigneter Tools (kostenlos, z. B. Miro)
+
 ** Entwicklung von Wireframes basierend auf User Stories
 
-Design der Weboberfläche:
+* Design der Weboberfläche:
+
 ** Analyse-Tool für visuelle Gestaltung
+
 ** Auswahl von Farbpalette & Schriftart (Designrichtlinien)
+
 ** Erstellung von klickbaren Mockups (später im Sprint)
 
 === 4. Aufgaben für Sprint 1 (Backend)
 
 Auswahl der Datenbank: PostgreSQL (Open Source, kompatibel)
 
-Aufgaben:
+* Aufgaben:
+
 ** Datenbankschema erstellen (z. B. ER-Modell)
+
 ** Entscheidung über Schnittstellen: Verwendung einer REST-API
+
 ** Grundfunktionen definieren für die API (CRUD-Operationen)
 
 === 5. Sprintorganisation
 
-Sprintdauer: 4 Wochen (Start: 24.04.2025, Ende: 21.05.2025)
+* Sprintdauer: 4 Wochen (Start: 24.04.2025, Ende: 21.05.2025)
 
-Planung erfolgt gemeinsam, Zuteilung der Aufgaben ab Donnerstag, 25.04.
+* Planung erfolgt gemeinsam, Zuteilung der Aufgaben ab Donnerstag, 25.04.
 
-Aufgaben sollen unabhängig voneinander sein, damit alle frei auswählen können
+* Aufgaben sollen unabhängig voneinander sein, damit alle frei auswählen können
 
-Sprintboard in GitHub Projects dient zur Übersicht und Nachverfolgung
+* Sprintboard in GitHub Projects dient zur Übersicht und Nachverfolgung
 
 === 6. Weitere Punkte & Organisation
 
-User Stories dienen als Inspiration für Aufgaben, werden aber nicht direkt in GitHub abgebildet
+* User Stories dienen als Inspiration für Aufgaben, werden aber nicht direkt in GitHub abgebildet
 
-Hinweise zur Verwendung der GitHub-Struktur (Parent Issues, Labels, Filter etc.)
+* Hinweise zur Verwendung der GitHub-Struktur (Parent Issues, Labels, Filter etc.)
 
-Diskussion zur Ordnung im Repository (Ordnerstruktur, Testordner, Readme)
+* Diskussion zur Ordnung im Repository (Ordnerstruktur, Testordner, Readme)
 
-Vereinbarung: Testordner & Templates bleiben vorerst erhalten
+* Vereinbarung: Testordner & Templates bleiben vorerst erhalten
 
 == Nächste Schritte
 
-Aufgabenbeschreibung (inkl. Anzahl, Ziel und Deadline) bis Donnerstag vervollständigen
+* Aufgabenbeschreibung (inkl. Anzahl, Ziel und Deadline) bis Donnerstag vervollständigen
 
-Aufgabenverteilung am Donnerstag im Sprint-Daily (Start Sprint 1)
+* Aufgabenverteilung am Donnerstag im Sprint-Daily (Start Sprint 1)
 
 Weiteres Sprint-Planning ggf. nächste Woche
 

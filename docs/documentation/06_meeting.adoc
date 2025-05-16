@@ -66,5 +66,5 @@ Online-Meeting (Discord)
 * Backend-Team: REST-API reviewen und ggf. verbessern
 * Backend-Modellierung starten (inkl. Worker-Klassen)
 * Frontend-Team: Wireframes finalisieren und gegenseitig reviewen
-* Kevin und Benni: Definition des letzten Reiters im UI für Einkaufsliste
+* Kevin und Benni: enddültige Definition der Reiter im UI für Einkaufsliste
 * Neues Meeting am **Donnerstag, 01.05.2025 um 20:30 Uhr**

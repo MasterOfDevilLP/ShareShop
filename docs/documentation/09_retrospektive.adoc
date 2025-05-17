@@ -1,0 +1,63 @@
+= ShareShop Projekt – Retrospektive – Sprint 1
+Kevin (Project Owner)
+2025-05-16
+
+== Teilnehmer
+* Kevin
+* Benni
+* Anni
+* Emil
+* Han
+* Valencia
+* Florian
+
+== Datum und Uhrzeit
+16.05.2025, 18:30 Uhr
+
+== Ort
+Online-Meeting (Discord), Interaktiv via Miro-Board
+
+== Themenübersicht
+
+=== 1. Gefühlsrad zum Einstieg
+* Jeder Teilnehmer wählte ein Gefühl (visuell per Marker im Miro-Gefühlsrad)
+* Mehrheit positionierte sich bei „hoffnungsvoll“ oder „zufrieden“
+* Einzelne Anmerkungen zu Stress oder Gleichgültigkeit – nicht projektspezifisch
+* Diskussion über persönliche Stimmung und Arbeitszufriedenheit im Projektkontext
+
+=== 2. Rückblick auf Sprint 1 – Emotion & Reflexion
+
+* Rückmeldungen:
+  ** Sprint war besser organisiert als erwartet
+  ** Zusammenarbeit funktionierte gut – v. a. im Frontend & mit PO
+  ** Backend teils frustriert durch längere Lösungswege, aber Lernfortschritte vorhanden
+  ** Frontend-Abstimmung funktioniert auch offline gut (persönliche Absprache, WhatsApp)
+
+=== 3. Was lief gut?
+* Teamzusammenhalt und Hilfsbereitschaft im Discord
+* Kommunikation zwischen PO, Scrum Master & Entwickler:innen wurde gelobt
+* Eigenverantwortliches Arbeiten wurde gut angenommen
+* Wireframes und erste Backend-Strukturen kamen früh zustande
+
+=== 4. Was lief weniger gut?
+* Ticketbeschreibung oft zu ungenau (z. B. „Wireframes“ vs. „Clickables“ unklar getrennt)
+* GitHub-Sprintboard zeigte auch Story-Issues – führte zu Verwirrung bei der Planung
+* Meetings teils redundant, Daily-Struktur wurde kritisch diskutiert
+
+=== 5. Entscheidungen und Verbesserungen
+* Feste Meetingstruktur:
+  ** Dienstag 18:30 Uhr = verpflichtendes Weekly
+  ** Donnerstag 20:30 Uhr = freiwilliges Zusatzmeeting
+* Ticketing:
+  ** Künftig präzisere Ticketformulierung und kleinere Tasks
+  ** Einführung von Storypoint-Schätzung im Sprint 2
+  ** Filterung der Sprintansicht nach `!Story` in GitHub
+* Retro-Methodik:
+  ** Feedback gemischt zum Gefühlsrad – wird optional beibehalten
+  ** Wunsch nach konkreteren Einstiegsfragen beim nächsten Mal
+
+== Nächste Schritte
+* Sprint 2 startet mit angepasster Sprintplanung (inkl. Storypoints)
+* Verbesserte Ticketstruktur wird vom PO vorbereitet
+* Backend- und Frontendteams arbeiten weiterhin parallel an vertieften Features
+* PO dokumentiert Retro-Ergebnisse und bereitet nächste Sprint-Planung vor

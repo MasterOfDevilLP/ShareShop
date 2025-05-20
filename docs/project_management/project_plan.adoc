@@ -1,31 +1,79 @@
 = Projektplan: {project-name}
-Vorname Nachname <email@domain.org>; Vorname2 Nachname2 <email2@domain.org>; Vorname3 Nachname3 <email3@domain.org>
+
+Benjamin Banse <Benjamin.Banse@stud.htw-dresden.de>;
+Kevin Bürger <Bürger.Kevin@stud.htw-dresden.de>;
+Anni Nguyen <Anni.Nguyen@stud.htw-dresden.de>;
+Emil Hempel <Emil.Hempel@stud.htw-dresden.de>;
+Valencia Melvika <Valencia.Melvika@stud.htw-dresden.de>;
+Florian Süßmann <Florian.Süßmann@stud.htw-dresden.de>;
+Han Nguyen <HanNguyen@stud.htw-dresden.de>;
+
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
 
 
 == Einführung
-//Kurze Beschreibung und Überblick zum Dokument.
+In Diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil davon ist unter anderem Terminplanung, Sprint-Details und Details zu Ticket-Typen etc.
 
 
 == Projektorganisation
-//Introduce the project team, team members, and roles that they play during this project. If applicable, introduce work areas, domains, or technical work packages that are assigned to team members. Introduce neighboring projects, relationships, and communication channels. If the project is introduced somewhere else, reference that location with a link.
+=== Teammitglieder
+[cols="1,2", options="header"]
+|===
+| Name           | Rolle
 
+| Benjamin Banse  | Projektleiter, Scrum Master
+| Anni Nguyen     | Front-End Leader, Front-End Developer
+| Kevin Bürger    | Product Owner, "Dokumentator"
+| Emil Hempel     | Back-End Developer
+| Valencia Melvika| Front-End Developer
+| Florian Süßmann | Back-End Developer
+| Han Nguyen      | Front-End Developer
+|===
+
+=== Termine
+* Dailies:
+** Dienstags: 18:30 Uhr - 19:00 Uhr (Pflicht)
+** Donnerstags: 20:30 Uhr - 21:00 Uhr (Freiwillig)
+* Sprint-Planning:
+** Mittwochs vor Sprint-Beginn. Zeiten werden aufgrund verschiedener Termine spontan entschieden.
+* Sprint-Review:
+** noch nicht abschätzbar wann erstes Sprint-Review durchzuführen ist.
+* Sprint-Retro:
+** Freitags, eine Woche vor Sprint-Ende. 14:00 Uhr - 15:00 Uhr.
 
 == Praktiken und Bewertung
-//Describe or reference which management and technical practices will be used in the project, such as iterative development, continuous integration, independent testing and list any changes or particular configuration to the project. Specify how you will track progress in each practice. As an example, for iterative development the team may decide to use iteration assessments and iteration burndown reports and collect metrics such as velocity (completed work item points/ iteration).
+
+=== Sprint-Taktiken
+Zur Zeit nutzen wir einen 4-wöchigen Sprintzyklus, mit jeweils einem (pflicht-)Meeting am Dienstag und ein freiwilliges jeden Donnerstag. Zudem haben wir im ersten Zyklus bereits ein Sprint-Planning und eine Sprint-Retro vollzogen.
+Als Visualisierung für unsere Tickets benutzen wir ein Kanban-Board inkl. einem Review-Schritt. Dieses soll nicht nur prüfen, ob eine Aufgabe geschafft wurde, sondern auch anderen Mitgliedern die Chance geben, Einblicke zu anderen Themen zu erhalten, um so einen allgemeinen Überblick zu behalten.
+Als Ablage für unser Projekt haben wir neben GitHub noch https://www.figma.com/design/tPMhkiZtvIjjC1mEde0giE/huyenbaohan.nguyen-s-team-library?node-id=0-1&p=f&t=yasinkcutEItHR6t-0[Figma] als auch https://miro.com/app/board/uXjVIEsf25w=/[miro] benutzt, damit das Front-End-Team eine bessere Arbeitsumgebung für die Modellierung besitzt.
 
 
 === Definition of Ready
-// Listen Sie hier die Kriterien auf, die ein Product Backlog Item (z.B. User Story) erfüllen muss, damit es bei der Sprint-Planung berücksichtigt werden kann
+* Das Ticket ist klar beschrieben.
+* Das Ticket enthält Akzeptanzkriterien.
+* Das Ticket ist im Arbeitsaufwand in Storypoints geschätzt.
+* Das Ticket hat keine offenen Abhängigkeiten zu anderen Themen, sozusagen "Standalone"
+* Das Ticket ist klein genug, um in einem Sprint von einer Person umgesetzt zu werden.
+* Das Ticket ist priorisiert und vom Product Owner freigegeben bzw. abgesprochen mit diesem.
+* Alle notwendigen Informationen und Anhänge sind vorhanden.
 
 === Definition of Done
-// Listen Sie hier alle Kritierien auf, damit die Aufgabe eines bestimmten Typs (z.B. Task, User Story) als abgeschlossen gilt.
+* Der Code ist vollständig implementiert.
+* Alle Akzeptanzkriterien des Tickets sind erfüllt.
+* Unit-Tests wurden geschrieben und bestanden.
+* Die Funktionalität wurde manuell getestet (falls erforderlich, wie z.B. Front-End).
+* Code Review wurde durchgeführt und freigegeben.
+* Dokumentation wurde aktualisiert (z. B. technische Doku, API-Doku).
+* Die Änderung ist in der Testumgebung deployed.
+* Das Product Owner hat das Ergebnis bestätigt.
 
 == Deployment
 //Outline the strategy for deploying the software (and its updates) into the production environment.
-
+// STILL TODO
 
 == Erkenntnisse (Lessons learned)
-// Führen Sie hier die wesentlichen Erkenntnisse auf, die Sie in den Retrospektiven gewonnen haben. Legen Sie besonderen Fokus auf die Maßnahmen, die Sie getroffen haben um Verbesserungen in den verschiedenen Aspekten des Projekts zu erzielen, z.B. dem Entwicklungsprozess, der technischen und organisatorischen Umgebung oder der Zusammenarbeit im Team.
+Im Ersten Sprint wurden 2 Dailies pro Woche als Pflicht angesehen. Schnell hat sich herausgestellt, dass für den Arbeitsaufwand nicht 2 Dailies von Nöten sind.
+Ein Projekt zu entwickeln, zu stabilisieren und voran zu treiben ist anspruchsvoller als erwartet. Dazu gehört auch das Planen von Tickets die für einen Sprint relevant sind.

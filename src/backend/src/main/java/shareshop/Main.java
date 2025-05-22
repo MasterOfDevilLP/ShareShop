@@ -1,5 +1,7 @@
 package shareshop;
 
+import java.sql.SQLException;
+
 /**
  * Main class of shareshop
  */
@@ -16,5 +18,18 @@ public class Main {
             System.err.println(e.getMessage());
             System.exit(1);
         }
+        DBConnectionHandler connectionHandler = new DBConnectionHandler(config.getDBConfig());
+        
+        try {
+            connectionHandler.open();
+        } catch (SQLException e)
+        {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+        /* put the main loop of the backend here */
+
+        connectionHandler.close();
     }
 }

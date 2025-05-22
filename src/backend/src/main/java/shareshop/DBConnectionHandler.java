@@ -33,11 +33,11 @@ public class DBConnectionHandler {
      * @throws SQLException
      */
     public void open() throws SQLException {
-        String url = new String("jdbc:postgresql://" + this.server + ":" + this.port);
+        String url = new String("jdbc:postgresql://" + this.server + ":" + this.port + "/ShareShopTestDB");
         Properties props = new Properties();
         props.setProperty("user", this.user);
         props.setProperty("password", this.pwd);
-        props.setProperty("ssl", "true");
+        props.setProperty("ssl", "false");
         int connectionTries = 0;
         while (connectionTries < this.MAX_CONNECTION_TRIES) {
             try {
@@ -67,5 +67,17 @@ public class DBConnectionHandler {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * makes sure the connection is open (if it got closed it will reopen it)
+     * @throws SQLException
+     */
+    public void makeSureItsOpen() throws SQLException {
+        if (!this.conn.isClosed()) {
+            return;
+        } else {
+            this.open();
+        }
     }
 }

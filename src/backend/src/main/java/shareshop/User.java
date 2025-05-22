@@ -49,6 +49,17 @@ public class User {
         this.pwd = pwd;
     }
 
+    /**
+     * private function to update the DB after a change of any attribute of the user
+     * @param connectionHandler
+     * @param userID
+     * @param wgID
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param pwd
+     * @throws SQLException
+     */
     private void updateDB(DBConnectionHandler connectionHandler, String userID, String wgID, String firstName, String lastName, String email, String pwd) throws SQLException {
         String updateString = new String("UPDATE users SET userid = ?, wgid = ?, firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
         connectionHandler.makeSureItsOpen();

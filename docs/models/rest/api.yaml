@@ -29,6 +29,10 @@ components:
     categoryInfo:
       type: object
 
+servers:
+  - url: http://127.0.0.1:8001/
+    description: local test server
+
 paths:
   /user/create:
     post:

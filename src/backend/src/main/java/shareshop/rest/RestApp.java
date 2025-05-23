@@ -10,6 +10,10 @@ public class RestApp {
 		// Register Endpoints
 		// these could be static too, probably nicer that way
 		UsersEndpoints.register(app);
+		WGEndpoints.register(app);
+		ListEndpoints.register(app);
+		ItemEndpoints.register(app);
+		CategoryEndpoints.register(app);
 		
 		app.start(host, port);
 	}

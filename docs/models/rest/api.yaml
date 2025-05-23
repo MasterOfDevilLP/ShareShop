@@ -512,14 +512,7 @@ paths:
               $ref: "#/components/schemas/itemInfo"
       responses:
         "200":
-          description: item created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
+          description: item modified
         "401":
           $ref: "#/components/responses/unauthorized"
         "403":

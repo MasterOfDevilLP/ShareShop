@@ -8,7 +8,9 @@ import io.javalin.http.ContentType;
 import io.javalin.http.HttpStatus;
 import shareshop.rest.requests.CreateUserRequest;
 
-public class UsersEndpoints{
+public class UsersEndpoints {
+	
+	private final static String basepath = "/user";
 	
 	public static void register(Javalin app) {
 		// TODO Auto-generated method stub
@@ -18,7 +20,7 @@ public class UsersEndpoints{
 	}
 	
 	private static void registerCreate(Javalin app) {
-		app.post("/user/create", ctx -> {
+		app.post(basepath + "/create", ctx -> {
 			
 			try {
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -42,14 +44,14 @@ public class UsersEndpoints{
 	}
 	
 	private static void registerGet(Javalin app) {
-		app.get("/user", ctx -> {
+		app.get(basepath, ctx -> {
 			// TODO: requires SessionManager to make sense
 			ctx.status(HttpStatus.UNAUTHORIZED);
 		});
 	}
 	
 	private static void registerModify(Javalin app) {
-		app.post("/user", ctx -> {
+		app.post(basepath, ctx -> {
 			// TODO: requires SessionManager to make sense
 			ctx.status(HttpStatus.UNAUTHORIZED);
 		});

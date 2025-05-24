@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iPhone PWA</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <div class="iphone-app">
+      <!-- Header -->
+      <header class="app-header">
+        <select class="wg-selector">
+          <option selected>WG Sonnenstraße</option>
+          <option>WG Blumenweg</option>
+          <option>WG Fuchsbau</option>
+          <option>WG Mondhain</option>
+        </select>
+        <span class="wg-name"></span>
+        <button class="qr-btn" title="QR">
+          <img src="icons/barcode.png" class="nav-icon" />
+        </button>
+        <button class="settings-btn" title="settings">
+          <img src="icons/settings.svg" />
+        </button>
+      </header>
+
+      <!-- Navigation -->
+      <nav class="bottom-nav">
+        <button class="nav-item active">
+          <img src="icons/Liste.png" alt="Start" class="nav-icon" /><br />Liste
+        </button>
+        <button class="nav-item">
+          <img
+            src="icons/Rechnung.png"
+            alt="Start"
+            class="nav-icon"
+          /><br />Rechnungen
+        </button>
+        <button class="nav-item">
+          <img
+            src="icons/Kalender.png"
+            alt="Start"
+            class="nav-icon"
+          /><br />Kalender
+        </button>
+        <button class="nav-item">
+          <img
+            src="icons/Rezepte.png"
+            alt="Start"
+            class="nav-icon"
+          /><br />Rezepte
+        </button>
+        <button class="nav-item">
+          <img
+            src="icons/Profil.png"
+            alt="Start"
+            class="nav-icon"
+          /><br />Profil
+        </button>
+      </nav>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

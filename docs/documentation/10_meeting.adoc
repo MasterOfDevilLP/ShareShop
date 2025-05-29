@@ -1,0 +1,65 @@
+= ShareShop Projekt – Meetingprotokoll  
+Kevin (Product Owner)  
+2025-05-20
+
+== Teilnehmer
+* Florian
+* Valencia
+* Anni
+* Han
+* Benni
+* Kevin
+
+== Datum und Uhrzeit
+20.05.2025, ca. 20:30 Uhr
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Modellierung & Frontend-Fortschritt
+* Valencia finalisiert die Komponenten-Modellierung (Text liegt vor, Diagramm wird nachgezogen)
+* Modellierung soll bis Mittwochabend (vor 20 Uhr) abgeschlossen sein → Grundlage für weitere Backend-Tickets
+* Einkaufsliste und Einkaufsmodus funktionsfähig, kleinere Inkonsistenzen bestehen noch
+* Finale Absprachen zur Fertigstellung der Wireframes laufen, Abschluss bis Donnerstag/Freitag angestrebt
+
+=== 2. Datenbankstruktur
+* Florian erstellt testweise eine Projekt-Datenbank mit SQL-Export
+* Datenbankaufbau kann per SQL-Skript repliziert werden → erste Deploy-Strategie entsteht
+* Ticket „Datenbank anlegen“ wird übernommen, bei Verzögerung in nächsten Sprint verschiebbar
+
+=== 3. Sprachkonventionen im Code
+* Diskussion über konsistente Benennung:
+  ** Codebestandteile (Klassen, Funktionen, Tabellen etc.) auf Englisch
+  ** Dokumentation weiterhin auf Deutsch
+* Kürzel „BG“ bleibt als Ausnahme erhalten
+* Hinweis: Eine adoc-Dokumentation mit Coding-Vorgaben soll folgen
+
+=== 4. Einführung von Storypoints
+* Sprintplanung wird künftig mit Storypoints ergänzt (Richtwert: 6h Pensum = 6 Storypoints)
+* Sinn: Bessere Aufwandseinschätzung und Nachvollziehbarkeit von Ticketgrößen
+* Abweichungen (z. B. massiver Mehraufwand) sollen im Tickettext festgehalten werden
+* Optionales Q&A zu Storypoints am Donnerstagabend (Daily)
+
+=== 5. Projektplan & Doku-Planung
+* Kevin stellt Projectplan fertig (inkl. Sprintwechsel, Review, Retro – vorläufige Termine)
+* Review findet voraussichtlich am 01.06. statt (Fokus auf Wireframes und Usability)
+* Neue Struktur für technische Doku in Planung: Aufteilung nach Frontend-/Backend-Modulen
+* Idee: Separate adoc-Dateien für Architektur und Modulübersicht
+
+=== 6. Vorbereitung Sprint Review
+* Ziel: Vorstellung der aktuellen Wireframes im Review, ggf. erste Prototypen
+* Feedbackrunde mit Usability-Fokus geplant (Erwartungen an Bedienelemente etc.)
+* Wichtig für Frontend-Team: Wireframes als Arbeitsgrundlage auch in SE2
+
+=== 7. Tickets & Sichtbarkeit
+* Benni & Kevin planen eigene Tickets zur Erfassung nicht-codierbarer Aufgaben
+* Erinnerung an alle: Sinnvoller Umgang mit To-Do/In-Progress-Tickets bei Sprintwechsel
+
+== Nächste Schritte
+* Valencia schließt Diagramm-Modellierung ab
+* Florian erweitert Datenbankstruktur und sichert SQL-Export
+* Anni & Han schließen Wireframe-Abstimmung und Uploads ab
+* Kevin überarbeitet Projectplan, initiiert technische adoc-Dokumentation
+* Donnerstag: Optionales Storypoints-Meeting, Sprint Review wird vorbereitet

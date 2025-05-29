@@ -1,15 +1,15 @@
 = ShareShop Projekt – Retrospektive – Sprint 1
-Kevin (Project Owner)
+Kevin (Product Owner)
 2025-05-16
 
 == Teilnehmer
-* Kevin
 * Benni
 * Anni
 * Emil
 * Han
 * Valencia
 * Florian
+* Kevin
 
 == Datum und Uhrzeit
 16.05.2025, 18:30 Uhr

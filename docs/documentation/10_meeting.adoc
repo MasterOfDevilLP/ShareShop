@@ -33,7 +33,6 @@ Online-Meeting (Discord)
 * Diskussion über konsistente Benennung:
   ** Codebestandteile (Klassen, Funktionen, Tabellen etc.) auf Englisch
   ** Dokumentation weiterhin auf Deutsch
-* Kürzel „BG“ bleibt als Ausnahme erhalten
 * Hinweis: Eine adoc-Dokumentation mit Coding-Vorgaben soll folgen
 
 === 4. Einführung von Storypoints

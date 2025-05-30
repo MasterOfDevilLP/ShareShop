@@ -47,6 +47,32 @@
         <button class="add-list"><span>+</span> Liste hinzufügen</button>
       </main>
 
+      <!-- Formular zum Erstellen einer neuen Liste -->
+      <div id="neueListeFormular" class="form-bereich hidden">
+        <input
+          type="text"
+          id="neueListeInput"
+          placeholder="Name der neuen Liste"
+        />
+        <button id="listeErstellenBtn">Erstellen</button>
+      </div>
+
+      <!-- Bottom Sheet -->
+      <div class="bottom-sheet hidden" id="bottomSheet">
+        <div class="sheet-header">
+          Neue Liste erstellen
+          <button class="close-btn" id="closeSheet">✕</button>
+        </div>
+        <div class="sheet-body">
+          <input
+            type="text"
+            id="listNameInput"
+            placeholder="Name der neuen Liste"
+          />
+          <button id="createListBtn" disabled>Erstellen</button>
+        </div>
+      </div>
+
       <!-- Navigation -->
       <nav class="bottom-nav">
         <button class="nav-item active">

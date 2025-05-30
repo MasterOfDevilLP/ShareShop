@@ -155,3 +155,36 @@
         font-size: 18px;
 
       }
+
+       /* Liste hinzufügen */
+      .form-bereich {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .form-bereich input {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      .form-bereich button {
+        padding: 0.5rem 1rem;
+        background-color: #7DCFB6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .form-bereich button:hover {
+        background-color: #6bbca5;
+      }
+
+      .hidden {
+        display: none;
+      }

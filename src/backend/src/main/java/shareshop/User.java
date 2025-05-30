@@ -60,18 +60,17 @@ public class User {
      * @param pwd
      * @throws SQLException
      */
-    private void updateDB(DBConnectionHandler connectionHandler, String userID, String wgID, String firstName, String lastName, String email, String pwd) throws SQLException {
-        String updateString = new String("UPDATE users SET userid = ?, wgid = ?, firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
+    private void updateDB(DBConnectionHandler connectionHandler, String wgID, String firstName, String lastName, String email, String pwd) throws SQLException {
+        String updateString = new String("UPDATE users SET wgid = ?, firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(updateString)) {
             connectionHandler.conn.setAutoCommit(false);
-            deleteUser.setString(1, userID);
-            deleteUser.setString(2, wgID);
-            deleteUser.setString(3, firstName);
-            deleteUser.setString(4, lastName);
-            deleteUser.setString(5, email);
-            deleteUser.setString(6, pwd);
-            deleteUser.setString(7, this.userID);
+            deleteUser.setString(1, wgID);
+            deleteUser.setString(2, firstName);
+            deleteUser.setString(3, lastName);
+            deleteUser.setString(4, email);
+            deleteUser.setString(5, pwd);
+            deleteUser.setString(6, this.userID);
             deleteUser.executeUpdate();
             connectionHandler.conn.commit();
             deleteUser.close();
@@ -86,22 +85,12 @@ public class User {
     }
 
     /**
-     * updates userID
-     * @param userID
-     * @throws SQLException
-     */
-    public void setUserID(DBConnectionHandler connectionHandler, String userID) throws SQLException {
-        this.updateDB(connectionHandler, userID, this.wgID, this.firstName, this.lastName, this.email, this.pwd);
-        this.userID = userID;
-    }
-
-    /**
      * updates wgID
      * @param wgID
      * @throws SQLException
      */
     public void setWgID(DBConnectionHandler connectionHandler, String wgID) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, wgID, this.firstName, this.lastName, this.email, this.pwd);
+        this.updateDB(connectionHandler, wgID, this.firstName, this.lastName, this.email, this.pwd);
         this.wgID = wgID;
     }
 
@@ -111,7 +100,7 @@ public class User {
      * @throws SQLException
      */
     public void setFirstName(DBConnectionHandler connectionHandler, String firstName) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, firstName, this.lastName, this.email, this.pwd);
+        this.updateDB(connectionHandler, this.wgID, firstName, this.lastName, this.email, this.pwd);
         this.firstName = firstName;
     }
 
@@ -121,7 +110,7 @@ public class User {
      * @throws SQLException
      */
     public void setLastName(DBConnectionHandler connectionHandler, String lastName) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, this.firstName, lastName, this.email, this.pwd);
+        this.updateDB(connectionHandler, this.wgID, this.firstName, lastName, this.email, this.pwd);
         this.lastName = lastName;
     }
 
@@ -131,7 +120,7 @@ public class User {
      * @throws SQLException
      */
     public void setEmail(DBConnectionHandler connectionHandler, String email) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, this.firstName, this.lastName, email, this.pwd);
+        this.updateDB(connectionHandler, this.wgID, this.firstName, this.lastName, email, this.pwd);
         this.email = email;
     }
 
@@ -141,7 +130,7 @@ public class User {
      * @throws SQLException
      */
     public void setPassword(DBConnectionHandler connectionHandler, String password) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, this.firstName, this.lastName, this.email, pwd);
+        this.updateDB(connectionHandler, this.wgID, this.firstName, this.lastName, this.email, pwd);
         this.pwd = password;
     }
 

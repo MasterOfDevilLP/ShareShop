@@ -31,15 +31,14 @@ public class WG {
      * @param creationDate
      * @throws SQLException
      */
-    private void updateDB(DBConnectionHandler connectionHandler, String wgID, String wgName, Date creationDate) throws SQLException {
-        String updateString = new String("UPDATE wg SET wgid = ?, wgname = ?, creationdate = ? WHERE wgid = ?");
+    private void updateDB(DBConnectionHandler connectionHandler, String wgName, Date creationDate) throws SQLException {
+        String updateString = new String("UPDATE wg SET wgname = ?, creationdate = ? WHERE wgid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(updateString)) {
             connectionHandler.conn.setAutoCommit(false);
-            deleteUser.setString(1, wgID);
-            deleteUser.setString(2, wgName);
-            deleteUser.setDate(3, creationDate);
-            deleteUser.setString(4, this.wgID);
+            deleteUser.setString(1, wgName);
+            deleteUser.setDate(2, creationDate);
+            deleteUser.setString(3, this.wgID);
             deleteUser.executeUpdate();
             connectionHandler.conn.commit();
             deleteUser.close();
@@ -53,24 +52,13 @@ public class WG {
     }
 
     /**
-     * update wgID
-     * @param connectionHandler
-     * @param wgID
-     * @throws SQLException
-     */
-    public void setWgID(DBConnectionHandler connectionHandler, String wgID) throws SQLException {
-        this.updateDB(connectionHandler, wgID, this.wgName, this.creationDate);
-        this.wgID = wgID;
-    }
-
-    /**
      * update wg name
      * @param connectionHandler
      * @param wgName
      * @throws SQLException
      */
     public void setWgName(DBConnectionHandler connectionHandler, String wgName) throws SQLException {
-        this.updateDB(connectionHandler, this.wgID, wgName, this.creationDate);
+        this.updateDB(connectionHandler, wgName, this.creationDate);
         this.wgName = wgName;
     }
 
@@ -81,7 +69,7 @@ public class WG {
      * @throws SQLException
      */
     public void setCreationDate(DBConnectionHandler connectionHandler, Date creationDate) throws SQLException {
-        this.updateDB(connectionHandler, this.wgID, this.wgName, creationDate);
+        this.updateDB(connectionHandler, this.wgName, creationDate);
         this.creationDate = creationDate;
     }
 

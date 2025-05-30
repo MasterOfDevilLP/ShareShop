@@ -53,7 +53,8 @@
       <button class="add-list" @click = "add_list" ><span>+</span> Liste hinzufügen</button>
 
       <!-- Bottom Slide Popup zu Hinzufugung neuer List-->
-      <div class="bottom-sheet hidden" v-if="showPopup">
+      <div class="bottom-sheet" :class="{ visible: showPopup }">
+
         <div class="sheet-header">
           Neue Liste erstellen
           <button class="close-btn" id="closePopup" @click="closePopup">✕</button>

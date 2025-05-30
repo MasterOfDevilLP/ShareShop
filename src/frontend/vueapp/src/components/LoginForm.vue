@@ -59,41 +59,52 @@ export default {
 </script>
 
 <style scoped>
+/* Container mit Figma-Styles (frame) */
 .auth-form {
-  width: 100%;
-  max-width: 400px;
+  display: flex;
+  width: 240px;
+  flex-direction: column;
+  gap: 16px;
   background: white;
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Inputs & Button */
+/* Eingabeboxen – aus Figma */
+.input-box {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  align-items: flex-start;
+  gap: 8px;
+}
+
 input {
   width: 100%;
-  margin: 8px 0;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
 
+/* Login-Button */
 button {
   width: 100%;
   padding: 10px;
-  margin-top: 10px;
-  background-color: #3b82f6;
   color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
+border-radius: 8px;
+border: var(--sds-size-stroke-border) solid var(--sds-color-border-default-default);
+background: #7DCFB6;
+font-weight: bold;
+  cursor: pointer;
 }
 
-/* Language Buttons */
+/* Sprachumschalter */
 .lang-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 16px;
+  width: 100%;
+  gap: 8px;
 }
 
 .lang-buttons button {
@@ -112,8 +123,10 @@ button {
   border: none;
 }
 
+/* Registrierung-Link */
 .link {
   text-align: center;
+  width: 100%;
   margin-top: 12px;
   color: #2563eb;
   cursor: pointer;

@@ -16,7 +16,7 @@ new Vue({
       einheit:''
     },
   
-    wg_name: 'Wocheneinkauf',
+    list_name: 'Wocheneinkauf',
     showPopup:false
     },
 

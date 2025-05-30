@@ -13,6 +13,10 @@
     <meta name="theme-color" content="#ffffff" />
   </head>
   <body>
+     <!-- Load Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <div id="app">
+
     <div class="iphone-app">
       <!-- Header -->
       <header class="app-header">
@@ -33,10 +37,10 @@
 
       <main class="app-content">
         <div class="shopping-list">
-          <div class="list-card">
+          <div v-for="list in lists" :key="list.id" class="list-card">
             <a href="../Einkaufsliste/einkaufsliste.html" class="list-left">
               <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
-              Wocheneinkauf
+              {{list.name}}
             
             <div class="list-arrow">
               <img src="icons/arrow_right.svg" alt="Arrow" class="list-arrow" />
@@ -44,9 +48,25 @@
            </a>
           </div>
         </div>
-
-        <button class="add-list"><span>+</span> Liste hinzufügen</button>
       </main>
+
+      <button class="add-list" @click = "add_list" ><span>+</span> Liste hinzufügen</button>
+
+      <!-- Bottom Slide Popup zu Hinzufugung neuer List-->
+      <div class="bottom-sheet hidden" v-if="showPopup">
+        <div class="sheet-header">
+          Neue Liste erstellen
+          <button class="close-btn" id="closePopup" @click="closePopup">✕</button>
+        </div>
+        <div class="sheet-body">
+          <input
+            type="text"
+            v-model="newList.name" 
+            placeholder="Name der neuen Liste"
+          />
+          <button id="saveList" @click="saveList">Erstellen</button>
+        </div>
+      </div>
 
       <!-- Navigation -->
       <nav class="bottom-nav">
@@ -83,6 +103,8 @@
         </button>
       </nav>
     </div>
+
+
 
     <script src="app.js"></script>
   </body>

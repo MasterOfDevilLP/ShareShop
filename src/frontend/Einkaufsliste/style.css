@@ -33,7 +33,7 @@
         border-bottom: 1px solid #ddd;
         gap: 10px;
       }
-      .wg_name {
+      .list_name {
         flex: 2;
         font-weight: bold;
         font-size: 17px;

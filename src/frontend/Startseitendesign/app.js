@@ -14,6 +14,22 @@ new Vue({
 
     
     methods: {
+      //Fragen Einkaufliste von DB ab 
+      async fetchLists() {
+        try {
+          const response = await fetch('/api/lists'); 
+          if (!response.ok) throw new Error('Fehler beim Laden der Listen');
+          const data = await response.json();
+          this.lists = data.map(item => ({
+            id: item.listID,
+            name: item.listName,
+          }));
+        } catch (error) {
+          console.error(error);
+          alert('Konnte Listen nicht laden');
+        }
+      },
+      
       add_list() {
       this.showPopup = true;
       },

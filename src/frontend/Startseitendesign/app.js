@@ -43,6 +43,7 @@ new Vue({
       },
 
       /* pseudocode
+      //Liste erstellen
       async saveList() {
         if (!this.newList.name) {
           alert('Bitte alle Felder ausfüllen.');
@@ -77,6 +78,7 @@ new Vue({
         });
         }
 
+      //Liste anpassen
       async updateList(){
        const list = this.lists.find(l => l.id === listID);
         if (!list) {
@@ -110,6 +112,23 @@ new Vue({
           alert("Fehler beim Netzwerk"); 
         }
       }
+
+      //Liste loeschen
+      async deleteList(listID) {
+      try {
+        const response = await fetch(`api/list/delete/${listID}`, {
+          method: "DELETE"
+        });
+        if (response.ok) {
+          this.lists = this.lists.filter(l => l.id !== listID);
+        } else {
+          alert("Fehler beim Löschen der Liste");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Fehler beim Netzwerk");
+      }
+    },
 
        */
     }

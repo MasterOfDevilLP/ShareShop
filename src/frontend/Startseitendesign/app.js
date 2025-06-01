@@ -1,4 +1,4 @@
-// ✅ Service Worker Registrierung
+// Service Worker Registrierung
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 🟩 Neue Liste zur Seite hinzufügen
+  // Neue Liste zur Seite hinzufügen
  createListBtn.addEventListener('click', () => {
   const name = listNameInput.value.trim();
   if (name !== '') {

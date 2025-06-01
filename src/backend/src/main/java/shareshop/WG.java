@@ -122,7 +122,7 @@ public class WG {
     }
 
     public ShoppingList getList(DBConnectionHandler connectionHandler, String shoppingListID) {
-        return new ShoppingList(); // TODO: implement getList after implementing the ShoppingList Class
+        return null; // TODO: implement getList after implementing the ShoppingList Class
     }
 
     // TODO: createList

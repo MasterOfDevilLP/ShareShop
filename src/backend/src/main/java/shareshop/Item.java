@@ -79,6 +79,7 @@ public class Item {
             connectionHandler.conn.commit();
             update.close();
             itemChange.close();
+            this.itemName = itemName;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {
@@ -114,6 +115,7 @@ public class Item {
             connectionHandler.conn.commit();
             update.close();
             itemChange.close();
+            this.itemDescription = itemDescription;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {
@@ -149,6 +151,7 @@ public class Item {
             connectionHandler.conn.commit();
             update.close();
             itemChange.close();
+            this.price = price;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {

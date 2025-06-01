@@ -133,10 +133,12 @@
         display: flex;
         align-items: center;
         font-weight: 600;
+        color: black;
+        text-decoration:none;
+        flex: 1;
       }
        .add-list {
         position: absolute;
-        
         right: 20px;
         font-size: 18px;
         font-weight: 500;
@@ -163,9 +165,10 @@
       color: #7DCFB6;
       }
 
-      .list-arrow{
-      margin-left: 40px;
-      font-size: 18px;
+     .list-arrow{
+        margin-left: auto;
+        margin-right: 10px;
+        font-size: 18px;
       }
       
 /* bottom sheet */
@@ -236,4 +239,7 @@
     .hidden {
       display: none;
     }
-          
+  
+
+  
+  

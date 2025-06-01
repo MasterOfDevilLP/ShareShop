@@ -1,0 +1,9 @@
+{
+    "DatabaseConfig": {
+        "user":     "backendusr",
+        "password": "passwd",
+        "server":   "db",
+        "port":     5432,
+        "max_connection_tries": 4
+    }
+}

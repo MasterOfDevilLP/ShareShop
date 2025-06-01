@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Einkaufsliste</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+
+  <body>
+    <!-- Load Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+    <div id="app">
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <a href="einkaufsliste.html">
+            <button class="icon-btn" id="list_btn" title="Zurück zu der Liste">
+                <img src="icons/arrow_back.png" />
+            </button>
+          </a>
+          <span class="site-titel">Liste Einstellung</span>
+        </header>
+
+        <!-- Hauptseite -->
+        <main class="app-content">
+        <div class="settings-options">
+            <img src="icons/Wagen.png" alt="icon" class="icon-btn" />
+            <span class="change-listTitel">{{ list_name }}</span>
+
+            <button class="icon-btn">
+            <img src="icons/Stift.png" alt="edit" title ="Titel anpassen" @click="openChangeListName"/>
+            </button>
+        </div>
+        <hr>
+        <div class="settings-options">
+            <img src="icons/bookmark.png" alt="icon" class="icon-btn" />
+            <span class="settings-option">Als neue Vorlage speichern</span>
+        </div>
+        <br>
+        <div class="settings-options">
+            <img src="icons/Drucker.png" alt="icon" class="icon-btn" />
+            <span class="settings-option"> Liste exportieren </span>
+        </div>
+        <br>
+        <div class="settings-options">
+            <img src="icons/clock.png" alt="icon" class="icon-btn" />
+            <span class="settings-option"> Änderungshistorie </span>
+        </div>
+        <br>
+        <div class="settings-options">
+            <img src="icons/Listen.png" alt="icon" class="icon-btn" />
+            <span class="settings-option"> Produkte sortieren </span>
+        </div>
+        <br>
+        <hr>
+        <div class="settings-options" @click="confirmDeleteList">
+            <img src="icons/Trashcan.png" alt="icon" class="icon-btn" />
+            <span class="delete-list" > Liste löschen </span>
+        </div>
+        </main>
+
+        <!-- Dialogfenster zur Bestätigeung zum löschen -->
+    <div class="popup-overlay" v-if="showDeleteListPopup">
+      <div class="popup-content">
+        <h4>Liste löschen</h4><br>
+        <span>Möchtest du die Liste wirklich löschen?</span>
+        <div class="popup-buttons">
+          <button @click="closeDeleteListPopup">Abbrechen</button>
+          <button @click="deleteList">Löschen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Slide Popup zur Umbenennung der List-->
+      <div class="bottom-sheet" :class="{ visible: showChangeListName }">
+        <div class="sheet-header"> Liste umbenennen          
+            <button class="close-btn" @click="closeChangeListName">✕</button>
+        </div>
+        <div class="sheet-body">
+          <input
+            type="text"
+            v-model="list_name" 
+            placeholder="Neuer Name"
+          />
+          <button id="saveList" @click="changeListName">OK</button>
+        </div>
+      </div>
+    <!-- Navigation -->
+        <nav class="bottom-nav">
+          <button class="nav-item active"  @click="goToStartseite">
+            <img src="icons/Liste.png" alt="Start" class="nav-icon" /><br />Liste
+          </button>
+          <button class="nav-item">
+            <img src="icons/Rechnung.png" alt="Rechnungen" class="nav-icon" /><br />Rechnungen
+          </button>
+          <button class="nav-item">
+            <img src="icons/Kalender.png" alt="Kalender" class="nav-icon" /><br />Kalender
+          </button>
+          <button class="nav-item">
+            <img src="icons/Rezepte.png" alt="Rezepte" class="nav-icon" /><br />Rezepte
+          </button>
+          <button class="nav-item">
+            <img src="icons/Profil.png" alt="Profil" class="nav-icon" /><br />Profil
+          </button>
+        </nav>
+        </div>
+     </div>
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -23,16 +23,20 @@
       <div class="iphone-app">
         <!-- Header -->
         <header class="app-header">
-          <button class="icon-btn" id="list_btn" title="Zurück zu Startseite" @click="zuruck_startseite">
-            <img src="icons/arrow_back.png" />
-          </button>
-          <span class="list_name">{{ list_name }}</span>
+          <a href="../Startseitendesign/startseite.html">
+            <button class="icon-btn" id="list_btn" title="Zurück zu Startseite">
+              <img src="icons/arrow_back.png" />
+            </button>
+          </a>
+          <span class="site-titel">{{ list_name }}</span>
           <button class="icon-btn" id="einkaufmodus_btn" title="Einkaufmodus">
             <img src="icons/Wagen.png" />
           </button>
-          <button class="icon-btn" id="settings_btn" title="Settings">
-            <img src="icons/settings.svg" />
-          </button>
+          <a href="./settings_einkaufsliste.html">
+            <button class="icon-btn" id="settings_btn" title="Settings">
+              <img src="icons/settings.svg" />
+            </button>
+          </a>
         </header>
 
         <!-- Hauptseite -->
@@ -100,7 +104,7 @@
 
     <!-- Navigation -->
         <nav class="bottom-nav">
-          <button class="nav-item active">
+          <button class="nav-item active"  @click="goToStartseite">
             <img src="icons/Liste.png" alt="Start" class="nav-icon" /><br />Liste
           </button>
           <button class="nav-item">
@@ -116,7 +120,6 @@
             <img src="icons/Profil.png" alt="Profil" class="nav-icon" /><br />Profil
           </button>
         </nav>
-
     </div>
   </div>
 

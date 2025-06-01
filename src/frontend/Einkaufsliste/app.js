@@ -17,15 +17,13 @@ new Vue({
     },
   
     list_name: 'Wocheneinkauf',
-    showPopup:false
+    showPopup:false,
+    showDeleteListPopup:false,
+    showChangeListName: false
     },
 
     
     methods: {
-      zuruck_startseite(){
-         window.location.href = '../Startseitendesign/startseite.html';
-      },
-
       getIcon(kategorie) {
         const icons = {
           Obst: 'Icons/obst.png',
@@ -55,7 +53,6 @@ new Vue({
           alert('Bitte alle Felder ausfüllen.');
           return;
           }
-
         this.products.push({
           id: Date.now().toString(),
           name: this.newProduct.name,
@@ -65,12 +62,39 @@ new Vue({
           einheit: this.newProduct.einheit,
           preis: null
         });
-
         this.closePopup();
       },
 
       deleteProduct(id){
         this.products = this.products.filter(product => product.id !== id);
+      },
+
+      confirmDeleteList(){
+        this.showDeleteListPopup = true;
+      },
+
+      closeDeleteListPopup(){
+        this.showDeleteListPopup = false;
+      },
+
+      deleteList(){
+        window.location.href = '../Startseitendesign/startseite.html';
+      },
+
+      openChangeListName(){
+        this.showChangeListName=true;
+      },
+
+      closeChangeListName(){
+        this.showChangeListName=false;
+      },
+
+      changeListName(){
+        this.showChangeListName=false;
+      },
+
+      goToStartseite(){
+        window.location.href = '../Startseitendesign/startseite.html';
       }
   }
 });

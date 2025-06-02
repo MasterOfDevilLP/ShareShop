@@ -1,5 +1,6 @@
 package shareshop;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,11 @@ public class ShoppingList {
     private String listName;
     private String creatorUserID;
     private ArrayList<ItemAllocation> itemAllocations;
+    public enum Change {
+        ADD,
+        REMOVE,
+        TICK
+    }
 
     protected class ItemAllocation {
         private Item item;
@@ -93,6 +99,14 @@ public class ShoppingList {
                     connectionHandler.conn.rollback();
                 }
             }
+        }
+
+        /**
+         * sets the amount of the item on the list
+         * @param amount
+         */
+        public void setAmount(int amount) {
+            this.amount = amount;
         }
 
         /**
@@ -206,9 +220,241 @@ public class ShoppingList {
         return items;
     }
 
-    // TODO: addChange(user, change, ...) -> change is an enum
-    // TODO: possible changes: ADD (amt), REMOVE (amt), TICK (amt, price)
-    // TODO: Column for userid in listchanges
+    /**
+     * add a change made to the list (that has something to do with the items on the list, for changing name use the setListName() function)
+     * @param connectionHandler
+     * @param user
+     * @param item
+     * @param change
+     *              ADD: add items to the list.
+     *              REMOVE: remove items from the list.
+     *              TICK: also remove items from the list after buying them.
+     * @param args
+     *              ADD:    first arg is amount from type Integer -> how much of the item is added to the list.
+     *              REMOVE: first arg is amount from type Integer -> how much of the item is removed from the list.
+     *              TICK:   first arg ist amount from type Integer -> how much of the item got bought (the amount that will be removed).
+     *                      second arg is the price from type BigDecimal -> how much did it cost to buy the amount of items.
+     * @throws SQLException
+     */
+    public void addChange(DBConnectionHandler connectionHandler, User user, Item item, Change change, Object... args) throws SQLException, IllegalArgumentException {
+        switch (change) {
+            case Change.ADD: {
+                if (!(args[0] instanceof Integer)) {throw new IllegalArgumentException("argument must be from type Integer");}
+                int amount = (Integer)args[0];
+                for (ItemAllocation itemAllocation : itemAllocations) { // if the item is already on the list, the amount gets added onto the current amount
+                    if (itemAllocation.getItem() == item) {
+                        String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?"); // will get put into updateCache() later
+                        String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                        try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
+                                PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
+                            connectionHandler.conn.setAutoCommit(false);
+                                
+                            update.setInt(1, amount  + itemAllocation.getAmount());
+                            update.setString(2, item.getItemID());
+                            update.setString(3, this.shoppingListID);
+                                
+                            listChange.setString(1, this.shoppingListID);
+                            listChange.setInt(2, newChangeID(connectionHandler));
+                            listChange.setString(3, "ADDED");
+                            listChange.setDate(4, Date.valueOf(LocalDate.now()));
+                            listChange.setString(5, item.getItemID());
+                            listChange.setString(6, user.getUserID());
+                            listChange.setInt(7, amount); // the amount that gets added onto the current amount
+                                
+                            connectionHandler.conn.commit();
+                            update.close();
+                            listChange.close();
+                            itemAllocation.setAmount(amount + itemAllocation.getAmount());
+                        } catch (SQLException e) {
+                            System.err.println(e.getMessage());
+                            if (connectionHandler.conn != null) {
+                                System.err.println("Transaction failed, rolling back...");
+                                connectionHandler.conn.rollback();
+                            }
+                        }
+                        return;
+                    }
+                }
+
+                // if the item is not on the list, it gets added onto the list with the amount
+                String insertString = new String("INSERT INTO itemallocation(itemid, shoppinglistid, creationdate, amount) VALUES(?, ?, ?, ?)");
+                String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                try (   PreparedStatement insert = connectionHandler.conn.prepareStatement(insertString);
+                        PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
+                    connectionHandler.conn.setAutoCommit(false);
+                        
+                    insert.setString(1, item.getItemID());
+                    insert.setString(2, this.shoppingListID);
+                    insert.setDate(3, Date.valueOf(LocalDate.now()));
+                    insert.setInt(4, amount);
+                        
+                    listChange.setString(1, this.shoppingListID);
+                    listChange.setInt(2, newChangeID(connectionHandler));
+                    listChange.setString(3, "ADDED");
+                    listChange.setDate(4, Date.valueOf(LocalDate.now()));
+                    listChange.setString(5, item.getItemID());
+                    listChange.setString(6, user.getUserID());
+                    listChange.setInt(7, amount);
+                        
+                    connectionHandler.conn.commit();
+                    insert.close();
+                    listChange.close();
+                    itemAllocations.add(new ItemAllocation(item, this.shoppingListID, Date.valueOf(LocalDate.now()), amount));
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                    if (connectionHandler.conn != null) {
+                        System.err.println("Transaction failed, rolling back...");
+                        connectionHandler.conn.rollback();
+                    }
+                }
+            } break;
+            case Change.REMOVE: {
+                if (!(args[0] instanceof Integer)) {throw new IllegalArgumentException("argument must be from type Integer");}
+                int amount = (Integer)args[0];
+                for (ItemAllocation itemAllocation : itemAllocations) {
+                    if (itemAllocation.getItem() == item) {
+                        if (itemAllocation.getAmount() - amount <= 0) { // the item gets completely removed from the shoppinglist
+                            String deleteString = new String("DELETE FROM itemallocation WHERE itemid = ? AND shoppinglistid = ?");
+                            String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                            try (   PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(deleteString);
+                                    PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
+                                connectionHandler.conn.setAutoCommit(false);
+                                    
+                                deleteStatement.setString(1, item.getItemID());
+                                deleteStatement.setString(2, this.shoppingListID);
+                                    
+                                listChange.setString(1, this.shoppingListID);
+                                listChange.setInt(2, newChangeID(connectionHandler));
+                                listChange.setString(3, "REMOVED");
+                                listChange.setDate(4, Date.valueOf(LocalDate.now()));
+                                listChange.setString(5, item.getItemID());
+                                listChange.setString(6, user.getUserID());
+                                listChange.setInt(7, amount);
+                                    
+                                connectionHandler.conn.commit();
+                                deleteStatement.close();
+                                listChange.close();
+                                itemAllocations.remove(itemAllocation);
+                            } catch (SQLException e) {
+                                System.err.println(e.getMessage());
+                                if (connectionHandler.conn != null) {
+                                    System.err.println("Transaction failed, rolling back...");
+                                    connectionHandler.conn.rollback();
+                                }
+                            }
+                            return;
+                        } else {
+                            String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?"); // will get put into updateCache() later
+                            String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                            try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
+                                    PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
+                                connectionHandler.conn.setAutoCommit(false);
+                                    
+                                update.setInt(1, amount  - itemAllocation.getAmount());
+                                update.setString(2, item.getItemID());
+                                update.setString(3, this.shoppingListID);
+                                    
+                                listChange.setString(1, this.shoppingListID);
+                                listChange.setInt(2, newChangeID(connectionHandler));
+                                listChange.setString(3, "REMOVED");
+                                listChange.setDate(4, Date.valueOf(LocalDate.now()));
+                                listChange.setString(5, item.getItemID());
+                                listChange.setString(6, user.getUserID());
+                                listChange.setInt(7, amount); // the amount that gets removed from the current amount
+                                    
+                                connectionHandler.conn.commit();
+                                update.close();
+                                listChange.close();
+                                itemAllocation.setAmount(amount - itemAllocation.getAmount());
+                            } catch (SQLException e) {
+                                System.err.println(e.getMessage());
+                                if (connectionHandler.conn != null) {
+                                    System.err.println("Transaction failed, rolling back...");
+                                    connectionHandler.conn.rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+            } break;
+            case Change.TICK: {
+                if (!(args[0] instanceof Integer)) {throw new IllegalArgumentException("argument must be from type Integer");}
+                if (!(args[1] instanceof BigDecimal)) {throw new IllegalArgumentException("argument must be from type BigDecimal");}
+                int amount = (Integer)args[0];
+                BigDecimal price = (BigDecimal)args[1];
+                for (ItemAllocation itemAllocation : itemAllocations) {
+                    if (itemAllocation.getItem() == item) {
+                        if (itemAllocation.getAmount() - amount <= 0) { // the item gets completely removed from the shoppinglist
+                            String deleteString = new String("DELETE FROM itemallocation WHERE itemid = ? AND shoppinglistid = ?");
+                            String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+                            try (   PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(deleteString);
+                                    PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
+                                connectionHandler.conn.setAutoCommit(false);
+                                    
+                                deleteStatement.setString(1, item.getItemID());
+                                deleteStatement.setString(2, this.shoppingListID);
+                                    
+                                listChange.setString(1, this.shoppingListID);
+                                listChange.setInt(2, newChangeID(connectionHandler));
+                                listChange.setString(3, "REMOVED");
+                                listChange.setDate(4, Date.valueOf(LocalDate.now()));
+                                listChange.setString(5, item.getItemID());
+                                listChange.setString(6, user.getUserID());
+                                listChange.setInt(7, amount);
+                                listChange.setBigDecimal(8, price);
+                                    
+                                connectionHandler.conn.commit();
+                                deleteStatement.close();
+                                listChange.close();
+                                itemAllocations.remove(itemAllocation);
+                            } catch (SQLException e) {
+                                System.err.println(e.getMessage());
+                                if (connectionHandler.conn != null) {
+                                    System.err.println("Transaction failed, rolling back...");
+                                    connectionHandler.conn.rollback();
+                                }
+                            }
+                            return;
+                        } else {
+                            String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?"); // will get put into updateCache() later
+                            String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+                            try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
+                                    PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
+                                connectionHandler.conn.setAutoCommit(false);
+                                    
+                                update.setInt(1, amount  - itemAllocation.getAmount());
+                                update.setString(2, item.getItemID());
+                                update.setString(3, this.shoppingListID);
+                                    
+                                listChange.setString(1, this.shoppingListID);
+                                listChange.setInt(2, newChangeID(connectionHandler));
+                                listChange.setString(3, "REMOVED");
+                                listChange.setDate(4, Date.valueOf(LocalDate.now()));
+                                listChange.setString(5, item.getItemID());
+                                listChange.setString(6, user.getUserID());
+                                listChange.setInt(7, amount); // the amount that gets removed from the current amount
+                                listChange.setBigDecimal(8, price);
+                                    
+                                connectionHandler.conn.commit();
+                                update.close();
+                                listChange.close();
+                                itemAllocation.setAmount(amount - itemAllocation.getAmount());
+                            } catch (SQLException e) {
+                                System.err.println(e.getMessage());
+                                if (connectionHandler.conn != null) {
+                                    System.err.println("Transaction failed, rolling back...");
+                                    connectionHandler.conn.rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+            } break;
+            default: {
+                System.err.println("change value " + change + " does not correspond to a valid change");
+            } break;
+        }
+    }
 
     /**
      * removes the Shoppinglist from the database

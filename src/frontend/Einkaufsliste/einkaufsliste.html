@@ -64,11 +64,12 @@
   <button class="add-product" @click="add_product"><span>+</span> Produkte hinzufügen</button>
 
     <!-- Dialogfenster zum anlegen eines neuen Items  -->
-    <div class="popup-overlay" v-if="showPopup">
-      <div class="popup-content">
-        <h4>Produkt hinzufügen</h4>
-
-        <label>Name:</label>
+    <div class="bottom-sheet" :class="{ visible: showPopup }">
+        <div class="sheet-header"> Produkte hinzufügen           
+            <button class="close-btn" @click="closePopup">✕</button>
+        </div>
+        <div class="sheet-body">
+          <label>Name:</label>
         <input type="text" v-model="newProduct.name" />
 
         <label>Kategorie:</label>
@@ -83,7 +84,7 @@
         </select>
 
         <label>Gewicht:</label>
-        <input type="number" v-model="newProduct.menge" placeholder="z.B. 500" />
+        <input type="number" v-model="newProduct.menge" placeholder="z.B. 500" min="0"/>
 
         <label>Einheit:</label>
         <select v-model="newProduct.einheit">
@@ -94,14 +95,10 @@
           <option>Liter</option>
           <option>Stück</option>
         </select>
-
-        <div class="popup-buttons">
-          <button @click="saveProduct">Speichern</button>
-          <button @click="closePopup">Abbrechen</button>
+          <button id="saveList" @click="saveProduct">Speichern</button>
         </div>
-      </div>
     </div>
-
+ 
     <!-- Navigation -->
         <nav class="bottom-nav">
           <button class="nav-item active"  @click="goToStartseite">

@@ -41,7 +41,13 @@ const LoginForm = {
 
     <div class="input-with-icon">
       <img src="icons/lock.png" class="lock-icon" />
-      <input type="password" :placeholder="t('Passwort', 'Password')" v-model="password" />
+      <input :type="showPassword ? 'text' : 'password'" :placeholder="t('Passwort', 'Password')" v-model="password" />
+      <img
+        :src="showPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
+        class="eye-icon"
+        @click="togglePassword"
+        alt="Toggle Password Visibility"
+      />  
     </div>
 
       <button @click="login">{{ t('Einloggen', 'Log In') }}</button>
@@ -57,11 +63,15 @@ const LoginForm = {
     return {
       username: '',
       password: '',
+      showPassword: false,
       errorMessage: ''
     };
   },
   methods: {
     t,
+    togglePassword() {
+    this.showPassword = !this.showPassword;
+    },
     async login() {
       this.errorMessage = '';
       if (!this.username || !this.password) {
@@ -103,12 +113,24 @@ const RegisterForm = {
 
     <div class="input-with-icon">
       <img src="icons/lock.png" class="lock-icon" />
-      <input type="password" :placeholder="t('Passwort', 'Password')" v-model="password" />
+      <input :type="showPassword ? 'text' : 'password'" :placeholder="t('Passwort', 'Password')" v-model="password" />
+      <img
+        :src="showPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
+        class="eye-icon"
+        @click="togglePassword"
+        alt="Toggle Password Visibility"
+      />  
     </div>
 
     <div class="input-with-icon">
       <img src="icons/lock.png" class="lock-icon" />
       <input type="password" :placeholder="t('Passwort wiederholen', 'Repeat password')" v-model="repeatPassword" />
+      <img
+        :src="showRepeatPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
+        class="eye-icon"
+        @click="toggleRepeatPassword"
+        alt="Toggle Password Visibility"
+      />  
     </div>
 
       <button @click="register">{{ t('Registrieren', 'Register') }}</button>
@@ -124,11 +146,19 @@ const RegisterForm = {
       email: '',
       password: '',
       repeatPassword: '',
+      showRepeatPassword: false,
+      showPassword: false,
       errorMessage: ''
     };
   },
   methods: {
     t,
+    togglePassword() {
+      this.showPassword = !this.showPassword;
+    },
+    toggleRepeatPassword() {
+      this.showRepeatPassword = !this.showRepeatPassword;
+    },
     async register() {
       this.errorMessage = '';
       if (!this.email || !this.password || !this.repeatPassword) {

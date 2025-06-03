@@ -44,22 +44,63 @@
           <div class="product-list">
             <div v-for="product in products" :key="product.id" class="product-card">
               <div class="product-icon">
-                <!-- <img :src="getIcon(product.kategorie)" alt="icon" /> -->
-                  <img src="icons/default.png" alt="Icon" class="nav-icon" />
+                <img :src="getIcon(product.kategorie)" alt="icon" /> 
+                <!-- <img src="icons/default.png" alt="Icon" class="nav-icon" /> -->
               </div>
               <div class="product-info">
                 <div class="product-name">{{ product.name }}</div>
                 <div class="product-meta">
-                  Gekauft am: {{ product.datum }} </br>
+                  Gekauft: {{ product.datum }} </br>
                   Menge: {{ product.menge }} {{ product.einheit }}
                 </div>
               </div>
-              <div class="product-price">{{ product.preis || '— €' }}</div>
-              <button class="btn btn-outline-danger" title="Loschen die Artikel" @click ="deleteProduct(product.id)">X</button>
+              <div class="product-price">{{ product.preis || '—' }} €</div>
+              <button class="btn btn-outline-success  custom-button" title="Artikel anpassen" @click ="openChangeProduct(product)">...</button>
+              <button class="btn btn-outline-danger  custom-button" title="Artikel loschen" @click ="deleteProduct(product.id)">X</button>
             </div>
           </div>
         </main>
 
+    <!-- Dialogsfenster zur Anpassung der Produkte -->
+      <div class="bottom-sheet" :class="{ visible: showChangeProduct }">
+        <div class="sheet-header"> Produkt anpassen          
+            <button class="close-btn" @click="closeChangeProduct">✕</button>
+        </div>
+        <div class="sheet-body">
+           <label>Name:</label>
+        <input type="text" v-model="newProduct.name" />
+
+        <label>Kategorie:</label>
+        <select v-model="newProduct.kategorie">
+          <option disabled value="">Bitte wählen</option>
+          <option>Obst & Gemüse</option>
+          <option>Getränke</option>
+          <option>Fleisch</option>
+          <option>Snacks</option>
+          <option>Haushalt</option>
+          <option>Sonstiges</option>
+        </select>
+
+        <label>Gewicht:</label>
+        <input type="number" v-model="newProduct.menge" placeholder="z.B. 500" min="0"/>
+
+        <label>Einheit:</label>
+        <select v-model="newProduct.einheit">
+          <option disabled value="">Bitte wählen</option>
+          <option>Gramm</option>
+          <option>Kilogramm</option>
+          <option>Milliliter</option>
+          <option>Liter</option>
+          <option>Stück</option>
+        </select>
+
+        <label>Preis:</label>
+        <input type="float" v-model="newProduct.preis" placeholder="z.B. 3,00" min="0"/>
+          <button @click="changeProduct">OK</button>
+        </div>
+      </div>
+
+  
     <!-- Button: neue Produkt hinzufugen -->
   <button class="add-product" @click="add_product"><span>+</span> Produkte hinzufügen</button>
 
@@ -95,6 +136,9 @@
           <option>Liter</option>
           <option>Stück</option>
         </select>
+
+        <label>Preis:</label>
+        <input type="number" step="0.01" v-model="newProduct.preis" placeholder="z.B. 3.00" min="0"/>
           <button id="saveList" @click="saveProduct">Speichern</button>
         </div>
     </div>

@@ -51,6 +51,22 @@ new Vue({
             this.newList = { name: ''};
       },
 
+      // ohne Logik Liste erstellen --> wenn mit logik das hier löschen
+      saveList() {
+        if(!this.newList.name) 
+          {
+          alert('Bitte alle Felder ausfüllen.');
+          return;
+          }
+
+        this.lists.push({
+          id: Date.now().toString(36), // Date.now() gibt die aktuelle Zeit in Millisekunden seit dem 1. Januar 1970 zurück (z. B. 1717171234567), .toString(36) wandelt diese Zahl in das Zahlensystem zur Basis 36 um 
+          name: this.newList.name
+        });
+
+        this.closePopup();
+      },
+
       /*
       //Logik Liste erstellen
       //Liste erstellen

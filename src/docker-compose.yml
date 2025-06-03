@@ -1,0 +1,16 @@
+services:
+  # 
+  backend:
+    build: backend/
+
+  db:
+    build: backend/database/
+    restart: always
+    volumes:
+      - ./postgres:/var/lib/postgresql/data # keep the db somewhere persistent
+    environment:
+      POSTGRES_PASSWORD: passwd # not very nice
+      POSTGRES_USER: backendusr
+      POSTGRES_DB: shareshopdb
+    ports:
+      - 5434:5432 # allow access from the host. This is just for testing, remove in deployment!

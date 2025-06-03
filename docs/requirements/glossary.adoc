@@ -42,6 +42,7 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet (Fa
 //| UP | Unified Process | Vorgehensmodell für die Softwareentwicklung
 | DB | Datenbank | xx
 | ORM | Objektrelationaler Mapper | 
+| cwd | current working directory | Aktuelles Arbeitsverzeichnis eines Prozesses, oft im Kontext einer Shell.
 |===
 
 [#verzeichnisdatenstruktur]

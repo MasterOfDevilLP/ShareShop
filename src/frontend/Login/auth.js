@@ -33,12 +33,23 @@ const LoginForm = {
     <div class="auth-form">
       <h2>{{ t('Login', 'Sign In') }}</h2>
       <LanguageSwitcher />
-      <input type="text" :placeholder="t('Benutzername', 'Username')" v-model="username" />
+
+    <div class="input-with-icon">
+      <img src="icons/email.png" class="email-icon" />
+      <input type="email" :placeholder="t('E-Mail', 'Email')" v-model="email" />
+    </div>
+
+    <div class="input-with-icon">
+      <img src="icons/lock.png" class="lock-icon" />
       <input type="password" :placeholder="t('Passwort', 'Password')" v-model="password" />
+    </div>
+
       <button @click="login">{{ t('Einloggen', 'Log In') }}</button>
+      
       <p class="link" @click="$emit('switchMode')">
         {{ t('Noch kein Account? Jetzt registrieren', 'No account? Register here') }}
       </p>
+
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
   `,
@@ -66,7 +77,7 @@ const LoginForm = {
         });
         const data = await res.json();
         if (data.success) {
-          window.location.href = '/dashboard';
+          window.location.href = '/startenseite';
         } else {
           this.errorMessage = t('Falscher Benutzername oder Passwort.', 'Incorrect username or password.');
         }
@@ -84,9 +95,22 @@ const RegisterForm = {
     <div class="auth-form">
       <h2>{{ t('Registrieren', 'Register') }}</h2>
       <LanguageSwitcher />
+
+    <div class="input-with-icon">
+      <img src="icons/email.png" class="email-icon" />
       <input type="email" :placeholder="t('E-Mail', 'Email')" v-model="email" />
+    </div>
+
+    <div class="input-with-icon">
+      <img src="icons/lock.png" class="lock-icon" />
       <input type="password" :placeholder="t('Passwort', 'Password')" v-model="password" />
+    </div>
+
+    <div class="input-with-icon">
+      <img src="icons/lock.png" class="lock-icon" />
       <input type="password" :placeholder="t('Passwort wiederholen', 'Repeat password')" v-model="repeatPassword" />
+    </div>
+
       <button @click="register">{{ t('Registrieren', 'Register') }}</button>
       <p class="link" @click="$emit('switchMode')">
         {{ t('Bereits registriert? Zum Login', 'Already registered? Login here') }}
@@ -94,6 +118,7 @@ const RegisterForm = {
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
   `,
+  
   data() {
     return {
       email: '',
@@ -125,7 +150,14 @@ const RegisterForm = {
         if (data.success) {
           window.location.href = '/startenseite?erklaermodus=true';
         } else {
-          this.errorMessage = data.message || t('Registrierung nicht erfolgreich.', 'Registration failed.');
+          if (data.message === 'Email already registered') {
+            this.errorMessage = t(
+              'Diese E-Mail ist bereits registriert. Bitte einloggen.',
+              'This email is already registered. Please log in.'
+            );
+          } else {
+            this.errorMessage = data.message || t('Registrierung nicht erfolgreich.', 'Registration failed.');
+          }
         }
       } catch {
         this.errorMessage = t('Fehler bei der Registrierung.', 'Error during registration.');

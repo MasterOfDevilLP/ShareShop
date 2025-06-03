@@ -1,23 +1,23 @@
-= Projektplan: {project-name}
+= Projektplan: ShareShop
 
-Benjamin Banse <Benjamin.Banse@stud.htw-dresden.de>;
-Kevin Bürger <Bürger.Kevin@stud.htw-dresden.de>;
-Anni Nguyen <Anni.Nguyen@stud.htw-dresden.de>;
-Emil Hempel <Emil.Hempel@stud.htw-dresden.de>;
-Valencia Melvika <Valencia.Melvika@stud.htw-dresden.de>;
-Florian Süßmann <Florian.Süßmann@stud.htw-dresden.de>;
-Han Nguyen <HanNguyen@stud.htw-dresden.de>;
+* Benjamin Banse Benjamin.Banse@stud.htw-dresden.de
+* Kevin Bürger Bürger.Kevin@stud.htw-dresden.de
+* Anni Nguyen Anni.Nguyen@stud.htw-dresden.de
+* Emil Hempel Emil.Hempel@stud.htw-dresden.de
+* Valencia Melvika Valencia.Melvika@stud.htw-dresden.de
+* Florian Süßmann Florian.Süßmann@stud.htw-dresden.de
+* Han Nguyen HanNguyen@stud.htw-dresden.de
 
-{localdatetime}
+2025-05-29
 include::../_includes/default-attributes.inc.adoc[]
-// Platzhalter für weitere Dokumenten-Attribute
 
 
 == Einführung
-In Diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil davon ist unter anderem Terminplanung, Sprint-Details und Details zu Ticket-Typen etc.
+In diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil davon sind unter anderem Terminplanung, Sprint-Details und Vorgaben zur Ticketgestaltung.
 
 
 == Projektorganisation
+
 === Teammitglieder
 [cols="1,2", options="header"]
 |===
@@ -25,7 +25,7 @@ In Diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil dav
 
 | Benjamin Banse  | Projektleiter, Scrum Master
 | Anni Nguyen     | Front-End Leader, Front-End Developer
-| Kevin Bürger    | Product Owner, "Dokumentator"
+| Kevin Bürger    | Product Owner, Dokumentation
 | Emil Hempel     | Back-End Developer
 | Valencia Melvika| Front-End Developer
 | Florian Süßmann | Back-End Developer
@@ -33,47 +33,63 @@ In Diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil dav
 |===
 
 === Termine
-* Dailies:
-** Dienstags: 18:30 Uhr - 19:00 Uhr (Pflicht)
-** Donnerstags: 20:30 Uhr - 21:00 Uhr (Freiwillig)
-* Sprint-Planning:
-** Mittwochs vor Sprint-Beginn. Zeiten werden aufgrund verschiedener Termine spontan entschieden.
-* Sprint-Review:
-** noch nicht abschätzbar wann erstes Sprint-Review durchzuführen ist.
-* Sprint-Retro:
-** Freitags, eine Woche vor Sprint-Ende. 14:00 Uhr - 15:00 Uhr.
+* **Dailies**:
+** Dienstags: 18:30 Uhr – 19:00 Uhr (Pflicht)
+** Donnerstags: 20:30 Uhr – 21:00 Uhr (Freiwillig)
+
+* **Sprint-Planning**:
+** Immer mittwochs vor Sprintbeginn, Zeit wird flexibel im Team abgestimmt (z. B. 21.05.2025, 17:00 Uhr)
+
+* **Sprint-Review**:
+** Voraussichtlich 01.06.2025, je nach Wireframe-Fortschritt und Kundentermin
+
+* **Sprint-Retrospektive**:
+** Jeweils freitags, eine Woche vor Sprint-Ende, 14:00 Uhr – 15:00 Uhr
+** Erste Retro fand am 16.05.2025 statt (Meeting 09)
+
 
 == Praktiken und Bewertung
 
 === Sprint-Taktiken
-Zur Zeit nutzen wir einen 4-wöchigen Sprintzyklus, mit jeweils einem (pflicht-)Meeting am Dienstag und ein freiwilliges jeden Donnerstag. Zudem haben wir im ersten Zyklus bereits ein Sprint-Planning und eine Sprint-Retro vollzogen.
-Als Visualisierung für unsere Tickets benutzen wir ein Kanban-Board inkl. einem Review-Schritt. Dieses soll nicht nur prüfen, ob eine Aufgabe geschafft wurde, sondern auch anderen Mitgliedern die Chance geben, Einblicke zu anderen Themen zu erhalten, um so einen allgemeinen Überblick zu behalten.
-Als Ablage für unser Projekt haben wir neben GitHub noch https://www.figma.com/design/tPMhkiZtvIjjC1mEde0giE/huyenbaohan.nguyen-s-team-library?node-id=0-1&p=f&t=yasinkcutEItHR6t-0[Figma] als auch https://miro.com/app/board/uXjVIEsf25w=/[miro] benutzt, damit das Front-End-Team eine bessere Arbeitsumgebung für die Modellierung besitzt.
-
+Wir arbeiten im vierwöchigen Sprint-Zyklus. Das Team nutzt ein gemeinsames Kanban-Board mit Review-Spalte, um Fortschritt und Codequalität sichtbar zu machen. Neben GitHub nutzen wir Figma und Miro zur UI-Modellierung und kollaborativen Designarbeit.
 
 === Definition of Ready
-* Das Ticket ist klar beschrieben.
-* Das Ticket enthält Akzeptanzkriterien.
-* Das Ticket ist im Arbeitsaufwand in Storypoints geschätzt.
-* Das Ticket hat keine offenen Abhängigkeiten zu anderen Themen, sozusagen "Standalone"
-* Das Ticket ist klein genug, um in einem Sprint von einer Person umgesetzt zu werden.
-* Das Ticket ist priorisiert und vom Product Owner freigegeben bzw. abgesprochen mit diesem.
-* Alle notwendigen Informationen und Anhänge sind vorhanden.
+* Das Ticket ist klar und verständlich formuliert.
+* Akzeptanzkriterien sind enthalten.
+* Storypoints wurden geschätzt (z. B. 6h = 6 SP-Regel).
+* Keine offenen Blocker oder Abhängigkeiten.
+* Umfang ist für eine Person in einem Sprint machbar.
+* Freigabe oder Absprache mit dem PO erfolgte.
+* Alle nötigen Infos und Anhänge liegen bei.
 
 === Definition of Done
-* Der Code ist vollständig implementiert.
-* Alle Akzeptanzkriterien des Tickets sind erfüllt.
-* Unit-Tests wurden geschrieben und bestanden.
-* Die Funktionalität wurde manuell getestet (falls erforderlich, wie z.B. Front-End).
-* Code Review wurde durchgeführt und freigegeben.
-* Dokumentation wurde aktualisiert (z. B. technische Doku, API-Doku).
-* Die Änderung ist in der Testumgebung deployed.
-* Das Product Owner hat das Ergebnis bestätigt.
+* Code ist vollständig und korrekt implementiert.
+* Alle Akzeptanzkriterien sind erfüllt.
+* Unit-Tests vorhanden und erfolgreich.
+* Manuelles Testing (v. a. Front-End) abgeschlossen.
+* Code Review erfolgt und freigegeben.
+* Doku wurde angepasst/aktualisiert.
+* Änderung ist in Testumgebung deployed.
+* Abnahme durch PO ist erfolgt.
 
-== Deployment
-//Outline the strategy for deploying the software (and its updates) into the production environment.
-// STILL TODO
+== Deployment (bereitstellung der Software)
 
-== Erkenntnisse (Lessons learned)
-Im Ersten Sprint wurden 2 Dailies pro Woche als Pflicht angesehen. Schnell hat sich herausgestellt, dass für den Arbeitsaufwand nicht 2 Dailies von Nöten sind.
-Ein Projekt zu entwickeln, zu stabilisieren und voran zu treiben ist anspruchsvoller als erwartet. Dazu gehört auch das Planen von Tickets die für einen Sprint relevant sind.
+Aktuell arbeiten wir daran, unsere Software so vorzubereiten, dass sie einfach gestartet und genutzt werden kann. 
+Das für uns im Team als auch später für andere.
+
+Folgende Schritte haben wir bereits unternommen:
+
+* **Datenbank vorbereiten**: Florian hat eine Test-Datenbank erstellt und ein Skript entwickelt, mit dem diese Datenbank automatisch eingerichtet werden kann. Das bedeutet, dass niemand die Datenbank manuell einrichten muss; das Skript übernimmt das für uns.
+
+* **Automatischer Start der Anwendung**: Wir planen, unsere Anwendung so zu verpacken, dass sie mit einem einzigen Befehl gestartet werden kann. Dafür nutzen wir ein Tool namens Docker. Es sorgt dafür, dass alle benötigten Teile der Anwendung zusammenarbeiten und auf jedem Computer gleich funktionieren.
+
+Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwendung problemlos starten und verwenden kann, ohne sich um technische Details kümmern zu müssen.
+
+== Erkenntnisse (Lessons Learned)
+
+* Zwei Pflicht-Dailies pro Woche waren zunächst zu viel – Donnerstagstermin wurde als freiwillig deklariert.
+* Das frühzeitige Definieren von Branching- und Pull-Request-Standards war sinnvoll zur Qualitätssicherung.
+* Modellierung ist essenziell für gute Sprintplanung – besonders beim Backend hilfreich für Ticketdefinition.
+* Storypoints helfen bei realistischeren Aufwandseinschätzungen, müssen aber noch stärker im Team verankert werden.
+* Die Dokumentation (Adoc-Struktur) braucht klare Rollenverteilung – PO und Entwicklerteams strukturieren Backend/Frontend getrennt.
+

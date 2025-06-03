@@ -161,3 +161,27 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Coding-Guidelines (Java) werden zentral gesammelt (inkl. Linter-Vorlage)
 * Sprintboards sollen so gefiltert werden, dass Storys nicht mehr in den Task-Fokus fallen
 * Vision-Dokument steht bald zur Review bereit
+
+== 09. Retrospektive, 16.05.2025:
+
+* `xref:./09_retrospektive.adoc[Zur vollständigen Dokumentation]`
+
+* Einstieg mit Gefühlsrad: Mehrheit fühlte sich „hoffnungsvoll“ oder „zufrieden“
+* Positives Feedback zur Zusammenarbeit aller Teammitglieder
+* Herausforderungen im Backend führten zu Lernfortschritten trotz Frustration
+* Verbesserungsbedarf bei Ticketbeschreibungen und GitHub-Board-Filterung erkannt
+* Einführung von Storypoint-Schätzungen und präziseren Tickets für Sprint 2 beschlossen
+* Anpassung der Meetingstruktur: Dienstag = Pflichtmeeting, Donnerstag = freiwillig
+
+== 10. Meeting, 20.05.2025:
+
+* `xref:./10_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Modellierung (Komponenten) soll abgeschlossen und als Diagramm umgesetzt werden
+* Florian baut Datenbankstruktur nach Projektvorlage auf (SQL-Export & Deploy-Skript)
+* Vorschlag: Code komplett auf Englisch (inkl. Tabellen/Klassen/Funktionen), Doku bleibt Deutsch
+* Einkaufsliste & Einkaufsmodus im UI sind funktional, kleinere Inkonsistenzen werden behoben
+* Einführung von **Storypoints** zur Sprintplanung (6h = 6 SP), optionales Q&A im Daily
+* Projectplan fertiggestellt, Review- & Retrotermine vorläufig gesetzt
+* Sprint Review am 01.06. geplant (Wireframes als Präsentationsbasis)
+* Geplante Erweiterung der Doku: Aufteilung nach Frontend-/Backend-Modulen

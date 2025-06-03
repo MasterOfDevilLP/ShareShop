@@ -20,7 +20,7 @@ SET row_security = off;
 
 --
 -- TOC entry 858 (class 1247 OID 16416)
--- Name: changeenum; Type: TYPE; Schema: public; Owner: modfurry
+-- Name: changeenum; Type: TYPE; Schema: public; Owner: backendusr
 --
 
 CREATE TYPE public.changeenum AS ENUM (
@@ -30,7 +30,7 @@ CREATE TYPE public.changeenum AS ENUM (
 );
 
 
-ALTER TYPE public.changeenum OWNER TO modfurry;
+ALTER TYPE public.changeenum OWNER TO backendusr;
 
 SET default_tablespace = '';
 
@@ -38,7 +38,7 @@ SET default_table_access_method = heap;
 
 --
 -- TOC entry 219 (class 1259 OID 16410)
--- Name: itemallocation; Type: TABLE; Schema: public; Owner: modfurry
+-- Name: itemallocation; Type: TABLE; Schema: public; Owner: backendusr
 --
 
 CREATE TABLE public.itemallocation (
@@ -49,11 +49,11 @@ CREATE TABLE public.itemallocation (
 );
 
 
-ALTER TABLE public.itemallocation OWNER TO modfurry;
+ALTER TABLE public.itemallocation OWNER TO backendusr;
 
 --
 -- TOC entry 220 (class 1259 OID 16423)
--- Name: itemchanges; Type: TABLE; Schema: public; Owner: modfurry
+-- Name: itemchanges; Type: TABLE; Schema: public; Owner: backendusr
 --
 
 CREATE TABLE public.itemchanges (
@@ -64,11 +64,11 @@ CREATE TABLE public.itemchanges (
 );
 
 
-ALTER TABLE public.itemchanges OWNER TO modfurry;
+ALTER TABLE public.itemchanges OWNER TO backendusr;
 
 --
 -- TOC entry 217 (class 1259 OID 16400)
--- Name: items; Type: TABLE; Schema: public; Owner: modfurry
+-- Name: items; Type: TABLE; Schema: public; Owner: backendusr
 --
 
 CREATE TABLE public.items (
@@ -81,11 +81,11 @@ CREATE TABLE public.items (
 );
 
 
-ALTER TABLE public.items OWNER TO modfurry;
+ALTER TABLE public.items OWNER TO backendusr;
 
 --
 -- TOC entry 221 (class 1259 OID 16428)
--- Name: listchanges; Type: TABLE; Schema: public; Owner: modfurry
+-- Name: listchanges; Type: TABLE; Schema: public; Owner: backendusr
 --
 
 CREATE TABLE public.listchanges (
@@ -97,11 +97,11 @@ CREATE TABLE public.listchanges (
 );
 
 
-ALTER TABLE public.listchanges OWNER TO modfurry;
+ALTER TABLE public.listchanges OWNER TO backendusr;
 
 --
 -- TOC entry 218 (class 1259 OID 16405)
--- Name: shoppinglists; Type: TABLE; Schema: public; Owner: modfurry
+-- Name: shoppinglists; Type: TABLE; Schema: public; Owner: backendusr
 --
 
 CREATE TABLE public.shoppinglists (
@@ -113,11 +113,11 @@ CREATE TABLE public.shoppinglists (
 );
 
 
-ALTER TABLE public.shoppinglists OWNER TO modfurry;
+ALTER TABLE public.shoppinglists OWNER TO backendusr;
 
 --
 -- TOC entry 215 (class 1259 OID 16390)
--- Name: users; Type: TABLE; Schema: public; Owner: modfurry
+-- Name: users; Type: TABLE; Schema: public; Owner: backendusr
 --
 
 CREATE TABLE public.users (
@@ -130,11 +130,11 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO modfurry;
+ALTER TABLE public.users OWNER TO backendusr;
 
 --
 -- TOC entry 216 (class 1259 OID 16395)
--- Name: wg; Type: TABLE; Schema: public; Owner: modfurry
+-- Name: wg; Type: TABLE; Schema: public; Owner: backendusr
 --
 
 CREATE TABLE public.wg (
@@ -144,12 +144,12 @@ CREATE TABLE public.wg (
 );
 
 
-ALTER TABLE public.wg OWNER TO modfurry;
+ALTER TABLE public.wg OWNER TO backendusr;
 
 --
 -- TOC entry 3492 (class 0 OID 16410)
 -- Dependencies: 219
--- Data for Name: itemallocation; Type: TABLE DATA; Schema: public; Owner: modfurry
+-- Data for Name: itemallocation; Type: TABLE DATA; Schema: public; Owner: backendusr
 --
 
 COPY public.itemallocation (itemid, shoppinglistid, creationdate, amount) FROM stdin;
@@ -159,7 +159,7 @@ COPY public.itemallocation (itemid, shoppinglistid, creationdate, amount) FROM s
 --
 -- TOC entry 3493 (class 0 OID 16423)
 -- Dependencies: 220
--- Data for Name: itemchanges; Type: TABLE DATA; Schema: public; Owner: modfurry
+-- Data for Name: itemchanges; Type: TABLE DATA; Schema: public; Owner: backendusr
 --
 
 COPY public.itemchanges (itemid, itemchangeid, change, changedate) FROM stdin;
@@ -171,7 +171,7 @@ COPY public.itemchanges (itemid, itemchangeid, change, changedate) FROM stdin;
 --
 -- TOC entry 3490 (class 0 OID 16400)
 -- Dependencies: 217
--- Data for Name: items; Type: TABLE DATA; Schema: public; Owner: modfurry
+-- Data for Name: items; Type: TABLE DATA; Schema: public; Owner: backendusr
 --
 
 COPY public.items (itemid, wgid, lastcachedchangeid, itemname, itemdescription, price) FROM stdin;
@@ -183,7 +183,7 @@ COPY public.items (itemid, wgid, lastcachedchangeid, itemname, itemdescription, 
 --
 -- TOC entry 3494 (class 0 OID 16428)
 -- Dependencies: 221
--- Data for Name: listchanges; Type: TABLE DATA; Schema: public; Owner: modfurry
+-- Data for Name: listchanges; Type: TABLE DATA; Schema: public; Owner: backendusr
 --
 
 COPY public.listchanges (shoppinglistid, listchangeid, change, changedate, itemid) FROM stdin;
@@ -193,7 +193,7 @@ COPY public.listchanges (shoppinglistid, listchangeid, change, changedate, itemi
 --
 -- TOC entry 3491 (class 0 OID 16405)
 -- Dependencies: 218
--- Data for Name: shoppinglists; Type: TABLE DATA; Schema: public; Owner: modfurry
+-- Data for Name: shoppinglists; Type: TABLE DATA; Schema: public; Owner: backendusr
 --
 
 COPY public.shoppinglists (shoppinglistid, wgid, lastcachedchangeid, creatoruserid, creationdate) FROM stdin;
@@ -203,7 +203,7 @@ COPY public.shoppinglists (shoppinglistid, wgid, lastcachedchangeid, creatoruser
 --
 -- TOC entry 3488 (class 0 OID 16390)
 -- Dependencies: 215
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: modfurry
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: backendusr
 --
 
 COPY public.users (userid, wgid, firstname, lastname, email, pwd) FROM stdin;
@@ -213,7 +213,7 @@ COPY public.users (userid, wgid, firstname, lastname, email, pwd) FROM stdin;
 --
 -- TOC entry 3489 (class 0 OID 16395)
 -- Dependencies: 216
--- Data for Name: wg; Type: TABLE DATA; Schema: public; Owner: modfurry
+-- Data for Name: wg; Type: TABLE DATA; Schema: public; Owner: backendusr
 --
 
 COPY public.wg (wgid, wgname, creationdate) FROM stdin;
@@ -223,7 +223,7 @@ COPY public.wg (wgid, wgname, creationdate) FROM stdin;
 
 --
 -- TOC entry 3332 (class 2606 OID 16414)
--- Name: itemallocation itemallocation_pkey; Type: CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: itemallocation itemallocation_pkey; Type: CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.itemallocation
@@ -232,7 +232,7 @@ ALTER TABLE ONLY public.itemallocation
 
 --
 -- TOC entry 3334 (class 2606 OID 16427)
--- Name: itemchanges itemchanges_pkey; Type: CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: itemchanges itemchanges_pkey; Type: CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.itemchanges
@@ -241,7 +241,7 @@ ALTER TABLE ONLY public.itemchanges
 
 --
 -- TOC entry 3328 (class 2606 OID 16404)
--- Name: items items_pkey; Type: CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: items items_pkey; Type: CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.items
@@ -250,7 +250,7 @@ ALTER TABLE ONLY public.items
 
 --
 -- TOC entry 3336 (class 2606 OID 16432)
--- Name: listchanges listchanges_pkey; Type: CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: listchanges listchanges_pkey; Type: CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.listchanges
@@ -259,7 +259,7 @@ ALTER TABLE ONLY public.listchanges
 
 --
 -- TOC entry 3330 (class 2606 OID 16409)
--- Name: shoppinglists shoppinglist_pkey; Type: CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: shoppinglists shoppinglist_pkey; Type: CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.shoppinglists
@@ -268,7 +268,7 @@ ALTER TABLE ONLY public.shoppinglists
 
 --
 -- TOC entry 3324 (class 2606 OID 16394)
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.users
@@ -277,7 +277,7 @@ ALTER TABLE ONLY public.users
 
 --
 -- TOC entry 3326 (class 2606 OID 16399)
--- Name: wg wg_pkey; Type: CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: wg wg_pkey; Type: CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.wg
@@ -286,7 +286,7 @@ ALTER TABLE ONLY public.wg
 
 --
 -- TOC entry 3340 (class 2606 OID 16498)
--- Name: itemallocation itemallocation_itemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: itemallocation itemallocation_itemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.itemallocation
@@ -295,7 +295,7 @@ ALTER TABLE ONLY public.itemallocation
 
 --
 -- TOC entry 3341 (class 2606 OID 16503)
--- Name: itemallocation itemallocation_shoppinglistid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: itemallocation itemallocation_shoppinglistid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.itemallocation
@@ -304,7 +304,7 @@ ALTER TABLE ONLY public.itemallocation
 
 --
 -- TOC entry 3342 (class 2606 OID 16483)
--- Name: itemchanges itemchanges_itemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: itemchanges itemchanges_itemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.itemchanges
@@ -313,7 +313,7 @@ ALTER TABLE ONLY public.itemchanges
 
 --
 -- TOC entry 3338 (class 2606 OID 16473)
--- Name: items items_wgid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: items items_wgid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.items
@@ -322,7 +322,7 @@ ALTER TABLE ONLY public.items
 
 --
 -- TOC entry 3343 (class 2606 OID 16493)
--- Name: listchanges listchanges_itemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: listchanges listchanges_itemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.listchanges
@@ -331,7 +331,7 @@ ALTER TABLE ONLY public.listchanges
 
 --
 -- TOC entry 3344 (class 2606 OID 16488)
--- Name: listchanges listchanges_shoppinglistid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: listchanges listchanges_shoppinglistid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.listchanges
@@ -340,7 +340,7 @@ ALTER TABLE ONLY public.listchanges
 
 --
 -- TOC entry 3339 (class 2606 OID 16478)
--- Name: shoppinglists shoppinglists_wgid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: shoppinglists shoppinglists_wgid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.shoppinglists
@@ -349,7 +349,7 @@ ALTER TABLE ONLY public.shoppinglists
 
 --
 -- TOC entry 3337 (class 2606 OID 16468)
--- Name: users users_wgid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: modfurry
+-- Name: users users_wgid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: backendusr
 --
 
 ALTER TABLE ONLY public.users

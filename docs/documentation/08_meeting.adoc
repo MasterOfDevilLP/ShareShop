@@ -1,15 +1,15 @@
 = ShareShop Projekt – Meetingprotokoll
-Kevin (Project Owner)
+Kevin (Product Owner)
 2025-05-08
 
 == Teilnehmer
-* Kevin
 * Benni
 * Anni
 * Han
 * Valencia
 * Emil
 * Florian
+* Kevin
 
 == Datum und Uhrzeit
 15.05.2025, ca. 20:30 Uhr

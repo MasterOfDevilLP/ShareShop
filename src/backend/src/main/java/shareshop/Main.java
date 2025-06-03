@@ -2,6 +2,8 @@ package shareshop;
 
 import java.sql.SQLException;
 
+import shareshop.rest.RestApp;
+
 /**
  * Main class of shareshop
  */
@@ -27,7 +29,9 @@ public class Main {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
-
+        
+        RestApp restApp = new RestApp(config.webHost, config.webPort);
+        
         /* put the main loop of the backend here */
 
         connectionHandler.close();

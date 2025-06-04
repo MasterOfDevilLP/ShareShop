@@ -15,6 +15,9 @@ public class Config {
         public int port;
         public int max_connection_tries;
     }
+    
+    public int webPort;
+    public String webHost;
 
     public DatabaseConfig getDBConfig() {return this.DatabaseConfig;}
 }

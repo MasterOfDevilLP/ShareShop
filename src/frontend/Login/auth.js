@@ -96,7 +96,7 @@ const LoginForm = {
       // Hash pwd before sending
       const hashed = CryptoJS.SHA256(this.password).toString();
       try {
-        const res = await fetch('/api/login', {
+        const res = await fetch('/api/login', { //
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username: this.username, password: hashed })
@@ -124,13 +124,13 @@ const RegisterForm = {
       <h2>{{ t('Registrieren', 'Register') }}</h2>
       <LanguageSwitcher />
 
-    <-- Email input -->
+    <!-- Email input -->
     <div class="input-with-icon">
       <img src="icons/email.png" class="email-icon" />
       <input type="email" :placeholder="t('E-Mail', 'Email')" v-model="email" />
     </div>
 
-    <-- Password input -->
+    <!-- Password input -->
     <div class="input-with-icon">
       <img src="icons/lock.png" class="lock-icon" />
       <input :type="showPassword ? 'text' : 'password'" :placeholder="t('Passwort', 'Password')" v-model="password" />
@@ -142,7 +142,7 @@ const RegisterForm = {
       />  
     </div>
 
-    <-- Repeat Password input -->
+    <!-- Repeat Password input -->
     <div class="input-with-icon">
       <img src="icons/lock.png" class="lock-icon" />
       <input type="password" :placeholder="t('Passwort wiederholen', 'Repeat password')" v-model="repeatPassword" />
@@ -154,15 +154,15 @@ const RegisterForm = {
       />  
     </div>
 
-      <-- Register button -->
+      <!-- Register button -->
       <button @click="register">{{ t('Registrieren', 'Register') }}</button>
 
-      <-- Switch to login form -->
+      <!-- Switch to login form -->
       <p class="link" @click="$emit('switchMode')">
         {{ t('Bereits registriert? Zum Login', 'Already registered? Login here') }}
       </p>
 
-      <-- Error msg -->
+      <!-- Error msg -->
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
   `,

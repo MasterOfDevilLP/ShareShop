@@ -7,8 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.imageio.IIOException;
 
 import org.javatuples.Pair;
+
+import shareshop.ListChange.ChangeEnum;
 
 public class ShoppingList {
     private String shoppingListID;
@@ -217,7 +222,49 @@ public class ShoppingList {
         for (ItemAllocation itemAllocation : itemAllocations) {
             items.add(new Pair<Item,Integer>(itemAllocation.getItem(), itemAllocation.getAmount()));
         }
+        items.trimToSize();
         return items;
+    }
+
+    /**
+     * get the change log of the shoppinglist with pagination as an ArrayList filled with objects of the class ListChanges
+     * @param connectionHandler
+     * @param start
+     *              first row is 1.
+     *              If start is 0 or higher then the last row it will start at the first row.
+     * @param end   first row is 1.
+     *              If end is 0 or higher then last row it will go until the last row.
+     * @return      ArrayList with ListChange objects if there are changes in the list.
+     *              null if there are no changes
+     * @throws SQLException
+     * @throws IllegalArgumentException if start >= end
+     */
+    public ArrayList<ListChange> getChangeLog(DBConnectionHandler connectionHandler, int start, int end) throws SQLException, IllegalArgumentException {
+        if (start >= end) {throw new IllegalArgumentException("end has to be bigger then start");}
+        String selectString = new String("SELECT * FROM listchanges WHERE shoppinglistid = ? ORDER BY listchangeid ASC");
+        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
+        selectStatement.setString(1, this.shoppingListID);
+
+        ResultSet rs = selectStatement.executeQuery();
+        rs.last();
+        int length = rs.getRow();
+        int last = end != 0 && end <= length ? end : length;
+        if (length == 0) {return null;}
+        ArrayList<ListChange> listchanges = new ArrayList<ListChange>();
+        rs.absolute(start != 0 && start <= length ? start : 1);
+        do {
+            listchanges.add(new ListChange( rs.getString("shoppinglistid"),
+                                            rs.getInt("listchangeid"), 
+                                            ChangeEnum.valueOf(rs.getString("change")), 
+                                            rs.getDate("changedate"), rs.getString("itemid"),
+                                            rs.getString("listname"), 
+                                            rs.getInt("amount"),
+                                            rs.getString("userid"),
+                                            rs.getBigDecimal("price")));
+        } while ((rs.getRow() < last) && rs.next());
+        selectStatement.close();
+        listchanges.trimToSize();
+        return listchanges;
     }
 
     /**

@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class WG {
@@ -121,11 +122,79 @@ public class WG {
         user.setWgID(connectionHandler, null);
     }
 
-    public ShoppingList getList(DBConnectionHandler connectionHandler, String shoppingListID) {
-        return null; // TODO: implement getList after implementing the ShoppingList Class
+    /**
+     * get the Shoppinglist as an Object corresponding to the ID
+     * @param connectionHandler
+     * @param shoppingListID
+     * @return  Shoppinglist Object,
+     *          or null if there is no shoppinglist with this ID.
+     * @throws SQLException
+     */
+    public ShoppingList getList(DBConnectionHandler connectionHandler, String shoppingListID) throws SQLException {
+        String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
+        connectionHandler.makeSureItsOpen();
+        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
+        selectStatement.setString(1, shoppingListID);
+        ResultSet rs = selectStatement.executeQuery();
+        if (rs.next()) {
+            ShoppingList newShoppingList = new ShoppingList(    rs.getString("shoppinglistid"), 
+                                                                rs.getString("wgid"), 
+                                                                rs.getInt("lastcachedchangeid"), 
+                                                                rs.getDate("creationdate"), 
+                                                                rs.getString("listname"), 
+                                                                rs.getString("creatoruserid"));
+            selectStatement.close();
+            return newShoppingList;
+        }
+        selectStatement.close();
+        return null;
     }
 
-    // TODO: createList
+    /**
+     * creates a new list on the database, adds the first change to the changelist ('CREATED') and returns the object of the new ShoppingList
+     * @param connectionHandler
+     * @param user
+     * @param name
+     * @return  ShoppingList Object,
+     *          or null when something goes wrong.
+     * @throws SQLException
+     */
+    public ShoppingList createList(DBConnectionHandler connectionHandler, User user, String name) throws SQLException {
+        Date currentDate = Date.valueOf(LocalDate.now());
+        String uuid = ShareShopUtility.genNewUUID(connectionHandler);
+        String insertString = new String("INSERT INTO shoppinglists(shoppinglistid, wgid, lastcachedchangeid, creationdate, listname, creatoruserid) VALUES(?, ?, ?, ?, ?, ?)");
+        String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, userid) VALUES(?, ?, ?, ?, ?)");
+        connectionHandler.makeSureItsOpen();
+        try (   PreparedStatement insertStatement = connectionHandler.conn.prepareStatement(insertString);
+                PreparedStatement listChangeStatement = connectionHandler.conn.prepareStatement(listChangeString)) {
+            connectionHandler.conn.setAutoCommit(false);
+
+            insertStatement.setString(1, uuid);
+            insertStatement.setString(2, this.wgID);
+            insertStatement.setInt(3, 1);
+            insertStatement.setDate(4, currentDate);
+            insertStatement.setString(5, name);
+            insertStatement.setString(6, user.getUserID());
+
+            listChangeStatement.setString(1, uuid);
+            listChangeStatement.setInt(2, 1);
+            listChangeStatement.setString(3, "CREATED");
+            listChangeStatement.setDate(4, currentDate);
+            listChangeStatement.setString(5, user.getUserID());
+
+            connectionHandler.conn.commit();
+            insertStatement.close();
+            listChangeStatement.close();
+            return new ShoppingList(uuid, this.wgID, 1, currentDate, name, user.getUserID());
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            if (connectionHandler.conn != null) {
+                System.err.println("Transaction failed, rolling back...");
+                connectionHandler.conn.rollback();
+            }
+        }
+        return null;
+    }
 
     /**
      * get a list of ShoppingList Objects from the wg

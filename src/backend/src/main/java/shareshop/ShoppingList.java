@@ -166,6 +166,7 @@ public class ShoppingList {
      */
     private int newChangeID(DBConnectionHandler connectionHandler) throws SQLException {
         String lastChangesString = new String("SELECT MAX(listchangeid) FROM listchanges WHERE shoppinglistid = ?");
+        connectionHandler.makeSureItsOpen();
         PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
         lastChanges.setString(1, this.shoppingListID);
         ResultSet rs = lastChanges.executeQuery();
@@ -187,6 +188,7 @@ public class ShoppingList {
     public void setListName(DBConnectionHandler connectionHandler, String listName) throws SQLException {
         String updateString = new String("UPDATE shoppinglists SET listname = ? WHERE shoppinglistid = ?");
         String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, listname) VALUES(?, ?, ?, ?, ?)");
+        connectionHandler.makeSureItsOpen();
         try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                 PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
             connectionHandler.conn.setAutoCommit(false);
@@ -242,6 +244,7 @@ public class ShoppingList {
     public ArrayList<ListChange> getChangeLog(DBConnectionHandler connectionHandler, int start, int end) throws SQLException, IllegalArgumentException {
         if (start >= end) {throw new IllegalArgumentException("end has to be bigger then start");}
         String selectString = new String("SELECT * FROM listchanges WHERE shoppinglistid = ? ORDER BY listchangeid ASC");
+        connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
         selectStatement.setString(1, this.shoppingListID);
 

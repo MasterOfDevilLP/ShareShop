@@ -145,7 +145,7 @@ const RegisterForm = {
     <!-- Repeat Password input -->
     <div class="input-with-icon">
       <img src="icons/lock.png" class="lock-icon" />
-      <input :type="showRepeatPassword ? 'text' : 'password'" :placeholder="t('Passwort wiederholen', 'Repeat Password')" v-model="password" />
+      <input :type="showRepeatPassword ? 'text' : 'password'" :placeholder="t('Passwort wiederholen', 'Repeat Password')" v-model="repeatPassword" />
       <img
         :src="showRepeatPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
         class="eye-icon"

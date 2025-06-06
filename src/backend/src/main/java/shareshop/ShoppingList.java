@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.imageio.IIOException;
 
@@ -156,6 +157,43 @@ public class ShoppingList {
         this.listName = listName;
         this.creatorUserID = creatorUserID;
         this.itemAllocations = new ArrayList<ItemAllocation>();
+    }
+
+    /**
+     * Constructor of Class ShoppingList via shoppingListID and DB query
+     * @param connectionHandler
+     * @param shoppingListID
+     * @throws SQLException
+     */
+    public ShoppingList(DBConnectionHandler connectionHandler, String shoppingListID) throws SQLException {
+        String selectString = new String ("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
+        PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
+        select.setString(1, shoppingListID);
+        ResultSet rs = select.executeQuery();
+        if (rs.next()) {
+            this.shoppingListID = shoppingListID;
+            this.wgID = rs.getString("wgid");
+            this.lastCachedCahngeID = rs.getInt("lastcachedchangeid");
+            this.creationDate = rs.getDate("creationdate");
+            this.listName = rs.getString("listname");
+            this.creatorUserID = rs.getString("creatoruserid");
+            select.close();
+        } else {
+            select.close();
+            throw new SQLException("there is no ShoppingList with shoppingListID: " + shoppingListID);
+        }
+
+        /* ItemAllocations */
+
+        this.itemAllocations = new ArrayList<ItemAllocation>();
+        selectString = new String ("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
+        select = connectionHandler.conn.prepareStatement(selectString);
+        select.setString(1, shoppingListID);
+        rs = select.executeQuery();
+        while (rs.next()) {
+            this.itemAllocations.add(new ItemAllocation(new Item(connectionHandler, rs.getString("itemid")), shoppingListID, rs.getDate("creationdate"), rs.getInt("amount")));
+        }
+        select.close();
     }
 
     /**

@@ -25,6 +25,28 @@ public class WG {
     }
 
     /**
+     * Constructor of Class WG via wgID and DB query
+     * @param connectionHandler
+     * @param wgID
+     * @throws SQLException
+     */
+    public WG(DBConnectionHandler connectionHandler, String wgID) throws SQLException {
+        String selectString = new String ("SELECT * FROM wg WHERE wgid = ?");
+        PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
+        select.setString(1, wgID);
+        ResultSet rs = select.executeQuery();
+        if (rs.next()) {
+            this.wgID = wgID;
+            this.wgName = rs.getString("wgname");
+            this.creationDate = rs.getDate("creationdate");
+            select.close();
+        } else {
+            select.close();
+            throw new SQLException("there is no WG with wgID: " + wgID);
+        }
+    }
+
+    /**
      * private function to update the DB after a change of any attribute of the wg
      * @param connectionHandler
      * @param wgID

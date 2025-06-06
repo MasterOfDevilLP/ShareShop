@@ -34,6 +34,31 @@ public class Item {
     }
 
     /**
+     * Constructor of Class Item via the itemID and a DB query
+     * @param connectionHandler
+     * @param itemID
+     * @throws SQLException
+     */
+    public Item(DBConnectionHandler connectionHandler, String itemID) throws SQLException {
+        String selectString = new String ("SELECT * FROM items WHERE itemid = ?");
+        PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
+        select.setString(1, itemID);
+        ResultSet rs = select.executeQuery();
+        if (rs.next()) {
+            this.itemID = itemID;
+            this.wgID = rs.getString("wgid");
+            this.lastCachedChangeID = rs.getInt("lastcachedchangeid");
+            this.itemName = rs.getString("itemname");
+            this.itemDescription = rs.getString("itemdescription");
+            this.price = rs.getBigDecimal("price");
+            select.close();
+        } else {
+            select.close();
+            throw new SQLException("there is no item with itemID: " + itemID);
+        }
+    }
+
+    /**
      * "generates" the next ID for a new change entry in the itemchanges table
      * @param connectionHandler
      * @return

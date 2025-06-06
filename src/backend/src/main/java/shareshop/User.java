@@ -1,6 +1,7 @@
 package shareshop;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -17,8 +18,8 @@ public class User {
     /**
      * Constructor of Class User with wgID
      * @param userID
-     * @param firstName
-     * @param lastName
+     * @param firstName can be null
+     * @param lastName  can be null
      * @param email
      * @param pwd
      * @param wgID
@@ -35,8 +36,8 @@ public class User {
     /**
      * Constructor of Class User without wgID
      * @param userID
-     * @param firstName
-     * @param lastName
+     * @param firstName can be null
+     * @param lastName  can be null
      * @param email
      * @param pwd
      */
@@ -47,6 +48,31 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.pwd = pwd;
+    }
+
+    /**
+     * Construcot of Class User via userID and DB query
+     * @param connectionHandler
+     * @param userID
+     * @throws SQLException
+     */
+    public User(DBConnectionHandler connectionHandler, String userID) throws SQLException {
+        String selectString = new String ("SELECT * FROM users WHERE userid = ?");
+        PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
+        select.setString(1, userID);
+        ResultSet rs = select.executeQuery();
+        if (rs.next()) {
+            this.userID = userID;
+            this.wgID = rs.getString("wgid");
+            this.firstName = rs.getString("firstname");
+            this.lastName = rs.getString("lastname");
+            this.email = rs.getString("email");
+            this.pwd = rs.getString("pwd");
+            select.close();
+        } else {
+            select.close();
+            throw new SQLException("there is no user with userID: " + userID);
+        }
     }
 
     /**

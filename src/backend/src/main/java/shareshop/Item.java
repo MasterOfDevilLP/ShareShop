@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class Item {
     private String itemID;
     private String wgID;
-    private int lastCachedCahngeID;
+    private int lastCachedChangeID;
     private String itemName;
     private String itemDescription;
     private BigDecimal price;
@@ -19,15 +19,15 @@ public class Item {
      * Constructor of Class Item
      * @param itemID
      * @param wgID
-     * @param lastCachedCahngeID
+     * @param lastCachedChangeID
      * @param itemName
      * @param itemDescription
      * @param price
      */
-    public Item(String itemID, String wgID, int lastCachedCahngeID, String itemName, String itemDescription, BigDecimal price) {
+    public Item(String itemID, String wgID, int lastCachedChangeID, String itemName, String itemDescription, BigDecimal price) {
         this.itemID = itemID;
         this.wgID = wgID;
-        this.lastCachedCahngeID = lastCachedCahngeID;
+        this.lastCachedChangeID = lastCachedChangeID;
         this.itemName = itemName;
         this.itemDescription = itemDescription;
         this.price = price;
@@ -177,7 +177,7 @@ public class Item {
      * get last cached change ID
      * @return
      */
-    public int getLastCachedChangeID() {return this.lastCachedCahngeID;}
+    public int getLastCachedChangeID() {return this.lastCachedChangeID;}
 
     /**
      * get item name

@@ -25,7 +25,6 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.5</version>
         </dependency>
-        
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
@@ -35,6 +34,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

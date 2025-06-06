@@ -1,6 +1,7 @@
 package shareshop;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -17,8 +18,8 @@ public class User {
     /**
      * Constructor of Class User with wgID
      * @param userID
-     * @param firstName
-     * @param lastName
+     * @param firstName can be null
+     * @param lastName  can be null
      * @param email
      * @param pwd
      * @param wgID
@@ -35,8 +36,8 @@ public class User {
     /**
      * Constructor of Class User without wgID
      * @param userID
-     * @param firstName
-     * @param lastName
+     * @param firstName can be null
+     * @param lastName  can be null
      * @param email
      * @param pwd
      */
@@ -50,6 +51,31 @@ public class User {
     }
 
     /**
+     * Construcot of Class User via userID and DB query
+     * @param connectionHandler
+     * @param userID
+     * @throws SQLException
+     */
+    public User(DBConnectionHandler connectionHandler, String userID) throws SQLException {
+        String selectString = new String ("SELECT * FROM users WHERE userid = ?");
+        PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
+        select.setString(1, userID);
+        ResultSet rs = select.executeQuery();
+        if (rs.next()) {
+            this.userID = userID;
+            this.wgID = rs.getString("wgid");
+            this.firstName = rs.getString("firstname");
+            this.lastName = rs.getString("lastname");
+            this.email = rs.getString("email");
+            this.pwd = rs.getString("pwd");
+            select.close();
+        } else {
+            select.close();
+            throw new SQLException("there is no user with userID: " + userID);
+        }
+    }
+
+    /**
      * private function to update the DB after a change of any attribute of the user
      * @param connectionHandler
      * @param userID
@@ -60,18 +86,17 @@ public class User {
      * @param pwd
      * @throws SQLException
      */
-    private void updateDB(DBConnectionHandler connectionHandler, String userID, String wgID, String firstName, String lastName, String email, String pwd) throws SQLException {
-        String updateString = new String("UPDATE users SET userid = ?, wgid = ?, firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
+    private void updateDB(DBConnectionHandler connectionHandler, String wgID, String firstName, String lastName, String email, String pwd) throws SQLException {
+        String updateString = new String("UPDATE users SET wgid = ?, firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(updateString)) {
             connectionHandler.conn.setAutoCommit(false);
-            deleteUser.setString(1, userID);
-            deleteUser.setString(2, wgID);
-            deleteUser.setString(3, firstName);
-            deleteUser.setString(4, lastName);
-            deleteUser.setString(5, email);
-            deleteUser.setString(6, pwd);
-            deleteUser.setString(7, this.userID);
+            deleteUser.setString(1, wgID);
+            deleteUser.setString(2, firstName);
+            deleteUser.setString(3, lastName);
+            deleteUser.setString(4, email);
+            deleteUser.setString(5, pwd);
+            deleteUser.setString(6, this.userID);
             deleteUser.executeUpdate();
             connectionHandler.conn.commit();
             deleteUser.close();
@@ -86,22 +111,12 @@ public class User {
     }
 
     /**
-     * updates userID
-     * @param userID
-     * @throws SQLException
-     */
-    public void setUserID(DBConnectionHandler connectionHandler, String userID) throws SQLException {
-        this.updateDB(connectionHandler, userID, this.wgID, this.firstName, this.lastName, this.email, this.pwd);
-        this.userID = userID;
-    }
-
-    /**
      * updates wgID
      * @param wgID
      * @throws SQLException
      */
     public void setWgID(DBConnectionHandler connectionHandler, String wgID) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, wgID, this.firstName, this.lastName, this.email, this.pwd);
+        this.updateDB(connectionHandler, wgID, this.firstName, this.lastName, this.email, this.pwd);
         this.wgID = wgID;
     }
 
@@ -111,7 +126,7 @@ public class User {
      * @throws SQLException
      */
     public void setFirstName(DBConnectionHandler connectionHandler, String firstName) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, firstName, this.lastName, this.email, this.pwd);
+        this.updateDB(connectionHandler, this.wgID, firstName, this.lastName, this.email, this.pwd);
         this.firstName = firstName;
     }
 
@@ -121,7 +136,7 @@ public class User {
      * @throws SQLException
      */
     public void setLastName(DBConnectionHandler connectionHandler, String lastName) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, this.firstName, lastName, this.email, this.pwd);
+        this.updateDB(connectionHandler, this.wgID, this.firstName, lastName, this.email, this.pwd);
         this.lastName = lastName;
     }
 
@@ -131,7 +146,7 @@ public class User {
      * @throws SQLException
      */
     public void setEmail(DBConnectionHandler connectionHandler, String email) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, this.firstName, this.lastName, email, this.pwd);
+        this.updateDB(connectionHandler, this.wgID, this.firstName, this.lastName, email, this.pwd);
         this.email = email;
     }
 
@@ -141,7 +156,7 @@ public class User {
      * @throws SQLException
      */
     public void setPassword(DBConnectionHandler connectionHandler, String password) throws SQLException {
-        this.updateDB(connectionHandler, this.userID, this.wgID, this.firstName, this.lastName, this.email, pwd);
+        this.updateDB(connectionHandler, this.wgID, this.firstName, this.lastName, this.email, pwd);
         this.pwd = password;
     }
 

@@ -5,7 +5,7 @@
 -- Dumped from database version 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1)
 
--- Started on 2025-06-06 14:36:24 CEST
+-- Started on 2025-06-06 15:03:41 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -148,8 +148,8 @@ ALTER TABLE public.shoppinglists OWNER TO backendusr;
 CREATE TABLE public.users (
     userid uuid DEFAULT gen_random_uuid() NOT NULL,
     wgid uuid,
-    firstname character varying(16) NOT NULL,
-    lastname character varying(16) NOT NULL,
+    firstname character varying(16),
+    lastname character varying(16),
     email character varying(50) NOT NULL,
     pwd character varying(128) NOT NULL
 );
@@ -377,7 +377,7 @@ ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_wgid_fkey FOREIGN KEY (wgid) REFERENCES public.wg(wgid) ON DELETE SET NULL;
 
 
--- Completed on 2025-06-06 14:36:24 CEST
+-- Completed on 2025-06-06 15:03:41 CEST
 
 --
 -- PostgreSQL database dump complete

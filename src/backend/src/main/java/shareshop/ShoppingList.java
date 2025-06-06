@@ -17,12 +17,12 @@ import org.javatuples.Pair;
 import shareshop.ListChange.ChangeEnum;
 
 public class ShoppingList {
-    private String shoppingListID;
-    private String wgID;
+    private UUID shoppingListID;
+    private UUID wgID;
     private int lastCachedCahngeID;
     private Date creationDate;
     private String listName;
-    private String creatorUserID;
+    private UUID creatorUserID;
     private ArrayList<ItemAllocation> itemAllocations;
     public enum Change {
         ADD,
@@ -32,7 +32,7 @@ public class ShoppingList {
 
     protected class ItemAllocation {
         private Item item;
-        private String shoppingListID;
+        private UUID shoppingListID;
         private Date creationDate;
         private int amount;
 
@@ -43,7 +43,7 @@ public class ShoppingList {
          * @param creationDate
          * @param amount
          */
-        public ItemAllocation(Item item, String shoppingListID, Date creationDate, int amount) {
+        public ItemAllocation(Item item, UUID shoppingListID, Date creationDate, int amount) {
             this.item = item;
             this.shoppingListID = shoppingListID;
             this.creationDate = creationDate;
@@ -59,7 +59,7 @@ public class ShoppingList {
         private int newChangeID(DBConnectionHandler connectionHandler) throws SQLException {
             String lastChangesString = new String("SELECT MAX(listchangeid) FROM listchanges WHERE shoppinglistid = ?");
             PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
-            lastChanges.setString(1, this.shoppingListID);
+            lastChanges.setObject(1, this.shoppingListID);
             ResultSet rs = lastChanges.executeQuery();
             if (rs.next()) {
                 int newID = rs.getInt(1) + 1;
@@ -84,14 +84,14 @@ public class ShoppingList {
                 connectionHandler.conn.setAutoCommit(false);
 
                 update.setInt(1, amount);
-                update.setString(2, this.item.getItemID());
-                update.setString(3, this.shoppingListID);
+                update.setObject(2, this.item.getItemID());
+                update.setObject(3, this.shoppingListID);
 
-                listChange.setString(1, this.shoppingListID);
+                listChange.setObject(1, this.shoppingListID);
                 listChange.setInt(2, newChangeID(connectionHandler));
                 listChange.setString(3, "EDITED");
                 listChange.setDate(4, Date.valueOf(LocalDate.now()));
-                listChange.setString(5, this.item.getItemID());
+                listChange.setObject(5, this.item.getItemID());
                 listChange.setInt(6, amount);
 
                 connectionHandler.conn.commit();
@@ -125,7 +125,7 @@ public class ShoppingList {
          * get shopping list ID
          * @return the ID of the list of this allocation
          */
-        public String getShoppingListID() {return this.shoppingListID;}
+        public UUID getShoppingListID() {return this.shoppingListID;}
 
         /**
          * get creation date
@@ -149,7 +149,7 @@ public class ShoppingList {
      * @param listName
      * @param creatorUserID
      */
-    public ShoppingList(String shoppingListID, String wgID, int lastCachedCahngeID, Date creationDate, String listName, String creatorUserID) {
+    public ShoppingList(UUID shoppingListID, UUID wgID, int lastCachedCahngeID, Date creationDate, String listName, UUID creatorUserID) {
         this.shoppingListID = shoppingListID;
         this.wgID = wgID;
         this.lastCachedCahngeID = lastCachedCahngeID;
@@ -165,18 +165,18 @@ public class ShoppingList {
      * @param shoppingListID
      * @throws SQLException
      */
-    public ShoppingList(DBConnectionHandler connectionHandler, String shoppingListID) throws SQLException {
+    public ShoppingList(DBConnectionHandler connectionHandler, UUID shoppingListID) throws SQLException {
         String selectString = new String ("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
-        select.setString(1, shoppingListID);
+        select.setObject(1, shoppingListID);
         ResultSet rs = select.executeQuery();
         if (rs.next()) {
             this.shoppingListID = shoppingListID;
-            this.wgID = rs.getString("wgid");
+            this.wgID = (UUID)rs.getObject("wgid");
             this.lastCachedCahngeID = rs.getInt("lastcachedchangeid");
             this.creationDate = rs.getDate("creationdate");
             this.listName = rs.getString("listname");
-            this.creatorUserID = rs.getString("creatoruserid");
+            this.creatorUserID = (UUID)rs.getObject("creatoruserid");
             select.close();
         } else {
             select.close();
@@ -188,10 +188,10 @@ public class ShoppingList {
         this.itemAllocations = new ArrayList<ItemAllocation>();
         selectString = new String ("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         select = connectionHandler.conn.prepareStatement(selectString);
-        select.setString(1, shoppingListID);
+        select.setObject(1, shoppingListID);
         rs = select.executeQuery();
         while (rs.next()) {
-            this.itemAllocations.add(new ItemAllocation(new Item(connectionHandler, rs.getString("itemid")), shoppingListID, rs.getDate("creationdate"), rs.getInt("amount")));
+            this.itemAllocations.add(new ItemAllocation(new Item(connectionHandler, (UUID)rs.getObject("itemid")), shoppingListID, rs.getDate("creationdate"), rs.getInt("amount")));
         }
         select.close();
     }
@@ -206,7 +206,7 @@ public class ShoppingList {
         String lastChangesString = new String("SELECT MAX(listchangeid) FROM listchanges WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
-        lastChanges.setString(1, this.shoppingListID);
+        lastChanges.setObject(1, this.shoppingListID);
         ResultSet rs = lastChanges.executeQuery();
         if (rs.next()) {
             int newID = rs.getInt(1) + 1;
@@ -232,9 +232,9 @@ public class ShoppingList {
             connectionHandler.conn.setAutoCommit(false);
 
             update.setString(1, listName);
-            update.setString(2, this.shoppingListID);
+            update.setObject(2, this.shoppingListID);
 
-            listChange.setString(1, this.shoppingListID);
+            listChange.setObject(1, this.shoppingListID);
             listChange.setInt(2, newChangeID(connectionHandler));
             listChange.setString(3, "EDITED");
             listChange.setDate(4, Date.valueOf(LocalDate.now()));
@@ -284,7 +284,7 @@ public class ShoppingList {
         String selectString = new String("SELECT * FROM listchanges WHERE shoppinglistid = ? ORDER BY listchangeid ASC");
         connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
-        selectStatement.setString(1, this.shoppingListID);
+        selectStatement.setObject(1, this.shoppingListID);
 
         ResultSet rs = selectStatement.executeQuery();
         rs.last();
@@ -294,13 +294,13 @@ public class ShoppingList {
         ArrayList<ListChange> listchanges = new ArrayList<ListChange>();
         rs.absolute(start != 0 && start <= length ? start : 1);
         do {
-            listchanges.add(new ListChange( rs.getString("shoppinglistid"),
+            listchanges.add(new ListChange( (UUID)rs.getObject("shoppinglistid"),
                                             rs.getInt("listchangeid"), 
                                             ChangeEnum.valueOf(rs.getString("change")), 
-                                            rs.getDate("changedate"), rs.getString("itemid"),
+                                            rs.getDate("changedate"), (UUID)rs.getObject("itemid"),
                                             rs.getString("listname"), 
                                             rs.getInt("amount"),
-                                            rs.getString("userid"),
+                                            (UUID)rs.getObject("userid"),
                                             rs.getBigDecimal("price")));
         } while ((rs.getRow() < last) && rs.next());
         selectStatement.close();
@@ -338,15 +338,15 @@ public class ShoppingList {
                             connectionHandler.conn.setAutoCommit(false);
                                 
                             update.setInt(1, amount  + itemAllocation.getAmount());
-                            update.setString(2, item.getItemID());
-                            update.setString(3, this.shoppingListID);
+                            update.setObject(2, item.getItemID());
+                            update.setObject(3, this.shoppingListID);
                                 
-                            listChange.setString(1, this.shoppingListID);
+                            listChange.setObject(1, this.shoppingListID);
                             listChange.setInt(2, newChangeID(connectionHandler));
                             listChange.setString(3, "ADDED");
                             listChange.setDate(4, Date.valueOf(LocalDate.now()));
-                            listChange.setString(5, item.getItemID());
-                            listChange.setString(6, user.getUserID());
+                            listChange.setObject(5, item.getItemID());
+                            listChange.setObject(6, user.getUserID());
                             listChange.setInt(7, amount); // the amount that gets added onto the current amount
                                 
                             connectionHandler.conn.commit();
@@ -371,17 +371,17 @@ public class ShoppingList {
                         PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                     connectionHandler.conn.setAutoCommit(false);
                         
-                    insert.setString(1, item.getItemID());
-                    insert.setString(2, this.shoppingListID);
+                    insert.setObject(1, item.getItemID());
+                    insert.setObject(2, this.shoppingListID);
                     insert.setDate(3, Date.valueOf(LocalDate.now()));
                     insert.setInt(4, amount);
                         
-                    listChange.setString(1, this.shoppingListID);
+                    listChange.setObject(1, this.shoppingListID);
                     listChange.setInt(2, newChangeID(connectionHandler));
                     listChange.setString(3, "ADDED");
                     listChange.setDate(4, Date.valueOf(LocalDate.now()));
-                    listChange.setString(5, item.getItemID());
-                    listChange.setString(6, user.getUserID());
+                    listChange.setObject(5, item.getItemID());
+                    listChange.setObject(6, user.getUserID());
                     listChange.setInt(7, amount);
                         
                     connectionHandler.conn.commit();
@@ -408,15 +408,15 @@ public class ShoppingList {
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);
                                     
-                                deleteStatement.setString(1, item.getItemID());
-                                deleteStatement.setString(2, this.shoppingListID);
+                                deleteStatement.setObject(1, item.getItemID());
+                                deleteStatement.setObject(2, this.shoppingListID);
                                     
-                                listChange.setString(1, this.shoppingListID);
+                                listChange.setObject(1, this.shoppingListID);
                                 listChange.setInt(2, newChangeID(connectionHandler));
                                 listChange.setString(3, "REMOVED");
                                 listChange.setDate(4, Date.valueOf(LocalDate.now()));
-                                listChange.setString(5, item.getItemID());
-                                listChange.setString(6, user.getUserID());
+                                listChange.setObject(5, item.getItemID());
+                                listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount);
                                     
                                 connectionHandler.conn.commit();
@@ -439,15 +439,15 @@ public class ShoppingList {
                                 connectionHandler.conn.setAutoCommit(false);
                                     
                                 update.setInt(1, amount  - itemAllocation.getAmount());
-                                update.setString(2, item.getItemID());
-                                update.setString(3, this.shoppingListID);
+                                update.setObject(2, item.getItemID());
+                                update.setObject(3, this.shoppingListID);
                                     
-                                listChange.setString(1, this.shoppingListID);
+                                listChange.setObject(1, this.shoppingListID);
                                 listChange.setInt(2, newChangeID(connectionHandler));
                                 listChange.setString(3, "REMOVED");
                                 listChange.setDate(4, Date.valueOf(LocalDate.now()));
-                                listChange.setString(5, item.getItemID());
-                                listChange.setString(6, user.getUserID());
+                                listChange.setObject(5, item.getItemID());
+                                listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount); // the amount that gets removed from the current amount
                                     
                                 connectionHandler.conn.commit();
@@ -479,15 +479,15 @@ public class ShoppingList {
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);
                                     
-                                deleteStatement.setString(1, item.getItemID());
-                                deleteStatement.setString(2, this.shoppingListID);
+                                deleteStatement.setObject(1, item.getItemID());
+                                deleteStatement.setObject(2, this.shoppingListID);
                                     
-                                listChange.setString(1, this.shoppingListID);
+                                listChange.setObject(1, this.shoppingListID);
                                 listChange.setInt(2, newChangeID(connectionHandler));
                                 listChange.setString(3, "REMOVED");
                                 listChange.setDate(4, Date.valueOf(LocalDate.now()));
-                                listChange.setString(5, item.getItemID());
-                                listChange.setString(6, user.getUserID());
+                                listChange.setObject(5, item.getItemID());
+                                listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount);
                                 listChange.setBigDecimal(8, price);
                                     
@@ -511,15 +511,15 @@ public class ShoppingList {
                                 connectionHandler.conn.setAutoCommit(false);
                                     
                                 update.setInt(1, amount  - itemAllocation.getAmount());
-                                update.setString(2, item.getItemID());
-                                update.setString(3, this.shoppingListID);
+                                update.setObject(2, item.getItemID());
+                                update.setObject(3, this.shoppingListID);
                                     
-                                listChange.setString(1, this.shoppingListID);
+                                listChange.setObject(1, this.shoppingListID);
                                 listChange.setInt(2, newChangeID(connectionHandler));
                                 listChange.setString(3, "REMOVED");
                                 listChange.setDate(4, Date.valueOf(LocalDate.now()));
-                                listChange.setString(5, item.getItemID());
-                                listChange.setString(6, user.getUserID());
+                                listChange.setObject(5, item.getItemID());
+                                listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount); // the amount that gets removed from the current amount
                                 listChange.setBigDecimal(8, price);
                                     
@@ -555,7 +555,7 @@ public class ShoppingList {
         try (PreparedStatement deleteList = connectionHandler.conn.prepareStatement(removeString)) {
             connectionHandler.conn.setAutoCommit(false);
 
-            deleteList.setString(1, this.shoppingListID);
+            deleteList.setObject(1, this.shoppingListID);
             deleteList.executeUpdate();
 
             connectionHandler.conn.commit();

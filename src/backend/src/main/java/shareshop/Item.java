@@ -2,14 +2,15 @@ package shareshop;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.UUID;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.math.BigDecimal;
 
 public class Item {
-    private String itemID;
-    private String wgID;
+    private UUID itemID;
+    private UUID wgID;
     private int lastCachedChangeID;
     private String itemName;
     private String itemDescription;
@@ -24,7 +25,7 @@ public class Item {
      * @param itemDescription
      * @param price
      */
-    public Item(String itemID, String wgID, int lastCachedChangeID, String itemName, String itemDescription, BigDecimal price) {
+    public Item(UUID itemID, UUID wgID, int lastCachedChangeID, String itemName, String itemDescription, BigDecimal price) {
         this.itemID = itemID;
         this.wgID = wgID;
         this.lastCachedChangeID = lastCachedChangeID;
@@ -39,14 +40,14 @@ public class Item {
      * @param itemID
      * @throws SQLException
      */
-    public Item(DBConnectionHandler connectionHandler, String itemID) throws SQLException {
+    public Item(DBConnectionHandler connectionHandler, UUID itemID) throws SQLException {
         String selectString = new String ("SELECT * FROM items WHERE itemid = ?");
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
-        select.setString(1, itemID);
+        select.setObject(1, itemID);
         ResultSet rs = select.executeQuery();
         if (rs.next()) {
             this.itemID = itemID;
-            this.wgID = rs.getString("wgid");
+            this.wgID = (UUID)rs.getObject("wgid");
             this.lastCachedChangeID = rs.getInt("lastcachedchangeid");
             this.itemName = rs.getString("itemname");
             this.itemDescription = rs.getString("itemdescription");
@@ -67,7 +68,7 @@ public class Item {
     private int newChangeID(DBConnectionHandler connectionHandler) throws SQLException {
         String lastChangesString = new String("SELECT MAX(itemchangeid) FROM itemchanges WHERE itemid = ?");
         PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
-        lastChanges.setString(1, this.itemID);
+        lastChanges.setObject(1, this.itemID);
         ResultSet rs = lastChanges.executeQuery();
         if (rs.next()) {
             int newID = rs.getInt(1) + 1;
@@ -92,9 +93,9 @@ public class Item {
             connectionHandler.conn.setAutoCommit(false);
 
             update.setString(1, itemName);
-            update.setString(2, this.itemID);
+            update.setObject(2, this.itemID);
 
-            itemChange.setString(1, this.itemID);
+            itemChange.setObject(1, this.itemID);
             itemChange.setInt(2, newChangeID(connectionHandler));
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
@@ -128,9 +129,9 @@ public class Item {
             connectionHandler.conn.setAutoCommit(false);
 
             update.setString(1, itemDescription);
-            update.setString(2, this.itemID);
+            update.setObject(2, this.itemID);
 
-            itemChange.setString(1, this.itemID);
+            itemChange.setObject(1, this.itemID);
             itemChange.setInt(2, newChangeID(connectionHandler));
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
@@ -164,9 +165,9 @@ public class Item {
             connectionHandler.conn.setAutoCommit(false);
 
             update.setBigDecimal(1, price);
-            update.setString(2, this.itemID);
+            update.setObject(2, this.itemID);
 
-            itemChange.setString(1, this.itemID);
+            itemChange.setObject(1, this.itemID);
             itemChange.setInt(2, newChangeID(connectionHandler));
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
@@ -190,13 +191,13 @@ public class Item {
      * get item ID
      * @return
      */
-    public String getItemID() {return this.itemID;}
+    public UUID getItemID() {return this.itemID;}
 
     /**
      * get wg ID
      * @return
      */
-    public String getWgID() {return this.wgID;}
+    public UUID getWgID() {return this.wgID;}
 
     /**
      * get last cached change ID
@@ -238,7 +239,7 @@ public class Item {
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteItem = connectionHandler.conn.prepareStatement(removeString)) {
             connectionHandler.conn.setAutoCommit(false);
-            deleteItem.setString(1, this.itemID);
+            deleteItem.setObject(1, this.itemID);
             deleteItem.executeUpdate();
             connectionHandler.conn.commit();
             deleteItem.close();

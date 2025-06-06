@@ -4,9 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.javalin.Javalin;
+import io.javalin.config.Key;
 import io.javalin.http.ContentType;
 import io.javalin.http.HttpStatus;
+import shareshop.AppContext;
+import shareshop.User;
 import shareshop.rest.requests.CreateUserRequest;
+import shareshop.rest.requests.CreateUserResponse;
 
 public class UsersEndpoints {
 	
@@ -20,6 +24,7 @@ public class UsersEndpoints {
 	}
 	
 	private static void registerCreate(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
 		app.post(basepath + "/create", ctx -> {
 			
 			try {
@@ -30,11 +35,23 @@ public class UsersEndpoints {
 					return;
 				}
 				
+				AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+				User usr = appCtx.userManager.create(req.username, req.password);
+				if(usr == null) {
+					// this could either be some internal error, or an account with the same email already existing
+					// this way, no information about existing accounts should be leaked (maybe a timing side-channel)
+					ctx.status(400);
+				} else {
+					CreateUserResponse resp = new CreateUserResponse(usr);
+					
+					ctx.contentType(ContentType.JSON);
+					ctx.result(gson.toJson(resp));
+					ctx.status(HttpStatus.OK);
+				}
 				
-				System.out.println(String.format("Created user %s", req.username));
-				ctx.contentType(ContentType.JSON);
+				/*ctx.contentType(ContentType.JSON);
 				ctx.result(String.format("{\"id\":\"%s\"}", "59813uuid"));
-				ctx.status(HttpStatus.OK);
+				ctx.status(HttpStatus.OK);*/
 			} catch(Exception e) {
 				e.printStackTrace();
 				ctx.status(400);

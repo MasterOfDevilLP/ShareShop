@@ -3,13 +3,14 @@ package shareshop;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  * Class, that represents a user
  */
 public class User {
-    private String userID;
-    private String wgID;
+    private UUID userID;
+    private UUID wgID;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,7 +25,7 @@ public class User {
      * @param pwd
      * @param wgID
      */
-    public User(String userID, String firstName, String lastName, String email, String pwd, String wgID) {
+    public User(UUID userID, String firstName, String lastName, String email, String pwd, UUID wgID) {
         this.userID = userID;
         this.wgID = wgID;
         this.firstName = firstName;
@@ -41,13 +42,32 @@ public class User {
      * @param email
      * @param pwd
      */
-    public User(String userID, String firstName, String lastName, String email, String pwd) {
+    public User(UUID userID, String firstName, String lastName, String email, String pwd) {
         this.userID = userID;
         this.wgID = null;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.pwd = pwd;
+    }
+    
+    // Constructors using the DB
+    
+    // Creates a new user
+    public User(DBConnectionHandler conn, String email, String pwdhash) throws SQLException {
+    	conn.makeSureItsOpen();
+    	String statementStr = "INSERT INTO users (userid, email, pwd) VALUES (?, ?, ?)";
+    	PreparedStatement statement = conn.conn.prepareStatement(statementStr);
+    	conn.conn.setAutoCommit(true);
+    	UUID uuid = UUID.randomUUID();
+    	statement.setObject(1, uuid);
+    	statement.setString(2, email);
+    	statement.setString(3, pwdhash);
+    	statement.execute();
+    	statement.close();
+    	this.userID = uuid;
+    	this.email = email;
+    	this.pwd = pwdhash;
     }
 
     /**
@@ -56,14 +76,14 @@ public class User {
      * @param userID
      * @throws SQLException
      */
-    public User(DBConnectionHandler connectionHandler, String userID) throws SQLException {
+    public User(DBConnectionHandler connectionHandler, UUID userID) throws SQLException {
         String selectString = new String ("SELECT * FROM users WHERE userid = ?");
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
-        select.setString(1, userID);
+        select.setObject(1, userID);
         ResultSet rs = select.executeQuery();
         if (rs.next()) {
             this.userID = userID;
-            this.wgID = rs.getString("wgid");
+            this.wgID = (UUID)rs.getObject("wgid");
             this.firstName = rs.getString("firstname");
             this.lastName = rs.getString("lastname");
             this.email = rs.getString("email");
@@ -86,17 +106,17 @@ public class User {
      * @param pwd
      * @throws SQLException
      */
-    private void updateDB(DBConnectionHandler connectionHandler, String wgID, String firstName, String lastName, String email, String pwd) throws SQLException {
+    private void updateDB(DBConnectionHandler connectionHandler, UUID wgID, String firstName, String lastName, String email, String pwd) throws SQLException {
         String updateString = new String("UPDATE users SET wgid = ?, firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(updateString)) {
             connectionHandler.conn.setAutoCommit(false);
-            deleteUser.setString(1, wgID);
+            deleteUser.setObject(1, wgID);
             deleteUser.setString(2, firstName);
             deleteUser.setString(3, lastName);
             deleteUser.setString(4, email);
             deleteUser.setString(5, pwd);
-            deleteUser.setString(6, this.userID);
+            deleteUser.setObject(6, this.userID);
             deleteUser.executeUpdate();
             connectionHandler.conn.commit();
             deleteUser.close();
@@ -115,7 +135,7 @@ public class User {
      * @param wgID
      * @throws SQLException
      */
-    public void setWgID(DBConnectionHandler connectionHandler, String wgID) throws SQLException {
+    public void setWgID(DBConnectionHandler connectionHandler, UUID wgID) throws SQLException {
         this.updateDB(connectionHandler, wgID, this.firstName, this.lastName, this.email, this.pwd);
         this.wgID = wgID;
     }
@@ -164,13 +184,13 @@ public class User {
      * get userID
      * @return
      */
-    public String getUserID() {return this.userID;}
+    public UUID getUserID() {return this.userID;}
 
     /**
      * get wgID
      * @return
      */
-    public String getWgID() {return this.wgID;}
+    public UUID getWgID() {return this.wgID;}
 
     /**
      * get first name
@@ -206,7 +226,7 @@ public class User {
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(removeUser)) {
             connectionHandler.conn.setAutoCommit(false);
-            deleteUser.setString(1, this.userID);
+            deleteUser.setObject(1, this.userID);
             deleteUser.executeUpdate();
             connectionHandler.conn.commit();
             deleteUser.close();

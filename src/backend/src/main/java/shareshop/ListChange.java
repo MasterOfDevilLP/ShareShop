@@ -2,6 +2,7 @@ package shareshop;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.UUID;
 
 public class ListChange {
     public enum ChangeEnum {
@@ -11,14 +12,14 @@ public class ListChange {
         CREATED,
         DELETED
     }
-    private String shoppingListID;
+    private UUID shoppingListID;
     private int listChangeID;
     private ChangeEnum change;
     private Date changeDate;
-    private String itemID;
+    private UUID itemID;
     private String listName;
     private int amount;
-    private String userID;
+    private UUID userID;
     private BigDecimal price;
 
     /**
@@ -33,7 +34,7 @@ public class ListChange {
      * @param userID
      * @param price
      */
-    public ListChange(String shoppingListID, int listChangeID, ChangeEnum change, Date changeDate, String itemID, String listName, int amount, String userID, BigDecimal price) {
+    public ListChange(UUID shoppingListID, int listChangeID, ChangeEnum change, Date changeDate, UUID itemID, String listName, int amount, UUID userID, BigDecimal price) {
         this.shoppingListID = shoppingListID;
         this.listChangeID = listChangeID;
         this.change = change;
@@ -48,7 +49,7 @@ public class ListChange {
      * get shoppinglist ID
      * @return shoppinglist ID
      */
-    public String getShoppingListID() {return shoppingListID;}
+    public UUID getShoppingListID() {return shoppingListID;}
 
     /**
      * get list change ID
@@ -72,7 +73,7 @@ public class ListChange {
      * get item ID
      * @return item ID
      */
-    public String getItemID() {return itemID;}
+    public UUID getItemID() {return itemID;}
 
     /**
      * get list name
@@ -90,7 +91,7 @@ public class ListChange {
      * get user ID
      * @return user ID
      */
-    public String getUserID() {return userID;}
+    public UUID getUserID() {return userID;}
 
     /**
      * get price

@@ -2,6 +2,7 @@ package shareshop;
 
 import java.sql.SQLException;
 
+import shareshop.Manager.UserManager;
 import shareshop.rest.RestApp;
 
 /**
@@ -30,7 +31,11 @@ public class Main {
             e.printStackTrace();
         }
         
-        RestApp restApp = new RestApp(config.webHost, config.webPort);
+        UserManager userManager = new UserManager(connectionHandler);
+        
+        AppContext ctx = new AppContext(userManager);
+        
+        RestApp restApp = new RestApp(config.webHost, config.webPort, ctx);
         
         /* put the main loop of the backend here */
 

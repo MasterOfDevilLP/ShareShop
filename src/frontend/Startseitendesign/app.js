@@ -1,17 +1,20 @@
 new Vue({
-    el: '#app',
-    data: {
-      lists: [
-      { id: "1", name: "Wocheneinkauf"},
-      ],
-    
-    newList: {
-      name: ''
-    },
-  
-    showPopup:false
-    },
-
+  el: '#app',
+  data: {
+    lists: [
+      { id: "1", name: "Wocheneinkauf" }
+    ],
+    wgList: [
+      { id: 1, name: "WG Sonnenstraße" },
+      { id: 2, name: "WG Blumenweg" },
+      { id: 3, name: "WG Fuchsbau" },
+      { id: 4, name: "WG Mondhain" }
+    ],
+    selectedWG: 1,
+    benutzerID: 123,
+    newList: { name: '' },
+    showPopup: false
+  },
     
     methods: {
       //Fragen Einkaufliste von DB ab 
@@ -147,8 +150,33 @@ new Vue({
     },
 
        */
+    
+    async switchWG() {
+      try {
+        const response = await fetch('/api/wg/switch', { // korrekten pfad angeben
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            benutzerID: this.benutzerID,
+            neueWGID: this.selectedWG
+          })
+        });
+
+        if (!response.ok) throw new Error("WG-Wechsel fehlgeschlagen");
+
+        const result = await response.json();
+        console.log("WG gewechselt:", result);
+        alert("WG erfolgreich gewechselt");
+
+      } catch (error) {
+        console.error("Fehler beim WG-Wechsel:", error);
+        alert("Fehler beim Wechseln der WG");
+      }
     }
+
+  }
 });
+
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

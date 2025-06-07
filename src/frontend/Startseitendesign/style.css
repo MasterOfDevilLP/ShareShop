@@ -368,6 +368,64 @@
       transform: scale(1.03);
     }
 
+    /*settings.html icons*/
+.settings-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: inline-block;
+  margin-right: 12px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-title-row {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.settings-option-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  font-size: 16px;
+}
+
+.settings-delete-text {
+  font-weight: 600;
+  color: #e74c3c;
+}
+
+.delete-row {
+  margin-top: 12px;
+  color: #e74c3c;
+  cursor: pointer;
+}
+.back-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+
 
       
 

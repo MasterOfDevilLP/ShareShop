@@ -16,10 +16,8 @@
       <div class="iphone-app">
         <!-- Header -->
         <header class="app-header">
-          <a href="startseite.html">
-            <button class="icon-btn" id="list_btn" title="Zurück zur Liste">
-              <img src="icons/arrow_back.png" />
-            </button>
+          <a href="startseite.html" class="back-link" title="Zurück zur Liste">
+            <img src="icons/arrow_back.png" class="back-icon" alt="Zurück" />
           </a>
           <span class="site-titel">Einstellungen</span>
         </header>
@@ -30,12 +28,13 @@
           <div class="settings-title-row">
             <img src="icons/Wagen.png" class="settings-icon" />
             <span class="settings-title">{{ list_name }}</span>
-            <img
-              src="icons/Stift.png"
-              class="settings-edit-icon"
-              alt="Bearbeiten"
-              @click="openChangeListName"
-            />
+            <button class="icon-btn" @click="openChangeListName">
+              <img
+                src="icons/Stift.png"
+                class="settings-icon"
+                alt="Bearbeiten"
+              />
+            </button>
           </div>
 
           <hr />

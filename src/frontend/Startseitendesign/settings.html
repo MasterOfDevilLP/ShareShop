@@ -12,9 +12,6 @@
   </head>
 
   <body>
-    <!-- Vue.js -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-
     <div id="app">
       <div class="iphone-app">
         <!-- Header -->
@@ -24,68 +21,81 @@
               <img src="icons/arrow_back.png" />
             </button>
           </a>
-          <span class="site-titel">WG-Einstellungen</span>
+          <span class="site-titel">Einstellungen</span>
         </header>
 
         <!-- Inhalt -->
-        <main class="app-content">
-          <div class="settings-options">
-            <h4>Aktuelle WG: {{ selectedWGName }}</h4>
-          </div>
-
-          <hr />
-
-          <div class="settings-options">
-            <label>WG umbenennen</label>
-            <input
-              type="text"
-              v-model="newWGName"
-              placeholder="Neuer WG-Name"
+        <main class="app-content settings-page">
+          <!-- Titelzeile -->
+          <div class="settings-title-row">
+            <img src="icons/Wagen.png" class="settings-icon" />
+            <span class="settings-title">{{ list_name }}</span>
+            <img
+              src="icons/Stift.png"
+              class="settings-edit-icon"
+              alt="Bearbeiten"
+              @click="openChangeListName"
             />
-            <button class="btn btn-outline-primary mt-2" @click="renameWG">
-              Umbenennen
-            </button>
           </div>
 
           <hr />
 
-          <div class="settings-options">
-            <button class="btn btn-outline-danger mt-2" @click="deleteWG">
-              WG löschen
-            </button>
+          <!-- Optionen -->
+          <div class="settings-option-row">
+            <img src="icons/bookmark.png" class="settings-icon" />
+            <span class="settings-option-text">Als neue Vorlage speichern</span>
+          </div>
+
+          <div class="settings-option-row">
+            <img src="icons/Drucker.png" class="settings-icon" />
+            <span class="settings-option-text">Liste exportieren</span>
+          </div>
+
+          <div class="settings-option-row">
+            <img src="icons/clock.png" class="settings-icon" />
+            <span class="settings-option-text">Änderungshistorie</span>
+          </div>
+
+          <div class="settings-option-row">
+            <img src="icons/Listen.png" class="settings-icon" />
+            <span class="settings-option-text">Produkte sortieren</span>
+          </div>
+
+          <hr />
+
+          <!-- Löschen -->
+          <div class="settings-option-row delete-row" @click="deleteWG">
+            <img src="icons/Trashcan.png" class="settings-icon" />
+            <span class="settings-delete-text">Liste löschen</span>
           </div>
         </main>
       </div>
     </div>
 
+    <!-- SCRIPTS AM ENDE -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
     <script>
       new Vue({
         el: "#app",
         data: {
-          selectedWG: localStorage.getItem("selectedWGID") || null,
-          selectedWGName:
+          list_name:
             localStorage.getItem("selectedWGName") || "Keine ausgewählt",
           newWGName: "",
         },
         methods: {
-          renameWG() {
-            if (!this.newWGName.trim()) {
-              alert("Bitte neuen Namen eingeben.");
-              return;
+          openChangeListName() {
+            const neuerName = prompt("Neuer WG-Name:", this.list_name);
+            if (neuerName && neuerName.trim() !== "") {
+              this.list_name = neuerName;
+              localStorage.setItem("selectedWGName", neuerName);
+              alert("Name geändert.");
             }
-
-            // Optional: API call hier einbauen
-            this.selectedWGName = this.newWGName;
-            localStorage.setItem("selectedWGName", this.newWGName);
-            alert("WG wurde umbenannt.");
-            this.newWGName = "";
           },
           deleteWG() {
             if (confirm("Möchtest du diese WG wirklich löschen?")) {
-              // Optional: API call hier einbauen
-              alert("WG gelöscht.");
               localStorage.removeItem("selectedWGID");
               localStorage.removeItem("selectedWGName");
+              alert("WG gelöscht.");
               window.location.href = "startseite.html";
             }
           },

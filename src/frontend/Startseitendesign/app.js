@@ -11,9 +11,11 @@ new Vue({
       { id: 4, name: "WG Mondhain" }
     ],
     selectedWG: 1,
-    benutzerID: 123,
+    benutzerID: 123, //beispiel
     newList: { name: '' },
-    showPopup: false
+    showPopup: false,
+    showCreateGroupModal: false,
+    newGroupName: ''
   },
     
     methods: {
@@ -151,9 +153,15 @@ new Vue({
 
        */
     
-    async switchWG() {
+      async switchWG() {
+      if (this.selectedWG === '__create__') {
+        this.showCreateGroupModal = true;
+        this.selectedWG = null;
+        return;
+      }
+
       try {
-        const response = await fetch('/api/wg/switch', { // korrekten pfad angeben
+        const response = await fetch('/api/wg/switch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -172,9 +180,26 @@ new Vue({
         console.error("Fehler beim WG-Wechsel:", error);
         alert("Fehler beim Wechseln der WG");
       }
+  },
+    createNewGroup() {
+    if (!this.newGroupName.trim()) {
+      alert("Bitte einen Gruppennamen eingeben.");
+      return;
     }
 
-  }
+    const newGroup = {
+      id: Date.now(), // temporär, später ggf. durch API ersetzt
+      name: this.newGroupName
+    };
+
+    this.wgList.push(newGroup);
+    this.selectedWG = newGroup.id;
+    this.newGroupName = '';
+    this.showCreateGroupModal = false;
+  },
+      
+    }
+
 });
 
 

@@ -44,9 +44,11 @@
           <button class="qr-btn" title="QR">
             <img src="icons/barcode.png" class="nav-icon" />
           </button>
-          <button class="settings-btn" title="settings">
-            <img src="icons/settings.svg" />
-          </button>
+          <a href="settings.html">
+            <button class="settings-btn" title="Einstellungen">
+              <img src="icons/settings.svg" alt="Einstellungen" />
+            </button>
+          </a>
         </header>
         <!-- MODAL: Neue Gruppe erstellen -->
         <div v-if="showCreateGroupModal" class="modal-overlay">

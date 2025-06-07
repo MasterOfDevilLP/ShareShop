@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Einstellungen</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+    <div id="app">
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <a href="startseite.html">
+            <button class="icon-btn" id="list_btn" title="Zurück zur Liste">
+              <img src="icons/arrow_back.png" />
+            </button>
+          </a>
+          <span class="site-titel">WG-Einstellungen</span>
+        </header>
+
+        <!-- Inhalt -->
+        <main class="app-content">
+          <div class="settings-options">
+            <h4>Aktuelle WG: {{ selectedWGName }}</h4>
+          </div>
+
+          <hr />
+
+          <div class="settings-options">
+            <label>WG umbenennen</label>
+            <input
+              type="text"
+              v-model="newWGName"
+              placeholder="Neuer WG-Name"
+            />
+            <button class="btn btn-outline-primary mt-2" @click="renameWG">
+              Umbenennen
+            </button>
+          </div>
+
+          <hr />
+
+          <div class="settings-options">
+            <button class="btn btn-outline-danger mt-2" @click="deleteWG">
+              WG löschen
+            </button>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          selectedWG: localStorage.getItem("selectedWGID") || null,
+          selectedWGName:
+            localStorage.getItem("selectedWGName") || "Keine ausgewählt",
+          newWGName: "",
+        },
+        methods: {
+          renameWG() {
+            if (!this.newWGName.trim()) {
+              alert("Bitte neuen Namen eingeben.");
+              return;
+            }
+
+            // Optional: API call hier einbauen
+            this.selectedWGName = this.newWGName;
+            localStorage.setItem("selectedWGName", this.newWGName);
+            alert("WG wurde umbenannt.");
+            this.newWGName = "";
+          },
+          deleteWG() {
+            if (confirm("Möchtest du diese WG wirklich löschen?")) {
+              // Optional: API call hier einbauen
+              alert("WG gelöscht.");
+              localStorage.removeItem("selectedWGID");
+              localStorage.removeItem("selectedWGName");
+              window.location.href = "startseite.html";
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -15,7 +15,9 @@ new Vue({
     newList: { name: '' },
     showPopup: false,
     showCreateGroupModal: false,
-    newGroupName: ''
+    newGroupName: '',
+selectedWG: null,
+selectedWGName: '',
   },
     
     methods: {
@@ -152,6 +154,23 @@ new Vue({
     },
 
        */
+selectWG(id) {
+  document.getElementById("dropdown-toggle").checked = false;
+
+  if (id === '__create__') {
+    this.showCreateGroupModal = true;
+    this.selectedWG = null;
+    this.selectedWGName = "Neue Gruppe";
+    return;
+  }
+
+  const wg = this.wgList.find(w => w.id === id);
+  if (wg) {
+    this.selectedWG = wg.id;
+    this.selectedWGName = wg.name;
+    this.switchWG();
+  }
+},
     
       async switchWG() {
       if (this.selectedWG === '__create__') {

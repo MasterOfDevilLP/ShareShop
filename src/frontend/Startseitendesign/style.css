@@ -239,6 +239,67 @@
     .hidden {
       display: none;
     }
+
+
+    /*WG Selector*/
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      width: 200px;
+    }
+
+    .dropdown-checkbox {
+      display: none;
+    }
+
+    .dropdown-label {
+      display: block;
+      padding: 12px 16px;
+      background-color: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 15px;
+    }
+
+    .dropdown-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+      z-index: 100;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .dropdown-options li {
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 15px;
+    }
+
+    .dropdown-options li:hover {
+      background-color: #f0f0f0;
+    }
+
+    .divider {
+      color: #999;
+      cursor: default;
+    }
+
+    .dropdown-checkbox:checked ~ .dropdown-options {
+      max-height: 500px;
+    }
+
+
     /*Modal */
     .modal-overlay {
       position: fixed;

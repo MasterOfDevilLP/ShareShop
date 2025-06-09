@@ -15,6 +15,7 @@ import shareshop.User;
 import shareshop.rest.requests.CreateUserRequest;
 import shareshop.rest.requests.CreateUserResponse;
 import shareshop.rest.requests.LoginRequest;
+import shareshop.rest.requests.UserInformationResponse;
 
 public class UsersEndpoints {
 	
@@ -113,6 +114,10 @@ public class UsersEndpoints {
 			User usr = RestUtils.getAuthorizedUser(ctx);
 			if(usr != null) {
 				// TODO: return actual information
+				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+				UserInformationResponse resp = new UserInformationResponse(usr);
+				ctx.contentType(ContentType.JSON);
+				ctx.result(gson.toJson(resp));
 				ctx.status(HttpStatus.OK);
 			} else {				
 				ctx.status(HttpStatus.UNAUTHORIZED);

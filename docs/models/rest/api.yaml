@@ -64,7 +64,28 @@ paths:
         "400":
           description: something went wrong
 
-
+  /user/login:
+    post:
+      summary: log into an account
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: successfully logged in, a session cookie will be set
+        "401": 
+          $ref: "#/components/responses/unauthorized"
+        
 
   /user:
     get:

@@ -51,7 +51,7 @@
             <img src="icons/settings.svg" alt="Einstellungen" />
           </a>
         </header>
-        <!-- MODAL: Neue Gruppe erstellen -->
+        <!-- Modal pop up neue WG erstellen -->
         <div v-if="showCreateGroupModal" class="modal-overlay">
           <div class="modal-content">
             <h3>Neue Gruppe erstellen</h3>
@@ -81,7 +81,7 @@
           </button>
         </main>
 
-        <!-- Bottom Slide Popup zur Hinzufügung neuer Liste -->
+        <!-- Bottom sheet Liste hinzufügen -->
         <div class="bottom-sheet" :class="{ visible: showPopup }">
           <div class="sheet-header">
             Neue Liste erstellen

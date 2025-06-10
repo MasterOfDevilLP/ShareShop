@@ -27,9 +27,12 @@
                 id="dropdown-toggle"
                 class="dropdown-checkbox"
               />
-              <label for="dropdown-toggle" class="dropdown-label">
-                {{ selectedWGName || "WG auswählen" }}
-              </label>
+              <label
+                for="dropdown-toggle"
+                class="dropdown-label"
+                v-text="selectedWGName ? selectedWGName : 'WG auswählen'"
+              ></label>
+
               <ul class="dropdown-options">
                 <li v-for="wg in wgList" :key="wg.id" @click="selectWG(wg.id)">
                   {{ wg.name }}
@@ -44,10 +47,8 @@
           <button class="qr-btn" title="QR">
             <img src="icons/barcode.png" class="nav-icon" />
           </button>
-          <a href="settings.html">
-            <button class="settings-btn" title="Einstellungen">
-              <img src="icons/settings.svg" alt="Einstellungen" />
-            </button>
+          <a href="settings.html" class="settings-btn" title="Einstellungen">
+            <img src="icons/settings.svg" alt="Einstellungen" />
           </a>
         </header>
         <!-- MODAL: Neue Gruppe erstellen -->
@@ -68,14 +69,10 @@
               <a href="../Einkaufsliste/einkaufsliste.html" class="list-left">
                 <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
                 {{ list.name }}
-                <span class="list-arrow">
-                  <img
-                    src="icons/arrow_right.svg"
-                    alt="Arrow"
-                    class="list-arrow"
-                  />
-                </span>
               </a>
+              <button class="list-dots" @click="openListOptions(list)">
+                <img src="icons/dots.svg" alt="Mehr Optionen" />
+              </button>
             </div>
           </div>
 
@@ -99,6 +96,35 @@
               placeholder="Name der neuen Liste"
             />
             <button id="saveList" @click="saveList">Erstellen</button>
+          </div>
+        </div>
+
+        <!-- Bottom Sheet für Listenoptionen -->
+        <div class="bottom-sheet full" :class="{ visible: showListOptions }">
+          <div class="sheet-header">
+            Liste verwalten
+            <button class="close-btn" @click="closeListOptions">✕</button>
+          </div>
+          <div class="sheet-body list-actions">
+            <button>
+              <img src="icons/Stift.png" alt="Bearbeiten" />
+              <span>Umbenennen</span>
+            </button>
+            <button disabled>
+              <img src="icons/dots.svg" alt="Teilen" />
+              <span>Teilen</span>
+            </button>
+            <button disabled>
+              <img src="icons/dots.svg" alt="Kopieren" />
+              <span>Kopieren</span>
+            </button>
+            <button
+              class="danger"
+              @click="selectedList && deleteList(selectedList.id)"
+            >
+              <img src="icons/Trashcan.png" alt="Löschen" />
+              <span>Löschen</span>
+            </button>
           </div>
         </div>
 

@@ -16,8 +16,10 @@ new Vue({
     showPopup: false,
     showCreateGroupModal: false,
     newGroupName: '',
-selectedWG: null,
-selectedWGName: '',
+    selectedWGName: '',
+    showListOptions: false,
+    selectedList: null,
+
   },
     
     methods: {
@@ -39,6 +41,7 @@ selectedWGName: '',
       
       add_list() {
       this.showPopup = true;
+      this.showListOptions = false;
       },
 
       closePopup() {
@@ -63,6 +66,17 @@ selectedWGName: '',
         });
 
         this.closePopup();
+      },
+
+     openListOptions(list) {
+      this.selectedList = list;
+      this.showListOptions = true;
+      this.showPopup = false;
+    },
+
+      closeListOptions() {
+        this.selectedList = null;
+        this.showListOptions = false;
       },
 
       /* pseudocode

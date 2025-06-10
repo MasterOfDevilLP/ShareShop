@@ -165,11 +165,21 @@
       color: #7DCFB6;
       }
 
-     .list-arrow{
+     .list-dots{
+        background: none;
+        border: none;
+        position: absolute;
+        top: 20px;
+        right: 10px;
         margin-left: auto;
         margin-right: 10px;
         font-size: 18px;
+        background: none;
       }
+      .list-card {
+        position: relative;  /* damit neue Listen auch Einstellung haben*/
+      }
+
       
 /* bottom sheet */
       .bottom-sheet {
@@ -369,61 +379,165 @@
     }
 
     /*settings.html icons*/
-.settings-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  display: inline-block;
-  margin-right: 12px;
+    .settings-icon {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      display: inline-block;
+      margin-right: 12px;
+      border-right: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .settings-title-row {
+      justify-content: space-between; 
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .settings-title-left {
+      display: flex;
+      align-items: center;
+      gap: 12px; /* Abstand zwischen Icon und Text */
+    }
+    .settings-title {
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .settings-option-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      font-size: 16px;
+    }
+
+    .settings-delete-text {
+      font-weight: 600;
+      color: #e74c3c;
+    }
+
+    .delete-row {
+      margin-top: 12px;
+      color: #e74c3c;
+      cursor: pointer;
+    }
+    .back-icon {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+    }
+    /* Bottom sheet für listen einstelleung */
+    .list-actions button img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      flex-shrink: 0;
+      margin-left: 0.2rem;
+      }
+
+      .list-actions button {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.9rem 1rem;
+        border: none;
+        border-radius: 14px;
+        background-color: #ddd;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #000;
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+    .bottom-sheet.full {
+       position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+      padding: 1.5rem;
+      z-index: 10;
+      transform: translateY(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .bottom-sheet.full.visible {
+      transform: translateY(0);
+    }
+
+    .sheet-header {
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1.25rem;
+      color: #111;
+      position: relative;
+    }
+
+    .sheet-header .close-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #888;
+      cursor: pointer;
+    }
+
+  .list-actions {
+  border-top: 1px solid #e5e5e5;
 }
 
-.icon-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .list-actions button {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 14px;
+      background: transparent;
+      color: #000;
+      text-align: center;
+      transition: background-color 0.2s ease;
+    }
 
-.settings-title-row {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+    .list-actions button:active{
+      color: #7DCFB6;
+    }
 
-.settings-option-row {
-  display: flex;
-  align-items: center;
-  padding: 12px 0;
-  font-size: 16px;
-}
+    .list-actions button.danger {
+      background: transparent;
+      color: #f39291;
+    }
 
-.settings-delete-text {
-  font-weight: 600;
-  color: #e74c3c;
-}
-
-.delete-row {
-  margin-top: 12px;
-  color: #e74c3c;
-  cursor: pointer;
-}
-.back-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  display: block;
-}
-
-.back-link {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-}
+    .list-actions button:disabled {
+      background: transparent;
+      cursor: not-allowed;
+    }
 
 
 

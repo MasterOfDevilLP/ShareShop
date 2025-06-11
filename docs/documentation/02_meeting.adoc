@@ -1,4 +1,4 @@
-= ShareShop Projekt – Meetingprotokoll
+= ShareShop Projekt - Meetingprotokoll
 Kevin
 2025-04-15
 
@@ -31,12 +31,12 @@ Online-Meeting (Discord)
 * Gemeinsame Planung bevorzugt, um technische Abhängigkeiten früh zu erkennen (z.B. Frontend/Backend).
 * Klare Unterscheidung:
   ** Aufgabenplanung (Was wird gemacht?):
-    *** Alle: **Donnerstag**, ca. **17:00 Uhr** – Allgemeine Aufgabensammlung und Analyse
+    *** Alle: **Donnerstag**, ca. **17:00 Uhr** - Allgemeine Aufgabensammlung und Analyse
   ** Sprint-Planning (Wer macht was?)
-    *** Benni, Anni, Kevin: **Dienstag, 22.04.**, ca. **18:00 Uhr** – Sprint-Planning
+    *** Benni, Anni, Kevin: **Dienstag, 22.04.**, ca. **18:00 Uhr** - Sprint-Planning
 
 === 3. Aufgaben bis Donnerstag
-* Jede:r überlegt sich **5–6 User Stories** auf Basis der Projektbeschreibung.
+* Jede:r überlegt sich **5-6 User Stories** auf Basis der Projektbeschreibung.
 * Alternativ oder ergänzend: Mitarbeit an Wireframes.
 * Sammlung der Ergebnisse in **Miro**.
 

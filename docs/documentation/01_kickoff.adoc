@@ -1,4 +1,4 @@
-= 📄 Kick-Off Meeting – Projektdokumentation
+= 📄 Kick-Off Meeting - Projektdokumentation
 ShareShop
 11.04.2025
 :doctype: book
@@ -60,7 +60,7 @@ Hinweis: Aufgaben sind vorläufig und noch nicht spezifiziert.
 
 === 📌 Arbeitsmethode
 
-Agil – Sprintbasiert
+Agil - Sprintbasiert
 
 * **Sprintdauer:** 3 Wochen
 * **Sprintende:**

@@ -1,4 +1,4 @@
-= ShareShop Projekt – Meetingprotokoll
+= ShareShop Projekt - Meetingprotokoll
 Kevin 
 2025-04-24
 
@@ -41,7 +41,7 @@ Online-Meeting (Discord)
 * GitHub-Board zur Statusüberwachung:
   ** Aufgabenstatus von To Do → In Progress → Review → Done verschieben
   ** Mehrere Bearbeiter pro Task möglich
-* Dokumentation der Ergebnisse an Issues anhängen (z. B. Wireframes, Entwürfe)
+* Dokumentation der Ergebnisse an Issues anhängen (z. B. Wireframes, Entwürfe)
 * Nutzung von Discord für Projektkommunikation (separate Channels für Frontend/Backend)
 * Kurze Check-up-Meetings ("Dailies") jeden Dienstag, ca. **18:00 Uhr**
 

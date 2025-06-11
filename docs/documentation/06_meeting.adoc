@@ -1,4 +1,4 @@
-= ShareShop Projekt – Meetingprotokoll
+= ShareShop Projekt - Meetingprotokoll
 Kevin (Product Owner)
 2025-04-29
 
@@ -29,7 +29,7 @@ Online-Meeting (Discord)
 * Vorstellung und Aktualisierung des Datenmodells (ER-Modell in Draw.io)
 * REST-API Modellierung durch Emil:
   ** YAML-Datei mit OpenAPI-Definition verfügbar
-  ** Viewer-Tool Empfehlung für Visualisierung (z. B. Swagger, VSCode-Plugins)
+  ** Viewer-Tool Empfehlung für Visualisierung (z. B. Swagger, VSCode-Plugins)
 
 === 3. Review REST-API und Aufgabenvergabe
 * REST-API geht in den Review-Prozess, keine kritischen Änderungen nötig
@@ -53,7 +53,7 @@ Online-Meeting (Discord)
 * Ticket soll erstellt werden für mögliche Umstrukturierung
 
 === 6. Templates-Funktion (Datenbank)
-* Diskussion über Templates (z. B. Hygiene-Vorlagen mit Standard-Artikeln)
+* Diskussion über Templates (z. B. Hygiene-Vorlagen mit Standard-Artikeln)
 * Entscheidung:
   ** Templates werden **nicht** im aktuellen Sprint implementiert
   ** Tabellen und Datenbankstruktur hierzu werden gelöscht bzw. ausgeklammert

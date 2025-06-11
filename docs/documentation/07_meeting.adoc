@@ -1,4 +1,4 @@
-= ShareShop Projekt – Meetingprotokoll
+= ShareShop Projekt - Meetingprotokoll
 Kevin (Product Owner)
 2025-05-02
 
@@ -40,7 +40,7 @@ Online-Meeting (Discord)
 * Einkäufe starten über „Play“-Button in der Einkaufsliste
 * Template-Listen können separat erstellt und geplant werden
 * Inventarmanagement wird mit Rezeptlogik kombiniert
-* Wunsch nach intuitivem UI/UX-Design (z. B. durch Plus-Buttons, Scroll-Bereiche etc.)
+* Wunsch nach intuitivem UI/UX-Design (z. B. durch Plus-Buttons, Scroll-Bereiche etc.)
 
 === 4. Aufgabenverteilung
 * Kevin & Benni arbeiten an Feature-Spezifikationen

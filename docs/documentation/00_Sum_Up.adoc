@@ -1,4 +1,4 @@
-= 📘 Dokumentation - Zusammenfassung – ShareShop
+= 📘 Dokumentation - Zusammenfassung - ShareShop
 Kevin (Project Owner, Dokumentation)
 Stand: 2025-04-15
 :doctype: book
@@ -51,7 +51,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
         *** Aufgaben werden angelegt, priorisiert und zugewiesen
         *** Erste Sprintplanung findet am Dienstag, 22.04., um ca. 18 Uhr statt
 * Aufgaben bis Donnerstag:
-    ** Jeder erstellt 5–6 User Stories oder alternativ erste Wireframes
+    ** Jeder erstellt 5-6 User Stories oder alternativ erste Wireframes
     ** Ergebnisse werden in Miro gesammelt
 * Organisation & Dokumentation:
     ** Kevin erstellt ADoc-Protokolle je Meeting
@@ -69,7 +69,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Technologiewahl & Infrastruktur:
     ** Backend: Java + PostgreSQL + REST API
     ** Frontend: HTML, CSS, JavaScript (Web-App als PWA gedacht)
-    ** Framework-Recherche angestoßen (z. B. Spring Boot)
+    ** Framework-Recherche angestoßen (z. B. Spring Boot)
 * Aufgabenideen für den Sprint:
     ** Wireframes finalisieren & Farben/Schriftarten wählen
     ** API-Grundfunktionen planen (Artikel CRUD)
@@ -95,9 +95,9 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
     ** Backend:
         *** Datenbankmodell erstellen (PostgreSQL)
         *** Grundstruktur für REST-API definieren
-* Sprintdauer: 4 Wochen (24.04.–21.05.)
+* Sprintdauer: 4 Wochen (24.04.-21.05.)
 * Aufgaben werden am Donnerstag, 25.04., final zugewiesen
-* Besprechung von Ordnung und Relevanz vorhandener Dateien im Repository (z. B. Test-Ordner)
+* Besprechung von Ordnung und Relevanz vorhandener Dateien im Repository (z. B. Test-Ordner)
 
 == 05. Meeting, 24.04.2025:
 
@@ -114,7 +114,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
     *** JDBC-Integration
     *** Aufbau der REST-API
   ** Übergreifend:
-    *** Recherche zu Java-Buildsystemen (z. B. Gradle)
+    *** Recherche zu Java-Buildsystemen (z. B. Gradle)
 * Organisation:
   ** Nutzung des GitHub-Boards (To Do → In Progress → Review → Done)
   ** Wöchentliche Check-up-Meetings (dienstags um 18:00 Uhr)
@@ -137,12 +137,12 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 
 * `xref:./07_meeting.adoc[Zur vollständigen Dokumentation]`
 
-* Besprochene Features u. a.:
+* Besprochene Features u. a.:
   ** Einkaufsliste mit Änderungsverlauf
   ** Tagging-System, Kostenverteilung, Multi-Haushalte
   ** Inventarverwaltung, Rezepte, CO₂-Tracking
 * Frontend-Reiterstruktur festgelegt (`Liste`, `Rechnungen`, `Kalender`, `Rezepte`, `Profil`)
-* UI-Ideen und Feature-Verhalten (z. B. Play-Button, Dropdowns) konkretisiert
+* UI-Ideen und Feature-Verhalten (z. B. Play-Button, Dropdowns) konkretisiert
 * Add-ons wie saisonale Einkaufsmodelle, Vergleichsfunktionen und Offline-Modus eingeplant
 * GitHub-Backlog überarbeitet: Epics und Tasks neu zugewiesen und strukturiert
 * Nächste Schritte: Stories detaillieren, Struktur in Tools abstimmen, Reiter ins UI übertragen
@@ -185,3 +185,27 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Projectplan fertiggestellt, Review- & Retrotermine vorläufig gesetzt
 * Sprint Review am 01.06. geplant (Wireframes als Präsentationsbasis)
 * Geplante Erweiterung der Doku: Aufteilung nach Frontend-/Backend-Modulen
+
+== 11. Meeting, 04.06.2025 :
+
+* `xref:./11_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Frontend meldet Login-/Registrierungsseite als HTML/CSS-fertig
+* Backend setzt Docker mit Postgres & Java-App auf, REST noch nicht integriert
+* Objektmodell (User, Item, Session, ShoppingList) fast reviewbereit
+* Kein separater Branch für DB-Dateien notwendig, Upload über `.sql`-File
+* Aufgaben und Reviews im Sprintboard abgestimmt
+* Reviewtermin mit anderer Gruppe wird vorbereitet (UX-Fokus)
+* Erklärmodus als Onboardinghilfe für neue Nutzer diskutiert
+
+== 12. Meeting, 10.06.2025 :
+
+* `xref:./12_meeting.adoc[Zur vollständigen Dokumentation]`
+
+* Fortschritt bei SE-Dokumentation - Aufteilung & Deadlinebesprechung mit Benni geplant
+* Backend vollständig buildbar, Tests der Datenbankanbindung stehen an
+* Shoppinglist-Funktionalität priorisiert: Erstellen, Listenbefüllung, einfache Suche
+* Container-Handling (Docker Compose) für DB- und Backend-Tests abgestimmt
+* Frontend fast fertig für Anbindung - Test-Deployment via Live Server oder Container diskutiert
+* Rechnungslogik zunächst zurückgestellt zugunsten funktionierender Basisfeatures
+* Dokumentation für SE1 reicht minimal, SE2 erfordert erweiterte Codekommentare

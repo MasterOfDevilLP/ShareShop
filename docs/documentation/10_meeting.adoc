@@ -1,4 +1,4 @@
-= ShareShop Projekt – Meetingprotokoll  
+= ShareShop Projekt - Meetingprotokoll  
 Kevin (Product Owner)  
 2025-05-20
 
@@ -38,11 +38,11 @@ Online-Meeting (Discord)
 === 4. Einführung von Storypoints
 * Sprintplanung wird künftig mit Storypoints ergänzt (Richtwert: 6h Pensum = 6 Storypoints)
 * Sinn: Bessere Aufwandseinschätzung und Nachvollziehbarkeit von Ticketgrößen
-* Abweichungen (z. B. massiver Mehraufwand) sollen im Tickettext festgehalten werden
+* Abweichungen (z. B. massiver Mehraufwand) sollen im Tickettext festgehalten werden
 * Optionales Q&A zu Storypoints am Donnerstagabend (Daily)
 
 === 5. Projektplan & Doku-Planung
-* Kevin stellt Projectplan fertig (inkl. Sprintwechsel, Review, Retro – vorläufige Termine)
+* Kevin stellt Projectplan fertig (inkl. Sprintwechsel, Review, Retro - vorläufige Termine)
 * Review findet voraussichtlich am 01.06. statt (Fokus auf Wireframes und Usability)
 * Neue Struktur für technische Doku in Planung: Aufteilung nach Frontend-/Backend-Modulen
 * Idee: Separate adoc-Dateien für Architektur und Modulübersicht

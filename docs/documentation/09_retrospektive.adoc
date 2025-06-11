@@ -1,4 +1,4 @@
-= ShareShop Projekt – Retrospektive – Sprint 1
+= ShareShop Projekt - Retrospektive - Sprint 1
 Kevin (Product Owner)
 2025-05-16
 
@@ -22,14 +22,14 @@ Online-Meeting (Discord), Interaktiv via Miro-Board
 === 1. Gefühlsrad zum Einstieg
 * Jeder Teilnehmer wählte ein Gefühl (visuell per Marker im Miro-Gefühlsrad)
 * Mehrheit positionierte sich bei „hoffnungsvoll“ oder „zufrieden“
-* Einzelne Anmerkungen zu Stress oder Gleichgültigkeit – nicht projektspezifisch
+* Einzelne Anmerkungen zu Stress oder Gleichgültigkeit - nicht projektspezifisch
 * Diskussion über persönliche Stimmung und Arbeitszufriedenheit im Projektkontext
 
-=== 2. Rückblick auf Sprint 1 – Emotion & Reflexion
+=== 2. Rückblick auf Sprint 1 - Emotion & Reflexion
 
 * Rückmeldungen:
   ** Sprint war besser organisiert als erwartet
-  ** Zusammenarbeit funktionierte gut – v. a. im Frontend & mit PO
+  ** Zusammenarbeit funktionierte gut - v. a. im Frontend & mit PO
   ** Backend teils frustriert durch längere Lösungswege, aber Lernfortschritte vorhanden
   ** Frontend-Abstimmung funktioniert auch offline gut (persönliche Absprache, WhatsApp)
 
@@ -40,8 +40,8 @@ Online-Meeting (Discord), Interaktiv via Miro-Board
 * Wireframes und erste Backend-Strukturen kamen früh zustande
 
 === 4. Was lief weniger gut?
-* Ticketbeschreibung oft zu ungenau (z. B. „Wireframes“ vs. „Clickables“ unklar getrennt)
-* GitHub-Sprintboard zeigte auch Story-Issues – führte zu Verwirrung bei der Planung
+* Ticketbeschreibung oft zu ungenau (z. B. „Wireframes“ vs. „Clickables“ unklar getrennt)
+* GitHub-Sprintboard zeigte auch Story-Issues - führte zu Verwirrung bei der Planung
 * Meetings teils redundant, Daily-Struktur wurde kritisch diskutiert
 
 === 5. Entscheidungen und Verbesserungen
@@ -53,7 +53,7 @@ Online-Meeting (Discord), Interaktiv via Miro-Board
   ** Einführung von Storypoint-Schätzung im Sprint 2
   ** Filterung der Sprintansicht nach `!Story` in GitHub
 * Retro-Methodik:
-  ** Feedback gemischt zum Gefühlsrad – wird optional beibehalten
+  ** Feedback gemischt zum Gefühlsrad - wird optional beibehalten
   ** Wunsch nach konkreteren Einstiegsfragen beim nächsten Mal
 
 == Nächste Schritte

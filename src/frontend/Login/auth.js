@@ -29,6 +29,8 @@ const LanguageSwitcher = {
   }
 };
 
+const API_BASE = 'http://localhost:8001'; // ← API-Basis-URL
+
 // === Login Form ===
 const LoginForm = {
   components: { LanguageSwitcher },
@@ -96,7 +98,7 @@ const LoginForm = {
       // Hash pwd before sending
       const hashed = CryptoJS.SHA256(this.password).toString();
       try {
-        const res = await fetch('/api/login', { //
+        const res = await fetch(`${API_BASE}/user/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: this.email, password: hashed })
@@ -205,7 +207,7 @@ const RegisterForm = {
       const hashed = CryptoJS.SHA256(this.password).toString();
 
       try {
-        const res = await fetch('/api/register', {
+        const res = await fetch(`${API_BASE}/user/create`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: this.email, password: hashed })

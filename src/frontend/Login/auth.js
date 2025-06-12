@@ -69,7 +69,7 @@ const LoginForm = {
   `,
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       showPassword: false,
       errorMessage: ''
@@ -88,7 +88,7 @@ const LoginForm = {
       this.errorMessage = '';
 
       // Validate required fields
-      if (!this.username || !this.password) {
+      if (!this.email || !this.password) {
         this.errorMessage = t('Bitte alle Felder ausfüllen.', 'Please fill in all fields.');
         return;
       }
@@ -99,7 +99,7 @@ const LoginForm = {
         const res = await fetch('/api/login', { //
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: this.username, password: hashed })
+          body: JSON.stringify({ email: this.email, password: hashed })
         });
         const data = await res.json();
 
@@ -107,7 +107,7 @@ const LoginForm = {
         if (data.success) {
           window.location.href = '/startenseite';
         } else {
-          this.errorMessage = t('Falscher Benutzername oder Passwort.', 'Incorrect username or password.');
+          this.errorMessage = t('Falscher Email oder Passwort.', 'Incorrect Email or password.');
         }
       } catch {
         this.errorMessage = t('Fehler beim Einloggen.', 'Error logging in.');

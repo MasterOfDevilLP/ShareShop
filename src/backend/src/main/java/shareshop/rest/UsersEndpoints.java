@@ -42,7 +42,7 @@ public class UsersEndpoints {
 				}
 				
 				AppContext appCtx = (AppContext) ctx.appData(ctxKey);
-				User usr = appCtx.userManager.create(req.username, req.password);
+				User usr = appCtx.userManager.create(req.email, req.password);
 				if(usr == null) {
 					// this could either be some internal error, or an account with the same email already existing
 					// this way, no information about existing accounts should be leaked (maybe a timing side-channel)
@@ -86,7 +86,7 @@ public class UsersEndpoints {
 				}
 				
 				AppContext appCtx = (AppContext) ctx.appData(ctxKey);
-				User usr = appCtx.userManager.login(req.username, req.password);
+				User usr = appCtx.userManager.login(req.email, req.password);
 				if(usr == null) {
 					// login failed for some reason
 					// TODO: maybe respond with a 500 error code for server issues 

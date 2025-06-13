@@ -46,7 +46,7 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
                 password:
                   type: string
@@ -76,7 +76,7 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
                 password:
                   type: string
@@ -145,6 +145,7 @@ paths:
         - wg
       responses:
         "200":
+          description: success
           content:
             application/json:
               schema:
@@ -215,7 +216,7 @@ paths:
               properties:
                 id: 
                   type: string
-        responses:
+      responses:
         "201":
           description: user added
         "401":
@@ -513,7 +514,7 @@ paths:
       summary: delete the item
       tags: 
         - items
-    responses:
+      responses:
         "200":
           description: item deleted
         "401":

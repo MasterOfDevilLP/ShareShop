@@ -4,14 +4,14 @@ import com.google.gson.annotations.*;
 
 public class CreateUserRequest implements RequestBody {
 	@Expose
-	public String username;
+	public String email;
 	
 	@Expose
 	public String password;
 
 	@Override
 	public boolean validate() {
-		if(username != null && password != null) {
+		if(email != null && password != null) {
 			return true;
 		}
 		return false;

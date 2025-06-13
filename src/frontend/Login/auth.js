@@ -101,7 +101,8 @@ const LoginForm = {
         const res = await fetch(`${API_BASE}/user/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: hashed })
+          body: JSON.stringify({ email: this.email, password: hashed }),
+          credentials: 'include'
         });
         const data = await res.json();
 
@@ -210,7 +211,8 @@ const RegisterForm = {
         const res = await fetch(`${API_BASE}/user/create`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: hashed })
+          body: JSON.stringify({ email: this.email, password: hashed }),
+          credentials: 'include'
         });
         const data = await res.json();
 

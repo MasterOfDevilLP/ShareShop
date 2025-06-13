@@ -47,6 +47,7 @@ public class WG {
         }
     }
     
+    // creates a new WG
     public WG(DBConnectionHandler connectionHandler, String name) throws SQLException {
     	String statementStr = "INSERT INTO wg (wgid, wgname, creationdate) VALUES (?, ?, ?)";
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
@@ -64,6 +65,7 @@ public class WG {
     		this.creationDate = creationDate;
     	} catch(SQLException e) {
     		connectionHandler.conn.rollback();
+    		throw e;
     	}
     	
     }

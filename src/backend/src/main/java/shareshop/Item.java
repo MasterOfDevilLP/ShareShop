@@ -58,6 +58,33 @@ public class Item {
             throw new SQLException("there is no item with itemID: " + itemID);
         }
     }
+    
+    // create a new Item
+    // TODO: create an initial change entry as well
+    public Item(DBConnectionHandler connectionHandler, WG wg, String name, String description, BigDecimal price) throws SQLException {
+    	String statementStr = "INSERT INTO items (itemid, wgid, itemname, itemdescription, price) VALUES (?, ?, ?, ?, ?)";
+    	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
+    	UUID iid = UUID.randomUUID();
+    	try {
+    		connectionHandler.conn.setAutoCommit(true);
+    		statement.setObject(1, iid);
+    		statement.setObject(2, wg.getWgID());
+    		statement.setString(3, name);
+    		statement.setString(4, description);
+    		statement.setBigDecimal(5, price);
+    		statement.execute();
+    		statement.close();
+    		this.itemID = iid;
+    		this.wgID = wg.getWgID();
+    		this.itemName = name;
+    		this.itemDescription = description;
+    		this.price = price;
+    	} catch(SQLException e) {
+    		connectionHandler.conn.rollback();
+    		throw e;
+    	}
+    	
+    }
 
     /**
      * "generates" the next ID for a new change entry in the itemchanges table

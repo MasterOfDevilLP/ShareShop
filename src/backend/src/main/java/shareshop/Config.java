@@ -18,6 +18,7 @@ public class Config {
     
     public int webPort;
     public String webHost;
+    public boolean corsAllowAll;
 
     public DatabaseConfig getDBConfig() {return this.DatabaseConfig;}
 }

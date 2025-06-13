@@ -33,7 +33,7 @@ public class Main {
         
         UserManager userManager = new UserManager(connectionHandler);
         
-        AppContext ctx = new AppContext(userManager);
+        AppContext ctx = new AppContext(userManager, config);
         
         RestApp restApp = new RestApp(config.webHost, config.webPort, ctx);
         

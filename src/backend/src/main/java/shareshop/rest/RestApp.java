@@ -30,6 +30,13 @@ public class RestApp {
 			config.jetty.modifyServletContextHandler(handler -> {
 				handler.setSessionHandler(sessionHandler());
 			});
+			config.bundledPlugins.enableCors(cors -> {
+				if(ctx.config.corsAllowAll) {
+					cors.addRule(it -> {
+						it.reflectClientOrigin = true;
+					});
+				}
+			});
 		});
 		
 		// Register Endpoints

@@ -1,13 +1,24 @@
 package shareshop.rest;
 
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.javalin.Javalin;
+import io.javalin.config.Key;
 import io.javalin.http.ContentType;
 import io.javalin.http.HttpStatus;
+import shareshop.AppContext;
+import shareshop.User;
+import shareshop.WG;
 import shareshop.rest.requests.CreateWGRequest;
+import shareshop.rest.requests.CreateWGResponse;
 import shareshop.rest.requests.WGAddUserRequest;
+import shareshop.rest.requests.WGInformationResponse;
 
 public class WGEndpoints {
 	
@@ -29,20 +40,34 @@ public class WGEndpoints {
 	}
 	
 	private static void registerCreate(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
 		app.post(basepath + "/create", ctx -> {
 			
 			try {
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				CreateWGRequest req = gson.fromJson(ctx.body(), CreateWGRequest.class);
+				
+				AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+				User usr = RestUtils.getAuthorizedUser(ctx);
+				
+				if(usr == null) {
+					// noone's logged in
+					ctx.status(HttpStatus.UNAUTHORIZED);
+					return;
+				}
+				
 				if(!req.validate()) {
 					ctx.status(HttpStatus.BAD_REQUEST);
 					return;
 				}
 				
-				// TODO: proper functionality
-				System.out.println(String.format("Created wg %s", req.name));
+				// either this succeeds, or an exception gets thrown
+				WG newWG = appCtx.wgManager.create(usr, req.name);
+				
+				CreateWGResponse resp = new CreateWGResponse(newWG);
+				
 				ctx.contentType(ContentType.JSON);
-				ctx.result(String.format("{\"id\":\"%s\"}", "59813uuid"));
+				ctx.result(gson.toJson(resp));
 				ctx.status(HttpStatus.OK);
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -53,12 +78,42 @@ public class WGEndpoints {
 	}
 	
 	private static void registerGet(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
 		app.get(basepath + "/{wid}", ctx -> {
 			String wid = ctx.pathParam("wid");
-			System.out.printf("Get WG %s\n", wid);
+			Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+			AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+			User usr = RestUtils.getAuthorizedUser(ctx);
 			
-			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			if(usr == null) {
+				// noone's logged in
+				logger.debug("no user logged in");
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			UUID wgid = UUID.fromString(wid);
+			
+			if(!wgid.equals(usr.getWgID())) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			WGInformationResponse resp = new WGInformationResponse(wg);
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
 		});
 	}
 	

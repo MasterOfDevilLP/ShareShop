@@ -46,6 +46,27 @@ public class WG {
             throw new SQLException("there is no WG with wgID: " + wgID);
         }
     }
+    
+    public WG(DBConnectionHandler connectionHandler, String name) throws SQLException {
+    	String statementStr = "INSERT INTO wg (wgid, wgname, creationdate) VALUES (?, ?, ?)";
+    	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
+    	UUID wid = UUID.randomUUID();
+    	try {
+    		Date creationDate = Date.valueOf(LocalDate.now());
+    		connectionHandler.conn.setAutoCommit(true);
+    		statement.setObject(1, wid);
+    		statement.setString(2, name);
+    		statement.setDate(3, creationDate);
+    		statement.execute();
+    		statement.close();
+    		this.wgID = wid;
+    		this.wgName = name;
+    		this.creationDate = creationDate;
+    	} catch(SQLException e) {
+    		connectionHandler.conn.rollback();
+    	}
+    	
+    }
 
     /**
      * private function to update the DB after a change of any attribute of the wg

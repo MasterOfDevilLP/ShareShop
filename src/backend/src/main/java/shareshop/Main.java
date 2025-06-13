@@ -3,6 +3,7 @@ package shareshop;
 import java.sql.SQLException;
 
 import shareshop.Manager.UserManager;
+import shareshop.Manager.WGManager;
 import shareshop.rest.RestApp;
 
 /**
@@ -32,8 +33,9 @@ public class Main {
         }
         
         UserManager userManager = new UserManager(connectionHandler);
+        WGManager wgManager = new WGManager(connectionHandler);
         
-        AppContext ctx = new AppContext(userManager, config);
+        AppContext ctx = new AppContext(userManager, wgManager, config);
         
         RestApp restApp = new RestApp(config.webHost, config.webPort, ctx);
         

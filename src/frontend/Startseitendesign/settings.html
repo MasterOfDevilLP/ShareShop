@@ -127,7 +127,39 @@
             this.selectedWG = wg.id;
             this.selectedWGName = wg.name;
           },
+          deleteWG() {
+            if (!this.selectedWG) {
+              alert("Keine WG ausgewählt.");
+              return;
+            }
+
+            const wg = this.wgList.find((w) => w.id == this.selectedWG);
+            if (!wg) {
+              alert("WG nicht gefunden.");
+              return;
+            }
+
+            if (confirm(`Möchtest du "${wg.name}" wirklich löschen?`)) {
+              // Entferne die WG aus der Liste
+              this.wgList = this.wgList.filter((w) => w.id != this.selectedWG);
+
+              // Aktualisiere localStorage
+              localStorage.setItem("wgList", JSON.stringify(this.wgList));
+              localStorage.removeItem("selectedWGID");
+              localStorage.removeItem("selectedWGName");
+
+              // Zurücksetzen in der UI
+              this.selectedWG = null;
+              this.selectedWGName = "WG auswählen";
+
+              alert("WG gelöscht.");
+
+              // Optional: Seite neu laden, um Liste zu aktualisieren
+              // window.location.reload();
+            }
+          },
           //Logik löschen WG
+          /*
           async deleteWG() {
             if (!this.selectedWG) {
               alert("Keine WG ausgewählt.");
@@ -161,7 +193,7 @@
               console.error(error);
               alert("Fehler beim Löschen: " + error.message);
             }
-          },
+          },*/
         },
       });
     </script>

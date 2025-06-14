@@ -4,22 +4,23 @@ new Vue({
     lists: [
       { id: "1", name: "Wocheneinkauf" }
     ],
-    wgList: [
+    wgList: JSON.parse(localStorage.getItem("wgList")) || [
       { id: 1, name: "WG Sonnenstraße" },
       { id: 2, name: "WG Blumenweg" },
       { id: 3, name: "WG Fuchsbau" },
       { id: 4, name: "WG Mondhain" }
     ],
-    selectedWG: 1,
-    benutzerID: 123, //beispiel
+    selectedWG: localStorage.getItem("selectedWGID") || 1,
+    selectedWGName: localStorage.getItem("selectedWGName") || "",
+    benutzerID: 123,
     newList: { name: '' },
     showPopup: false,
     showCreateGroupModal: false,
     newGroupName: '',
-    selectedWGName: '',
     showListOptions: false,
     selectedList: null,
-
+    showRenameModal: false,
+    renameListName: '',
   },
     
     methods: {
@@ -169,24 +170,24 @@ new Vue({
 
        */
 selectWG(id) {
-  document.getElementById("dropdown-toggle").checked = false;
+      document.getElementById("dropdown-toggle").checked = false;
 
-  if (id === '__create__') {
-    this.showCreateGroupModal = true;
-    this.selectedWG = null;
-    this.selectedWGName = "Neue Gruppe";
-    return;
-  }
+      if (id === '__create__') {
+        this.showCreateGroupModal = true;
+        this.selectedWG = null;
+        this.selectedWGName = "Neue Gruppe";
+        return;
+      }
 
-  const wg = this.wgList.find(w => w.id === id);
-  if (wg) {
-    this.selectedWG = wg.id;
-    this.selectedWGName = wg.name;
-    this.switchWG();
-  }
-},
-    
-      async switchWG() {
+      const wg = this.wgList.find(w => w.id === id);
+      if (wg) {
+        this.selectedWG = wg.id;
+        this.selectedWGName = wg.name;
+        this.switchWG();
+      }
+    },
+
+    async switchWG() {
       if (this.selectedWG === '__create__') {
         this.showCreateGroupModal = true;
         this.selectedWG = null;
@@ -213,35 +214,107 @@ selectWG(id) {
         console.error("Fehler beim WG-Wechsel:", error);
         alert("Fehler beim Wechseln der WG");
       }
-  },
+    },
+
     createNewGroup() {
-    if (!this.newGroupName.trim()) {
-      alert("Bitte einen Gruppennamen eingeben.");
-      return;
+      if (!this.newGroupName.trim()) {
+        alert("Bitte einen Gruppennamen eingeben.");
+        return;
+      }
+
+      const newGroup = {
+        id: Date.now(),
+        name: this.newGroupName
+      };
+
+      this.wgList.push(newGroup);
+      this.selectedWG = newGroup.id;
+      this.selectedWGName = newGroup.name;
+      this.newGroupName = '';
+      this.showCreateGroupModal = false;
+
+      localStorage.setItem("wgList", JSON.stringify(this.wgList));
+      localStorage.setItem("selectedWGID", newGroup.id);
+      localStorage.setItem("selectedWGName", newGroup.name);
+    },
+
+    openRenameModal() {
+      if (!this.selectedList) return;
+      this.renameListName = this.selectedList.name;
+      this.showRenameModal = true;
+    },
+    //Lokale Umbennung Liste 
+    renameList() {
+      if (!this.renameListName.trim()) {
+        alert("Name darf nicht leer sein.");
+        return;
+      }
+
+      // optional nur lokal:
+      const index = this.lists.findIndex(l => l.id === this.selectedList.id);
+      if (index !== -1) {
+        this.lists[index].name = this.renameListName;
+        this.showRenameModal = false;
+        this.showListOptions = false;
+      }
+
+      // alternativ: updateList() aufrufen
+      // this.updateList();
+    }, 
+/* Logik Umbennung Liste 
+    async renameList() {
+  if (!this.selectedList || !this.renameListName.trim()) {
+    alert("Name darf nicht leer sein.");
+    return;
+  }
+
+  const listID = this.selectedList.id;
+  const newName = this.renameListName;
+
+  try {
+    const response = await fetch(`/api/list/update/${listID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        listID: listID,
+        listName: newName
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(err || "Unbekannter Fehler");
     }
 
-    const newGroup = {
-      id: Date.now(), // temporär, später ggf. durch API ersetzt
-      name: this.newGroupName
-    };
-
-    this.wgList.push(newGroup);
-    this.selectedWG = newGroup.id;
-    this.newGroupName = '';
-    this.showCreateGroupModal = false;
-  },
-      
+    // Lokale Liste aktualisieren
+    const index = this.lists.findIndex(l => l.id === listID);
+    if (index !== -1) {
+      this.lists[index].name = newName;
     }
 
+    this.showRenameModal = false;
+    this.showListOptions = false;
+    alert("Liste erfolgreich umbenannt.");
+  } catch (error) {
+    console.error("Fehler beim Umbenennen:", error);
+    alert("Umbenennen fehlgeschlagen: " + error.message);
+  }
+},*/
+
+  }
 });
 
-
+// Service Worker (optional behalten)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then(registration => {
-      console.log('ServiceWorker registriert:', registration);
-    }).catch(error => {
-      console.log('ServiceWorker Registrierung fehlgeschlagen:', error);
-    });
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registriert:', registration);
+      })
+      .catch(error => {
+        console.log('ServiceWorker Registrierung fehlgeschlagen:', error);
+      });
   });
 }

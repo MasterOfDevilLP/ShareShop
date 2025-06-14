@@ -38,7 +38,7 @@
                   {{ wg.name }}
                 </li>
                 <li class="divider">──────────</li>
-                <li @click="selectWG('__create__')">+ neue WG</li>
+                <li @click="selectWG('__create__')">+ neue Gruppe</li>
               </ul>
             </div>
           </div>
@@ -54,7 +54,7 @@
         <!-- Modal pop up neue WG erstellen -->
         <div v-if="showCreateGroupModal" class="modal-overlay">
           <div class="modal-content">
-            <h3>Neue Gruppe erstellen</h3>
+            <h3>Gruppe Erstellen</h3>
             <input v-model="newGroupName" placeholder="Gruppenname" />
             <div class="modal-actions">
               <button @click="createNewGroup">Erstellen</button>
@@ -106,7 +106,7 @@
             <button class="close-btn" @click="closeListOptions">✕</button>
           </div>
           <div class="sheet-body list-actions">
-            <button>
+            <button @click="openRenameModal">
               <img src="icons/pen.svg" alt="Bearbeiten" />
               <span>Umbenennen</span>
             </button>
@@ -125,6 +125,21 @@
               <img src="icons/Trash.svg" alt="Löschen" />
               <span>Löschen</span>
             </button>
+          </div>
+        </div>
+
+        <!-- Modal: Liste umbenennen -->
+        <div v-if="showRenameModal" class="modal-overlay">
+          <div class="modal-content">
+            <h3>Liste umbenennen</h3>
+            <input
+              v-model="renameListName"
+              placeholder="Neuer Name der Liste"
+            />
+            <div class="modal-actions">
+              <button @click="renameList">Speichern</button>
+              <button @click="showRenameModal = false">Abbrechen</button>
+            </div>
           </div>
         </div>
 

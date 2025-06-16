@@ -176,11 +176,11 @@ public class WG {
      *          or null if there is no shoppinglist with this ID.
      * @throws SQLException
      */
-    public ShoppingList getList(DBConnectionHandler connectionHandler, String shoppingListID) throws SQLException {
+    public ShoppingList getList(DBConnectionHandler connectionHandler, UUID shoppingListID) throws SQLException {
         String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
-        selectStatement.setString(1, shoppingListID);
+        selectStatement.setObject(1, shoppingListID);
         ResultSet rs = selectStatement.executeQuery();
         if (rs.next()) {
             ShoppingList newShoppingList = new ShoppingList(    (UUID)rs.getObject("shoppinglistid"), 
@@ -228,6 +228,8 @@ public class WG {
             listChangeStatement.setDate(4, currentDate);
             listChangeStatement.setObject(5, user.getUserID());
 
+            insertStatement.execute();
+            //listChangeStatement.execute();	// TODO: fix enum stuff
             connectionHandler.conn.commit();
             insertStatement.close();
             listChangeStatement.close();
@@ -256,7 +258,7 @@ public class WG {
         ResultSet rs = selectStatement.executeQuery();
         ArrayList<ShoppingList> lists = new ArrayList<ShoppingList>();
         while (rs.next()) {
-            lists.add(this.getList(connectionHandler, rs.getString("shoppinglistid")));
+            lists.add(this.getList(connectionHandler, (UUID)rs.getObject("shoppinglistid")));
         }
         selectStatement.close();
 

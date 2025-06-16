@@ -266,6 +266,14 @@ public class ShoppingList {
         return items;
     }
 
+    public UUID getShoppingListId() {
+    	return shoppingListID;
+    }
+    
+    public String getName() {
+    	return listName;
+    }
+    
     /**
      * get the change log of the shoppinglist with pagination as an ArrayList filled with objects of the class ListChanges
      * @param connectionHandler

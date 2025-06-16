@@ -1,5 +1,6 @@
 package shareshop.rest;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import shareshop.User;
 import shareshop.WG;
 import shareshop.rest.requests.CreateWGRequest;
 import shareshop.rest.requests.CreateWGResponse;
+import shareshop.rest.requests.ListContentResponse;
 import shareshop.rest.requests.WGAddUserRequest;
 import shareshop.rest.requests.WGInformationResponse;
 
@@ -198,12 +200,49 @@ public class WGEndpoints {
 	}
 	
 	private static void registerGetLists(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
 		app.get(basepath + "/{wid}/list", ctx -> {
 			String wid = ctx.pathParam("wid");
-			System.out.printf("Get WG %s lists\n", wid);
 			
-			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			
+			Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+			AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+			User usr = RestUtils.getAuthorizedUser(ctx);
+			
+			if(usr == null) {
+				// noone's logged in
+				logger.debug("no user logged in");
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			UUID wgid = UUID.fromString(wid);
+			
+			if(!wgid.equals(usr.getWgID())) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			var lists = wg.lists(appCtx.conn);
+			ArrayList<ListContentResponse> resp = new ArrayList<ListContentResponse>();
+			for(var l : lists) {
+				resp.add(new ListContentResponse(l));
+			}
+			
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
 		});
 	}
 }

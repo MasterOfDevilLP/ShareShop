@@ -8,7 +8,7 @@ public class CreateListRequest implements RequestBody {
 	
 	@Override
 	public boolean validate() {
-		if(name != null) {
+		if(name != null && name.length() > 0) {
 			return true;
 		}
 		return false;

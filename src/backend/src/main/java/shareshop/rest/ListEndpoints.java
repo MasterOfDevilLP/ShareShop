@@ -1,12 +1,24 @@
 package shareshop.rest;
 
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.javalin.Javalin;
+import io.javalin.config.Key;
 import io.javalin.http.ContentType;
 import io.javalin.http.HttpStatus;
+import shareshop.AppContext;
+import shareshop.ShoppingList;
+import shareshop.User;
+import shareshop.WG;
 import shareshop.rest.requests.CreateListRequest;
+import shareshop.rest.requests.CreateListResponse;
+import shareshop.rest.requests.ListContentResponse;
 
 public class ListEndpoints {
 	
@@ -21,6 +33,7 @@ public class ListEndpoints {
 	}
 	
 	private static void registerCreate(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
 		app.post(basepath, ctx -> {
 			String wid = ctx.pathParam("wid");
 			try {
@@ -31,10 +44,45 @@ public class ListEndpoints {
 					return;
 				}
 				
-				// TODO: proper functionality
-				System.out.println(String.format("Created list %s for WG %s", req.name, wid));
+				Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+				AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+				User usr = RestUtils.getAuthorizedUser(ctx);
+				
+				if(usr == null) {
+					// noone's logged in
+					logger.debug("no user logged in");
+					ctx.status(HttpStatus.UNAUTHORIZED);
+					return;
+				}
+				
+				UUID wgid = UUID.fromString(wid);
+				
+				if(!wgid.equals(usr.getWgID())) {
+					// wrong WG
+					logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+					ctx.status(HttpStatus.UNAUTHORIZED);
+					return;
+				}
+				
+				WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+				if(wg == null) {
+					// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+					logger.debug("no such WG");
+					ctx.status(HttpStatus.UNAUTHORIZED);
+					return;
+				}
+				
+				ShoppingList slist = wg.createList(appCtx.conn, usr, req.name);
+				if(slist == null) {
+					logger.error("Failed to create shopping list");
+					ctx.status(HttpStatus.FORBIDDEN);
+					return;
+				}
+				
+				CreateListResponse resp = new CreateListResponse(slist);
+				
 				ctx.contentType(ContentType.JSON);
-				ctx.result(String.format("{\"id\":\"%s\"}", "59813uuid"));
+				ctx.result(gson.toJson(resp));
 				ctx.status(HttpStatus.OK);
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -45,13 +93,52 @@ public class ListEndpoints {
 	}
 	
 	private static void registerGet(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
 		app.get(basepath + "/{lid}", ctx -> {
 			String wid = ctx.pathParam("wid");
 			String lid = ctx.pathParam("lid");
-			System.out.printf("Get WG %s list %s\n", wid, lid);
 			
-			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+			AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+			User usr = RestUtils.getAuthorizedUser(ctx);
+			
+			if(usr == null) {
+				// noone's logged in
+				logger.debug("no user logged in");
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			UUID wgid = UUID.fromString(wid);
+			
+			if(!wgid.equals(usr.getWgID())) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
+			if(slist == null) {
+				logger.debug("no such list");
+				ctx.status(HttpStatus.UNAUTHORIZED);
+				return;
+			}
+			
+			ListContentResponse resp = new ListContentResponse(slist);
+			
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
 		});
 	}
 	

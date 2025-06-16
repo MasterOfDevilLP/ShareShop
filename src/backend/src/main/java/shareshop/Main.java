@@ -37,7 +37,7 @@ public class Main {
         WGManager wgManager = new WGManager(connectionHandler);
         ItemManager itemManager = new ItemManager(connectionHandler);
         
-        AppContext ctx = new AppContext(userManager, wgManager, itemManager, config);
+        AppContext ctx = new AppContext(userManager, wgManager, itemManager, connectionHandler, config);
         
         RestApp restApp = new RestApp(config.webHost, config.webPort, ctx);
         

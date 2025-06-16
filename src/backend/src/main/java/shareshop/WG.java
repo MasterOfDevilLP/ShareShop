@@ -229,7 +229,7 @@ public class WG {
             listChangeStatement.setObject(5, user.getUserID());
 
             insertStatement.execute();
-            //listChangeStatement.execute();	// TODO: fix enum stuff
+            listChangeStatement.execute();	// TODO: fix enum stuff
             connectionHandler.conn.commit();
             insertStatement.close();
             listChangeStatement.close();

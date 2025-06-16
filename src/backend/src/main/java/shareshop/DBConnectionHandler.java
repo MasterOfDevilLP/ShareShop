@@ -33,7 +33,7 @@ public class DBConnectionHandler {
      * @throws SQLException
      */
     public void open() throws SQLException {
-        String url = new String("jdbc:postgresql://" + this.server + ":" + this.port + "/shareshopdb");
+        String url = new String("jdbc:postgresql://" + this.server + ":" + this.port + "/shareshopdb?stringtype=unspecified");
         Properties props = new Properties();
         props.setProperty("user", this.user);
         props.setProperty("password", this.pwd);

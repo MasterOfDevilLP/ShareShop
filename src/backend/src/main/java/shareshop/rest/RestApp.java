@@ -34,6 +34,7 @@ public class RestApp {
 				if(ctx.config.corsAllowAll) {
 					cors.addRule(it -> {
 						it.reflectClientOrigin = true;
+						it.allowCredentials = true;
 					});
 				}
 			});

@@ -177,7 +177,8 @@ public class WG {
      * @throws SQLException
      */
     public ShoppingList getList(DBConnectionHandler connectionHandler, UUID shoppingListID) throws SQLException {
-        String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
+    	return new ShoppingList(connectionHandler, shoppingListID);
+        /*String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
         selectStatement.setObject(1, shoppingListID);
@@ -193,7 +194,7 @@ public class WG {
             return newShoppingList;
         }
         selectStatement.close();
-        return null;
+        return null;*/
     }
 
     /**

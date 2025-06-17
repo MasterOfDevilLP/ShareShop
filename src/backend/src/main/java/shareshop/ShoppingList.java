@@ -186,7 +186,7 @@ public class ShoppingList {
         /* ItemAllocations */
 
         this.itemAllocations = new ArrayList<ItemAllocation>();
-        selectString = new String ("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
+        selectString = new String ("SELECT * FROM itemallocation WHERE shoppinglistid = ?");
         select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, shoppingListID);
         rs = select.executeQuery();
@@ -338,7 +338,7 @@ public class ShoppingList {
                 if (!(args[0] instanceof Integer)) {throw new IllegalArgumentException("argument must be from type Integer");}
                 int amount = (Integer)args[0];
                 for (ItemAllocation itemAllocation : itemAllocations) { // if the item is already on the list, the amount gets added onto the current amount
-                    if (itemAllocation.getItem() == item) {
+                    if (itemAllocation.getItem().equals(item)) {
                         String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?"); // will get put into updateCache() later
                         String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
                         try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
@@ -357,6 +357,8 @@ public class ShoppingList {
                             listChange.setObject(6, user.getUserID());
                             listChange.setInt(7, amount); // the amount that gets added onto the current amount
                                 
+                            update.execute();
+                            listChange.execute();
                             connectionHandler.conn.commit();
                             update.close();
                             listChange.close();
@@ -392,6 +394,8 @@ public class ShoppingList {
                     listChange.setObject(6, user.getUserID());
                     listChange.setInt(7, amount);
                         
+                    insert.execute();
+                    listChange.execute();
                     connectionHandler.conn.commit();
                     insert.close();
                     listChange.close();
@@ -408,7 +412,7 @@ public class ShoppingList {
                 if (!(args[0] instanceof Integer)) {throw new IllegalArgumentException("argument must be from type Integer");}
                 int amount = (Integer)args[0];
                 for (ItemAllocation itemAllocation : itemAllocations) {
-                    if (itemAllocation.getItem() == item) {
+                    if (itemAllocation.getItem().equals(item)) {
                         if (itemAllocation.getAmount() - amount <= 0) { // the item gets completely removed from the shoppinglist
                             String deleteString = new String("DELETE FROM itemallocation WHERE itemid = ? AND shoppinglistid = ?");
                             String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
@@ -427,6 +431,8 @@ public class ShoppingList {
                                 listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount);
                                     
+                                deleteStatement.execute();
+                                listChange.execute();
                                 connectionHandler.conn.commit();
                                 deleteStatement.close();
                                 listChange.close();
@@ -446,7 +452,7 @@ public class ShoppingList {
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);
                                     
-                                update.setInt(1, amount  - itemAllocation.getAmount());
+                                update.setInt(1, itemAllocation.getAmount() - amount);
                                 update.setObject(2, item.getItemID());
                                 update.setObject(3, this.shoppingListID);
                                     
@@ -457,11 +463,13 @@ public class ShoppingList {
                                 listChange.setObject(5, item.getItemID());
                                 listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount); // the amount that gets removed from the current amount
-                                    
+                                
+                                update.execute();
+                                listChange.execute();
                                 connectionHandler.conn.commit();
                                 update.close();
                                 listChange.close();
-                                itemAllocation.setAmount(amount - itemAllocation.getAmount());
+                                itemAllocation.setAmount(itemAllocation.getAmount() - amount);
                             } catch (SQLException e) {
                                 System.err.println(e.getMessage());
                                 if (connectionHandler.conn != null) {
@@ -479,7 +487,7 @@ public class ShoppingList {
                 int amount = (Integer)args[0];
                 BigDecimal price = (BigDecimal)args[1];
                 for (ItemAllocation itemAllocation : itemAllocations) {
-                    if (itemAllocation.getItem() == item) {
+                    if (itemAllocation.getItem().equals(item)) {
                         if (itemAllocation.getAmount() - amount <= 0) { // the item gets completely removed from the shoppinglist
                             String deleteString = new String("DELETE FROM itemallocation WHERE itemid = ? AND shoppinglistid = ?");
                             String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
@@ -498,7 +506,9 @@ public class ShoppingList {
                                 listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount);
                                 listChange.setBigDecimal(8, price);
-                                    
+                                
+                                deleteStatement.execute();
+                                listChange.execute();
                                 connectionHandler.conn.commit();
                                 deleteStatement.close();
                                 listChange.close();
@@ -518,7 +528,7 @@ public class ShoppingList {
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);
                                     
-                                update.setInt(1, amount  - itemAllocation.getAmount());
+                                update.setInt(1, itemAllocation.getAmount() - amount);
                                 update.setObject(2, item.getItemID());
                                 update.setObject(3, this.shoppingListID);
                                     
@@ -530,11 +540,13 @@ public class ShoppingList {
                                 listChange.setObject(6, user.getUserID());
                                 listChange.setInt(7, amount); // the amount that gets removed from the current amount
                                 listChange.setBigDecimal(8, price);
-                                    
+                                   
+                                update.execute();
+                                listChange.execute();
                                 connectionHandler.conn.commit();
                                 update.close();
                                 listChange.close();
-                                itemAllocation.setAmount(amount - itemAllocation.getAmount());
+                                itemAllocation.setAmount(itemAllocation.getAmount() - amount);
                             } catch (SQLException e) {
                                 System.err.println(e.getMessage());
                                 if (connectionHandler.conn != null) {

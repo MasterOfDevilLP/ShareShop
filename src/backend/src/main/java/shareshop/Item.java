@@ -34,6 +34,17 @@ public class Item {
         this.price = price;
     }
 
+    // doesn't override the generic equals method, as this doesn't compare everything, only the IDs (which is good enough for most usecases)
+    public boolean equals(Item item) {
+    	if(item == null) {
+    		return false;
+    	}
+    	if(itemID.equals(item.getItemID()) && wgID.equals(item.getWgID())) {
+    		return true;
+    	}
+    	return false;
+    }
+    
     /**
      * Constructor of Class Item via the itemID and a DB query
      * @param connectionHandler

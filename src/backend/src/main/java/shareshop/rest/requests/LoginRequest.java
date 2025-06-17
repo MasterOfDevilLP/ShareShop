@@ -2,13 +2,16 @@ package shareshop.rest.requests;
 
 import com.google.gson.annotations.*;
 
-public class CreateListRequest implements RequestBody {
+public class LoginRequest implements RequestBody {
 	@Expose
-	public String name;
+	public String email;
 	
+	@Expose
+	public String password;
+
 	@Override
 	public boolean validate() {
-		if(name != null && name.length() > 0) {
+		if(email != null && password != null) {
 			return true;
 		}
 		return false;

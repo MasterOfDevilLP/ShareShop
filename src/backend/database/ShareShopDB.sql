@@ -36,7 +36,7 @@ ALTER TYPE public.changeenum OWNER TO backendusr;
 
 --
 -- TOC entry 849 (class 1247 OID 16718)
--- Name: columnchangeenum; Type: TYPE; Schema: public; Owner: postgres
+-- Name: columnchangeenum; Type: TYPE; Schema: public; Owner: backendusr
 --
 
 CREATE TYPE public.columnchangeenum AS ENUM (
@@ -46,7 +46,7 @@ CREATE TYPE public.columnchangeenum AS ENUM (
 );
 
 
-ALTER TYPE public.columnchangeenum OWNER TO postgres;
+ALTER TYPE public.columnchangeenum OWNER TO backendusr;
 
 SET default_tablespace = '';
 
@@ -150,7 +150,7 @@ CREATE TABLE public.users (
     wgid uuid,
     firstname character varying(16),
     lastname character varying(16),
-    email character varying(50) NOT NULL,
+    email character varying(50) NOT NULL UNIQUE,
     pwd character varying(128) NOT NULL
 );
 

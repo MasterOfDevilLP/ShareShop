@@ -6,9 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class WG {
-    private String wgID;
+    private UUID wgID;
     private String wgName;
     private Date creationDate;
     
@@ -18,7 +19,7 @@ public class WG {
      * @param wgName
      * @param creationDate
      */
-    public WG(String wgID, String wgName, Date creationDate) {
+    public WG(UUID wgID, String wgName, Date creationDate) {
         this.wgID = wgID;
         this.wgName = wgName;
         this.creationDate = creationDate;
@@ -30,10 +31,10 @@ public class WG {
      * @param wgID
      * @throws SQLException
      */
-    public WG(DBConnectionHandler connectionHandler, String wgID) throws SQLException {
+    public WG(DBConnectionHandler connectionHandler, UUID wgID) throws SQLException {
         String selectString = new String ("SELECT * FROM wg WHERE wgid = ?");
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
-        select.setString(1, wgID);
+        select.setObject(1, wgID);
         ResultSet rs = select.executeQuery();
         if (rs.next()) {
             this.wgID = wgID;
@@ -44,6 +45,29 @@ public class WG {
             select.close();
             throw new SQLException("there is no WG with wgID: " + wgID);
         }
+    }
+    
+    // creates a new WG
+    public WG(DBConnectionHandler connectionHandler, String name) throws SQLException {
+    	String statementStr = "INSERT INTO wg (wgid, wgname, creationdate) VALUES (?, ?, ?)";
+    	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
+    	UUID wid = UUID.randomUUID();
+    	try {
+    		Date creationDate = Date.valueOf(LocalDate.now());
+    		connectionHandler.conn.setAutoCommit(true);
+    		statement.setObject(1, wid);
+    		statement.setString(2, name);
+    		statement.setDate(3, creationDate);
+    		statement.execute();
+    		statement.close();
+    		this.wgID = wid;
+    		this.wgName = name;
+    		this.creationDate = creationDate;
+    	} catch(SQLException e) {
+    		connectionHandler.conn.rollback();
+    		throw e;
+    	}
+    	
     }
 
     /**
@@ -61,7 +85,7 @@ public class WG {
             connectionHandler.conn.setAutoCommit(false);
             deleteUser.setString(1, wgName);
             deleteUser.setDate(2, creationDate);
-            deleteUser.setString(3, this.wgID);
+            deleteUser.setObject(3, this.wgID);
             deleteUser.executeUpdate();
             connectionHandler.conn.commit();
             deleteUser.close();
@@ -100,7 +124,7 @@ public class WG {
      * get wgID
      * @return
      */
-    public String getWgID() {return this.wgID;}
+    public UUID getWgID() {return this.wgID;}
 
     /**
      * get wg name
@@ -152,24 +176,25 @@ public class WG {
      *          or null if there is no shoppinglist with this ID.
      * @throws SQLException
      */
-    public ShoppingList getList(DBConnectionHandler connectionHandler, String shoppingListID) throws SQLException {
-        String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
+    public ShoppingList getList(DBConnectionHandler connectionHandler, UUID shoppingListID) throws SQLException {
+    	return new ShoppingList(connectionHandler, shoppingListID);
+        /*String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
-        selectStatement.setString(1, shoppingListID);
+        selectStatement.setObject(1, shoppingListID);
         ResultSet rs = selectStatement.executeQuery();
         if (rs.next()) {
-            ShoppingList newShoppingList = new ShoppingList(    rs.getString("shoppinglistid"), 
-                                                                rs.getString("wgid"), 
+            ShoppingList newShoppingList = new ShoppingList(    (UUID)rs.getObject("shoppinglistid"), 
+                                                                (UUID)rs.getObject("wgid"), 
                                                                 rs.getInt("lastcachedchangeid"), 
                                                                 rs.getDate("creationdate"), 
                                                                 rs.getString("listname"), 
-                                                                rs.getString("creatoruserid"));
+                                                                (UUID)rs.getObject("creatoruserid"));
             selectStatement.close();
             return newShoppingList;
         }
         selectStatement.close();
-        return null;
+        return null;*/
     }
 
     /**
@@ -183,7 +208,7 @@ public class WG {
      */
     public ShoppingList createList(DBConnectionHandler connectionHandler, User user, String name) throws SQLException {
         Date currentDate = Date.valueOf(LocalDate.now());
-        String uuid = ShareShopUtility.genNewUUID(connectionHandler);
+        UUID uuid = UUID.randomUUID();//ShareShopUtility.genNewUUID(connectionHandler);
         String insertString = new String("INSERT INTO shoppinglists(shoppinglistid, wgid, lastcachedchangeid, creationdate, listname, creatoruserid) VALUES(?, ?, ?, ?, ?, ?)");
         String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, userid) VALUES(?, ?, ?, ?, ?)");
         connectionHandler.makeSureItsOpen();
@@ -191,19 +216,21 @@ public class WG {
                 PreparedStatement listChangeStatement = connectionHandler.conn.prepareStatement(listChangeString)) {
             connectionHandler.conn.setAutoCommit(false);
 
-            insertStatement.setString(1, uuid);
-            insertStatement.setString(2, this.wgID);
+            insertStatement.setObject(1, uuid);
+            insertStatement.setObject(2, this.wgID);
             insertStatement.setInt(3, 1);
             insertStatement.setDate(4, currentDate);
             insertStatement.setString(5, name);
-            insertStatement.setString(6, user.getUserID());
+            insertStatement.setObject(6, user.getUserID());
 
-            listChangeStatement.setString(1, uuid);
+            listChangeStatement.setObject(1, uuid);
             listChangeStatement.setInt(2, 1);
             listChangeStatement.setString(3, "CREATED");
             listChangeStatement.setDate(4, currentDate);
-            listChangeStatement.setString(5, user.getUserID());
+            listChangeStatement.setObject(5, user.getUserID());
 
+            insertStatement.execute();
+            listChangeStatement.execute();	// TODO: fix enum stuff
             connectionHandler.conn.commit();
             insertStatement.close();
             listChangeStatement.close();
@@ -228,11 +255,11 @@ public class WG {
         String selectString = new String("SELECT shoppinglistid FROM shoppinglists WHERE wgid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
-        selectStatement.setString(1, this.wgID);
+        selectStatement.setObject(1, this.wgID);
         ResultSet rs = selectStatement.executeQuery();
         ArrayList<ShoppingList> lists = new ArrayList<ShoppingList>();
         while (rs.next()) {
-            lists.add(this.getList(connectionHandler, rs.getString("shoppinglistid")));
+            lists.add(this.getList(connectionHandler, (UUID)rs.getObject("shoppinglistid")));
         }
         selectStatement.close();
 
@@ -249,7 +276,7 @@ public class WG {
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteWG = connectionHandler.conn.prepareStatement(removeString)) {
             connectionHandler.conn.setAutoCommit(false);
-            deleteWG.setString(1, this.wgID);
+            deleteWG.setObject(1, this.wgID);
             deleteWG.executeUpdate();
             connectionHandler.conn.commit();
             deleteWG.close();

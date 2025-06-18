@@ -95,13 +95,11 @@ const LoginForm = {
         return;
       }
 
-      // Hash pwd before sending
-      const hashed = CryptoJS.SHA256(this.password).toString();
       try {
         const res = await fetch(`${API_BASE}/user/login/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: hashed }),
+          body: JSON.stringify({ email: this.email, password: this.password }),
           credentials: 'include'
         });
         const data = await res.json();
@@ -204,14 +202,11 @@ const RegisterForm = {
         return;
       }
 
-      // Hash password before sending
-      const hashed = CryptoJS.SHA256(this.password).toString();
-
       try {
         const res = await fetch(`${API_BASE}/user/create/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: hashed }),
+          body: JSON.stringify({ email: this.email, password: this.password }),
           credentials: 'include'
         });
         const data = await res.json();

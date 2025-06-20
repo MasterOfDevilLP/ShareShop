@@ -1,0 +1,46 @@
+= Individuelle Reflexion
+Valencia Melvika <s86971@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Allgemeine erlernte Sachen
+Das Modul *Software Engineering 1 (I152)* hat mein Bild von Softwareentwicklung grundlegend verändert. Vor dem Modul dachte ich, Software Engineering bestehe hauptsächlich aus Programmieren – dem Schreiben von Code, vielleicht noch dem Designen von Benutzeroberflächen. Doch ich habe schnell gemerkt, dass es sich um ein sehr vielschichtiges Feld handelt. *Programmierung ist nur ein kleiner Teil.* SE1 hat mir gezeigt, wie wichtig systematische Planung, Teamarbeit, klare Prozesse und geeignete Werkzeuge sind, um komplexe Softwareprojekte erfolgreich umzusetzen.
+
+== Projektarbeit und agile Methoden
+Ein wesentlicher Bestandteil des Moduls war die praktische Projektarbeit in einem Team, in dem wir nach dem agilen Vorgehensmodell gearbeitet haben. Wir haben das Framework *Scrum* eingesetzt – für mich eine völlig neue und sehr spannende Erfahrung.
+
+Durch Scrum habe ich gelernt, wie wichtig *Flexibilität*, regelmäßige Abstimmungen und *Selbstorganisation* im Team sind. Besonders die Struktur mit *Sprints*, *Dailies* und *Retrospektiven* hat mir geholfen, meinen eigenen Arbeitsstil zu reflektieren und zu verbessern. Ich habe gelernt, dass es völlig normal ist, Pläne anzupassen — Flexibilität ist kein Zeichen von Schwäche, sondern von *Reife im Projektmanagement*.
+
+== Gruppenorganisation und Zusammenarbeit
+Auch meine Vorstellung von Teamarbeit hat sich verändert. Früher dachte ich, eine Gruppe brauche „Druck von oben“, damit etwas passiert. Doch in SE1 habe ich erlebt, wie effektiv Selbstorganisation sein kann. Jeder bringt sich ein, übernimmt Verantwortung und trägt zum gemeinsamen Ziel bei – ohne Hierarchie, aber mit viel Engagement.
+
+Die *Retrospektiven* boten Raum zur Reflexion und zur offenen Kommunikation über Herausforderungen – eine neue, aber sehr wertvolle Erfahrung. Besonders positiv hervorzuheben ist mein Team: sieben Personen mit klar verteilten Rollen, was die Zusammenarbeit effizient und angenehm machte.
+
+== Technische Tools und neue Arbeitsweisen
+Ein wichtiger Aspekt war der Einsatz moderner Werkzeuge wie:
+
+* *GitHub* – anfangs komplex, aber sehr hilfreich für Versionskontrolle, Teamarbeit und Aufgabenverwaltung.
+* *AsciiDoc* – strukturiert, aber für mich weniger benutzerfreundlich.
+* *UML-Diagramme* – zur Visualisierung von Architektur und Abläufen.
+* *Miro* – intuitiv für kollaboratives Arbeiten, besonders remote.
+* *Figma* – sehr wertvoll für Frontend-Design, inkl. Übergabe ans Dev-Team.
+
+Gern hätte ich auch mit *JIRA* gearbeitet, aber das war im Modul nicht vorgesehen.
+
+== Eigene Rolle im Team und Erkenntnisse
+Früher habe ich versucht, Frontend und Backend gleichzeitig zu bearbeiten. In SE1 habe ich gelernt, dass *klare Arbeitsteilung* und Spezialisierung effizienter sind. Man muss nicht alles selbst machen – Zusammenarbeit an Schnittstellen ist entscheidend. Dieses Verständnis wird mir in künftigen Projekten helfen, meinen Fokus zu setzen und mich besser ins Team einzubringen.
+
+== Persönliche Weiterentwicklung
+SE1 hat viele meiner bisherigen Annahmen hinterfragt. Ich habe gelernt, dass Softwareentwicklung genauso viel mit *Kommunikation, Organisation und Menschen* zu tun hat wie mit Code. Die Theorie aus der Vorlesung wurde durch das Projekt greifbar. Begriffe wie *Anforderungen*, *Architektur*, *Testen* oder *Qualitätssicherung* sind für mich nun mit Erfahrungen verknüpft.
+
+Auch meine *Soft Skills* haben sich verbessert: Teamfähigkeit, Selbstorganisation, Reflexionsvermögen. Besonders wichtig war für mich das kritische Hinterfragen meines eigenen Arbeitsstils:
+
+[quote]
+____
+Muss ich wirklich alles selbst kontrollieren?  
+Darf ein Plan sich verändern?  
+Ist Vertrauen besser als Kontrolle?
+____
+
+== Fazit
+*Software Engineering* ist ein breites, spannendes und dynamisches Feld, das ständige Weiterentwicklung erfordert – fachlich, methodisch und menschlich. Ich freue mich darauf, dieses Wissen in weiteren Modulen und im Berufsleben zu vertiefen und anzuwenden.

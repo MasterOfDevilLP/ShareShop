@@ -1,6 +1,6 @@
-= ShareShop Projekt – Sprint Review (13. Meeting)
+= ShareShop Projekt - Sprint Review (13. Meeting)
 Kevin (Product Owner)
-2025‑MM‑DD
+2025-06-15
 
 == Teilnehmer
 * Kevin
@@ -15,8 +15,8 @@ Online via Discord, Prototypen-Demo in Figma
 
 == Themenübersicht
 
-=== 1. Wireframe-Demo & Feedback – Einstieg bis WG-Beitritt
-* „Let’s Start“-Button – größer, mit Marker oder Kreis hervorheben
+=== 1. Wireframe-Demo & Feedback, Einstieg bis WG-Beitritt
+* „Let's Start“-Button, größer, mit Marker oder Kreis hervorheben
 * Klarere CTA für Login/Register
 * WG beitreten über Code/Suche ergänzen (nicht nur erstellen)
 
@@ -26,7 +26,7 @@ Online via Discord, Prototypen-Demo in Figma
 * Favoritenlisten & Vorlagen funktionieren, Rezepte eher als Unterpunkt
 
 === 3. Navigation & Layout
-* Vorschlag: 4 Tab-Reiter – mittig: Liste, seitlich: Kalender, Profil oben
+* Vorschlag: 4 Tab-Reiter, mittig: Liste, seitlich: Kalender, Profil oben
 * Rezepte als Feature unter „Liste“ integrieren
 * Icons & Nutzerführung basierend auf Miro-Feedback angepasst
 

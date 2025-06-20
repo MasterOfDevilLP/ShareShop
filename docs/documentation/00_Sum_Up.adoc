@@ -209,3 +209,14 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Frontend fast fertig für Anbindung - Test-Deployment via Live Server oder Container diskutiert
 * Rechnungslogik zunächst zurückgestellt zugunsten funktionierender Basisfeatures
 * Dokumentation für SE1 reicht minimal, SE2 erfordert erweiterte Codekommentare
+
+== 13. Sprint Review, 15.06.2025:
+
+* `xref:./13_meeting_sprint_review.adoc[Zur vollständigen Dokumentation]`
+
+* Interaktive Wireframes besprochen (Navigation, Buttons, WG‑Beitritt, Einkaufsliste, Templates/Rezepte)
+* Optimierung der Haupt-Navigation: Liste zentral, Kalender seitlich, Profil aus Menü löschen
+* Einkaufsmodus mit Offline-Funktion vorgestellt (Preis + Shop + Teilnehmer-Zuordnung)
+* Automatischer QR-Code-Belegscan & Finanztool (Verrechnen/Bezahlt) diskutiert
+* Prototyp (Dummy-Daten) soll durchgängigen Klick‑Workflow zeigen
+* Tech-Stack präsentiert: Java Backend (PostgreSQL, Docker, REST), HTML/CSS/JS Frontend

@@ -1,0 +1,62 @@
+= ShareShop Projekt – Sprint Review (13. Meeting)
+Kevin (Product Owner)
+2025‑MM‑DD
+
+== Teilnehmer
+* Kevin
+* Benni
+* Anni
+
+== Datum und Uhrzeit
+15.06.2025, ca. 17:00 Uhr
+
+== Ort
+Online via Discord, Prototypen-Demo in Figma
+
+== Themenübersicht
+
+=== 1. Wireframe-Demo & Feedback – Einstieg bis WG-Beitritt
+* „Let’s Start“-Button – größer, mit Marker oder Kreis hervorheben
+* Klarere CTA für Login/Register
+* WG beitreten über Code/Suche ergänzen (nicht nur erstellen)
+
+=== 2. Einkaufslisten-UX & Community-Funktionen
+* Inline-Bearbeitung: Menge, Kosten, Datum bearbeiten
+* Community-Artikel: automatisierte prozentuale Kostenverteilung
+* Favoritenlisten & Vorlagen funktionieren, Rezepte eher als Unterpunkt
+
+=== 3. Navigation & Layout
+* Vorschlag: 4 Tab-Reiter – mittig: Liste, seitlich: Kalender, Profil oben
+* Rezepte als Feature unter „Liste“ integrieren
+* Icons & Nutzerführung basierend auf Miro-Feedback angepasst
+
+=== 4. Einkaufsmodus (Offline geeignet)
+* Artikel abhaken, Preis eintragen, Shop-Nennung
+* Shopping-Teilnehmer-Management hinzugefügt
+* Offline funktioniert auch ohne Netzabdeckung
+
+=== 5. Rechnungen & Finanzfunktionen
+* QR-Scan angedacht für Belegerfassung in „Rechnungen“-Bereich
+* Funktionen wie „Verrechnen“, „Bezahlt“, Summe/Reihenfolge wurden erklärt
+* Manuelle Nachbuchung von Zahlungen notwendig (kein Banking-Integration)
+
+=== 6. Demo & Klick-Dummy
+* Prototyp (HTML/CSS/JS) basierend auf Branches; Dummy-Daten vorhanden
+* Kompletter Klick-Workflow bis List-Nutzung funktioniert
+* Empfehlung: Hauptfunktionen (Login, Einkaufsablauf) stabil präsentieren
+
+=== 7. Technischer Stack & Ausblick
+* Backend: Java, PostgreSQL, Docker, REST-API
+* Frontend: plain HTML/CSS/JS
+* Weiterarbeit:
+  - Navigationsstruktur optimieren
+  - QR-Rechnungs-Integration planen
+  - Einkaufsmodus weiter stabilisieren
+  - Anbindung an Live-API + Datenbanken im nächsten Sprint
+
+== Nächste Schritte
+* Tickets für Navigation, Profil-Position, WG-Beitritt-Code anlegen
+* Einkaufsmodus mit Offline-Logik fertigstellen
+* QR-Code/Beleg-Scan im „Rechnungen“-Bereich konzipieren
+* Tech-Demo konsolidieren für abschließende Präsentation
+* Frontend- und Backend-Teams synchronisieren für nahtlosen Workflow

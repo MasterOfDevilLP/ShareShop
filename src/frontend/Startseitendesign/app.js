@@ -1,5 +1,5 @@
 import { API_BASE_URL } from '../config.js';
-new Vue({
+new Vue({ 
   el: '#app',
   data: {
     lists: [
@@ -23,12 +23,12 @@ new Vue({
     showRenameModal: false,
     renameListName: '',
   },
-    
+
     methods: {
       //Fragen Einkaufliste von DB ab 
       async fetchLists() {
         try {
-          const response = await fetch('/api/lists'); 
+          const response = await fetch(`${API_BASE_URL}/api/lists`); 
           if (!response.ok) throw new Error('Fehler beim Laden der Listen');
           const data = await response.json();
           this.lists = data.map(item => ({
@@ -196,7 +196,7 @@ new Vue({
         }
 
         try {
-          const response = await fetch('/api/wg/switch', {
+          const response = await fetch(`${API_BASE_URL}/api/lists`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

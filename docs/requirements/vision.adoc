@@ -1,22 +1,11 @@
 = Vision: ShareShop
-
-* Kevin
-* Benni
-* Han
-* Anni
-* Valencia
-* Emil
-* Florian
-
+{localtime}
 include::../_includes/default-attributes.inc.adoc[]
 // Platzhalter für weitere Dokumenten-Attribute
 
 
 == Einführung
 Der Zweck dieses Dokuments ist es, die wesentlichen Bedarfe und Funktionalitäten des Systems ShareShop überblicksartig zu beschreiben. Der Fokus liegt auf den Fähigkeiten, die von Stakeholdern und adressierten Nutzern benötigt werden, und der Begründung dieser Bedarfe. Die Details, wie das System ShareShop diese Bedarfe erfüllt, werden durch User Stories im Product Backlog sowie dem UX-Konzept beschrieben.
-
-=== Zweck
-Der Zweck dieses Dokuments ist es, die wesentlichen Anforderungen an das System aus Sicht und mit den Begriffen der künftigen Anwender zu beschreiben.
 
 === Gültigkeitsbereich (Scope)
 Dieses Visions-Dokument bezieht sich auf das System ShareShop, das von SE1-Team 4 entwickelt wird. Das System wird es Wohngemeinschaften (WGs) erlauben, gemeinsam Einkaufslisten zu verwalten, wiederkehrende Einkäufe zu strukturieren und Ausgaben transparent aufzuteilen, um damit den Alltag effizienter zu organisieren.
@@ -27,21 +16,17 @@ Dieses Visions-Dokument bezieht sich auf das System ShareShop, das von SE1-Team 
 //Siehe <<./glossary.adoc#glossary, Glossar>>.
 
 === Referenzen
-
 * Product Backlog
-* Protokolle der Sprintmeetings
-* Vorlesung
+* Figma-Wireframes
+* Sprint-Meetings (Protokolle)
+* Vorlesung Systementwicklung 1
 
 == Positionierung
 
 === Fachliche Motivation
-
-Einkaufen in Wohngemeinschaften führt häufig zu organisatorischen Problemen: unklare Zuständigkeiten, doppelte Einkäufe, fehlende Transparenz bei Ausgaben. Die App ShareShop soll diese Probleme durch digitale Organisation lösen. Sie schafft Klarheit über Aufgabenverteilungen, Rechnungen und Vorräte.
+Das Einkaufen in WGs ist häufig schlecht koordiniert: es wird doppelt gekauft, nichts abgesprochen, Rechnungen geraten in Vergessenheit. ShareShop möchte genau dort ansetzen. Die App bietet einen zentralen Ort für das gemeinsame Verwalten von Einkäufen, Listen und Abrechnungen – abgestimmt auf den WG-Alltag.
 
 === Produktvision
-//Eine Produktvision beschreibt das Einsatzziel der Anwendung und sorgt für ein gemeinsames Ziel und Verständnis für alle Beteiligten im Projekt. Geben Sie in knapper Form übersichtsartig die Positionierung der angestrebten Lösung im Vergleich zu verfügbaren Alternativen dar. Das folgende Format kann dazu verwendet werden:
-
-
 [cols="1,3"]
 |===
 | Für | Mitglieder von Wohngemeinschaften
@@ -56,50 +41,42 @@ Einkaufen in Wohngemeinschaften führt häufig zu organisatorischen Problemen: u
 == Stakeholder Beschreibungen
 
 === Zusammenfassung der Stakeholder
-
 [%header, cols="1,3,3"]
 |===
 | Name | Beschreibung | Verantwortlichkeiten
 | WG-Mitglied | Endnutzer:in der App | Erstellt Listen, prüft Einkäufe, nutzt Templates
-| Product Owner | Vertritt Nutzerinteressen im Team | Pflegt Backlog, priorisiert Funktionen, stimmt mit Team ab
-| Entwickler:innen | Team für Frontend und Backend | Implementieren Funktionen, führen Tests durch
-| Modulbetreuung bzw. Coach | Dozent:innen im SE-Modul | Prüfen Fortschritt, bewerten Dokumentation und Methode
-| Scrum Master | Unterstützt das Team bei der Einhaltung des agilen Prozesses und entfernt Hindernisse im Arbeitsablauf | Achtet auf regelmäßige Meetings, fördert gute Zusammenarbeit und stellt sicher, dass das Team effizient arbeiten kann
+| Product Owner | Vertritt Nutzerinteressen im Team | Pflegt Backlog, priorisiert Funktionen
+| Entwickler:innen | Team für Frontend und Backend | Implementieren Features, testen Funktionalität
+| Modulbetreuung / Coach | Lehrende des Moduls SE1 | Begleiten das Projekt, bewerten Umsetzung und Vorgehen
+| Scrum Master | Prozessverantwortliche Person im Team | Achtet auf Abläufe, sorgt für Hindernisbeseitigung
 |===
 
 == Produktüberblick
 
 === Bedarfe und Hauptfunktionen
-
 [%header, cols="4,1,4,1"]
-
 |===
 | Bedarf | Priorität | Features / Funktionen | Geplantes Release
-| Datenmodell strukturieren | Hoch | ER-Modell, Klassenmodell, Attributdefinitionen | Sprint 1
-| REST-API vorbereiten | Hoch | Schnittstellenmodellierung | Sprint 1
-| UI planen | Hoch | Wireframes für Profil, Liste, Kalender, Rezepte | Sprint 1
-| Einkaufsliste gemeinsam bearbeiten | Hoch | Änderungsverfolgung, Aufgabenverteilung | Sprint -
-| Templates nutzen | Niedrig | Speichern und wiederverwenden von Einkaufslisten | Sprint -
-| Ausgaben aufteilen | Niedrig | Rechnungserstellung, Zuordnung, Budgetübersicht   | Sprint -
-| Einkäufe offline nutzen | Mittel | Offline-Modus | Sprint -
-| Vorräte anzeigen & verwalten | Niedrig | Inventar + Haltbarkeitswarnung | Sprint -
+| Gemeinsame Einkaufsliste | Hoch | Änderungen in Echtzeit, Sperrmodus bei Nutzung | Sprint 2
+| Listen-Templates | Mittel | Vorlagen für wiederkehrende Einkäufe | Sprint 3/4
+| Ausgabenaufteilung | Hoch | Rechnungserfassung, automatische Zuordnung | Sprint 3/4
+| Vorratsübersicht | Niedrig | Artikelstatus, Haltbarkeitsinfos (optional) | offen
+| Benutzerverwaltung | Hoch | WG beitreten, Mitgliederverwaltung | Sprint 1
+| Offline-Nutzung | Mittel | Nutzung im Laden ohne Internet | Sprint 3/4
+| Responsives UI | Mittel | Mobile First Design | Sprint 2
 |===
 
-
 === Zusätzliche Produktanforderungen
-
 [%header, cols="4,1,1"]
 |===
 | Anforderung | Priorität | Geplantes Release
-
-| **Plattformanforderung:** Unterstützung aktueller Webbrowser (Chrome, Firefox, Safari, Edge) | Hoch | Sprint -
-| **Hardwareannahme:** App wird auf mobilen Geräten (Smartphones/Tablets) sowie Desktop-PCs verwendet | Hoch | Sprint -
-| **Standard:** Umsetzung als Progressive Web App (PWA), Nutzung REST-konformer Schnittstellen | Hoch | Sprint -
-| **Qualität:** Mobile First, responsives Design, kurze Ladezeiten unter 1 Sekunde (Richtwert) | Mittel | Sprint -
-| **Qualität:** Einfache und intuitive Nutzerführung, barrierearme Gestaltung | Hoch | Sprint -
-| **Qualität:** Offline-Funktionalität durch lokale Speicherung | Mittel | Sprint -
-| **Qualität:** Minimale Fehleranfälligkeit bei Netzwerkverlust, einfache Wiederaufnahme | Mittel | Sprint -
-| **Datenschutz:** Speicherung personenbezogener Daten lokal im Browser | Hoch | Sprint -
-| **Recht:** DSGVO-Konformität durch Verzicht auf Cloud-Dienste und Tracking | Hoch | Sprint -
-| **Abhängigkeit:** System benötigt moderne HTML5-kompatible Umgebung (JavaScript erforderlich) | Hoch | Sprint -
+| Unterstützung aktueller Webbrowser | Hoch | Sprint 1
+| Nutzung auf Smartphone | Hoch | Sprint 2
+| Umsetzung als PWA | Hoch | Sprint 2
+| REST-API für Datenzugriff | Hoch | Sprint 1
+| Kurze Ladezeiten (<1s) | Mittel | durchgängig
+| Einfache Nutzerführung | Mittel | durchgängig
+| Datenschutz: keine Cloud, keine Weitergabe | Hoch | durchgängig
+| Speicherung im lokalen Speicher (Browser) | Hoch | Sprint 2/3
+| Barrierearme Gestaltung | Mittel | durchgängig
 |===

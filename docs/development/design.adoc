@@ -1,17 +1,87 @@
-= Design: {project-name}
-Vorname Nachname <email@domain.org>; Vorname2 Nachname2 <email2@domain.org>; Vorname3 Nachname3 <email3@domain.org>
-{localdatetime}
+= Design: ShareShop
+Kevin Bürger
+{localtime}
 include::../_includes/default-attributes.inc.adoc[]
-// Platzhalter für weitere Dokumenten-Attribute
-
 
 == Zweck
-Dieses Dokument beschreibt wesentliche Entwurfsentscheidungen auf Ebene der Komponenten und Module. Diese dienen als Vorgabe für die Implementierung und erleichtern das Systemverständnis.
- 
+Dieses Dokument hält wichtige Designentscheidungen für unsere App fest – vor allem, wie einzelne Module und Komponenten aufgebaut sind. Ziel ist, die technische Struktur übersichtlich darzustellen und den späteren Code leichter nachvollziehbar zu machen.
+
 == Ausgewählte Sichten
-//Entwurfsklassendiagramme, Sequenzdiagramme
+
+=== Datenstruktur (ERM)
+image::../../models/database/ShareShop_ERM.png[width=max, title="Entity-Relationship-Modell der Einkaufslistenanwendung"]
+
+Das ERM zeigt die wichtigsten Datenobjekte wie Nutzer, WGs, Einkaufslisten und Items, und wie diese logisch miteinander verknüpft sind. Auch Änderungen und Benutzerzuordnungen sind als eigene Entitäten abgebildet.
+
+=== Ablauf: Artikel hinzufügen (Sequenzdiagramm)
+[plantuml]
+----
+@startuml
+actor User
+participant "Frontend" as FE
+participant "Backend" as BE
+participant "DB"
+
+User -> FE : klickt auf "+ Artikel"
+FE -> BE : POST /wg/{wid}/item
+BE -> DB : INSERT INTO Items
+DB --> BE : OK
+BE --> FE : Antwort 201 Created
+FE --> User : Artikel erscheint in der Liste
+@enduml
+----
+
+Das Diagramm zeigt beispielhaft, wie ein Artikel in eine Einkaufsliste eingefügt wird, von der Nutzeraktion bis zur Datenbank.
+
+=== User Interface (Wireframe)
+Screens und Ideen fürs UI sind in der PDF unter folgendem Link zu finden:
+
+link:../../models/frontend/wireframe.pdf[Wireframe PDF anzeigen, window=_blank]
+
+Die Figma-Entwürfe geben einen Eindruck davon, wie die App aussehen und sich bedienen lassen soll, inklusive Navigation, Kategorien und typischen Use Cases wie Listen erstellen, teilen oder Rezepte verwenden.
 
 == Schnittstellen
-//Dokumentation oder Verweise auf Schnittstellen, z.B. REST-APIs
 
-== Datenmodell
+Unsere App verwendet eine REST-API, um Frontend und Backend zu verbinden. Darüber laufen z. B. Login, WG-Verwaltung, Artikelsuche und das Bearbeiten von Einkaufslisten. Die API ist nach dem OpenAPI-3.0.4-Standard beschrieben und mit Javalin in Java umgesetzt.
+
+=== Auswahl zentraler Endpunkte
+
+Die Tabelle unten zeigt eine Auswahl der wichtigsten Schnittstellen. Die komplette Beschreibung steht in der Datei `rest.yaml`.
+
+|===
+| Methode | Pfad | Beschreibung
+
+| POST  | /user/create               | Nutzer registrieren
+| POST  | /user/login               | Login mit Session-Cookie
+| GET   | /user                     | Daten des eingeloggten Nutzers
+| POST  | /wg/create                | Neue WG erstellen
+| GET   | /wg/{wid}                 | WG-Daten anzeigen
+| POST  | /wg/{wid}/user            | Nutzer zur WG hinzufügen
+| GET   | /wg/{wid}/list            | Alle Listen in einer WG abrufen
+| POST  | /wg/{wid}/list            | Neue Liste anlegen
+| GET   | /wg/{wid}/list/{lid}      | Liste anzeigen
+| POST  | /wg/{wid}/list/{lid}      | Artikel zur Liste hinzufügen o. ä.
+| GET   | /wg/{wid}/item            | Artikel suchen oder filtern
+| POST  | /wg/{wid}/item            | Neuen Artikel erstellen
+| PATCH | /wg/{wid}/item/{iid}      | Artikel bearbeiten
+| DELETE| /wg/{wid}/item/{iid}      | Artikel löschen
+| POST  | /wg/{wid}/category        | Neue Kategorie anlegen
+|===
+
+Fast alle Endpunkte benötigen eine gültige Session. Fehler wie „nicht eingeloggt“ oder „kein Zugriff“ werden mit den entsprechenden Statuscodes (`401`, `403`) zurückgegeben. Daten werden als JSON gesendet und empfangen, verarbeitet wird das mit der Bibliothek `gson`.
+
+== Technischer Aufbau
+
+Unsere Endpunkte sind mit Javalin umgesetzt. Jeder Bereich (z.B. Listen, Items) hat eine eigene Klasse, in der alle zugehörigen Routen registriert werden z.B. `ListEndpoints.java` oder `ItemEndpoints.java`. Die API prüft bei jeder Anfrage, ob der Nutzer eingeloggt ist und zur jeweiligen WG gehört.
+
+Für Anfragen nutzen wir eigene Request-Objekte wie `CreateItemRequest`. JSON wird mit `gson` (de)serialisiert. Felder ohne `@Expose`-Annotation werden dabei ignoriert.
+
+Ein typischer Ablauf für `POST /wg/{wid}/item` sieht so aus:
+
+- Nutzer wird authentifiziert
+- WG-Zugehörigkeit wird geprüft
+- Request wird validiert
+- Neues Item wird erstellt und als JSON zurückgegeben
+
+Mehr Infos zum genauen Aufbau der Logik gibt es hier:  
+<<../models/backend_general/backend.adoc#, backend.adoc>>

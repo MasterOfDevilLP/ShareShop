@@ -18,6 +18,7 @@ Dieses Visions-Dokument bezieht sich auf das System ShareShop, das von SE1-Team 
 === Referenzen
 * Product Backlog
 * Figma-Wireframes
+* Miro-Board
 * Sprint-Meetings (Protokolle)
 * Vorlesung Systementwicklung 1
 

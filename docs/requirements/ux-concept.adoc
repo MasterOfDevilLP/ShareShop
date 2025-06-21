@@ -1,37 +1,111 @@
-= UX-Konzept: {project-name}
-Vorname Nachname <email@domain.org>; Vorname2 Nachname2 <email2@domain.org>; Vorname3 Nachname3 <email3@domain.org>
+= UX-Konzept: ShareShop
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]
-// Platzhalter für weitere Dokumenten-Attribute
-
 
 == Einführung
-In diesem Dokument werden die Benutzeroberflächen des Systems {project-system-name} beschrieben. Dies können sein:
+In diesem Dokument werden die Benutzeroberflächen des Systems ShareShop beschrieben. Dies umfasst:
 
 * Personas der wichtigsten Stakeholder
-* Nutzerkontext
+* Nutzungskontext
 * Wireframes relevanter Benutzeroberflächen
-* Zusammenhänge mittels Taskflow-Diagrammen
-* Angaben über die Gestaltung der Benutzeroberfläche, z.B. Styling, Bedienbarkeit, ...
+* exemplarische User Stories und Clickflows
+* Angaben über Designentscheidungen zur Bedienbarkeit und zum Layout
 
 == Personas
-// Fügen Sie hier als Tabelle oder Bild die Persons der wichtigsten Stakeholder ein
+
+[cols="1,3"]
+|===
+| Karolina Samantha
+| Technikaffin, nutzt Apple-Ökosystem, will schnellen Zugriff und einfache Nutzung ohne komplexe Menüführung. Frustriert sich über unübersichtliche Apps.
+
+| Bruce Luke
+| Nutzt v.a. Office-Produkte, möchte faire Kostenverteilung, hat wenig Geduld für unklare Berechnungen oder Gruppenteilung.
+
+| Thomas Müller
+| Studiert Medieninformatik, plant gern voraus, ist aber introvertiert und will Einkäufe ohne persönlichen Kontakt koordinieren.
+
+| Emilia Zimmermann
+| Umweltbewusste Doktorandin, legt Wert auf Nachhaltigkeit und Datensouveränität. Frustriert sich über doppelte Einkäufe und intransparente Apps.
+
+| Max
+| Möchte volle Kontrolle über Daten und Funktionen, benötigt einfache, ressourcensparende App ohne Online-Zwang.
+|===
 
 == Nutzungskontext
-// Beschreiben Sie die Arbeitsaufgaben, Arbeitsmittel, physische und soziale Umgebung, in der das Produkt genutzt wird. 
-// Eventuell sind Angaben zu Fehlerquellen, Häufigkeiten von Ereignisse sowie Bearbeitungsdauern von Vorgängen relevant
 
-//Hier sind einige Anregungen:
+Das System wird von typischen WG-Mitgliedern genutzt, die sowohl digital affin als auch pragmatisch handeln. Die wichtigsten Rahmenbedingungen:
 
-//Zutreffendes angeben, nicht zutreffendes streichen oder auskommentieren
-. Anzahl der Personen, die an der Erfüllung der Aufgabe beteiligt sind. Ändert sich das?
-. Wie lange dauert die Bearbeitung der Aufgabe? Wie viel Zeit wird für jeden Arbeitsschritt benötigt? Ändert sich das?
-. Gibt es besondere Umgebungsbedingungen, z.B. mobil, offline, Außeneinsatz, Touchbedienung, Nutzung durch seh- oder hörbeeinträchtigte Personen?
-. Welche Systemplattformen werden heute eingesetzt? Welche sind es ggf. zukünftig?
-. Welche anderen Anwendungen sind im Einsatz? Muss ihre Anwendung mit diesen integriert werden?
-
-Hier können zudem bei Bedarf Teile des Unternehmensmodells (Prozesse, Organigramme, IT-Landschaft, ...) eingefügt werden, um die beteiligten Aufgaben und Rollen zu skizzieren.
+- **Geräte:** Mobile Devices (Smartphone, Tablet) sowie Desktop (Laptop/PC)
+- **Betriebsumfeld:** App wird zu Hause (Planung) und unterwegs (Einkauf) genutzt, stabile Offline-Funktion wird benötigt
+- **Umgebung:** Nutzung oft spontan im Alltag (z.B. Supermarkt), einfache Touchbedienung auf Smartphones erforderlich
+- **Barrierefreiheit:** Angestrebt ist barrierearme Gestaltung mit gut lesbarer Schrift, ausreichenden Kontrasten und klarer Struktur
+- **Fehlerquellen:** Doppelteinkäufe, Verwirrung über geteilte vs. private Listen, manuelle Mengenverteilung, Versionskonflikte
+- **Systemvoraussetzung:** Moderne Browser (Chrome, Firefox, Safari), kein spezieller Download notwendig (PWA)
 
 == Wireframes und Wireflow
-// Fügen Sie Wireframes als Bilder oder als Link (z.B. zu einem Miroboard) ein
-// Beziehen Sie ihre Wireframes auf konkrete User Stories oder Epics.
+
+Die vollständige Wireframe-Dokumentation befindet sich unter:
+
+link:../models/frontend/wireframe.pdf[Wireframe PDF anzeigen, window=_blank]
+
+Sie umfasst u.a.:
+
+- Registrierung / Login
+- Gruppenverwaltung und Einladung
+- Einkaufslisten-Ansicht und Bearbeitung
+- Rechnungsübersicht und Verrechnung
+- Kalenderansicht mit Terminen
+- Rezepteverwaltung
+- responsive Bottom-Navigation
+
+=== Beispielhafte User Storys
+
+[cols="1,3"]
+|===
+| User Story 1
+| Als Person in einem Haushalt möchte ich dieselbe Einkaufsliste mit meinem Partner teilen, damit wir keine Doppeltkäufe machen.
+
+| User Story 2
+| Als Nutzer:in möchte ich Artikel speichern, bearbeiten und löschen können, damit ich flexibel bleibe.
+
+| User Story 3
+| Als Nutzer:in möchte ich sehen, wer wann etwas geändert hat, damit ich nachverfolgen kann, was passiert ist.
+
+| User Story 4
+| Als Nutzer:in möchte ich auf Basis vorheriger Listen Vorschläge erhalten, damit ich schneller neue Listen erstellen kann.
+
+| User Story 5
+| Als Nutzer:in möchte ich eine klare Kategorisierung der Artikel, damit ich im Supermarkt schneller finde, was ich brauche.
+
+| User Story 6
+| Als Nutzer:in möchte ich die App auch mobil optimal bedienen können (Bottom-Navigation, kompaktes Layout etc.).
+|===
+
+=== Clickflows & UX-Wünsche
+
+[%header, cols="1,4"]
+|===
+| Wunsch 1
+| Beim Anlegen eines Templates werden zuletzt genutzte Artikel vorgeschlagen.
+
+| Wunsch 2
+| Ein Tab zeigt an, was gerade „zu Hause“ ist (z.B. durch letzten Einkauf).
+
+| Clickflow A: Erstellung einer WG
+a|
+. App öffnen  
+. Auswahl „Neue Gruppe erstellen“  
+. Eingabe des Gruppennamens  
+. „Weiter“ → Mitglieder einladen per WhatsApp  
+. Abschluss oder „Jetzt nicht“ → Gruppe erstellt und gespeichert
+
+| Clickflow B: Bearbeiten einer Einkaufsliste
+a|
+. App öffnen  
+. Auswahl einer WG → Öffnen der Einkaufsliste  
+. Artikelliste erscheint (z.B. „Wocheneinkauf“)  
+. Artikel können bearbeitet, gelöscht oder als erledigt markiert werden  
+. Über das „Stern“-Symbol lassen sich Favoriten setzen  
+. In den Einstellungen kann die Liste exportiert, sortiert, gespeichert oder gelöscht werden  
+. In der Historie ist der Änderungverlauf lesbar
+|===

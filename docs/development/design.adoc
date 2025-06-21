@@ -36,7 +36,7 @@ Das Diagramm zeigt beispielhaft, wie ein Artikel in eine Einkaufsliste eingefüg
 === User Interface (Wireframe)
 Screens und Ideen fürs UI sind in der PDF unter folgendem Link zu finden:
 
-link:../../models/frontend/wireframe.pdf[Wireframe PDF anzeigen, window=_blank]
+link:../models/frontend/wireframe.pdf[Wireframe PDF anzeigen, window=_blank]
 
 Die Figma-Entwürfe geben einen Eindruck davon, wie die App aussehen und sich bedienen lassen soll, inklusive Navigation, Kategorien und typischen Use Cases wie Listen erstellen, teilen oder Rezepte verwenden.
 

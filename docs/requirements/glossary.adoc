@@ -119,4 +119,4 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet der
 |===
 
 == Domänenmodell
-image::../../models/database/ShareShop_ERM.png[width=max, title="Entity-Relationship-Modell der Einkaufslistenanwendung"]
+image::images/ShareShop_ERM.png[width=max, title="Entity-Relationship-Modell der Einkaufslistenanwendung"]

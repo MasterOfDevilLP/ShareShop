@@ -1,6 +1,6 @@
 FROM maven:3-eclipse-temurin-21-alpine
 
-RUN apk update && apk add java-postgresql-jdbc
+#RUN apk update && apk add java-postgresql-jdbc
 
 WORKDIR .
 COPY pom.xml /app/

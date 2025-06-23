@@ -46,6 +46,10 @@ Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Be
 
 === Container
 //Level 2 im C4-Modell
+[plantuml, "{diagramsdir}/c4", svg]
+....
+include::plantuml/container.puml[]
+....
 
 === Components
 //Level 3 im C4-Modell

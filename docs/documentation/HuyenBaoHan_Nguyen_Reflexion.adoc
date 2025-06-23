@@ -4,7 +4,7 @@ Huyen Bao Han Nguyen <s54687@htw-dresden.de>
 include::../_includes/default-attributes.inc.adoc[]
 
 == Allgemeine erlernte Sachen
-Das Modul *Software Engineering 1 (I152)* hat mein Bild von Softwareentwicklung grundlegend verändert. Vor dem Modul dachte ich, Software Engineering bestehe hauptsächlich aus Programmieren – dem Schreiben von Code, vielleicht noch dem Designen von Benutzeroberflächen. Doch ich habe schnell gemerkt, dass es sich um ein sehr vielschichtiges Feld handelt. *Programmierung ist nur ein kleiner Teil.* SE1 hat mir gezeigt, wie wichtig systematische Planung, Teamarbeit, klare Prozesse und geeignete Werkzeuge sind, um komplexe Softwareprojekte erfolgreich umzusetzen.
+Das Modul *Software Engineering 1 (I152)* hat mein Bild von Softwareentwicklung grundlegend verändert. Vor dem Modul dachte ich, Software Engineering bestehe hauptsächlich aus Programmieren – dem Schreiben von Code, vielleicht noch dem Designen von Benutzeroberflächen. Doch ich habe schnell gemerkt, dass es sich um ein sehr vielschichtiges Feld handelt. Programmierung ist nur ein kleiner Teil. SE1 hat mir gezeigt, wie wichtig systematische Planung, Teamarbeit, klare Prozesse und geeignete Werkzeuge sind, um komplexe Softwareprojekte erfolgreich umzusetzen.
 
 == Projektarbeit und agile Methoden
 Ein wesentlicher Bestandteil des Moduls war die praktische Projektarbeit in einem Team, in dem wir nach dem agilen Vorgehensmodell gearbeitet haben. Wir haben das Framework *Scrum* eingesetzt – für mich eine völlig neue und sehr spannende Erfahrung.

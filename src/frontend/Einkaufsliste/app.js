@@ -8,6 +8,7 @@ new Vue({
       { id: "4", kategorie: "Fleisch", name: "Hähnchenbrust", preis: "11.00", datum: "12/2/2025", menge: "500", einheit: "gramm" },
       { id: "5", kategorie: "Backwaren", name: "Brot", preis: "", datum: "12/2/2025", menge: "1", einheit: "stück" }
       ],
+      //products: [], 
     
     newProduct: {
       id:'',
@@ -27,6 +28,19 @@ new Vue({
 
     
     methods: {
+      /*get Item from DB
+      mounted() {
+        fetch(`${baseUrl}/item`)
+          .then(response => response.json())
+          .then(data => {
+            this.products = data;
+          })
+          .catch(error => {
+            console.error('Lỗi khi tải dữ liệu sản phẩm:', error);
+          });
+      }
+      */
+
       getIcon(kategorie) {
         const icons = {
           Obst: 'Icons/obst.png',
@@ -56,7 +70,7 @@ new Vue({
           alert('Bitte den Name der Produkte ausfüllen.');
           return;
           }
-        this.products.push({
+        this.products.push({ // const productToAdd = {
           id: Date.now().toString(),
           name: this.newProduct.name,
           kategorie: this.newProduct.kategorie,
@@ -65,12 +79,37 @@ new Vue({
           einheit: this.newProduct.einheit,
           preis:this.newProduct.preis
         });
+        /*fetch(this.apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(productToAdd)
+        })
+          .then(response => response.json())
+          .then(addedProduct => {
+            this.products.push(addedProduct);
+            this.closePopup();
+          })
+          .catch(error => {
+            console.error('Lỗi khi thêm sản phẩm:', error);
+          });*/
         this.closePopup();
       },
 
       deleteProduct(id){
         this.products = this.products.filter(product => product.id !== id);
       },
+
+      /*deleteProduct(id) {
+        fetch(`${this.apiUrl}/${id}`, {
+          method: 'DELETE'
+        })
+          .then(() => {
+            this.products = this.products.filter(product => product.id !== id);
+          })
+          .catch(error => {
+            console.error('Lỗi khi xoá sản phẩm:', error);
+          });
+      }*/
 
       openChangeProduct(product){
         this.newProduct = { ...product };
@@ -84,6 +123,18 @@ new Vue({
         }
         this.showChangeProduct = false;
       },
+
+      /*fetch(`${baseUrl}/item/${itemId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedItem)
+      })
+        .then(res => res.json())
+        .then(newItem => {
+          const i = this.products.findIndex(p => p.id === itemId);
+          if (i !== -1) this.products[i] = newItem;
+        }); */
+
 
       closeChangeProduct(){
         this.showChangeProduct=false;

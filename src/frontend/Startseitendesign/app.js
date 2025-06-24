@@ -217,6 +217,41 @@ new Vue({
         }
       },
 
+      async createNewGroup() {
+        if (!this.newGroupName.trim()) {
+          alert("Bitte einen Gruppennamen eingeben.");
+          return;
+        }
+      
+        try {
+          const response = await fetch(`${API_BASE_URL}/wg/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: this.newGroupName
+            })
+          });
+      
+          const text = await response.text(); // <– egal ob 200 oder 401
+      
+          console.log("Serverantwort:", response.status, text);
+      
+          if (response.status === 201 || response.status === 200) {
+            const result = JSON.parse(text);
+            alert("WG erfolgreich erstellt: " + result.id);
+          } else if (response.status === 401) {
+            alert("Demo-Antwort: Backend verweigert Zugriff (401)");
+          } else {
+            throw new Error("Fehlercode: " + response.status);
+          }
+      
+        } catch (error) {
+          console.error("Fehler beim Erstellen der WG:", error);
+          alert("Fehler beim Erstellen der WG");
+        }
+      },
+      
+
       createNewGroup() {
         if (!this.newGroupName.trim()) {
           alert("Bitte einen Gruppennamen eingeben.");

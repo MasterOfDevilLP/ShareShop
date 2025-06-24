@@ -105,7 +105,7 @@ const LoginForm = {
 
         // Handle response
         if (data.success) {
-          window.location.href = '/startenseite';
+          window.location.href = '/Startseitendesign/startseite.html';
         } else {
           this.errorMessage = t('Falscher Email oder Passwort.', 'Incorrect Email or password.');
         }

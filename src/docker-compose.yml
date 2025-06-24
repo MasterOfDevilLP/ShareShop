@@ -21,7 +21,7 @@ services:
     ports:
       - 5434:5432 # allow access from the host. This is just for testing, remove in deployment!
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       retries: 5
       start_period: 30s

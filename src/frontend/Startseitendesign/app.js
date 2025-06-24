@@ -216,7 +216,7 @@ new Vue({
           alert("Fehler beim Wechseln der WG");
         }
       },
-
+      /*
       async createNewGroup() {
         if (!this.newGroupName.trim()) {
           alert("Bitte einen Gruppennamen eingeben.");
@@ -250,8 +250,8 @@ new Vue({
           alert("Fehler beim Erstellen der WG");
         }
       },
+      */
       
-
       createNewGroup() {
         if (!this.newGroupName.trim()) {
           alert("Bitte einen Gruppennamen eingeben.");
@@ -273,6 +273,7 @@ new Vue({
         localStorage.setItem("selectedWGID", newGroup.id);
         localStorage.setItem("selectedWGName", newGroup.name);
       },
+      
 
       openRenameModal() {
         if (!this.selectedList) return;

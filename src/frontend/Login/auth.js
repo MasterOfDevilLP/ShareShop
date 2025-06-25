@@ -220,24 +220,29 @@ const RegisterForm = {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: this.email, password: this.password })
         });
-        const data = await res.json();
 
         // Handle registration result
-        if (data.id) {
+        if (res.ok) {
+          // Register success --> weiterleiten
           window.location.href = '/startseitendesign/startseite.html?erklaermodus=true'; //path to startenseite
-        } else {
+        } else if (res.status === 400) {
+          this.errorMessage = t(
+            'Ungültige Eingabe. Bitte überprüfe deine Daten.',
+            'Invalid input. Please check your data.');
+        }
           // Show specific error if email already exists
-          if (data.message === 'Email already registered') {
+          else if (res.status === 401) {
             this.errorMessage = t(
               'Diese E-Mail ist bereits registriert. Bitte einloggen.',
               'This email is already registered. Please log in.'
             );
           } else {
-            this.errorMessage = data.message || t('Registrierung nicht erfolgreich.', 'Registration failed.');
+            this.errorMessage = t('Registrierung nicht erfolgreich.', 'Registration failed.');
           }
-        }
-      } catch {
-        this.errorMessage = t('Fehler bei der Registrierung.', 'Error during registration.');
+        
+      } catch (err) {
+       console.error('Fehler bei der Anfrage:', err);
+    this.errorMessage = t('Fehler bei der Registrierung.', 'Error during registration.');
       }
     }
   }

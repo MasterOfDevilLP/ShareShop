@@ -1,0 +1,35 @@
+= Reflexion zum Projekt
+Phuong Anh Nguyen <s87098@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+Im Rahmen des Moduls „Software Engineering I“ vom 17. März  – 5. Juli 2025 
+habe ich gemeinsam mit meinem Team ein Softwareprojekt zum Thema:
+ „Share Shop: kollaborative Einkaufsliste für WGs“ umgesetzt. Ziel des Moduls war es, die in den Vorlesungen und Praktika vermittelten Inhalte praktisch und theoretisch anzuwenden, ein funktionsfähigen Prototypen im Team zu entwickeln und ihn zu präsentieren.
+
+Zu Beginn des Projekts wurde unser Team von der Lehrveranstaltung zusammengestellt.
+In unserem ersten Meeting haben wir uns mit dem Projekt vertraut gemacht und unsere ersten Ideen auf Miro gesammelt. Die Rollen haben wir je nach unserem individuellen Stärken verteilt. Ich war insbesondere in der Frontend Entwicklung zuständig.
+Danach folgte schon die Planung, bei der wir wie nach der Vorlesung, das Projekt nach dem Scrum-Prinzip organisierten. 
+Wir teilten die Arbeit in mehreren Sprints auf, die jeweils 4 Wochen gingen. In jedem Sprint planten wir wöchentliche stand ups durch und hielten nach jedem Sprint ein Review sowie eine Retroperspektiven durch. 
+Tools, die wir während der Projektarbeit benutzt haben, waren: 
+
+*	Discord für die Meetings, 
+*	GitHub für Dokumentationen, Aufgabenvergaben und Versionsverwaltung,
+*	Miro für Sprint Reviews und Retroperspektiven,
+*	Figma für die Wireframes
+
+Für das Programmieren nutzte das Frontend Team hauptsächlich HTML, Java Script mit Vue Framework und CSS. 
+Anfangs waren nicht alle mit den Tools vertraut, aber durch die Praktika, gegenseitiger Hilfe und selbstständiger Recherche hat es keine großen Schwierigkeiten gegeben.
+Diese strukturierte Vorbereitung half uns dabei das Projekt effizient anzugehen.
+
+Während dieser Zusammenarbeit habe ich gelernt, wie der Softwarentwicklungsprozess entsteht, von der Anforderungsanalyse bis hin zur Umsetzung konnte ich ein umfassendes Verständnis entwickeln. Insbesondere konnte ich durch die Anwendung des scrums Prinzip lernen, wie man ein Projekt iterativ strukturiert und managet. Der Einsatz von GitHub trug wesentlich zur strukturierten Zusammenarbeit bei
+
+Ein weiterer wichtiger Lernbereich war die Arbeit mit API-Schnittstellen, die das Frontend-Team benötigte, um auf die Daten des Backends zuzugreifen. Ich lernte, wie man APIs mit HTTP-Methoden korrekt anfragt, passende Endpunkte erreicht und die Anfragen richtig formuliert. Dabei war insbesondere die Fehlerbehandlung von API-Requests eine Herausforderung. Um diese besser zu verstehen, habe ich zusätzlich das Tool Insomnia verwendet, um die Antworten (z. B. 200 OK oder 400 Bad Request) gezielt zu testen und auszuwerten.
+
+Die API-Arbeit war für mich persönlich die größte Herausforderung gleichzeitig aber auch die lehrreichste. Sie hat mir geholfen, ein tieferes Verständnis für die Funktionsweise moderner Webanwendungen zu entwickeln.
+
+Ebenso habe ich gelernt, wie wichtig es ist im Team zusammen zu arbeiten. 
+Wie wichtig die Kommunikation zwischen Frontend und Backend ist, vor allem wenn man unterschiedliche Erfahrungen, Persönlichkeiten und Arbeitsweisen mit sich bringt.
+Dennoch hat es in der Teamarbeit keine großen Probleme gegeben. Bei Schwierigkeiten konnte man sich immer gegenseitig helfen. Die Rollenverteilung war aus meiner Sicht perfekt gewählt, und sowohl der Scrum Master als auch der Product owner haben ihre Arbeit sehr verantwortungsbewusst und zuverlässig gemacht. 
+
+Insgesamt war die Projektarbeit eine wertvolle Erfahrung bei der ich nicht nur mein Technisches Wissen erweitern konnte, sondern auch ein tiefes Verständnis für agile Projektmethoden und effektive Teamarbeit gewonnen habe. Vor allem habe ich gelernt, wie wichtig Eigenverantwortung, Vertrauen und Zusammenarbeit in einem Projekt ist. Diese Erkenntnisse werde ich auf jeden Fall in kommenden Projekten auf mitnehmen.

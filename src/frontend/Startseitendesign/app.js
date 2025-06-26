@@ -184,10 +184,12 @@ new Vue({
         if (wg) {
           this.selectedWG = wg.id;
           this.selectedWGName = wg.name;
-          this.switchWG();
+          //this.switchWG();
         }
       },
+      
       //Logik WG wechsel
+      /*
       async switchWG() {
         if (this.selectedWG === '__create__') {
           this.showCreateGroupModal = true;
@@ -215,43 +217,71 @@ new Vue({
           console.error("Fehler beim WG-Wechsel:", error);
           alert("Fehler beim Wechseln der WG");
         }
-      },
-      /*
-      async createNewGroup() {
-        if (!this.newGroupName.trim()) {
-          alert("Bitte einen Gruppennamen eingeben.");
-          return;
-        }
+      },*/
       
-        try {
-          const response = await fetch(`${API_BASE_URL}/wg/create`, {
+async createNewGroup() {
+    if (!this.newGroupName.trim()) {
+        alert("Bitte einen Gruppennamen eingeben.");
+        return;
+    }
+
+    try {
+      console.log("Sende WG-Daten an Server:", JSON.stringify({ name: this.newGroupName }));
+        const response = await fetch(`${API_BASE_URL}/wg/create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',  // Stellt sicher, dass der Cookie mitgesendet wird
             body: JSON.stringify({
-              name: this.newGroupName
+                name: this.newGroupName
             })
+        });
+
+        // Wenn die Antwort erfolgreich war, den JSON-Inhalt direkt extrahieren
+        const result = await response.json();
+
+        console.log("Serverantwort:", response.status, result);
+
+        // Wenn erfolgreich
+       if (response.ok) {
+            alert("WG erfolgreich erstellt: " + result.name);  // Die Antwort kann hier ein Text sein, kein JSON
+
+          // Neue WG zur Liste hinzufügen
+          this.wgList.push({
+              name:this.newGroupName
           });
-      
-          const text = await response.text(); // <– egal ob 200 oder 401
-      
-          console.log("Serverantwort:", response.status, text);
-      
-          if (response.status === 201 || response.status === 200) {
-            const result = JSON.parse(text);
-            alert("WG erfolgreich erstellt: " + result.id);
-          } else if (response.status === 401) {
-            alert("Demo-Antwort: Backend verweigert Zugriff (401)");
-          } else {
+
+          // Lokale Speicherung
+          localStorage.setItem("wgList", JSON.stringify(this.wgList));
+          localStorage.setItem("selectedWGID", result.id);
+          localStorage.setItem("selectedWGName", result.name);
+
+          // Auswahl updaten
+          this.selectedWG = result.id;
+          this.selectedWGName = result.name;
+
+          // Modal schließen & Eingabe zurücksetzen
+          this.showCreateGroupModal = false;
+          this.newGroupName = '';
+
+        } else if (response.status === 400) {
+            // Fehler bei 400 Bad Request - Server gibt möglicherweise mehr Details zurück
+            console.error("Fehler 400: Bad Request. Serverantwort:", result);
+            alert("Fehler beim Erstellen der WG. Serverantwort: " + result);
+        } else if (response.status === 401) {
+            // Authentifizierungsfehler
+            alert("Backend verweigert Zugriff (401). Bitte sicherstellen, dass der Benutzer eingeloggt ist.");
+        } else {
+            // Anderer Fehlercode
+            alert("Fehler beim Erstellen der WG. Serverantwort: " + result);
             throw new Error("Fehlercode: " + response.status);
-          }
-      
-        } catch (error) {
-          console.error("Fehler beim Erstellen der WG:", error);
-          alert("Fehler beim Erstellen der WG");
         }
-      },
-      */
-      
+    } catch (error) {
+        console.error("Fehler beim Erstellen der WG:", error);
+        alert("Fehler beim Erstellen der WG. Details: " + error.message);
+    }
+},
+
+      /*
       createNewGroup() {
         if (!this.newGroupName.trim()) {
           alert("Bitte einen Gruppennamen eingeben.");
@@ -272,7 +302,7 @@ new Vue({
         localStorage.setItem("wgList", JSON.stringify(this.wgList));
         localStorage.setItem("selectedWGID", newGroup.id);
         localStorage.setItem("selectedWGName", newGroup.name);
-      },
+      },*/
       
 
       openRenameModal() {
@@ -344,6 +374,7 @@ new Vue({
 });
 
 // Service Worker (optional behalten)
+/*
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
@@ -354,4 +385,6 @@ if ('serviceWorker' in navigator) {
         console.log('ServiceWorker Registrierung fehlgeschlagen:', error);
       });
   });
+  
 }
+*/

@@ -95,7 +95,7 @@ const LoginForm = {
       }
 
       try {
-        const res = await fetch(`${API_BASE}/user/login`, {
+        const res = await fetch(`${API_BASE}/user/login/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: this.email, password: this.password }),
@@ -215,10 +215,11 @@ const RegisterForm = {
       }
 
       try {
-        const res = await fetch(`${API_BASE}/user/create`, {
+        const res = await fetch(`${API_BASE}/user/create/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: this.password })
+          body: JSON.stringify({ email: this.email, password: this.password }),
+          credentials: 'include'
         });
 
         // Handle registration result

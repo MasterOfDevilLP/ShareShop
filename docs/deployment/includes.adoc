@@ -1,5 +1,5 @@
 = Includes-Dokumentation
-Benjamin Banse
+Benjamin Banse <s86480@htw-dresden.de>
 {localtime}
 :doctype: book
 
@@ -7,9 +7,10 @@ include::../_includes/default-attributes.inc.adoc[]
 
 == Werkzeuge für Design/Diagramme
 
-=== PlantUML/PGAdmin
-Für die Darstellung von Abhängigkeiten innerhalb der Datenbank wurde zu beginn PlantUML verwendet.
-Später wurde dann auf die hauseigene Diagrammm-Generierung von PGAdmin umgestellt, als die Datenbank in PostgreSQL aufgesetzt wurde.
+=== PlantUML/PGAdmin4/DrawIO
+Für die Darstellung von Abhängigkeiten innerhalb der Datenbank wurde zu beginn DrawIO verwendet.
+Später wurde dann auf die hauseigene Diagrammm-Generierung von PGAdmin4 umgestellt, als die Datenbank in PostgreSQL aufgesetzt wurde.
+PlantUML wurden für die C4-Modelle benutzt als auch für kleinere Darstellungen, welche kurzzeitig dienten, um für Klarheit innerhalb des Teams zu sorgen.
 
 === Figma / Miro
 Um das Frontend planen und visualisieren zu können, wurde zu beginn Mithilfe der in Miro angelegten Userstories mögliche Design-Parameter gewählt. Später wurde dann mit Figma weiter gearbeitet, da es die Konfigurierung des Frontends incl. bereits ausgefertigter HTML/CSS-Style Codes wesentlich vereinfachte. Auch Clickables wurden mithilfe von Figma erstellt.

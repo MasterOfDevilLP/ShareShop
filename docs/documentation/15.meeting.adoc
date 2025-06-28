@@ -1,0 +1,45 @@
+ne= ShareShop Projekt - Meeting 15
+Kevin (Product Owner)
+2025-06-24
+
+== Teilnehmer
+* Kevin
+* Benni
+* Anni
+* Emil
+* Valencia
+
+== Datum und Uhrzeit
+25.06.2025, ca. [Uhrzeit einfügen]
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Dokumentation - ADoc-Kopfzeilen
+* Bei allgemeinen Dokumenten (Glossar, Requirements) künftig alle Beteiligten im Kopf angeben
+* Modellierungs-Dokumente (z.B. Architektur) ebenfalls mit vollständigem Autorenvermerk
+
+=== 2. REST-API und Session-Testing
+* Anni: POST /wg create schlägt mit 401 fehl, Ursache: fehlende Session-Cookie / Login erforderlich
+* Session-Persistenz bricht nach Server-Neustart ab, wird aber für Präsentation toleriert
+* Emil bietet Unterstützung beim Session-Setup nach dem Call
+
+=== 3. Frontend-Branches und Pull-Requests
+* Branches für Login, Startseite und Einkaufslisten existieren, Merge auf Main noch ausstehend
+* Code-Reviews und Merges sollen bis Samstagmittag abgeschlossen werden
+* Review-Pings über Discord (Review-Channel) sicherstellen, damit PRs zeitnah bearbeitet werden
+
+=== 4. Wireframe-Anpassungen
+* Keine weiteren Anpassungen geplant, Fokus auf funktionierende Implementierung
+* Erkenntnisse aus Sprint Review werden in späteren Sprints adressiert
+
+=== 5. Backend-Updates
+* ERM-Diagramm (UML) mit neuen Daten aktualisiert, Bild wird ersetzt, Includes angepasst
+* Snap/Docker-Snap Probleme thematisiert, Warnung erfolgt im Team
+
+=== 6. Präsentationsplanung
+* Ziel: Main-Branch bis Samstagmittag stabil, danach keine Änderungen mehr vornehmen
+* Prototyp muss funktionierende Demo-Parts beinhalten (Login + REST-API calls)
+* Geplanter Preview-Call ca. 1 Stunde vor dem offiziellen Präsentationstermin

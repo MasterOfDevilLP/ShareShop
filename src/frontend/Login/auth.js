@@ -86,10 +86,9 @@ const LoginForm = {
     },
 
     // Handle login logic
-    async login() {
+   async login() {
       this.errorMessage = '';
 
-      // Validate required fields
       if (!this.email || !this.password) {
         this.errorMessage = t('Bitte alle Felder ausfüllen.', 'Please fill in all fields.');
         return;
@@ -102,15 +101,28 @@ const LoginForm = {
           body: JSON.stringify({ email: this.email, password: this.password }),
           credentials: 'include'
         });
-        const data = await res.json();
 
-        // Handle response
-        if (data.success) {
-          window.location.href = '/startenseite';
+        console.log("Status:", res.status);
+
+        // Check if body has content before parsing as JSON
+        const contentType = res.headers.get("content-type");
+        let data = {};
+        if (contentType && contentType.includes("application/json")) {
+          data = await res.json();
         } else {
-          this.errorMessage = t('Falscher Email oder Passwort.', 'Incorrect Email or password.');
+          console.log("Kein JSON-Body vorhanden.");
         }
-      } catch {
+
+        if (res.ok) {
+          window.location.href = '/src/frontend/Startseitendesign/startseite.html';
+        } else if (res.status === 401) {
+          this.errorMessage = t('Falsche Email oder Passwort.', 'Incorrect email or password.');
+        } else {
+          this.errorMessage = t('Fehler beim Einloggen.', 'Error logging in.');
+        }
+
+      } catch (error) {
+        console.error('Fehler bei der Anfrage:', error);
         this.errorMessage = t('Fehler beim Einloggen.', 'Error logging in.');
       }
     }
@@ -209,24 +221,29 @@ const RegisterForm = {
           body: JSON.stringify({ email: this.email, password: this.password }),
           credentials: 'include'
         });
-        const data = await res.json();
 
         // Handle registration result
-        if (data.success) {
-          window.location.href = '/startenseite?erklaermodus=true'; //path to startenseite
-        } else {
+        if (res.ok) {
+          // Register success --> weiterleiten
+          window.location.href = '/startseitendesign/startseite.html?erklaermodus=true'; //path to startenseite
+        } else if (res.status === 400) {
+          this.errorMessage = t(
+            'Ungültige Eingabe. Bitte überprüfe deine Daten.',
+            'Invalid input. Please check your data.');
+        }
           // Show specific error if email already exists
-          if (data.message === 'Email already registered') {
+          else if (res.status === 401) {
             this.errorMessage = t(
               'Diese E-Mail ist bereits registriert. Bitte einloggen.',
               'This email is already registered. Please log in.'
             );
           } else {
-            this.errorMessage = data.message || t('Registrierung nicht erfolgreich.', 'Registration failed.');
+            this.errorMessage = t('Registrierung nicht erfolgreich.', 'Registration failed.');
           }
-        }
-      } catch {
-        this.errorMessage = t('Fehler bei der Registrierung.', 'Error during registration.');
+        
+      } catch (err) {
+       console.error('Fehler bei der Anfrage:', err);
+    this.errorMessage = t('Fehler bei der Registrierung.', 'Error during registration.');
       }
     }
   }

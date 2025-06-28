@@ -1,0 +1,30 @@
+= Includes-Dokumentation
+Benjamin Banse
+{localtime}
+:doctype: book
+
+include::../_includes/default-attributes.inc.adoc[]
+
+== Werkzeuge für Design/Diagramme
+
+=== PlantUML/PGAdmin
+Für die Darstellung von Abhängigkeiten innerhalb der Datenbank wurde zu beginn PlantUML verwendet.
+Später wurde dann auf die hauseigene Diagrammm-Generierung von PGAdmin umgestellt, als die Datenbank in PostgreSQL aufgesetzt wurde.
+
+=== Figma / Miro
+Um das Frontend planen und visualisieren zu können, wurde zu beginn Mithilfe der in Miro angelegten Userstories mögliche Design-Parameter gewählt. Später wurde dann mit Figma weiter gearbeitet, da es die Konfigurierung des Frontends incl. bereits ausgefertigter HTML/CSS-Style Codes wesentlich vereinfachte. Auch Clickables wurden mithilfe von Figma erstellt.
+
+
+== Code-Snippets
+
+=== Backend
+Im Backend wurde Java als Programmiersprache gewählt. Um eine geeignete Umgebung zu schaffen, wurde Maven 21 verwendet.
+
+=== Frontend
+Das Frontend hat klassisch HTML/CSS/JS verwendet. Als JS-Modul wurde vue.js verwendet.
+
+=== Datenbank
+Als eine geeignete Datenbank hat sich PostgreSQL herausgestellt, da zum einen bereits Kenntnisse zu dieser DB im Team waren, als auch der Fakt, dass diese Datenbank relativ einfach und unkompliziert ist. Desweiteren ist sie schnell genug für unseren Anwendungsfall.
+
+== Werkzeuge für Organisation
+Für die Organisation wurde Miro für Reviews und Retros als auch allgemeine Dokumentensammlung verwendet. Für die Kommunikation wurde Discord zum großen Teil verwendet. Als Arbeitsteilung wurde Github Projects verwendet. Dort wurden Aufgaben im Product-Backlog ausspezifiziert und im Sprint-Board für die jeweiligen Teams zur Verfügung gestellt. Somit hatte man einen Überblick über den Fortschritt innerhalb des Teams.

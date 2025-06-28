@@ -4,7 +4,7 @@ Kevin Bürger
 include::../_includes/default-attributes.inc.adoc[]
 
 == Zweck
-Dieses Dokument hält wichtige Designentscheidungen für unsere App fest – vor allem, wie einzelne Module und Komponenten aufgebaut sind. Ziel ist, die technische Struktur übersichtlich darzustellen und den späteren Code leichter nachvollziehbar zu machen.
+Dieses Dokument hält wichtige Designentscheidungen für unsere App fest - vor allem, wie einzelne Module und Komponenten aufgebaut sind. Ziel ist, die technische Struktur übersichtlich darzustellen und den späteren Code leichter nachvollziehbar zu machen.
 
 == Ausgewählte Sichten
 
@@ -42,7 +42,7 @@ Die Figma-Entwürfe geben einen Eindruck davon, wie die App aussehen und sich be
 
 == Schnittstellen
 
-Unsere App verwendet eine REST-API, um Frontend und Backend zu verbinden. Darüber laufen z. B. Login, WG-Verwaltung, Artikelsuche und das Bearbeiten von Einkaufslisten. Die API ist nach dem OpenAPI-3.0.4-Standard beschrieben und mit Javalin in Java umgesetzt.
+Unsere App verwendet eine REST-API, um Frontend und Backend zu verbinden. Darüber laufen z.B. Login, WG-Verwaltung, Artikelsuche und das Bearbeiten von Einkaufslisten. Die API ist nach dem OpenAPI-3.0.4-Standard beschrieben und mit Javalin in Java umgesetzt.
 
 === Auswahl zentraler Endpunkte
 
@@ -85,3 +85,31 @@ Ein typischer Ablauf für `POST /wg/{wid}/item` sieht so aus:
 
 Mehr Infos zum genauen Aufbau der Logik gibt es hier:  
 <<../models/backend_general/backend.adoc#, backend.adoc>>
+
+=== Frontend-Architektur & Designentscheidungen
+
+* **Framework & Build-Tool**  
+  Vue.js (3.5.x) verwendet mit Vite (inkl. @vitejs/plugin-vue) für schnelles Entwickeln und Bauen
+
+* **Projektstruktur (`src/`)**  
+  - `main.js`: Einstiegspunkt, lädt `App.vue` und CSS  
+  - `App.vue`: Root-Komponente, zeigt `AuthWrapper`  
+  - `components/`:  
+    • `AuthWrapper.vue`: Umschaltung zwischen Login und Registrierung  
+    • `LoginForm.vue` & `RegisterForm.vue`: Formulare mit reaktiven Eingaben und Sprachumschaltung (DE/EN)
+
+* **Formular‑ & Sprach-Logik**  
+  - `LoginForm.vue`:  
+    • `v-model` für Benutzername und Passwort  
+    • DE/EN-Toggle über Buttons  
+    • Event `switchMode` zum Wechsel der Formulare
+
+* **Styling**  
+  - Global: `style.css` aus `src`  
+  - Komponenten-spezifisch: Scoped CSS in `.vue`-Dateien (Cards, Buttons etc.)   
+  - Einheitliches Design: z. B. abgerundete Ecken, Schatten, mobile Breite
+
+* **Tooling & Dev-Workflow**  
+  - Entwicklung: `npm run dev` (Vite) → Live-Reload  
+  - Build: `npm run build`; lokale Vorschau mit `npm run preview`  
+  - Dev-Setup unterstützt durch `docker-compose.yml`, `.editorconfig`, `.markdownlint.json`

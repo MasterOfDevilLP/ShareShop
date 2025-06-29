@@ -75,7 +75,7 @@ Das Einkaufen in WGs ist häufig schlecht koordiniert: es wird doppelt gekauft, 
 | Nutzung auf Smartphone | Hoch | Sprint 2
 | Umsetzung als PWA | Hoch | Sprint 2
 | REST-API für Datenzugriff | Hoch | Sprint 2
-| Kurze Ladezeiten (<1s) | Mittel | durchgängig
+| Kurze Ladezeiten (<2s) | Niedrig/Mittel | durchgängig
 | Einfache Nutzerführung | Mittel | durchgängig
 | Datenschutz: keine Cloud, keine Weitergabe | Hoch | durchgängig
 | Speicherung im lokalen Speicher (Browser) | Hoch | Sprint 2/3

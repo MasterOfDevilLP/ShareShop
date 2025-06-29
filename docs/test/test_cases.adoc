@@ -1,11 +1,11 @@
 = Test Cases: {project-name}
-* Benjamin Banse Benjamin.Banse@stud.htw-dresden.de
-* Kevin Bürger Bürger.Kevin@stud.htw-dresden.de
-* Anni Nguyen Anni.Nguyen@stud.htw-dresden.de
-* Emil Hempel Emil.Hempel@stud.htw-dresden.de
-* Valencia Melvika Valencia.Melvika@stud.htw-dresden.de
-* Florian Süßmann Florian.Süßmann@stud.htw-dresden.de
-* Han Nguyen HanNguyen@stud.htw-dresden.de
+* Benjamin Banse benjamin.banse@stud.htw-dresden.de
+* Kevin Bürger kevin.buerger@stud.htw-dresden.de
+* Anni Nguyen anni.nguyen@stud.htw-dresden.de
+* Emil Hempel emil.hempel@stud.htw-dresden.de
+* Valencia Melvika valencia.melvika@stud.htw-dresden.de
+* Florian Süßmann florian.suessmann@stud.htw-dresden.de
+* Han Nguyen huyenbaohan.nguyen@stud.htw-dresden.de
 
 {localdatetime}
 include::../_includes/default-attributes.inc.adoc[]

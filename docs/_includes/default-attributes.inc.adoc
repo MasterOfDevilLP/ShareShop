@@ -1,5 +1,5 @@
 // Meta
-:project-name: ShareShop (T00)
+:project-name: ShareShop (4.A)
 :project-system-name: ShareShop
 // Settings:
 :toc:

@@ -1,6 +1,14 @@
 = Glossar: ShareShop
-Kevin Bürger
+* Benjamin Banse Benjamin.Banse@stud.htw-dresden.de
+* Kevin Bürger Kevin.Buerger@stud.htw-dresden.de
+* Anni Nguyen Anni.Nguyen@stud.htw-dresden.de
+* Emil Hempel Emil.Hempel@stud.htw-dresden.de
+* Valencia Melvika Valencia.Melvika@stud.htw-dresden.de
+* Florian Süßmann Florian.Suessmann@stud.htw-dresden.de
+* Han Nguyen Han.Nguyen@stud.htw-dresden.de
+
 {localdatetime}
+
 include::../_includes/default-attributes.inc.adoc[]
 
 == Einführung

@@ -12,7 +12,8 @@ Kevin (Product Owner)
 * Florian  
 
 == Datum und Uhrzeit
-20.06.2025
+20.06.2025 14 Uhr
+
 
 == Ort
 Online-Meeting (Discord)
@@ -22,6 +23,7 @@ Online-Meeting (Discord)
 === 1. Gefühlsbarometer und Einstieg
 * Start ohne formales Gefühlsrad, Fokus lag auf konkretem Feedback  
 * Team äußerte Erleichterung über Struktur und weniger redundante Tagesmeetings  
+
 
 === 2. Rückblick auf Sprint 2, reflektiert
 * Offene Pull Requests blockierten Entwicklungsfluss, da Branches aufeinander aufbauen  

@@ -221,6 +221,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Prototyp (Dummy-Daten) soll durchgängigen Klick-Workflow zeigen
 * Tech-Stack präsentiert: Java Backend (PostgreSQL, Docker, REST), HTML/CSS/JS Frontend
 
+
 == 14. Retrospektive - Sprint 2, 20.06.2025:
 
 * `xref:./14_retrospektive_sprint2.adoc[Zur Vollständigen Dokumentation]`
@@ -231,6 +232,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
   ** Review-PRs werden direkt im Review-Channel verlinkt
   ** Review-Pings sollen aktiv gepostet werden, damit Reviews nicht verzögert werden
 * Akzeptanzkriterien & Sub-Issues:
+
   ** Nur bei Bedarf formulieren - Sub-Issues nur wenn sinnvoll zweckmäßig
 * Kommunikation & Channels:
   ** Fragen-Channel eingerichtet für bessere Team-Abstimmung

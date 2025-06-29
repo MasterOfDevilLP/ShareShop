@@ -1,12 +1,12 @@
 = Projektplan: ShareShop
 
-* Benjamin Banse Benjamin.Banse@stud.htw-dresden.de
-* Kevin Bürger Bürger.Kevin@stud.htw-dresden.de
-* Anni Nguyen Anni.Nguyen@stud.htw-dresden.de
-* Emil Hempel Emil.Hempel@stud.htw-dresden.de
-* Valencia Melvika Valencia.Melvika@stud.htw-dresden.de
-* Florian Süßmann Florian.Süßmann@stud.htw-dresden.de
-* Han Nguyen HanNguyen@stud.htw-dresden.de
+* Benjamin Banse benjamin.banse@stud.htw-dresden.de
+* Kevin Bürger kevin.bueger@stud.htw-dresden.de
+* Anni Nguyen anni.nguyen@stud.htw-dresden.de
+* Emil Hempel emil.hempel@stud.htw-dresden.de
+* Valencia Melvika valencia.melvika@stud.htw-dresden.de
+* Florian Süßmann florian.suessmann@stud.htw-dresden.de
+* Han Nguyen huyenbaohan.nguyen@stud.htw-dresden.de
 
 2025-05-29
 include::../_includes/default-attributes.inc.adoc[]
@@ -41,11 +41,12 @@ In diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil dav
 ** Immer mittwochs vor Sprintbeginn, Zeit wird flexibel im Team abgestimmt (z. B. 21.05.2025, 17:00 Uhr)
 
 * **Sprint-Review**:
-** Voraussichtlich 01.06.2025, je nach Wireframe-Fortschritt und Kundentermin
+**Hat stattgefunden am 15.06.2025, Feedback wurde in Tickets umgewandelt, konnte jedoch für den Prototypen aus zeitlichen Gründen nicht mehr umgesetzt werden.
 
 * **Sprint-Retrospektive**:
 ** Jeweils freitags, eine Woche vor Sprint-Ende, 14:00 Uhr – 15:00 Uhr
 ** Erste Retro fand am 16.05.2025 statt (Meeting 09)
+** Zweite Retro fand am 20.06.2025 statt
 
 
 == Praktiken und Bewertung
@@ -65,7 +66,7 @@ Wir arbeiten im vierwöchigen Sprint-Zyklus. Das Team nutzt ein gemeinsames Kanb
 === Definition of Done
 * Code ist vollständig und korrekt implementiert.
 * Alle Akzeptanzkriterien sind erfüllt.
-* Unit-Tests vorhanden und erfolgreich.
+* Unit-Tests vorhanden und erfolgreich. (Für Prototypen erstmalig nicht so wichtig)
 * Manuelles Testing (v. a. Front-End) abgeschlossen.
 * Code Review erfolgt und freigegeben.
 * Doku wurde angepasst/aktualisiert.
@@ -77,6 +78,8 @@ Wir arbeiten im vierwöchigen Sprint-Zyklus. Das Team nutzt ein gemeinsames Kanb
 Aktuell arbeiten wir daran, unsere Software so vorzubereiten, dass sie einfach gestartet und genutzt werden kann. 
 Das für uns im Team als auch später für andere.
 
+Neu: Aktuell arbeiten wir daran, den Prototypen vorführfertig zu machen, und gewisse Features zu überarbeiten, sodass im nächsten Sprint jeder weiß, was noch auf uns zu kommt.
+
 Folgende Schritte haben wir bereits unternommen:
 
 * **Datenbank vorbereiten**: Florian hat eine Test-Datenbank erstellt und ein Skript entwickelt, mit dem diese Datenbank automatisch eingerichtet werden kann. Das bedeutet, dass niemand die Datenbank manuell einrichten muss; das Skript übernimmt das für uns.
@@ -85,6 +88,8 @@ Folgende Schritte haben wir bereits unternommen:
 
 Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwendung problemlos starten und verwenden kann, ohne sich um technische Details kümmern zu müssen.
 
+* **Entwicklung Frontend**: Wir haben zuerst das Design und Anwendung des Frontends geplant und nun in Code übersetzt. Funktionen, welche durch die REST-API noch nicht übernommen werden, sind momentan durch plain json/js "gemocked".
+
 == Erkenntnisse (Lessons Learned)
 
 * Zwei Pflicht-Dailies pro Woche waren zunächst zu viel – Donnerstagstermin wurde als freiwillig deklariert.
@@ -92,4 +97,5 @@ Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwen
 * Modellierung ist essenziell für gute Sprintplanung – besonders beim Backend hilfreich für Ticketdefinition.
 * Storypoints helfen bei realistischeren Aufwandseinschätzungen, müssen aber noch stärker im Team verankert werden.
 * Die Dokumentation (Adoc-Struktur) braucht klare Rollenverteilung – PO und Entwicklerteams strukturieren Backend/Frontend getrennt.
+* Als ProjektOwner/Scrum-Master muss man aktiv auf seine Kollegen zugehen - Fragen werden damit schneller geklärt.
 

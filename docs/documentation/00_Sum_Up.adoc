@@ -214,9 +214,37 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 
 * `xref:./13_meeting_sprint_review.adoc[Zur vollständigen Dokumentation]`
 
-* Interaktive Wireframes besprochen (Navigation, Buttons, WG‑Beitritt, Einkaufsliste, Templates/Rezepte)
+* Interaktive Wireframes besprochen (Navigation, Buttons, WG-Beitritt, Einkaufsliste, Templates/Rezepte)
 * Optimierung der Haupt-Navigation: Liste zentral, Kalender seitlich, Profil aus Menü löschen
 * Einkaufsmodus mit Offline-Funktion vorgestellt (Preis + Shop + Teilnehmer-Zuordnung)
 * Automatischer QR-Code-Belegscan & Finanztool (Verrechnen/Bezahlt) diskutiert
-* Prototyp (Dummy-Daten) soll durchgängigen Klick‑Workflow zeigen
+* Prototyp (Dummy-Daten) soll durchgängigen Klick-Workflow zeigen
 * Tech-Stack präsentiert: Java Backend (PostgreSQL, Docker, REST), HTML/CSS/JS Frontend
+
+== 14. Retrospektive - Sprint 2, 20.06.2025:
+
+* `xref:./14_retrospektive_sprint2.adoc[Zur Vollständigen Dokumentation]`
+* Ticketstruktur und Übersicht:
+  ** Titel künftig präziser - z. B. „REST-API anbinden - User/Item/WG“
+  ** Tickets thematisch konsolidieren, um Abhängigkeiten zu reduzieren
+* Review-Prozess:
+  ** Review-PRs werden direkt im Review-Channel verlinkt
+  ** Review-Pings sollen aktiv gepostet werden, damit Reviews nicht verzögert werden
+* Akzeptanzkriterien & Sub-Issues:
+  ** Nur bei Bedarf formulieren - Sub-Issues nur wenn sinnvoll zweckmäßig
+* Kommunikation & Channels:
+  ** Fragen-Channel eingerichtet für bessere Team-Abstimmung
+  ** Discord-Backend-/Frontend-Kanäle bleiben bestehen
+* Meetingstruktur & Rhythmus:
+  ** Wöchentliche Dailies dienstags, donnerstags nun optional - funktioniert besser
+  ** Wicklung mit „Back-to-Back“-Retrospektive eingeführt - positiv bewertet
+
+== 15. Meeting, 25.06.2025:
+
+* `xref:./15_meeting_praesentation_preparation.adoc[Zur Vollständigen Dokumentation]`
+* ADoc-Kopf: alle Autoren bei allgemeinen und Modellierungs-Dokumenten ergänzen
+* Session-Testing: Login + Session-Cookie für WG create fixen; Stabilität nach Neustart später
+* Frontend-Branches (Login, Startseite, Einkaufslisten): Code-Review & Merge bis Samstagmittag
+* Wireframes: keine Änderungen mehr, Fokus auf funktionierende Demo
+* ERM-Diagramm mit pgAdmin-Version aktualisiert und ersetzt
+* Präsentation: Main-Branch stabil bis Samstagmittag, Treff am Dienstatg ca. 1 Stunde vorher geplant

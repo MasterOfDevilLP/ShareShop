@@ -45,8 +45,10 @@ Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Be
 == Entscheidungen, Nebenbedingungen und Begründungen
 //[List the decisions that have been made regarding architectural approaches and the constraints being placed on the way that the developers build the system. These will serve as guidelines for defining architecturally significant parts of the system. Justify each decision or constraint so that developers understand the importance of building the system according to the context created by those decisions and constraints. This may include a list of DOs and DON’Ts to guide the developers in building the system.]
 TODO:
-. Entscheidung für DB PostgreSQL: einfache 
-. Entscheidung oder Einschränkung oder Begründung 2
+. Entscheidung für DB PostgreSQL: offen, läuft auf allen Betriebssystemen, einfache Benutzung
+. Entscheidung für Javalin statt Spring, da für unseren Anwendungsfall Spring zu kompliziert ist + weniger Erfahrung als mit Javalin
+. Entscheidung für Vue.js statt plain js, damit Code übersichtlicher bleibt
+. Entscheidung für Java als Programmiersprache, da mehr Erfahrung vorhanden als bei Python+Flask
 
 
 == Schichten oder Architektur-Framework
@@ -77,4 +79,6 @@ include::plantuml/components.puml[]
 
 === Verteilungsdiagramm (Deployment Diagramm)
 //Beschreibt die physischen Knoten (Rechner) des Systems und Komponenten, die in diesen Knoten ausgeführt werden. Diese Sicht wird nicht benötigt, wenn das System in einem einzelnen Prozess oder Thread ausgeführt wird.
+Prototyp:
 
+Sowohl das Frontend, das Backend als auch die Datenbank laufen auf getrennten Docker-Containern und werden über eine "Zentrale Leistelle" miteinander als Cluster verbunden. Somit können die jeweiligen Betriebssysteme (Docker-Container) untereinander Kommunizieren.

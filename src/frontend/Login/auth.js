@@ -114,7 +114,7 @@ const LoginForm = {
         }
 
         if (res.ok) {
-          window.location.href = '/src/frontend/Startseitendesign/startseite.html';
+          window.location.href = '/Startseitendesign/startseite.html';
         } else if (res.status === 401) {
           this.errorMessage = t('Falsche Email oder Passwort.', 'Incorrect email or password.');
         } else {
@@ -225,7 +225,8 @@ const RegisterForm = {
         // Handle registration result
         if (res.ok) {
           // Register success --> weiterleiten
-          window.location.href = '/startseitendesign/startseite.html?erklaermodus=true'; //path to startenseite
+          // window.location.href = '/startseitendesign/startseite.html?erklaermodus=true'; //path to startenseite
+          window.location.href = '/Login/'; //path to startenseite
         } else if (res.status === 400) {
           this.errorMessage = t(
             'Ungültige Eingabe. Bitte überprüfe deine Daten.',

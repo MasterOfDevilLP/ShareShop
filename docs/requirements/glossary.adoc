@@ -69,6 +69,7 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet der
 | UUID | Universally Unique Identifier | 128bit eindeutige Kennung für Objekte wie User oder WG.
 | CRUD | Create Read Update Delete | Grundlegende Operationen auf Ressourcen.
 | cwd | current working directory | Aktuelles Arbeitsverzeichnis des Prozesses.
+| PWA | progressive web app | App, welche aus Browser downloadbar ist.
 |===
 
 [#verzeichnisdatenstruktur]

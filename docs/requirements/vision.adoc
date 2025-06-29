@@ -62,7 +62,7 @@ Das Einkaufen in WGs ist häufig schlecht koordiniert: es wird doppelt gekauft, 
 | Listen-Templates | Mittel | Vorlagen für wiederkehrende Einkäufe | Sprint 3/4
 | Ausgabenaufteilung | Hoch | Rechnungserfassung, automatische Zuordnung | Sprint 3/4
 | Vorratsübersicht | Niedrig | Artikelstatus, Haltbarkeitsinfos (optional) | offen
-| Benutzerverwaltung | Hoch | WG beitreten, Mitgliederverwaltung | Sprint 1
+| Benutzerverwaltung | Hoch | WG beitreten, Mitgliederverwaltung | Sprint 2
 | Offline-Nutzung | Mittel | Nutzung im Laden ohne Internet | Sprint 3/4
 | Responsives UI | Mittel | Mobile First Design | Sprint 2
 |===
@@ -71,11 +71,11 @@ Das Einkaufen in WGs ist häufig schlecht koordiniert: es wird doppelt gekauft, 
 [%header, cols="4,1,1"]
 |===
 | Anforderung | Priorität | Geplantes Release
-| Unterstützung aktueller Webbrowser | Hoch | Sprint 1
+| Unterstützung aktueller Webbrowser | Hoch | Sprint 2
 | Nutzung auf Smartphone | Hoch | Sprint 2
 | Umsetzung als PWA | Hoch | Sprint 2
-| REST-API für Datenzugriff | Hoch | Sprint 1
-| Kurze Ladezeiten (<1s) | Mittel | durchgängig
+| REST-API für Datenzugriff | Hoch | Sprint 2
+| Kurze Ladezeiten (<2s) | Niedrig/Mittel | durchgängig
 | Einfache Nutzerführung | Mittel | durchgängig
 | Datenschutz: keine Cloud, keine Weitergabe | Hoch | durchgängig
 | Speicherung im lokalen Speicher (Browser) | Hoch | Sprint 2/3

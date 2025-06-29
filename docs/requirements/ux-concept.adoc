@@ -45,10 +45,10 @@ In diesem Dokument werden die Benutzeroberflächen des Systems ShareShop beschri
 Das System wird von typischen WG-Mitgliedern genutzt, die sowohl digital affin als auch pragmatisch handeln. Die wichtigsten Rahmenbedingungen:
 
 - **Geräte:** Mobile Devices (Smartphone, Tablet) sowie Desktop (Laptop/PC)
-- **Betriebsumfeld:** App wird zu Hause (Planung) und unterwegs (Einkauf) genutzt, stabile Offline-Funktion wird benötigt
+- **Betriebsumfeld:** App wird zu Hause (Planung) und unterwegs (Einkauf) genutzt. Der Einkaufsmodus funktioniert auch ohne Netzverbindung.
 - **Umgebung:** Nutzung oft spontan im Alltag (z.B. Supermarkt), einfache Touchbedienung auf Smartphones erforderlich
 - **Barrierefreiheit:** Angestrebt ist barrierearme Gestaltung mit gut lesbarer Schrift, ausreichenden Kontrasten und klarer Struktur
-- **Fehlerquellen:** Doppelteinkäufe, Verwirrung über geteilte vs. private Listen, manuelle Mengenverteilung, Versionskonflikte
+- **Fehlerquellen:**  Doppelteinkäufe, Verwirrung über geteilte vs. private Listen, manuelle Mengenverteilung. Inline-Bearbeitung von Menge, Preis und Datum reduziert Fehleingaben.
 - **Systemvoraussetzung:** Moderne Browser (Chrome, Firefox, Safari), kein spezieller Download notwendig (PWA)
 
 == Wireframes und Wireflow
@@ -59,13 +59,14 @@ link:../models/frontend/wireframe.pdf[Wireframe PDF anzeigen, window=_blank]
 
 Sie umfasst u.a.:
 
-- Registrierung / Login
-- Gruppenverwaltung und Einladung
-- Einkaufslisten-Ansicht und Bearbeitung
-- Rechnungsübersicht und Verrechnung
-- Kalenderansicht mit Terminen
-- Rezepteverwaltung
-- responsive Bottom-Navigation
+- **Registrierung / Login:** Einstieg über einen deutlich hervorgehobenen “Let's Start”-Button und klar getrennte CTAs für Login und Registrierung.
+- **Gruppenverwaltung und Einladung:** WG erstellen oder direkt beitreten mittels Code-Eingabe.
+- **Einkaufslisten-Ansicht und Bearbeitung:** Inline-Editing (Menge, Preis, Datum); Favoriten und Vorlagen inkl. Rezepte als Unterfunktion.
+- **Rechnungsübersicht und Verrechnung:**, Funktionen für Belegerfassung (Foto/Scan), Verrechnen und Bezahlt-Markierung.
+- **Kalenderansicht mit Terminen:** übersichtliche Terminvergabe für Einkäufe.
+- **Rezepteverwaltung:** jetzt als Unterpunkt im Listen-Tab integriert.
+- **responsive Bottom-Navigation:** vier Tabs: mittig „Liste“, separat „Kalender“, Profil nach oben verlegt.
+
 
 === Beispielhafte User Storys
 
@@ -118,3 +119,15 @@ a|
 . In den Einstellungen kann die Liste exportiert, sortiert, gespeichert oder gelöscht werden  
 . In der Historie ist der Änderungverlauf lesbar
 |===
+
+== Designentscheidungen zur Bedienbarkeit
+
+- **Let's Start**-Button auffälliger positioniert
+- **Login/Register** CTAs (Handlungsaufforderungen) klar differenziert
+- **WG-Beitrittscode** ergänzt, um bestehenden Gruppen beizutreten
+- **Einkaufsliste** ermöglicht schnelles Inline-Editing und unterstützt Community-Artikel mit automatischer Kostenverteilung
+- **Favoriten und Vorlagen** sind direkt in der Liste verfügbar, Rezepte als Teilmenü integriert
+- **Navigation** logisch über 4 Tabs verteilt, mit Fokus auf Übersichtlichkeit auf mobilen Geräten
+- **Offline-Modus**: Artikel abhaken, Preise und Einkaufsort auch ohne Netz erfassbar
+- **Rechnungsfunktionen**: Belegerfassung per Scan skizziert; Verrechnen/Bezahlt klar umgesetzt
+- **Klick-Dummy** zeigt funktionierende Nutzerflüsse (Login bis Einkauf)

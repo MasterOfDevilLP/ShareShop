@@ -69,13 +69,17 @@ TODO:
 ....
 include::plantuml/container.puml[]
 ....
+==== As Picture:
+image::../images/container_puml.png[Container Diagram]
 
 === Components
 //Level 3 im C4-Modell
 [plantuml, "{diagramsdir}/c4", svg]
-....
+----
 include::plantuml/components.puml[]
-....
+----
+==== As Picture:
+image::../images/components_puml.png[Component Diagram]
 
 === Verteilungsdiagramm (Deployment Diagramm)
 //Beschreibt die physischen Knoten (Rechner) des Systems und Komponenten, die in diesen Knoten ausgeführt werden. Diese Sicht wird nicht benötigt, wenn das System in einem einzelnen Prozess oder Thread ausgeführt wird.

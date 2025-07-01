@@ -100,3 +100,10 @@ Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwen
 * Als ProjektOwner/Scrum-Master muss man aktiv auf seine Kollegen zugehen - Fragen werden damit schneller geklärt.
 * Code-Spezifikationen wie Schreibweise (CamelCase oder snake_case) sowie die Strukturierung und Namensgebung von Ordner und Dateien sollte wenn möglich bereits zu Beginn des Projektes festgehalten sein, damit NameErrors nicht passieren und der Code strukturiert bleibt.
 
+== Links
+* GitHub Sprint-Backlog:
+** https://github.com/users/MasterOfDevilLP/projects/3/views/1
+* GitHub Product-Backlog:
+** https://github.com/users/MasterOfDevilLP/projects/3/views/6
+* Miro
+** https://miro.com/app/board/uXjVIEsf25w=/

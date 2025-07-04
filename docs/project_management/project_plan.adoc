@@ -99,6 +99,7 @@ Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwen
 * Die Dokumentation (Adoc-Struktur) braucht klare Rollenverteilung – PO und Entwicklerteams strukturieren Backend/Frontend getrennt.
 * Als ProjektOwner/Scrum-Master muss man aktiv auf seine Kollegen zugehen - Fragen werden damit schneller geklärt.
 * Code-Spezifikationen wie Schreibweise (CamelCase oder snake_case) sowie die Strukturierung und Namensgebung von Ordner und Dateien sollte wenn möglich bereits zu Beginn des Projektes festgehalten sein, damit NameErrors nicht passieren und der Code strukturiert bleibt.
+* Die Aufteilung des Teams in einzelne Unterteams war zwar anfangs effektiv, jedoch hat sich zum Ende des 1. Semesters gezeigt, dass die Kommunikation bzw. auch die Kompetenz gefehlt hat, um die jeweiligen Fachgebiete wieder zusammen zu führen. Hier hätte man für mehr Kommunikation sorgen sollen, sodass beide Teams wissen, wie die Verbindung gebaut werden kann.
 
 == Links
 * GitHub Sprint-Backlog:

@@ -36,7 +36,7 @@ new Vue({
             this.products = data;
           })
           .catch(error => {
-            console.error('Lỗi khi tải dữ liệu sản phẩm:', error);
+            console.error('Error: Cannot load the item data', error);
           });
       }
       */
@@ -90,7 +90,7 @@ new Vue({
             this.closePopup();
           })
           .catch(error => {
-            console.error('Lỗi khi thêm sản phẩm:', error);
+            console.error('Error: Cannot add new item', error);
           });*/
         this.closePopup();
       },
@@ -107,7 +107,7 @@ new Vue({
             this.products = this.products.filter(product => product.id !== id);
           })
           .catch(error => {
-            console.error('Lỗi khi xoá sản phẩm:', error);
+            console.error('Error: Cannot delete this item', error);
           });
       }*/
 

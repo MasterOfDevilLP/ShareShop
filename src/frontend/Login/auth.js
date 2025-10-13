@@ -4,7 +4,7 @@ const LanguageStore = Vue.reactive({
   language: 'de'
 });
 
-// === Translation Helper === '
+// === Translation Helper === 
 // returns the correct text based on current language
 const t = (de, en) => LanguageStore.language === 'de' ? de : en;
 
@@ -12,8 +12,12 @@ const t = (de, en) => LanguageStore.language === 'de' ? de : en;
 const LanguageSwitcher = {
   template: `
     <div class="lang-buttons">
-      <button :class="{ active: language === 'de' }" @click="language = 'de'">🇩🇪 DE</button>
-      <button :class="{ active: language === 'en' }" @click="language = 'en'">🇬🇧 EN</button>
+      <button :class="{ active: language === 'de' }" @click="language = 'de'">
+        <img src="icons/flag-de.png" alt="German Flag" class="flag-icon" /> DE
+      </button>
+      <button :class="{ active: language === 'en' }" @click="language = 'en'">
+        <img src="icons/flag-en.png" alt="German Flag" class="flag-icon" /> EN
+      </button>
     </div>
   `,
   computed: {
@@ -61,12 +65,16 @@ const LoginForm = {
       <button @click="login">{{ t('Einloggen', 'Log In') }}</button>
       
       <!-- Switch to register form -->
-      <p class="link" @click="$emit('switchMode')">
-        {{ t('Noch kein Account? Jetzt registrieren', 'No account? Register here') }}
+      <p class="link">
+       <span>{{ t('Noch kein Account? ', 'No account? ') }}</span>
+        <span class="link-highlight" @click="$emit('switchMode')">
+         {{ t('Jetzt registrieren', 'Register here') }}
+      </span>
       </p>
 
-      <!-- Display error message -->
+      <!-- Display message -->
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="success">{{ successMessage }}</p>
     </div>
   `,
   data() {
@@ -95,7 +103,7 @@ const LoginForm = {
       }
 
       try {
-        const res = await fetch(`${API_BASE}/user/login/`, {
+        const res = await fetch(`${API_BASE}/user/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: this.email, password: this.password }),
@@ -171,12 +179,17 @@ const RegisterForm = {
       <button @click="register">{{ t('Registrieren', 'Register') }}</button>
 
       <!-- Switch to login form -->
-      <p class="link" @click="$emit('switchMode')">
-        {{ t('Bereits registriert? Zum Login', 'Already registered? Login here') }}
+      <p class="link">
+        <span>{{ t('Bereits registriert? ', 'Already registered? ') }}</span>
+        <span class="link-highlight" @click="$emit('switchMode')">
+         {{ t('Zum Login', 'Login here') }}
+        </span>
       </p>
 
-      <!-- Error msg -->
+
+      <!-- msg -->
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <p v-if="successMessage" class="success">{{ successMessage }}</p>
     </div>
   `,
   
@@ -187,7 +200,8 @@ const RegisterForm = {
       repeatPassword: '',
       showRepeatPassword: false,
       showPassword: false,
-      errorMessage: ''
+      errorMessage: '',
+      successMessage: ''
     };
   },
   methods: {
@@ -215,7 +229,7 @@ const RegisterForm = {
       }
 
       try {
-        const res = await fetch(`${API_BASE}/user/create/`, {
+        const res = await fetch(`${API_BASE}/user/create`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: this.email, password: this.password }),
@@ -224,9 +238,16 @@ const RegisterForm = {
 
         // Handle registration result
         if (res.ok) {
-          // Register success --> weiterleiten
-          // window.location.href = '/startseitendesign/startseite.html?erklaermodus=true'; //path to startenseite
-          window.location.href = '/Login/'; //path to startenseite
+          // Register success --> weiterleiten to login page
+          this.successMessage = t(
+            'Registrierung erfolgreich! Bitte loggen Sie sich nun ein.',
+            'Registration successful! Please sign in now.'
+          );
+            // Wait 2 seconds before redirect
+          setTimeout(() => {
+            window.location.href = '/Login/index.html';
+          }, 3000);
+
         } else if (res.status === 400) {
           this.errorMessage = t(
             'Ungültige Eingabe. Bitte überprüfe deine Daten.',

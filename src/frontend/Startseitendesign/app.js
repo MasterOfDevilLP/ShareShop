@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../config.js';
+import { API_BASE } from '../config.js';
 new Vue({ 
   el: '#app',
   data: {
@@ -28,7 +28,7 @@ new Vue({
       //Fragen Einkaufliste von DB ab 
       async fetchLists() {
         try {
-          const response = await fetch(`${API_BASE_URL}/api/lists`); 
+          const response = await fetch(`${API_BASE}/api/lists`); 
           if (!response.ok) throw new Error('Fehler beim Laden der Listen');
           const data = await response.json();
           this.lists = data.map(item => ({
@@ -198,7 +198,7 @@ new Vue({
         }
 
         try {
-          const response = await fetch(`${API_BASE_URL}/api/lists`, {
+          const response = await fetch(`${API_BASE}/api/lists`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -227,7 +227,7 @@ async createNewGroup() {
 
     try {
       console.log("Sende WG-Daten an Server:", JSON.stringify({ name: this.newGroupName }));
-        const response = await fetch(`${API_BASE_URL}/wg/create`, {
+        const response = await fetch(`${API_BASE}/wg/create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',  // Stellt sicher, dass der Cookie mitgesendet wird

@@ -269,7 +269,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Einführung verbindlicher Branching-Struktur (`main`, `develop`, Feature-Branches).  
 * Ziel: stabile, funktionsfähige Grundversion bis Weihnachten.
 
-== 17. Team-Meeting, (Datum im Transkript nicht genannt)
+== 17. Team-Meeting, 21.10.2025
 
 * `xref:./17_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
 

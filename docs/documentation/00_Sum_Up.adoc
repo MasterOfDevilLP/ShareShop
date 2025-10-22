@@ -243,10 +243,28 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 
 == 15. Meeting, 25.06.2025:
 
-* `xref:./15_meeting_praesentation_preparation.adoc[Zur Vollständigen Dokumentation]`
+* `xref:./15_meeting.adoc[Zur Vollständigen Dokumentation]`
 * ADoc-Kopf: alle Autoren bei allgemeinen und Modellierungs-Dokumenten ergänzen
 * Session-Testing: Login + Session-Cookie für WG create fixen; Stabilität nach Neustart später
 * Frontend-Branches (Login, Startseite, Einkaufslisten): Code-Review & Merge bis Samstagmittag
 * Wireframes: keine Änderungen mehr, Fokus auf funktionierende Demo
 * ERM-Diagramm mit pgAdmin-Version aktualisiert und ersetzt
 * Präsentation: Main-Branch stabil bis Samstagmittag, Treff am Dienstatg ca. 1 Stunde vorher geplant
+
+== 16. Coach-Meeting, 20.10.2025
+
+* `xref:./16_coachmeeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* Erstes offizielles Coach-Meeting zu SE2 nach Abschluss von SE1.  
+* Rückblick auf die Bewertung (Note 3,0) und Besprechung der Verbesserungspunkte:
+  ** Deployment stärker auf Auslieferungsform ausrichten (PWA/GitHub-Release)  
+  ** Risiken und Stakeholder (Gesetzgeber) ergänzen  
+  ** User Stories aus Nutzersicht formulieren, nicht technisch trennen  
+  ** UML-Klassendiagramm neu erstellen  
+  ** Glossar auf fachliche Begriffe beschränken  
+  ** Konsistenz zwischen Praktiken, Reflexion und Lessons Learned sicherstellen  
+* Einführung in neue Dokumentationspflichten:
+  ** Anwender-, Betriebs- und Entwicklerdokumentation  
+  ** Testkonzept mit dokumentierten Testfällen  
+* Einführung verbindlicher Branching-Struktur (`main`, `develop`, Feature-Branches).  
+* Ziel: stabile, funktionsfähige Grundversion bis Weihnachten.

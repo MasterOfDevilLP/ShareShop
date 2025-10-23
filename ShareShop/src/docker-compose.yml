@@ -1,0 +1,32 @@
+services:
+  # 
+  backend:
+    build: backend/
+    ports:
+      - 8001:8001
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  db:
+    build: backend/database/
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    environment:
+      POSTGRES_PASSWORD: passwd # not very nice
+      POSTGRES_USER: backendusr
+      POSTGRES_DB: shareshopdb
+    ports:
+      - 5434:5432 # allow access from the host. This is just for testing, remove in deployment!
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+volumes:
+  postgres_data:

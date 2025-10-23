@@ -1,0 +1,21 @@
+= Individuelle Reflexion
+Florian Süßmann <s86423@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+.Allgemeine erlernte Sachen
+Das Modul Software Engineering I ist bisher eines der "Zeitaufwendigsten" Module in diesem Studium gewesen, dennoch hat die bearbeitung des Projektes mir persönlich nicht nur spaß gemacht, sondern ich habe viele neue Sachen dazugelernt. Dazu zählen nicht nur die neuen Frameworks und libraries wie JDBC, Javatuple, gson und ein Build-Manager wie Maven, sondern auch eher das rundherum um das Projekt. Zuvor habe ich noch nie vor dem programmieren erst einmal die möglichen Frameworks und libraries analysiert, da bisher immer etwas vorgegeben war oder nichts davon benötigt wurde. Außerdem konnte ich in diesem Ramen lernen, wie man mithilfe von GIthub Issues die geplante bearbeitung des Projektes in einzelne teilprojekte aufteilen kann. Zudem habe ich das erste mal mit einem Review System und Pull Requests gearbeitet.
+
+.Gruppenorganisation
+Auch zur Gruppenorganisation konnte ich einiges lernen. Auch wenn ich nicht der Product-Owner oder Scrum-Master gewesen bin, habe ich neue Perspektiven in der Gruppenarbeit erblickt, z.B. eine feste Zeit zu haben für eine "aktualisation" des standes von jedem Teilnehmer (`dailies`, bzw hier `weeklies`). Auch durch das Planen der features ist es sehr einfach gewesen die Arbeit auf mehrere Leute aufzuteilen wobei jeder sich in gewisser maßen um eine spezialisierung gekümmert hat (z.B. bin ich für die Datenbank zuständig gewesen und habe dafür gesorgt, dass das Backend zugriff zur Datenbank hat, während sich jemand anderes um die REST Schnittstelle gekümmert hat und wiederrum andere sich mit dem Frontent auseinandergesetzt haben). Durch eine solche Aufteiling ist es in Gruppenarbeiten sehr effektiv möglich von jeder Person die Stärken nutzen zu können, was eine nahezu Reibungslose entwicklung der Gebiete ermöglicht und damit einen fließenden und entspannten Fortschritt im gesamtprojekt.
+
+.Analysen
+Das eindenken in potentielle User um gewisse features zur ermitteln hat sich ebenfalls als sehr hilfreich entwickelt, aus eben genau den gründen, wie wir sie in der Vorlesung kennengelernt haben.
+Ebenso das analysieren von verschiedenen Frameworks und libraries hat sehr geholfen sich ein Bild über die verfügbaren Tools zu machen um danach zu entscheiden welches am besten zum Projekt passt.
+
+.Zeitaufteilung
+Womöglich das positivste was ich aus gerade der Projektarbeit mitnehme, ist das einhalten der ungefähren 6h Arbeitszeit pro woche. Durch diese habe ich mich indirekt gezwungen jede Woche etwas zu machen, hatte aber dennoch ausreichend Zeit für andere Module und deren Belege, wodurch mein Zeitmanagement in diesem Semester sehr entspannt gewesen ist, trotz der vielen Belege. Es wäre also vlt eine gute idee in Zukunft diese Methode auch auf andere Belege anzuwenden anstatt mir eine beliebige länge an Zeit an einem Wochenende zu nehmen.
+
+.Fazit
+All in All hat sich meine herangehensweise für große Projekte dadurch stark verändert. Bisher hätte ich dennoch drauf los programmiert ohne Plan und wäre sehr wahrscheinlich schnell daran gescheitet, was mir auch schon in bestimmten privaten Projekten aufgefallen ist. Die meisten Sachen die ich gelernt habe sind dennoch nicht zu nötig für kleine Projekte und würden da den Aufwand eher stark erhöhen als die bearbeitung zu vereinfachen. Die Aufteilung oder vlt sogar einfach nur notierung von To-Do's mithilfe von Github Issues werde ich mir aber dennoch auch für kleinere Projekte vornehmen, da dies ein sehr strukturierter und geordneter weg ist, um dies machen zu können, ohne dabei irgendwelche .txt's anzulegen oder soetwas. +
+Rückblickend muss ich dennoch sagen, dass ich die Sprints eher weiter weg im Hinterkopf hatte und (das könnte aber auch an vlt zu grober Aufteilung der Aufgaben in den Issues liegen -> z.B. soetwas wie "Backendprogrammierung" im ersten Sprint) konnte nicht immer (vorallem am ende des ersten Sprints) alle Issues schließen.

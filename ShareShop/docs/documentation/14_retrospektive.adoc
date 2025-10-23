@@ -1,0 +1,62 @@
+= ShareShop Projekt, Retrospektive, Sprint 2
+Kevin (Product Owner)
+2025-06-20
+
+== Teilnehmer
+* Kevin  
+* Benni  
+* Anni  
+* Emil  
+* Han  
+* Valencia  
+* Florian  
+
+== Datum und Uhrzeit
+20.06.2025 14 Uhr
+
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Gefühlsbarometer und Einstieg
+* Start ohne formales Gefühlsrad, Fokus lag auf konkretem Feedback  
+* Team äußerte Erleichterung über Struktur und weniger redundante Tagesmeetings  
+
+
+=== 2. Rückblick auf Sprint 2, reflektiert
+* Offene Pull Requests blockierten Entwicklungsfluss, da Branches aufeinander aufbauen  
+* Tickets mit identischen Namen („REST-API anbinden“) führten zu Übersichtslosigkeit  
+* Ticket-Akzeptanzkriterien teilweise unnötig detailliert oder nicht sprintrelevant  
+* Frontend-Tickets wurden positiv bewertet, klare Aufgabenbeschreibung und zügige Umsetzung  
+
+=== 3. Was lief gut?
+* Discord-Kommunikation effizienter durch neuen Fragen- und Review-Channel  
+* Frontend- und Backend-Rollenzusammenarbeit besser geklärt  
+* Rückmeldungen bei Reviews erfolgten deutlich schneller  
+* Retrospektivverfahren (Back-to-Back-Format) wurde erneut als hilfreich empfunden  
+
+=== 4. Was lief weniger gut?
+* Branch- und Ticketstruktur bei zusammenhängenden Frontend/Backend-Aufgaben uneinheitlich  
+* Lange Reviewzeiten aufgrund mangelnder Notification-Pings  
+* Unterschied zwischen Prototyp- und „fertig“-Ticketstatus unklar  
+
+=== 5. Entscheidungen und Verbesserungen
+* Ticket-Titel präziser gestalten, Beispiel: „REST-API anbinden Items“  
+* Zusammenhängende Tickets in einem einzigen Branch oder als Sub-Issues bündeln  
+* PR-Ersteller aktiv Pings senden, um Reviews zeitnah zu triggern  
+* Akzeptanzkriterien nur sparsam einsetzen, vor allem bei umfangreichen Tasks  
+* Fragen-Channel bleibt aktiv, lädt zum Nachfragen ein  
+
+== Nächste Schritte
+
+* Zusammengehörende Tickets sollen konsolidiert in einem Branch bearbeitet werden
+* Tickettitel werden detailliert und thematisch angepasst
+* PRs werden mit Review-Pings direkt im Review-Channel verlinkt
+* Akzeptanzkriterien nur bei Bedarf verwenden
+* Fragen-Channel aktiv nutzen und pflegen
+
+== Offene Punkte
+* Soll eine Full-Stack-Rolle etabliert werden für koordinierte API-Arbeit?
+* Festlegung der Branch-Strategie bei gekoppelt arbeitenden Frontend/Backend-Teams  

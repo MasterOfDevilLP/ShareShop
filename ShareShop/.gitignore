@@ -1,0 +1,8 @@
+# Syntax: https://git-scm.com/docs/gitignore
+
+# General
+.DS_Store
+*~
+.vscode
+src/postgres
+belegabgabe_se1/se1_shareshop.pptx

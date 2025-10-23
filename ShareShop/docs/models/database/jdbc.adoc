@@ -1,0 +1,84 @@
+= ShareShop Projekt - JDBC analyse
+Florian Süßmann <s86423@htw-dresden.de>
+{localdatetime}
+include::../../_includes/default-attributes.inc.adoc[]
+
+== Allgemeine Dokumentation
+Die allgemeine Dokumentation zu JDBC ist link:https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/[hier] zu finden
+
+== Installation
+Da wir ein buildsystem verwenden muss kein Treiber vorher installiert werden, es ist jedoch wichtig den Treiber als depency in der build-configuration hinzuzufügen.
+
+=== Installation über maven
+.pom.xml - PostgreSQL Driver dependency
+[#dependencymaven]
+[source, xml]
+----
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.7.5</version>
+</dependency>
+----
+
+=== Installation über gradlew
+.build.gradle - PostgreSQL Driver dependency
+[source, gradle]
+----
+dependencies {
+    implementation 'org.postgresql:postgresql:42.7.5'
+}
+----
+
+== Anwendungsbeispiele
+Die src-file zu den Anwendungsbeispielen ist link:../../anwendungsbeispiele/jdbc/JDBC_Example.java[hier] zu finden
+
+[#setup]
+=== Setup
+Der Treiber muss im code selber noch importiert werden als import und als Klasse
+.Beispiel: setup sachen für den Treiber
+[source, java]
+----
+import com.microsoft.sqlserver.jdbc.*;
+
+public class mainclass
+{
+    public static void main(String[] args)
+    {
+        try
+        {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+    }
+}
+----
+
+[#verbindungsaufbau]
+=== Verbindungsaufbau
+.JDBC_Example.java - createConnection()
+[source, java]
+----
+include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=createConnection()]
+----
+
+[#query]
+=== Query
+.JDBC_Example.java - exampleQuery()
+[source, java]
+----
+include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=exampleQuery()]
+----
+
+[#parameterquery]
+=== Parametrisierte Query
+.JDBC_Example.java - exampleParameterQuery()
+[source, java]
+----
+include::../../anwendungsbeispiele/jdbc/JDBC_Example.java[tag=exampleParameterQuery()]
+----
+Durch die "?" im Query String, können Parameter gesetzt werden. +
+Extra: das Prepared Statement wird auf dem SQL Server bereits pre-compiled. Dies verhindert ebenfalls SQL Injections durch malicious user inputs (z.B. `Passwort: pw' OR '1'='1`)

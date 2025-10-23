@@ -1,0 +1,25 @@
+= Persönliche Reflexion
+Kevin Bürger <s86415@htw-dresden.de>
+{localtime}
+include::../_includes/default-attributes.inc.adoc[]
+
+.Einstieg ins Projekt
+Im Rahmen des Moduls SE 1 hatte ich erstmals die Möglichkeit, ein Softwareprojekt gemeinsam im Team von Grund auf mitzugestalten. Die Aufgabe, eine Einkaufsliste für Wohngemeinschaften zu entwickeln, brachte nicht nur fachliche Anforderungen mit sich, sondern auch viele neue Werkzeuge, mit denen ich zuvor keine Berührungspunkte hatte.
+
+.Technische Tools
+Der Umgang mit Maven, das Erstellen und Strukturieren von GitHub-Projekten, die Nutzung von Docker sowie der Einsatz von Figma und Miro waren zu Beginn neu für mich. Ich musste mich schnell in die Arbeitsweise mit einigen dieser Tools einfinden, da ich zuvor ausschließlich allein an Software gearbeitet hatte und daher Organisation und Strukturierung bisher eigenständig umgesetzt habe. Bei anderen Tools (Docker, ..) konnte ich gute Einblicke bekommen und Problemstellungen mitverfolgen. Mit der Zeit entwickelte sich jedoch ein klareres Verständnis dafür, wie technische Infrastruktur, Aufgabenplanung und Projektorganisation ineinandergreifen. Inzwischen kann ich deutlich besser einschätzen, wie sich größere Softwareprojekte strukturieren lassen und wie wichtig es ist, Aufgaben sauber zu dokumentieren und mit den Beteiligten abzustimmen.
+
+.Erfahrungen im Backend
+Auch das technische Backend-Thema war anfangs mit einigen Hürden verbunden, da ich mit diesem Bereich noch nicht besonders vertraut war. Beim Verfolgen der Problemstellungen, die sich im Backend ergaben, konnte ich einige wertvolle Erfahrungen sammeln. Die Datenbankanbindung per JDBC funktionierte zunächst nicht wie gewünscht, was unter anderem mit dem Buildsystem zusammenhing. Die Entscheidung, Maven einzusetzen, vereinfachte den Umgang mit Abhängigkeiten deutlich und ermöglichte später eine funktionierende Integration. Rückblickend war der Aufbau eines funktionierenden Backends ein Prozess, der mir, vorallem gegen Ende des Semesters, viel über Schnittstellenmanagement vermittelt hat.
+
+.Gestaltung und Planung im Frontend
+Im Bereich der grafischen Planung war ich teilweise aktiv, vor allem in Bezug auf Layout und Struktur. An Farbgebung und Design habe ich zwar nicht direkt mitgewirkt, konnte die Entwicklung der Oberflächen aber durch regelmäßige Meetings und gemeinsame Miro-Boards gut mitverfolgen. Die Wireframes in Figma zeigten deutlich, wie sehr Struktur und Funktion im Frontend miteinander verbunden sind, etwa bei der Entscheidung, welche Seiten zentral sein sollen oder wie Nutzer durch die App navigieren.
+
+.Rolle als Product Owner
+Mit meiner Rolle als Product Owner war auch eine gewisse Verantwortung verbunden, vor allem beim Behalten des Gesamtüberblicks und dem Nachhalten von Absprachen im Team bzw. mit dem Scrum Master (Benjamin Banse). Anfangs hatte ich dabei offen gesagt schwierigkeiten. Gerade bei mehreren parallelen Entwicklungen war es hilfreich, den Überblick über den aktuellen Stand zu behalten und offene Punkte frühzeitig sichtbar zu machen. Die Koordination über GitHub-Issues und unsere Dailys war dafür ein zentrales und sehr praktisches Element.
+
+.Teamarbeit und Kommunikation
+Rückblickend fällt auf, dass viele der wenigen tatsächlichen Probleme im Projektverlauf für mich weniger mit dem eigentlichen Coden zu tun hatten, sondern eher mit der Abstimmung von Zeiten und der anfänglichen „Schwammigkeit“ einiger Tickets. Es war hilfreich, dass wir regelmäßig Meetings hatten, auch spontan, und dass über Discord jederzeit jemand ansprechbar war. Diese Art der Organisation war für mich neu im Vergleich zu früheren Projekten.
+
+.Fazit
+Insgesamt bot SE 1 für mich die Gelegenheit, im Team in der Praxis an einer Software zu arbeiten. Viele Konzepte aus der Theorie bekamen dabei einen deutlich greifbareren Charakter. Besonders das Zusammenspiel aus Planung, technischer Umsetzung und Teamkommunikation hat gezeigt, wie es überhaupt möglich ist, gemeinsam an so großer oder „größerer“ Software zu arbeiten, gerade wenn sie sich über mehrere Ebenen gleichzeitig entwickelt und angepasst werden soll.

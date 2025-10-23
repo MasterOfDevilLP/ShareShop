@@ -1,0 +1,44 @@
+= Individuelle Reflexion 
+Huyen Bao Han Nguyen <s54687@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Allgemeine erlernte Sachen
+Das Modul *Software Engineering 1 (I152)* hat mein Bild von Softwareentwicklung grundlegend verändert. Vor dem Modul dachte ich, Software Engineering bestehe hauptsächlich aus Programmieren – dem Schreiben von Code, vielleicht noch dem Designen von Benutzeroberflächen. Doch ich habe schnell gemerkt, dass es sich um ein sehr vielschichtiges Feld handelt. Programmierung ist nur ein kleiner Teil. SE1 hat mir gezeigt, wie wichtig systematische Planung, Teamarbeit, klare Prozesse und geeignete Werkzeuge sind, um komplexe Softwareprojekte erfolgreich umzusetzen.
+
+== Projektarbeit und agile Methoden
+Ein wesentlicher Bestandteil des Moduls war die praktische Projektarbeit in einem Team, in dem wir nach dem agilen Vorgehensmodell gearbeitet haben. Wir haben das Framework *Scrum* eingesetzt – für mich eine völlig neue und sehr spannende Erfahrung.
+
+Durch Scrum habe ich gelernt, wie wichtig *Flexibilität*, regelmäßige Abstimmungen und *Selbstorganisation* im Team sind. Besonders die Struktur mit *Sprints*, *Dailies* und *Retrospektiven* hat mir geholfen, meinen eigenen Arbeitsstil zu reflektieren und zu verbessern. Ich habe gelernt, dass es völlig normal ist, Pläne anzupassen – Flexibilität ist kein Zeichen von Schwäche, sondern von *Reife im Projektmanagement*.
+
+== Gruppenorganisation und Zusammenarbeit
+Ich war Teil des Frontend-Teams unseres siebenköpfigen Projektteams für die App *ShareShop*. Die Zusammenarbeit im Team war sehr positiv. Wir haben zweimal pro Woche Daily Meetings durchgeführt, ein Meeting war verpflichtend. Die Kommunikation über Discord und die strukturierte Dokumentation der Meetings und Tickets waren sehr hilfreich.
+
+Die Aufgabenverteilung war klar, und bei Änderungen an Tickets wurde schnell und lösungsorientiert reagiert. Auch kleinere Unterschiede im Zeitbudget der Teammitglieder konnten offen angesprochen werden, was zu einer respektvollen und angenehmen Arbeitsatmosphäre beitrug.
+
+== Technische Tools und neue Arbeitsweisen
+Ein wichtiger Aspekt war der Einsatz moderner Werkzeuge wie:
+
+* *GitHub* – für Versionskontrolle und Zusammenarbeit im Code mit klarer Branch-Struktur und Pull Requests.
+* *Miro* – zur Strukturierung der Aufgaben, User Stories und Visualisierung von Abhängigkeiten.
+* *Figma* – für die Erstellung der Wireframes im Frontend-Design.
+* *Discord* – für schnelle Klärung technischer Fragen.
+* *HTML, CSS und JavaScript* – als zentrale Technologien für die Umsetzung der Benutzeroberfläche.
+
+Ich hätte gern auch mit JIRA gearbeitet, aber das war im Modul nicht vorgesehen.
+
+== Eigene Rolle im Team und Erkenntnisse
+Ich war verantwortlich für die Gestaltung und Umsetzung der Benutzeroberfläche. Zu Beginn habe ich mit Figma Wireframes erstellt, später die Seiten zur Ausgabenverwaltung und Einkaufsplanung umgesetzt. Mein Wissen aus dem Modul „Webbasierte Applikationen“ war dabei sehr hilfreich. Technische Herausforderungen konnte ich meist eigenständig lösen.
+
+Besonders wichtig war für mich die *klare Schnittstellendefinition* zwischen Frontend und Backend. Die gut strukturierten Tickets gaben mir Orientierung und Sicherheit, auch wenn ich keinen direkten Einblick in das Backend hatte.
+
+== Persönliche Weiterentwicklung
+SE1 war für mich ein wertvoller Lernprozess. Ich habe gelernt, dass Softwareprojekte nicht nur technische, sondern vor allem auch kommunikative Herausforderungen mit sich bringen. Die Arbeit mit Scrum war neu für mich – besonders die Meetings wie Sprint Planning und Review waren hilfreich, um *gemeinsame Ziele zu setzen* und eine gute Teamatmosphäre zu schaffen.
+
+Ich habe gelernt, dass man nicht alles selbst machen muss.  
+Klare Rollenverteilung und Vertrauen ins Team sind entscheidend.
+
+== Fazit
+Dieses Projekt war für mich eine sehr wertvolle Erfahrung. Ich konnte meine Fähigkeiten im Frontend-Development vertiefen und gleichzeitig lernen, wie wichtig Kommunikation, Planung und klare Rollenverteilung in einem agilen Projekt sind. *Scrum* ist für mich eine effiziente Methode, besonders wenn man kurzfristige Ziele setzt und flexibel auf Veränderungen reagiert.
+
+Ich freue mich darauf, dieses Wissen in zukünftigen Projekten weiter anzuwenden und mich sowohl fachlich als auch persönlich weiterzuentwickeln.

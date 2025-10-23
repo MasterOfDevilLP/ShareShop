@@ -1,0 +1,19 @@
+= Test Cases: {project-name}
+* Benjamin Banse benjamin.banse@stud.htw-dresden.de
+* Kevin Bürger kevin.buerger@stud.htw-dresden.de
+* Anni Nguyen anni.nguyen@stud.htw-dresden.de
+* Emil Hempel emil.hempel@stud.htw-dresden.de
+* Valencia Melvika valencia.melvika@stud.htw-dresden.de
+* Florian Süßmann florian.suessmann@stud.htw-dresden.de
+* Han Nguyen huyenbaohan.nguyen@stud.htw-dresden.de
+
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+// Platzhalter für weitere Dokumenten-Attribute
+
+
+== Allgemeine Informationen
+Hier werden in Zukunft Test-Cases festgehalten. zum jetzigen Stand wurden aus zeitlichen Gründen und fehlender Kompetenz zu diesem Thema keine Testcases mit Unittest o.ä. erstellt. Um die Kompetenz hier zu steigern, wird die Organisation (Scrum-Master) im nächsten Zyklus dazu einen Termin pflegen. In diesem Termin werden grundlegende Ideen und Funktionalitäten zu Test-Cases erklärt.
+
+== Test Cases
+**Noch keine**

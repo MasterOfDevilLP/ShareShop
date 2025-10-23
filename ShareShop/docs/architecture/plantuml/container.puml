@@ -1,0 +1,21 @@
+@startuml components
+!include <c4/C4_Container.puml> 
+!include <c4/C4_Context.puml> 
+
+' LAYOUT_WITH_LEGEND()
+
+title Component Diagram
+
+Person(user, "User")
+
+System_Boundary(docker, ""){
+    Container(nginx, "Nginx Webserver", "serves vue.js page and reverse proxy for backend")
+    Container(backend, "Java Backend", "Javalin application")
+    ContainerDb(db, "Database")
+
+    Rel(user, nginx, "Connects to", "HTTP")
+    Rel(nginx, backend, "reverse proxy", "HTTP")
+    Rel(backend, db, "", "JDBC")
+}
+
+@enduml

@@ -22,7 +22,7 @@ public class CategoryEndpoints {
 			System.out.printf("WG %s delete category %s\n", wid, cid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -35,7 +35,7 @@ public class CategoryEndpoints {
 			
 			// TODO: Request object (will likely just be the category class again)
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -46,7 +46,7 @@ public class CategoryEndpoints {
 			
 			// TODO: Request object (will likely just be the category class?)
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 }

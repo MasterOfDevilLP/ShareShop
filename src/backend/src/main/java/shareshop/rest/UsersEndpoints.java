@@ -37,6 +37,7 @@ public class UsersEndpoints {
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				CreateUserRequest req = gson.fromJson(ctx.body(), CreateUserRequest.class);
 				if(!req.validate()) {
+					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 					ctx.status(HttpStatus.BAD_REQUEST);
 					return;
 				}
@@ -46,7 +47,7 @@ public class UsersEndpoints {
 				if(usr == null) {
 					// this could either be some internal error, or an account with the same email already existing
 					// this way, no information about existing accounts should be leaked (maybe a timing side-channel)
-					ctx.status(400);
+					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "Failed to create user");
 				} else {
 					CreateUserResponse resp = new CreateUserResponse(usr);
 					
@@ -60,7 +61,7 @@ public class UsersEndpoints {
 				ctx.status(HttpStatus.OK);*/
 			} catch(Exception e) {
 				e.printStackTrace();
-				ctx.status(400);
+				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			}
 			
 		});
@@ -74,7 +75,7 @@ public class UsersEndpoints {
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				LoginRequest req = gson.fromJson(ctx.body(), LoginRequest.class);
 				if(!req.validate()) {
-					ctx.status(HttpStatus.BAD_REQUEST);
+					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 					return;
 				}
 				
@@ -90,7 +91,7 @@ public class UsersEndpoints {
 				if(usr == null) {
 					// login failed for some reason
 					// TODO: maybe respond with a 500 error code for server issues 
-					ctx.status(HttpStatus.UNAUTHORIZED);
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "Failed to log in");
 				} else {
 					ctx.req().getSession();	// create the session
 					ctx.req().changeSessionId();
@@ -103,7 +104,7 @@ public class UsersEndpoints {
 				ctx.status(HttpStatus.OK);*/
 			} catch(Exception e) {
 				e.printStackTrace();
-				ctx.status(400);
+				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			}
 			
 		});
@@ -113,14 +114,13 @@ public class UsersEndpoints {
 		app.get(basepath, ctx -> {
 			User usr = RestUtils.getAuthorizedUser(ctx);
 			if(usr != null) {
-				// TODO: return actual information
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				UserInformationResponse resp = new UserInformationResponse(usr);
 				ctx.contentType(ContentType.JSON);
 				ctx.result(gson.toJson(resp));
 				ctx.status(HttpStatus.OK);
 			} else {				
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 			}
 		});
 	}
@@ -130,9 +130,9 @@ public class UsersEndpoints {
 			User usr = RestUtils.getAuthorizedUser(ctx);
 			if(usr != null) {
 				// TODO: process the actual request
-				ctx.status(HttpStatus.OK);
+				RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 			} else {				
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 			}
 		});
 	}

@@ -51,7 +51,7 @@ public class ItemEndpoints {
 			
 			if(usr == null) {
 				// noone's logged in
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
@@ -60,7 +60,7 @@ public class ItemEndpoints {
 			if(!wgid.equals(usr.getWgID())) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
@@ -94,7 +94,7 @@ public class ItemEndpoints {
 			
 			if(usr == null) {
 				// noone's logged in
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
@@ -103,15 +103,15 @@ public class ItemEndpoints {
 			if(!wgid.equals(usr.getWgID())) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
 			Item item = appCtx.itemManager.getItem(UUID.fromString(iid));
-			if(item == null) {
+			if(item == null || !item.getWgID().equals(wgid)) {
 				// no such item
 				logger.debug("No such item");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.NOT_FOUND, "unknown item");
 				return;
 			}
 			
@@ -132,7 +132,7 @@ public class ItemEndpoints {
 			System.out.printf("WG %s delete item %s\n", wid, iid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -145,7 +145,7 @@ public class ItemEndpoints {
 			
 			// TODO: Request object (will likely just be the item class)
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -159,7 +159,7 @@ public class ItemEndpoints {
 			
 			if(usr == null) {
 				// noone's logged in
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
@@ -168,7 +168,7 @@ public class ItemEndpoints {
 			if(!wgid.equals(usr.getWgID())) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
@@ -176,7 +176,7 @@ public class ItemEndpoints {
 			CreateItemRequest req = gson.fromJson(ctx.body(), CreateItemRequest.class);
 			
 			if(!req.validate()) {
-				ctx.status(HttpStatus.BAD_REQUEST);
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 				return;
 			}
 			

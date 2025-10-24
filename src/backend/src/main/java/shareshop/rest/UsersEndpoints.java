@@ -25,6 +25,7 @@ public class UsersEndpoints {
 	public static void register(Javalin app) {
 		// TODO Auto-generated method stub
 		registerCreate(app);
+		registerLogout(app);
 		registerLogin(app);
 		registerGet(app);
 		registerModify(app);
@@ -115,6 +116,27 @@ public class UsersEndpoints {
 			epLogin(ctx);
 		});
 	}
+	
+	private static void registerLogout(Javalin app) {
+		app.post(basepath + "/logout", ctx -> {
+			try {
+				User oldusr = RestUtils.getAuthorizedUser(ctx);
+				if(oldusr != null) {
+					// some user is logged in, invalidate that session
+					ctx.req().getSession().invalidate();	// somehow this fails
+					// this does not delete the session cookie, but since the session is invalidated anyways, that doesn't matter
+				}
+				
+				ctx.status(HttpStatus.OK);
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+			}
+			
+		});
+	}
+			
 	
 	public static void epGet(Context ctx) {
 		User usr = RestUtils.getAuthorizedUser(ctx);

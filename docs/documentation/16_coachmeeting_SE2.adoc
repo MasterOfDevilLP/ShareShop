@@ -1,0 +1,89 @@
+= ShareShop Projekt,  Meeting 16 (Coach-Meeting SE2)
+Kevin (Product Owner)
+2025-10-20
+
+== Teilnehmer
+* Kevin
+* Benni
+* Anni
+* Emil
+* Valencia
+* Han
+* Florian
+* Coach (Marlene)
+
+== Datum und Uhrzeit
+20.10.2025 18:00
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Rückblick auf SE1-Bewertung
+* Gesamtnote: 3,0,  bestanden, aber mehrere formale und strukturelle Verbesserungen nötig.  
+* Hauptkritikpunkte des Dozenten:
+  - Dokumenteinstellungen fehlerhaft eingebunden  
+  - Deployment zu detailliert,  Fokus auf Auslieferungsform (z. B. GitHub-Release oder PWA-Link)  
+  - Branching- und Pull-Request-Praktiken gehören in „Praktiken“, nicht nur „Lessons Learned“  
+  - Sprint Backlog ≠ Product Backlog -> klare Trennung nötig  
+  - User Stories nicht in Frontend/Backend aufteilen, sondern rein aus Nutzersicht formulieren  
+  - Epics, Stories und Tasks müssen hierarchisch konsistent sein  
+  - Fehlende Risikoanalyse  
+  - Gesetzgeber als Stakeholder ergänzen  
+  - Scrum-Rollen sind keine Stakeholder  
+  - Domainmodell war kein korrektes UML-Klassendiagramm  
+
+=== 2. Feedback und Hinweise des Coachs
+* Viele Punkte sind nachvollziehbar und sollen in SE2 gezielt korrigiert werden.  
+* Konsistenz ist entscheidend: Praktiken, Reflexion und Lessons Learned müssen inhaltlich aufeinander verweisen.  
+* Glossar: nur fachliche Begriffe aus Nutzersicht, keine technischen Abkürzungen (z. B. PWA, ORM).  
+* Risiken realistisch halten (z. B. Krankheitsausfall, Zeitdruck) und Gegenmaßnahmen dokumentieren.  
+* Epics = große Themenbereiche; darunter folgen User Stories und anschließend Tasks.  
+* C4-Modell wird vollständig in vier Ebenen erwartet (Kontext, Container, Component, Code).  
+* UML-Klassendiagramm soll vollständige Entitätennamen enthalten.  
+
+=== 3. Anforderungen und Vorgehen in SE2
+* Das Projekt wird fortgeführt, jedoch **neu bewertet (Reset)**,  alte Noten fließen nicht ein.  
+* Alle relevanten Dokumente (Projektplan, Deployment, UML etc.) werden erneut eingereicht.  
+* Ziel: funktionierende Basisversion, keine vollständige Feature-Abdeckung nötig.  
+* Eigenständiges Arbeiten ohne Hinweiszettel,  Verantwortung liegt beim Team.  
+* Präsentation in der **letzten Vorlesungswoche vor Weihnachten**.  
+* Lessons Learned am besten fortlaufend ergänzen, um die Endreflexion zu erleichtern.
+
+=== 4. Dokumentation im neuen Semester
+Coach erklärte drei zentrale Doku-Arten:
+
+1. **Anwenderdokumentation:** Schritt-für-Schritt-Anleitung mit Screenshots (z. B. „Wie lege ich eine Einkaufsliste an?“).  
+2. **Betriebsdokumentation:** Informationen für Administratoren,  Setup, Voraussetzungen, Backups.  
+3. **Entwicklerdokumentation:** Vollständige Beschreibung aller Klassen, Funktionen und Module (empfohlen via JavaDoc).  
+→ Tipp: Dokumentation parallel pflegen, nicht erst am Ende.
+
+=== 5. Testkonzept und Qualitätssicherung
+* Entwicklung eines **Testkonzepts** mit Testfällen:
+  - Was wird getestet?  
+  - Erwartetes Verhalten?  
+  - Ergebnis?  
+* Unit Tests sind Teil des Testkonzepts, müssen aber zusätzlich dokumentiert werden.  
+* Früher Beginn empfohlen, um Aufwand zu verteilen.
+
+=== 6. Arbeitsweise und Organisation
+* Einführung einer klaren Branching-Strategie:
+  - `main` → stabiler Branch  
+  - `develop` → Entwicklungszweig  
+  - Feature-Branches pro Ticket  
+* Regelmäßiges Mergen zur Vermeidung von Konflikten.  
+* Kommunikation primär über Discord; Rückfragen an Coach per WhatsApp möglich.  
+
+== Aufgaben / ToDos
+* Projektplan und Deployment-Doku überarbeiten.  
+* UML-Klassendiagramm neu erstellen und um Entitäten ergänzen.  
+* Risikoliste anlegen.  
+* Glossar bereinigen.  
+* Testkonzept und Dokumentationsstruktur vorbereiten.  
+* Branching-Regeln im Repo umsetzen.
+
+== Nächste Schritte
+* Start des ersten Sprints am 21.10.2025.  
+* Überarbeitung der kritischen SE1-Dokumente bis Mitte November.  
+* Frühzeitiger Beginn von Tests und Dokumentation.

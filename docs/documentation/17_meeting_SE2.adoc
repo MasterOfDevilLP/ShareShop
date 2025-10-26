@@ -1,0 +1,83 @@
+= ShareShop Projekt, Meeting 17 (SE2)
+Kevin (Product Owner)
+21.10.2025
+
+== Teilnehmer
+* Kevin
+* Benni
+* Anni (asynchron/fehlend)
+* Valencia
+* Han
+* Florian
+* Emil
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1) Ticket-Struktur & Backlog-Ausrichtung (Epics -> Stories -> Subtasks)
+* Epics sollen ausschließlich **nutzerzentriert** formuliert sein („Als Nutzer möchte ich …, damit …“).
+* **Keine Trennung nach Frontend/Backend auf Epic/Story-Ebene**; die technische Aufteilung passiert in den **Subtasks**.
+* Beispiel (besprochen): *Registrierung/Login/Logout* als Epic -> Stories je Teilfunktion -> Subtasks für FE/BE (Formular, API-Endpoint, Validierung, Fehlertypen usw.).
+* Ziel des Sprints: Das Epic **„Registrierung & Login“** sauber fertigstellen, **erst danach** neue Bereiche (Listen/WG etc.) parallelisieren.
+
+=== 2) Fehlerbehandlung & Usability an der API
+* HTTP-Statuscodes weiter **standardkonform** verwenden (z. B. 401/403/404).
+* Zusätzlich **semantische Fehlermeldungen** im Response-Body zurückgeben, damit das Frontend differenziert reagieren kann (ohne sensible Infos zu leaken).
+* Hinweis: Keine Offenlegung, ob eine E-Mail existiert. Formulierung eher „Nutzer **oder** Passwort falsch“. Optional: **Rate-Limiting/Kontosperre** nach mehreren Fehlversuchen.
+
+=== 3) Frontend-Hinweise & Mobile/Device-Tests
+* **Node-Modules** gehören **nicht** ins Repo -> per `.gitignore` ausschließen; `package.json` genügt für Dev-Abhängigkeiten.
+* Aktuell wird **Vue** von einem externen CDN (z. B. unpkg) geladen. Für späteres Deployment besser **bundlen** (z. B. Vite) statt Fremd-CDN (Lizenz/Verfügbarkeit).
+* **Mobile-Ansicht**: Anzeige/Responsive-Bugs notiert; bitte konkrete Tickets im Frontend-Channel sammeln.
+* **Backend-Zugriff vom Handy**: Ursache vermutlich **konfigurierte API-Basis-URL** statt Compose-Ports. Ticket anlegen: konfigurierbare Base-URL + Doku, wie man lokal testet.
+
+=== 4) Infrastruktur/Deployment, Optionen für Tests
+* Kurzfristig: **lokal** weiterentwickeln; Logs für Dev offen lassen.
+* Mittelfristig (optional): VM vom Rechenzentrum + Zugriff via **EduVPN** (ohne HTTPS/PWA nicht ideal).
+* Alternative (privat bereitgestellt von Emil): Test-Hosting mit **HTTPS** (für spätere PWA-Tests); derzeit **nice-to-have**, kein Sprint-Ziel.
+
+=== 5) Arbeitsmodus & Team-Organisation
+* **Retro freitags** beibehalten (Uhrzeit per Umfrage klären).
+* Discord-Rolle **@team** eingeführt, damit man ohne Fremdpings alle erreicht.
+* Reviews möglichst **sprintbasiert** abarbeiten; bei Leerlauf bitte kurz im Kanal melden -> es kommen „Quick-Fix“-Tickets/Epics.
+
+=== 6) Codequalität & Formatierung
+* **camelCase** festhalten (Funktionen/Variablen klein beginnend; Klassen/PascalCase).
+* Später: **Formatierungs-/Lint-Regeln** konsolidieren (JavaDoc pflegen; generelle Konventionen dokumentieren).
+
+=== 7) Daten & Tests
+* Für FE-Entwicklung praktikabel: **Seed-Daten** bzw. **Test-Account** (per SQL-Script oder API-Calls mit Scalar/Insomnia) anlegen, damit man unabhängig von Registrierung/Workflow testen kann.
+* Docker-Compose: Es gab gelegentlich Inkonsistenzen; Ticket für **Reproduzierbarkeit** (Neuaufsetzen, Persistenz prüfen, How-To ins Repo).
+
+== Aufgaben / ToDos
+
+* **Backlog neu strukturieren** (Epics nutzerzentriert; Stories ableiten; Subtasks pro Tech):
+** Ziel-Epic im Sprint: „Registrierung & Login“ inkl. Logout.
+** Folge-Epics vorbereiten (z. B. WG-Management, Listen, Items), aber erst nach Epic „Registrierung & Login“ priorisieren.
+
+* **API-Fehlerbild schärfen**:
+** Einheitliches Fehlerobjekt (Code, Message, ggf. Hint) definieren und dokumentieren.
+** Keine Information, ob Account existiert; optional: Lockout/Ratelimit nach X Fehlversuchen.
+
+* **Repo-Hygiene**:
+** `.gitignore`: `node_modules/` (im `source-frontend`), weitere Build-Artefakte prüfen.
+** Externes CDN für Vue im Blick behalten; Ticket „Vite-Bundle fürs Deployment evaluieren“.
+
+* **Frontend & Mobile**:
+** Tickets für Responsiveness/Mobile-Bugs sammeln (konkrete Repro-Schritte).
+** Ticket: API-Base-URL konfigurierbar machen + Doku fürs mobile Testing im LAN.
+
+* **Infra & Docs**:
+** Compose-How-To aktualisieren (Ports, Persistenz, Erststart, Seed-Skripte/API-Calls).
+** Kurzanleitung: Test-Accounts/Seed (SQL oder via Scalar/Insomnia).
+
+* **Qualität**:
+** JavaDoc konsequent pflegen (Entwicklerdoku später generieren).
+** Formatierungsregeln festlegen (camelCase etc.) und ins Repo schreiben.
+
+== Nächste Schritte
+* Sprint-Fokus: **„Registrierung & Login“** vollständig abschließen (FE/BE inkl. Fehlerfälle).
+* Danach: Parallelisierung weiterer Stories (z. B. WG/Listen), basierend auf neuem Backlog-Zuschnitt.
+* Retro-Rhythmus am Freitag etablieren; Reviews im Sprinttakt.

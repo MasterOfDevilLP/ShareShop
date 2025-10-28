@@ -11,6 +11,7 @@ import java.util.UUID;
  * Class, that represents a user
  */
 public class User {
+    private DBConnectionHandler connectionHandler;
     private UUID userID;
     //private UUID wgID;
     private String firstName;
@@ -26,7 +27,8 @@ public class User {
      * @param email
      * @param pwd
      */
-    public User(UUID userID, String firstName, String lastName, String email, String pwd) {
+    public User(DBConnectionHandler connectionHandler, UUID userID, String firstName, String lastName, String email, String pwd) {
+        this.connectionHandler = connectionHandler;
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,6 +40,7 @@ public class User {
     
     // Creates a new user
     public User(DBConnectionHandler conn, String email, String pwdhash) throws SQLException {
+        this.connectionHandler = conn;
     	conn.makeSureItsOpen();
     	String statementStr = "INSERT INTO users (userid, email, pwd) VALUES (?, ?, ?)";
         conn.makeSureItsOpen();
@@ -61,6 +64,7 @@ public class User {
      * @throws SQLException
      */
     public User(DBConnectionHandler connectionHandler, UUID userID) throws SQLException {
+        this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT * FROM users WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
@@ -90,6 +94,7 @@ public class User {
      * @throws SQLException
      */
     private void updateDB(DBConnectionHandler connectionHandler, String firstName, String lastName, String email, String pwd) throws SQLException {
+        this.connectionHandler = connectionHandler;
         String updateString = new String("UPDATE users SET firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(updateString)) {
@@ -199,7 +204,7 @@ public class User {
      * @return
      * @throws SQLException
      */
-    public ArrayList<UUID> getWgIDList(DBConnectionHandler connectionHandler) throws SQLException {
+    public ArrayList<UUID> getWgIDList() throws SQLException {
         ArrayList<UUID> wgidlist = new ArrayList<UUID>();
         String selectString = new String ("SELECT wgid FROM userallocation WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
@@ -210,6 +215,17 @@ public class User {
             wgidlist.add((UUID)rs.getObject("wgid"));
         }
         return wgidlist;
+    }
+
+    /**
+     * checks if the User is in the WG with given wgid
+     * @param wgid
+     * @return
+     * @throws SQLException
+     */
+    public boolean isUserInWG(UUID wgid) throws SQLException {
+        ArrayList<UUID> wgidlist = getWgIDList();
+        return wgidlist.contains(wgid);
     }
 
     /**

@@ -67,10 +67,10 @@ public class UserManager {
 	    		return null;
 	    	}
 		} catch(SQLException e) {
-			logger.error("Failed to create new User: {}", e.getMessage());
+			logger.error("Failed to login User: {}", e.getMessage());
 			return null;
 		} catch (NoSuchAlgorithmException e) {
-			logger.error("Failed to create new User: {}", e.getMessage());
+			logger.error("Failed to login User: {}", e.getMessage());
 			return null;
 		}
 	}

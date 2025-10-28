@@ -54,12 +54,12 @@ public class WGEndpoints {
 				
 				if(usr == null) {
 					// noone's logged in
-					ctx.status(HttpStatus.UNAUTHORIZED);
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 					return;
 				}
 				
 				if(!req.validate()) {
-					ctx.status(HttpStatus.BAD_REQUEST);
+					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 					return;
 				}
 				
@@ -73,7 +73,7 @@ public class WGEndpoints {
 				ctx.status(HttpStatus.OK);
 			} catch(Exception e) {
 				e.printStackTrace();
-				ctx.status(400);
+				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			}
 			
 		});
@@ -90,7 +90,7 @@ public class WGEndpoints {
 			if(usr == null) {
 				// noone's logged in
 				logger.debug("no user logged in");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
@@ -99,7 +99,7 @@ public class WGEndpoints {
 			if(!wgid.equals(usr.getWgID())) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
@@ -107,7 +107,7 @@ public class WGEndpoints {
 			if(wg == null) {
 				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
 				logger.debug("no such WG");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
@@ -125,7 +125,7 @@ public class WGEndpoints {
 			System.out.printf("Delete WG %s\n", wid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -136,7 +136,7 @@ public class WGEndpoints {
 			
 			// TODO: the request body for this will probably use the regular WG class
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -148,7 +148,7 @@ public class WGEndpoints {
 			System.out.printf("Get WG %s users\n", wid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -159,17 +159,17 @@ public class WGEndpoints {
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				WGAddUserRequest req = gson.fromJson(ctx.body(), WGAddUserRequest.class);
 				if(!req.validate()) {
-					ctx.status(HttpStatus.BAD_REQUEST);
+					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 					return;
 				}
 				
 				// TODO: Authorisation
 				// TODO: proper functionality
 				System.out.println(String.format("Add user %s to WG %s", req.id, wid));
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 			} catch(Exception e) {
 				e.printStackTrace();
-				ctx.status(400);
+				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			}
 			
 		});
@@ -184,7 +184,7 @@ public class WGEndpoints {
 			System.out.printf("Get WG %s user %s\n", wid, uid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -195,7 +195,7 @@ public class WGEndpoints {
 			System.out.printf("Remove WG %s user %s\n", wid, uid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -212,7 +212,7 @@ public class WGEndpoints {
 			if(usr == null) {
 				// noone's logged in
 				logger.debug("no user logged in");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
@@ -221,7 +221,7 @@ public class WGEndpoints {
 			if(!wgid.equals(usr.getWgID())) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
@@ -229,7 +229,7 @@ public class WGEndpoints {
 			if(wg == null) {
 				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
 				logger.debug("no such WG");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			

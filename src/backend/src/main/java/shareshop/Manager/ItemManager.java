@@ -30,7 +30,7 @@ public class ItemManager {
 			Item item = new Item(conn, wg, name, description, price);
 			return item;
 		} catch(SQLException e) {
-			logger.info("Failed to create item: {}", e.getMessage());
+			logger.warn("Failed to create item: {}", e.getMessage());
 			return null;
 		}
 	}
@@ -40,7 +40,7 @@ public class ItemManager {
 			Item item = new Item(conn, iid);
 			return item;
 		} catch(SQLException e) {
-			logger.info("Failed to get item: {}", e.getMessage());
+			logger.warn("Failed to get item: {}", e.getMessage());
 			return null;
 		}
 	}

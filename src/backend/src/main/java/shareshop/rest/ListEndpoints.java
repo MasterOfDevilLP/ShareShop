@@ -44,7 +44,7 @@ public class ListEndpoints {
 				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 				CreateListRequest req = gson.fromJson(ctx.body(), CreateListRequest.class);
 				if(!req.validate()) {
-					ctx.status(HttpStatus.BAD_REQUEST);
+					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 					return;
 				}
 				
@@ -55,7 +55,7 @@ public class ListEndpoints {
 				if(usr == null) {
 					// noone's logged in
 					logger.debug("no user logged in");
-					ctx.status(HttpStatus.UNAUTHORIZED);
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 					return;
 				}
 				
@@ -64,7 +64,7 @@ public class ListEndpoints {
 				if(!wgid.equals(usr.getWgID())) {
 					// wrong WG
 					logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-					ctx.status(HttpStatus.UNAUTHORIZED);
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 					return;
 				}
 				
@@ -72,14 +72,14 @@ public class ListEndpoints {
 				if(wg == null) {
 					// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
 					logger.debug("no such WG");
-					ctx.status(HttpStatus.UNAUTHORIZED);
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 					return;
 				}
 				
 				ShoppingList slist = wg.createList(appCtx.conn, usr, req.name);
 				if(slist == null) {
 					logger.error("Failed to create shopping list");
-					ctx.status(HttpStatus.FORBIDDEN);
+					RestUtils.setResponseError(ctx, HttpStatus.FORBIDDEN, "failed to create list");
 					return;
 				}
 				
@@ -90,7 +90,7 @@ public class ListEndpoints {
 				ctx.status(HttpStatus.OK);
 			} catch(Exception e) {
 				e.printStackTrace();
-				ctx.status(400);
+				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			}
 			
 		});
@@ -109,7 +109,7 @@ public class ListEndpoints {
 			if(usr == null) {
 				// noone's logged in
 				logger.debug("no user logged in");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
@@ -118,7 +118,7 @@ public class ListEndpoints {
 			if(!wgid.equals(usr.getWgID())) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
@@ -126,14 +126,14 @@ public class ListEndpoints {
 			if(wg == null) {
 				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
 				logger.debug("no such WG");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
 			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
 			if(slist == null) {
 				logger.debug("no such list");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect list");
 				return;
 			}
 			
@@ -159,14 +159,14 @@ public class ListEndpoints {
 			if(usr == null) {
 				// noone's logged in
 				logger.debug("no user logged in");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
 			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 			AddChangeRequest req = gson.fromJson(ctx.body(), AddChangeRequest.class);
 			if(!req.validate()) {
-				ctx.status(HttpStatus.BAD_REQUEST);
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 				return;
 			}
 			
@@ -175,7 +175,7 @@ public class ListEndpoints {
 			if(!wgid.equals(usr.getWgID())) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
@@ -183,21 +183,21 @@ public class ListEndpoints {
 			if(wg == null) {
 				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
 				logger.debug("no such WG");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
 			
 			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
 			if(slist == null) {
 				logger.debug("no such list");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect list");
 				return;
 			}
 			
 			Item item = appCtx.itemManager.getItem(req.iid);
 			if(item == null || !item.getWgID().equals(wgid)) {
 				logger.debug("no such item or wrong wg");
-				ctx.status(HttpStatus.UNAUTHORIZED);
+				RestUtils.setResponseError(ctx, HttpStatus.NOT_FOUND, "unknown item");
 				return;
 			}
 			
@@ -213,7 +213,7 @@ public class ListEndpoints {
 				slist.addChange(appCtx.conn, usr, item, Change.TICK, req.amount, req.price == null ? new BigDecimal(0) : req.price);
 				break;
 			default:
-				ctx.status(HttpStatus.BAD_REQUEST);
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "unknown change type");
 				return;
 			}
 			
@@ -233,7 +233,7 @@ public class ListEndpoints {
 			System.out.printf("Delete WG %s list %s\n", wid, lid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 	
@@ -244,7 +244,7 @@ public class ListEndpoints {
 			System.out.printf("Get WG %s list %s Audit log\n", wid, lid);
 			
 			// TODO: functionality
-			ctx.status(HttpStatus.UNAUTHORIZED);
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 		});
 	}
 

@@ -96,9 +96,10 @@ public class WGEndpoints {
 			
 			UUID wgid = UUID.fromString(wid);
 			
-			if(!wgid.equals(usr.getWgID())) {
+			
+			if(!usr.isUserInWG(wgid)) {
 				// wrong WG
-				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
@@ -218,9 +219,9 @@ public class WGEndpoints {
 			
 			UUID wgid = UUID.fromString(wid);
 			
-			if(!wgid.equals(usr.getWgID())) {
+			if(!usr.isUserInWG(wgid)) {
 				// wrong WG
-				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}

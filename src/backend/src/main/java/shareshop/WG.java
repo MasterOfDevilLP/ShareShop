@@ -149,7 +149,7 @@ public class WG {
      * @return
      */
     public boolean hasUser(User user) throws SQLException {
-        ArrayList<UUID> wglist = user.getWgIDList(this.connectionHandler);
+        ArrayList<UUID> wglist = user.getWgIDList();
         if (wglist.contains(this.wgID))     return true;
         else                                return false;
     }
@@ -161,7 +161,17 @@ public class WG {
      * @throws SQLException
      */
     public void addUser(DBConnectionHandler connectionHandler, User user) throws SQLException {
-        user.setWgID(connectionHandler, this.wgID);
+        String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate) VALUES (?, ?, ?)");
+        connectionHandler.makeSureItsOpen();
+        PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
+        connectionHandler.conn.setAutoCommit(false);
+        Date joinDate = Date.valueOf(LocalDate.now());
+        statement.setObject(1, user.getUserID());
+        statement.setObject(2, this.wgID);
+        statement.setDate(3, joinDate);
+        connectionHandler.conn.commit();
+        statement.close();
+        //user.setWgID(connectionHandler, this.wgID);
     }
 
     /**
@@ -171,7 +181,14 @@ public class WG {
      * @throws SQLException
      */
     public void removeUser(DBConnectionHandler connectionHandler, User user) throws SQLException {
-        user.setWgID(connectionHandler, null);
+        String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
+        connectionHandler.makeSureItsOpen();
+        PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
+        deleteStatement.setObject(1, user.getUserID());
+        deleteStatement.setObject(2, this.wgID);
+        connectionHandler.conn.commit();
+        deleteStatement.close();
+        //user.setWgID(connectionHandler, null);
     }
 
     /**

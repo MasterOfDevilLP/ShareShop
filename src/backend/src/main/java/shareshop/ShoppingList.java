@@ -531,6 +531,7 @@ public class ShoppingList {
                         } else {
                             String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?"); // will get put into updateCache() later
                             String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+                            connectionHandler.makeSureItsOpen();
                             try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);

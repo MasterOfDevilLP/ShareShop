@@ -14,4 +14,4 @@ RUN cd /app && /usr/local/bin/mvn-entrypoint.sh mvn package
 
 # run without invoking maven. This results in faster startup
 # change the jar name to something that doesn't change, or find a better way to run this (maven exec is a bit annoying)
-CMD ["java", "-jar", "/app/target/htwd-shareshop-1.0.0.jar", "/app/config.json"]
+CMD ["java", "-Djava.util.logging.config.file=logging.properties", "-jar", "/app/target/htwd-shareshop-1.0.0.jar", "/app/config.json"]

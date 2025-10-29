@@ -1,12 +1,10 @@
--- TODO: put this into ShareShopDB.sql
--- TODO: remove wgid row and constraints from ShareShopDB.sql
 BEGIN;
     -- adding allocation table for user to wg
-    CREATE TABLE public.userallocation {
-    	userid uui NOT NULL,
-    	wgid uui NOT NULL,
-        joindate date NOT NULL,
-    };
+    CREATE TABLE public.userallocation (
+    	userid uuid NOT NULL,
+    	wgid uuid NOT NULL,
+        joindate date NOT NULL
+    );
 
     ALTER TABLE public.userallocation OWNER TO backendusr;
     ALTER TABLE ONLY public.userallocation

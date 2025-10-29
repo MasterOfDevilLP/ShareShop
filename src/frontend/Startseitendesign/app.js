@@ -14,7 +14,15 @@ new Vue({
     selectedWG: localStorage.getItem("selectedWGID") || 1,
     selectedWGName: localStorage.getItem("selectedWGName") || "",
     benutzerID: 123,
-    newList: { name: '' },
+    touched: {
+    name: false,
+    beschreibung: false
+    },
+    newList: {
+    name: '',
+    beschreibung: '',
+    wg: ''
+    },
     showPopup: false,
     showCreateGroupModal: false,
     newGroupName: '',
@@ -22,9 +30,17 @@ new Vue({
     selectedList: null,
     showRenameModal: false,
     renameListName: '',
+   
+  },
+  computed: {
+    isListValid() {
+      return this.newList.name.trim() !== '' && this.newList.beschreibung.trim() !== '';
+    }
   },
 
+
     methods: {
+      
       //Fragen Einkaufliste von DB ab 
       async fetchLists() {
         try {
@@ -52,33 +68,41 @@ new Vue({
       },
 
       resetNewList() {
-            this.newList = { name: ''};
+      this.newList = { name: '', beschreibung: '', wg: '' };
+      this.touched = { name: false, beschreibung: false };
       },
 
-      saveList() {
-        if(!this.newList.name) 
-          {
-          alert('Bitte alle Felder ausfüllen.');
-          return;
-          }
-
-        this.lists.push({
-          id: Date.now().toString(36), // Date.now() gibt die aktuelle Zeit in Millisekunden seit dem 1. Januar 1970 zurück (z. B. 1717171234567), .toString(36) wandelt diese Zahl in das Zahlensystem zur Basis 36 um 
-          name: this.newList.name
-        });
-
-        this.closePopup();
-      },
 
      openListOptions(list) {
       this.selectedList = list;
       this.showListOptions = true;
       this.showPopup = false;
-    },
+      },
 
       closeListOptions() {
         this.selectedList = null;
         this.showListOptions = false;
+      },
+
+      saveList() {
+          if (!this.isListValid) {
+    this.touched.name = true;
+    this.touched.beschreibung = true;
+    return;
+  }
+
+  const listID = Date.now().toString(36);
+  const newListData = {
+    id: listID,
+    name: this.newList.name,
+    beschreibung: this.newList.beschreibung,
+    wg: this.newList.wg
+  }
+  // Lokal speichern
+  this.lists.push(newListData);
+  this.resetNewList();
+  this.showPopup = false;
+  alert("Liste erfolgreich gespeichert");
       },
 
       /* pseudocode
@@ -281,7 +305,7 @@ async createNewGroup() {
     }
 },
 
-      /*
+      /* Lokal
       createNewGroup() {
         if (!this.newGroupName.trim()) {
           alert("Bitte einen Gruppennamen eingeben.");

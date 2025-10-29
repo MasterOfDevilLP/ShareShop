@@ -121,7 +121,7 @@
         gap: 16px;
         margin-bottom: 40px;
       }
-      /* graue box */
+      /* graue Einkaufslisten box */
       .list-card {
         display: flex;
         align-items: center;
@@ -222,6 +222,19 @@
       gap: 1rem;
     }
 
+.form-label-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.err-inline {
+  color: #c0392b;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
     .sheet-body input {
       padding: 0.75rem;
       border: 1px solid #ccc;
@@ -276,6 +289,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       font-size: 15px;
+      border: 1px solid #ccc; /* optional, für sichtbaren Rahmen */
     }
 
     .dropdown-options {
@@ -293,7 +307,13 @@
       list-style: none;
       padding: 0;
       margin: 0;
+      overflow-y: auto; 
+      overflow-x: hidden;
     }
+    .dropdown-checkbox:checked + .dropdown-label + .dropdown-options {
+  max-height: auto;
+  overflow-y: auto;
+}
 
     .dropdown-options li {
       padding: 10px 16px;

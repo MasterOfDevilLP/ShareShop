@@ -94,21 +94,52 @@
           </button>
         </main>
 
-        <!-- Bottom sheet Liste hinzufügen -->
+        <!-- Bottom sheet Liste hinzufügen  (erweitert)-->
         <div class="bottom-sheet" :class="{ visible: showPopup }">
           <div class="sheet-header">
             Neue Liste erstellen
-            <button class="close-btn" id="closePopup" @click="closePopup">
-              ✕
-            </button>
+            <button class="close-btn" @click="closePopup">✕</button>
           </div>
           <div class="sheet-body">
+            <div class="form-label-row">
+              <label>Listenname *</label>
+              <span class="err-inline" v-if="touched.name && !newList.name"
+                >Pflichtfeld</span
+              >
+            </div>
             <input
               type="text"
               v-model="newList.name"
-              placeholder="Name der neuen Liste"
+              @blur="touched.name = true"
             />
-            <button id="saveList" @click="saveList">Erstellen</button>
+
+            <label>Beschreibung</label>
+            <input type="text" v-model="newList.beschreibung" />
+
+            <label>WG-Zuordnung:</label>
+            <div class="dropdown">
+              <input
+                type="checkbox"
+                :id="'wg-dropdown-form'"
+                class="dropdown-checkbox"
+              />
+              <label for="wg-dropdown-form" class="dropdown-label">
+                {{ newList.wg || 'WG auswählen' }}
+              </label>
+              <ul class="dropdown-options">
+                <li
+                  v-for="wg in wgList"
+                  :key="wg.id"
+                  @click="selectWGForNewList(wg.name)"
+                >
+                  {{ wg.name }}
+                </li>
+              </ul>
+            </div>
+
+            <button id="saveList" :disabled="!isListValid" @click="saveList">
+              Erstellen
+            </button>
           </div>
         </div>
 

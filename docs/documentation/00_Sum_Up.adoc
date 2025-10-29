@@ -278,3 +278,12 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Repo-Hygiene: `node_modules` per `.gitignore` entfernen; Vue-CDN später durch Bundle (z. B. Vite) ersetzen.
 * Mobile/Device: Tickets für Responsive-Issues sammeln; API-Base-URL konfigurierbar machen; Compose/How-To & Seed-Daten dokumentieren.
 * Orga: Retro freitags
+
+== 18. Team-Meeting, 28.10.2025
+
+* `xref:./18_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* Ticketqualität geschärft: lieber keine als falsche API-Pfade; Fokus auf Funktionsziele. Board-Disziplin: Tickets sichtbar bewegen (FE/BE).
+* FE: fehlende Endpoints werden gemockt; erwartete Payloads im Ticket dokumentieren.
+* BE: Delete/Update schließen; Fehlerobjekt-PR mergen; Lambda-Handler testbar machen.
+* Tests: je Fall positiv/negativ; Mockito + Mock-DB. Branching: Ticketnummern in Branch-Namen; Option Master/Develop prüfen.

@@ -112,30 +112,29 @@
               v-model="newList.name"
               @blur="touched.name = true"
             />
-
-            <label>Beschreibung</label>
-            <input type="text" v-model="newList.beschreibung" />
-
             <label>WG-Zuordnung:</label>
-            <div class="dropdown">
+            <div class="wg-dropdown-form">
               <input
                 type="checkbox"
-                :id="'wg-dropdown-form'"
+                id="wgDropdown"
                 class="dropdown-checkbox"
               />
-              <label for="wg-dropdown-form" class="dropdown-label">
+              <label for="wgDropdown" class="dropdown-label">
                 {{ newList.wg || 'WG auswählen' }}
               </label>
               <ul class="dropdown-options">
                 <li
                   v-for="wg in wgList"
                   :key="wg.id"
-                  @click="selectWGForNewList(wg.name)"
+                  @click="selectWGForNewList(wg.name); isWGOpen = false"
                 >
                   {{ wg.name }}
                 </li>
               </ul>
             </div>
+
+            <label>Beschreibung</label>
+            <input type="text" v-model="newList.beschreibung" />
 
             <button id="saveList" :disabled="!isListValid" @click="saveList">
               Erstellen

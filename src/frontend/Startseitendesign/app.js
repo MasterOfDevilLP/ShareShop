@@ -11,6 +11,7 @@ new Vue({
       { id: 3, name: "WG Fuchsbau" },
       { id: 4, name: "WG Mondhain" }
     ],
+    
     selectedWG: localStorage.getItem("selectedWGID") || 1,
     selectedWGName: localStorage.getItem("selectedWGName") || "",
     benutzerID: 123,
@@ -30,7 +31,7 @@ new Vue({
     selectedList: null,
     showRenameModal: false,
     renameListName: '',
-   
+    isWGOpen: false,
   },
   computed: {
     isListValid() {
@@ -211,6 +212,11 @@ new Vue({
           //this.switchWG();
         }
       },
+
+  selectWGForNewList(name) {
+      this.newList.wg = name;
+      this.isWGOpen = false;
+    },
       
       //Logik WG wechsel
       /*

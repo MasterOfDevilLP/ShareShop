@@ -201,6 +201,7 @@
       z-index: 10;
       transform: translateY(100%);
       transition: transform 0.3s ease-in-out;
+      overflow: visible;
     }
 
     .bottom-sheet.visible {
@@ -310,10 +311,6 @@
       overflow-y: auto; 
       overflow-x: hidden;
     }
-    .dropdown-checkbox:checked + .dropdown-label + .dropdown-options {
-  max-height: auto;
-  overflow-y: auto;
-}
 
     .dropdown-options li {
       padding: 10px 16px;
@@ -335,6 +332,23 @@
       max-height: 500px;
     }
 
+    /* Einkaufsliste WG-Auswahl */
+    .wg-dropdown-form {
+      position: relative;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .wg-dropdown-form .dropdown-label {
+      display: block;
+      width: 100%;
+      padding: 10px 12px;
+      background-color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      box-sizing: border-box;
+      text-align: left;
+    }
 
     /*Modal */
     .modal-overlay {

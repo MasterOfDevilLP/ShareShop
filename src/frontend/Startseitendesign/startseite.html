@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Startseite</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="wgForm.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
       rel="stylesheet"
@@ -65,30 +66,46 @@
         </header>
 
         <!-- Modal pop up neue WG erstellen -->
-        <div id="wgform" style="display: none">
-          <div v-if="showCreateGroupModal" class="modal-overlay">
-            <div class="modal-content">
-              <h3>Neue WG erstellen</h3>
+        <div v-if="showCreateGroupModal" class="modal-overlay">
+          <div class="modal-content">
+            <h3>Neue WG erstellen</h3>
 
-              <label>Name *</label>
-              <input type="text" v-model="newGroup.name" />
+            <label>Name *</label>
+            <input
+              type="text"
+              v-model.trim="newGroup.name"
+              @input="validateGroupForm"
+            />
+            <span v-if="errors.name" class="error-text">{{ errors.name }}</span>
 
-              <label>Beschreibung</label>
-              <textarea v-model="newGroup.description"></textarea>
+            <label>Beschreibung *</label>
+            <textarea
+              v-model.trim="newGroup.description"
+              @input="validateGroupForm"
+            ></textarea>
+            <span v-if="errors.description" class="error-text"
+              >{{ errors.description }}</span
+            >
 
-              <label>Bild (optional)</label>
-              <input type="file" @change="handleImageUpload" />
-              <img
-                v-if="newGroup.preview"
-                :src="newGroup.preview"
-                width="100"
-              />
+            <label>Bild (optional)</label>
+            <input type="file" accept="image/*" @change="handleImageUpload" />
+            <img v-if="newGroup.preview" :src="newGroup.preview" width="100" />
 
-              <button @click="saveGroup">Speichern</button>
-
-              <p v-if="saveSuccess" style="color: green">✅ WG gespeichert!</p>
-              <p v-if="saveError" style="color: red">❌ {{ saveError }}</p>
+            <div class="btn-container">
+              <button
+                class="btn btn-green"
+                :disabled="isSaving || !formValid"
+                @click="saveGroup"
+              >
+                {{ isSaving ? 'Speichert...' : 'Erstellen' }}
+              </button>
+              <button class="btn btn-pink" @click="closeModal">
+                Abbrechen
+              </button>
             </div>
+
+            <p v-if="saveSuccess" class="success-text">✅ WG gespeichert!</p>
+            <p v-if="saveError" class="error-text">❌ {{ saveError }}</p>
           </div>
         </div>
 
@@ -238,6 +255,6 @@
 
     <!-- type model damit die config datei damit vue richtig gerendert wird -->
     <script type="module" src="app.js"></script>
-    <script src="./wgform.js"></script>
+    <script src="wgform.js"></script>
   </body>
 </html>

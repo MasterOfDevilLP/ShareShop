@@ -16,7 +16,6 @@
  *  - API-Aufrufe erfolgen über die Basis-URL API_BASE
  *  - Einige Daten werden lokal im localStorage gespeichert
  */
-
 console.log("app.js loaded", location.href);
 
 import { API_BASE } from "../config.js";

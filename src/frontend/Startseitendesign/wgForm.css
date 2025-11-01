@@ -1,0 +1,129 @@
+/* --- Modal Container (ohne dunklen Hintergrund) --- */
+.modal-overlay {
+  position: absolute; /* statt fixed, damit es Teil der App bleibt */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent; /* kein dunkler Overlay-Hintergrund */
+  z-index: 100;
+}
+
+/* --- Modal Inhalt --- */
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 22px;
+  padding: 24px 20px;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* dezenter iOS-Schatten */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: fadeUp 0.25s ease-out;
+}
+
+/* sanftes Einblenden */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Titel --- */
+.modal-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+/* --- Eingabefelder --- */
+.modal-content input[type="text"],
+.modal-content textarea,
+.modal-content input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #d9d9d9;
+  background-color: #fafafa;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content textarea:focus {
+  border-color: #7dcfb6;
+  background-color: #ffffff;
+  outline: none;
+}
+
+/* --- Textarea --- */
+.modal-content textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+/* --- Bildvorschau --- */
+.modal-content img {
+  display: block;
+  margin: 10px auto;
+  max-width: 100px;
+  border-radius: 10px;
+}
+
+/* --- Buttons --- */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.btn {
+  border: none;
+  border-radius: 18px;
+  padding: 10px 26px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.btn-green {
+  background-color: #8ad7c1;
+  color: #111;
+}
+
+.btn-pink {
+  background-color: #f6a9b4;
+  color: #111;
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+}
+
+/* --- Fehler- und Erfolgstexte --- */
+.error-text {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: -6px;
+  margin-bottom: 8px;
+}
+
+.success-text {
+  color: #2ecc71;
+  font-size: 14px;
+  margin-top: 10px;
+}

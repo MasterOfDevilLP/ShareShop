@@ -65,16 +65,29 @@
         </header>
 
         <!-- Modal pop up neue WG erstellen -->
-        <!-- Modal: Neue WG erstellen -->
-        <div v-if="showCreateGroupModal" class="modal-overlay">
-          <div class="modal-content">
-            <h3>Gruppe Erstellen</h3>
+        <div id="wgform" style="display: none">
+          <div v-if="showCreateGroupModal" class="modal-overlay">
+            <div class="modal-content">
+              <h3>Neue WG erstellen</h3>
 
-            <input v-model="newGroupName" placeholder="Gruppenname" />
+              <label>Name *</label>
+              <input type="text" v-model="newGroup.name" />
 
-            <div class="modal-actions">
-              <button @click="createNewGroup">Erstellen</button>
-              <button @click="showCreateGroupModal = false">Abbrechen</button>
+              <label>Beschreibung</label>
+              <textarea v-model="newGroup.description"></textarea>
+
+              <label>Bild (optional)</label>
+              <input type="file" @change="handleImageUpload" />
+              <img
+                v-if="newGroup.preview"
+                :src="newGroup.preview"
+                width="100"
+              />
+
+              <button @click="saveGroup">Speichern</button>
+
+              <p v-if="saveSuccess" style="color: green">✅ WG gespeichert!</p>
+              <p v-if="saveError" style="color: red">❌ {{ saveError }}</p>
             </div>
           </div>
         </div>
@@ -225,5 +238,6 @@
 
     <!-- type model damit die config datei damit vue richtig gerendert wird -->
     <script type="module" src="app.js"></script>
+    <script src="./wgform.js"></script>
   </body>
 </html>

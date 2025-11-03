@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil & Logout</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../Startseitendesign/style.css" />
+    <link rel="stylesheet" href="logout.css" />
+
+    <!-- Vue 3 zuerst -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="iphone-app">
+        <header class="app-header">
+          <h2>{{ t('Profil', 'Profile') }}</h2>
+        </header>
+
+        <main class="app-content profile-page">
+          <section class="profile-section">
+            <div class="profile-header">
+              <img
+                src="../Startseitendesign/icons/user-placeholder.png"
+                class="profile-pic"
+              />
+              <div class="profile-info">
+                <h3>{{ user.name }}</h3>
+                <p>{{ user.email }}</p>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="profile-option">
+              <img
+                src="../Startseitendesign/icons/brightness.png"
+                alt="Theme"
+              />
+              <span>{{ t('Erscheinungsbild', 'Appearance') }}</span>
+              <div class="toggle">
+                <button
+                  :class="{active: theme==='light'}"
+                  @click="setTheme('light')"
+                >
+                  {{ t('Hell', 'Light') }}
+                </button>
+                <button
+                  :class="{active: theme==='dark'}"
+                  @click="setTheme('dark')"
+                >
+                  {{ t('Dunkel', 'Dark') }}
+                </button>
+              </div>
+            </div>
+
+            <div class="profile-option">
+              <img
+                src="../Startseitendesign/icons/translate.png"
+                alt="Sprache"
+              />
+              <span>{{ t('Sprache', 'Language') }}</span>
+              <div class="lang-buttons">
+                <button
+                  :class="{active: language==='de'}"
+                  @click="setLanguage('de')"
+                >
+                  🇩🇪 Deutsch
+                </button>
+                <button
+                  :class="{active: language==='en'}"
+                  @click="setLanguage('en')"
+                >
+                  🇬🇧 English
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="logout-section">
+            <button @click="logout" class="logout-btn">
+              <img src="../Startseitendesign/icons/logout.svg" alt="Logout" />
+              {{ t('Logout', 'Log out') }}
+            </button>
+            <p v-if="message" class="logout-message">{{ message }}</p>
+          </section>
+        </main>
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+          <a href="../Startseitendesign/startseite.html" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Liste.png"
+              class="nav-icon"
+            /><br />Liste
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Rechnung.png"
+              class="nav-icon"
+            /><br />Rechnungen
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Kalender.png"
+              class="nav-icon"
+            /><br />Kalender
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Rezepte.png"
+              class="nav-icon"
+            /><br />Rezepte
+          </a>
+          <a href="logout.html" class="nav-item active">
+            <img
+              src="../Startseitendesign/icons/Profil.png"
+              class="nav-icon"
+            /><br />Profil
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Dein JS muss zuletzt kommen -->
+    <script src="logout.js"></script>
+  </body>
+</html>

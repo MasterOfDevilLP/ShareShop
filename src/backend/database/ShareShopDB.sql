@@ -382,3 +382,10 @@ ALTER TABLE ONLY public.users
 --
 -- PostgreSQL database dump complete
 --
+
+--
+-- after changes to DB:
+--
+
+-- unique email constraint
+ALTER TABLE users ADD CONSTRAINT unique_email UNIQUE (email);

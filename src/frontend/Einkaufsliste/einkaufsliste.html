@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Einkaufsliste</title>
-    <link rel="manifest" href="manifest.json" />
+    <!-- <link rel="manifest" href="manifest.json" /> -->
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -18,6 +18,7 @@
   <body>
     <!-- Load Vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <!-- <script src="./sw.js" defer></script> -->
 
     <div id="app">
       <div class="iphone-app">
@@ -39,92 +40,52 @@
           </a>
         </header>
 
-        <!-- Hauptseite -->
+        <!-- Hauptseite: Liste anzeigen -->
         <main class="app-content">
           <div class="product-list">
-            <div v-for="product in products" :key="product.id" class="product-card">
+            <div v-for="product in listItems" :key="product.iid" class="product-card">              
               <div class="product-icon">
                 <img :src="getIcon(product.kategorie)" alt="icon" /> 
                 <!-- <img src="icons/default.png" alt="Icon" class="nav-icon" /> -->
               </div>
               <div class="product-info">
-                <div class="product-name">{{ product.name }}</div>
+                <div class="product-name" :style="{ textDecoration: product.ticked ? 'line-through' : 'none' }">{{ product.name }}</div> <!--nếu product đã được tick thì name của product sẽ bị gạch đi-->
                 <div class="product-meta">
-                  Gekauft: {{ product.datum }} </br>
-                  Menge: {{ product.menge }} {{ product.einheit }}
+                  <span v-if="product.ticked"> Gekauft: {{ product.datum }} </br></span> <!--sau khi tick product thì sẽ hiện ngày đã tick-->
+                  Menge: {{ product.amount }} {{ product.einheit }}
                 </div>
               </div>
               <div class="product-price">{{ product.preis || '—' }} €</div>
-              <button class="btn btn-outline-success  custom-button" title="Artikel anpassen" @click ="openChangeProduct(product)">...</button>
-              <button class="btn btn-outline-danger  custom-button" title="Artikel loschen" @click ="deleteProduct(product.id)">X</button>
+              <button class="btn btn-outline-info  custom-button" title="Artikel anpassen" @click ="openChangeProduct(product)">...</button>
+             <button class="btn btn-outline-success custom-button":title="product.ticked ? 'Zurücksetzen' : 'Als gekauft markieren'" @click="toggleTick(product)">
+            {{ product.ticked ? '←' : '✓' }}
+          </button>
+          <button class="delete-button" @click="removeFromList(product)">x</button>
             </div>
           </div>
         </main>
 
-    <!-- Dialogsfenster zur Anpassung der Produkte -->
-      <div class="bottom-sheet" :class="{ visible: showChangeProduct }">
-        <div class="sheet-header"> Produkt anpassen          
-            <button class="close-btn" @click="closeChangeProduct">✕</button>
-        </div>
-        <div class="sheet-body">
-           <label>Name:</label>
-        <input type="text" v-model="newProduct.name" />
-
-        <label>Kategorie:</label>
-        <select v-model="newProduct.kategorie">
-          <option disabled value="">Bitte wählen</option>
-          <option>Obst & Gemüse</option>
-          <option>Getränke</option>
-          <option>Fleisch</option>
-          <option>Snacks</option>
-          <option>Haushalt</option>
-          <option>Sonstiges</option>
-        </select>
-
-        <label>Gewicht:</label>
-        <input type="number" v-model="newProduct.menge" placeholder="z.B. 500" min="0"/>
-
-        <label>Einheit:</label>
-        <select v-model="newProduct.einheit">
-          <option disabled value="">Bitte wählen</option>
-          <option>Gramm</option>
-          <option>Kilogramm</option>
-          <option>Milliliter</option>
-          <option>Liter</option>
-          <option>Stück</option>
-        </select>
-
-        <label>Preis:</label>
-        <input type="float" v-model="newProduct.preis" placeholder="z.B. 3,00" min="0"/>
-          <button @click="changeProduct">OK</button>
-        </div>
-      </div>
-
-  
-    <!-- Button: neue Produkt hinzufugen -->
-  <button class="add-product" @click="add_product"><span>+</span> Produkte hinzufügen</button>
-
-    <!-- Dialogfenster zum anlegen eines neuen Items  -->
+     <!-- POPUP: neues Item hinzugen und Item anpassen  -->
     <div class="bottom-sheet" :class="{ visible: showPopup }">
-        <div class="sheet-header"> Produkte hinzufügen           
-            <button class="close-btn" @click="closePopup">✕</button>
+        <div class="sheet-header"> 
+          <span v-if="isEditing">Produkt bearbeiten</span>
+          <span v-else>Produkte hinzufügen</span>     
+          <button class="close-btn" @click="closePopup">✕</button>
         </div>
         <div class="sheet-body">
           <label>Name:</label>
-        <input type="text" v-model="newProduct.name" />
+        <input list="wg-products" v-model="newProduct.name" @input="onProductNameInput" />
+        <datalist id="wg-products">
+          <option v-for="p in products" :key="p.id" :value="p.name"></option>
+        </datalist>
 
         <label>Kategorie:</label>
-        <select v-model="newProduct.kategorie">
-          <option disabled value="">Bitte wählen</option>
-          <option>Obst & Gemüse</option>
-          <option>Getränke</option>
-          <option>Fleisch</option>
-          <option>Snacks</option>
-          <option>Haushalt</option>
-          <option>Sonstiges</option>
+        <select v-model="newProduct.kategorie" :disabled="newProduct.fromWG"> <!-- Disable if product selected from wg  -->
+          <option value="">--Wähle Kategorie--</option>
+          <option v-for="k in kategorien" :key="k" :value="k">{{ k }}</option>
         </select>
 
-        <label>Gewicht:</label>
+        <label>Menge:</label>
         <input type="number" v-model="newProduct.menge" placeholder="z.B. 500" min="0"/>
 
         <label>Einheit:</label>
@@ -138,8 +99,9 @@
         </select>
 
         <label>Preis:</label>
-        <input type="number" step="0.01" v-model="newProduct.preis" placeholder="z.B. 3.00" min="0"/>
-          <button id="saveList" @click="saveProduct">Speichern</button>
+        <input type="number" v-model="newProduct.preis" step="0.01" />
+
+        <button id="saveList" @click="saveProduct">Speichern</button>
         </div>
     </div>
  

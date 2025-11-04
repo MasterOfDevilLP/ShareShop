@@ -49,10 +49,9 @@
                 <!-- <img src="icons/default.png" alt="Icon" class="nav-icon" /> -->
               </div>
               <div class="product-info">
-                <div class="product-name" :style="{ textDecoration: product.ticked ? 'line-through' : 'none' }">{{ product.name }}</div> <!--nếu product đã được tick thì name của product sẽ bị gạch đi-->
+                <div class="product-name" :style="{ textDecoration: product.ticked ? 'line-through' : 'none' }">{{ product.name }}</div> 
                 <div class="product-meta">
-                  <span v-if="product.ticked"> Gekauft: {{ product.datum }} </br></span> <!--sau khi tick product thì sẽ hiện ngày đã tick-->
-                  Menge: {{ product.amount }} {{ product.einheit }}
+                  <span v-if="product.ticked"> Gekauft: {{ product.datum }} </br></span> 
                 </div>
               </div>
               <div class="product-price">{{ product.preis || '—' }} €</div>
@@ -65,7 +64,10 @@
           </div>
         </main>
 
-     <!-- POPUP: neues Item hinzugen und Item anpassen  -->
+    <!-- Button: neue Produkt hinzufugen -->
+          <button class="add-product" @click="add_product"><span>+</span> Produkte hinzufügen</button>
+
+    <!-- POPUP: neues Item hinzugen und Item anpassen  -->
     <div class="bottom-sheet" :class="{ visible: showPopup }">
         <div class="sheet-header"> 
           <span v-if="isEditing">Produkt bearbeiten</span>

@@ -12,6 +12,7 @@ public class WG {
     private UUID wgID;
     private String wgName;
     private Date creationDate;
+    private DBConnectionHandler connectionHandler;
     
     /**
      * Constructor of Class WG
@@ -19,7 +20,8 @@ public class WG {
      * @param wgName
      * @param creationDate
      */
-    public WG(UUID wgID, String wgName, Date creationDate) {
+    public WG(DBConnectionHandler connectionHandler, UUID wgID, String wgName, Date creationDate) {
+        this.connectionHandler = connectionHandler;
         this.wgID = wgID;
         this.wgName = wgName;
         this.creationDate = creationDate;
@@ -32,7 +34,9 @@ public class WG {
      * @throws SQLException
      */
     public WG(DBConnectionHandler connectionHandler, UUID wgID) throws SQLException {
+        this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT * FROM wg WHERE wgid = ?");
+        connectionHandler.makeSureItsOpen();
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, wgID);
         ResultSet rs = select.executeQuery();
@@ -50,6 +54,7 @@ public class WG {
     // creates a new WG
     public WG(DBConnectionHandler connectionHandler, String name) throws SQLException {
     	String statementStr = "INSERT INTO wg (wgid, wgname, creationdate) VALUES (?, ?, ?)";
+        connectionHandler.makeSureItsOpen();
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
     	UUID wid = UUID.randomUUID();
     	try {
@@ -143,8 +148,9 @@ public class WG {
      * @param user
      * @return
      */
-    public boolean hasUser(User user) {
-        if (user.getWgID() == this.wgID)    return true;
+    public boolean hasUser(User user) throws SQLException {
+        ArrayList<UUID> wglist = user.getWgIDList();
+        if (wglist.contains(this.wgID))     return true;
         else                                return false;
     }
 
@@ -155,7 +161,17 @@ public class WG {
      * @throws SQLException
      */
     public void addUser(DBConnectionHandler connectionHandler, User user) throws SQLException {
-        user.setWgID(connectionHandler, this.wgID);
+        String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate) VALUES (?, ?, ?)");
+        connectionHandler.makeSureItsOpen();
+        PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
+        connectionHandler.conn.setAutoCommit(false);
+        Date joinDate = Date.valueOf(LocalDate.now());
+        statement.setObject(1, user.getUserID());
+        statement.setObject(2, this.wgID);
+        statement.setDate(3, joinDate);
+        connectionHandler.conn.commit();
+        statement.close();
+        //user.setWgID(connectionHandler, this.wgID);
     }
 
     /**
@@ -165,7 +181,14 @@ public class WG {
      * @throws SQLException
      */
     public void removeUser(DBConnectionHandler connectionHandler, User user) throws SQLException {
-        user.setWgID(connectionHandler, null);
+        String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
+        connectionHandler.makeSureItsOpen();
+        PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
+        deleteStatement.setObject(1, user.getUserID());
+        deleteStatement.setObject(2, this.wgID);
+        connectionHandler.conn.commit();
+        deleteStatement.close();
+        //user.setWgID(connectionHandler, null);
     }
 
     /**

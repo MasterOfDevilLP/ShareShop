@@ -38,15 +38,61 @@ public class ListEndpoints {
 		registerGetAudit(app);
 	}
 	
-	public static void epCreate(Context ctx) {
-		Key<AppContext> ctxKey = new Key<AppContext>("Context");
-		String wid = ctx.pathParam("wid");
-		try {
-			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-			CreateListRequest req = gson.fromJson(ctx.body(), CreateListRequest.class);
-			if(!req.validate()) {
-				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
-				return;
+	private static void registerCreate(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
+		app.post(basepath, ctx -> {
+			String wid = ctx.pathParam("wid");
+			try {
+				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+				CreateListRequest req = gson.fromJson(ctx.body(), CreateListRequest.class);
+				if(!req.validate()) {
+					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
+					return;
+				}
+				
+				Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+				AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+				User usr = RestUtils.getAuthorizedUser(ctx);
+				
+				if(usr == null) {
+					// noone's logged in
+					logger.debug("no user logged in");
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+					return;
+				}
+				
+				UUID wgid = UUID.fromString(wid);
+				
+				if(!usr.isUserInWG(wgid)) {
+					// wrong WG
+					logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+					return;
+				}
+				
+				WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+				if(wg == null) {
+					// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+					logger.debug("no such WG");
+					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+					return;
+				}
+				
+				ShoppingList slist = wg.createList(appCtx.conn, usr, req.name);
+				if(slist == null) {
+					logger.error("Failed to create shopping list");
+					RestUtils.setResponseError(ctx, HttpStatus.FORBIDDEN, "failed to create list");
+					return;
+				}
+				
+				CreateListResponse resp = new CreateListResponse(slist);
+				
+				ctx.contentType(ContentType.JSON);
+				ctx.result(gson.toJson(resp));
+				ctx.status(HttpStatus.OK);
+			} catch(Exception e) {
+				e.printStackTrace();
+				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			}
 			
 			Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
@@ -62,9 +108,9 @@ public class ListEndpoints {
 			
 			UUID wgid = UUID.fromString(wid);
 			
-			if(!wgid.equals(usr.getWgID())) {
+			if(!usr.isUserInWG(wgid)) {
 				// wrong WG
-				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
@@ -160,47 +206,47 @@ public class ListEndpoints {
 		});
 	}
 	
-	public static void epPost(Context ctx) {
-		Key<AppContext> ctxKey = new Key<AppContext>("Context");
-		String wid = ctx.pathParam("wid");
-		String lid = ctx.pathParam("lid");
-		
-		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
-		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
-		User usr = RestUtils.getAuthorizedUser(ctx);
-		
-		if(usr == null) {
-			// noone's logged in
-			logger.debug("no user logged in");
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
-			return;
-		}
-		
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		AddChangeRequest req = gson.fromJson(ctx.body(), AddChangeRequest.class);
-		if(!req.validate()) {
-			RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
-			return;
-		}
-		
-		UUID wgid = UUID.fromString(wid);
-		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
-		}
-		
-		WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
-		if(wg == null) {
-			// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
-			logger.debug("no such WG");
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
-		}
-		
-		try {
+	private static void registerPost(Javalin app) {
+		Key ctxKey = new Key<AppContext>("Context");
+		app.post(basepath + "/{lid}", ctx -> {
+			String wid = ctx.pathParam("wid");
+			String lid = ctx.pathParam("lid");
+			
+			Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+			AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+			User usr = RestUtils.getAuthorizedUser(ctx);
+			
+			if(usr == null) {
+				// noone's logged in
+				logger.debug("no user logged in");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+				return;
+			}
+			
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			AddChangeRequest req = gson.fromJson(ctx.body(), AddChangeRequest.class);
+			if(!req.validate()) {
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
+				return;
+			}
+			
+			UUID wgid = UUID.fromString(wid);
+			
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
 			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
 			if(slist == null) {
 				logger.debug("no such list");

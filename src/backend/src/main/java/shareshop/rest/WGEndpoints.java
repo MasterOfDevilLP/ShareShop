@@ -1,5 +1,6 @@
 package shareshop.rest;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -12,8 +13,10 @@ import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
 import io.javalin.config.Key;
 import io.javalin.http.ContentType;
+import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import shareshop.AppContext;
+import shareshop.ShoppingList;
 import shareshop.User;
 import shareshop.WG;
 import shareshop.rest.requests.CreateWGRequest;
@@ -41,162 +44,196 @@ public class WGEndpoints {
 		registerGetLists(app);
 	}
 	
-	private static void registerCreate(Javalin app) {
-		Key ctxKey = new Key<AppContext>("Context");
-		app.post(basepath + "/create", ctx -> {
+	public static void epCreate(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		try {
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			CreateWGRequest req = gson.fromJson(ctx.body(), CreateWGRequest.class);
 			
-			try {
-				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-				CreateWGRequest req = gson.fromJson(ctx.body(), CreateWGRequest.class);
-				
-				AppContext appCtx = (AppContext) ctx.appData(ctxKey);
-				User usr = RestUtils.getAuthorizedUser(ctx);
-				
-				if(usr == null) {
-					// noone's logged in
-					RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
-					return;
-				}
-				
-				if(!req.validate()) {
-					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
-					return;
-				}
-				
-				// either this succeeds, or an exception gets thrown
-				WG newWG = appCtx.wgManager.create(usr, req.name);
-				
-				CreateWGResponse resp = new CreateWGResponse(newWG);
-				
-				ctx.contentType(ContentType.JSON);
-				ctx.result(gson.toJson(resp));
-				ctx.status(HttpStatus.OK);
-			} catch(Exception e) {
-				e.printStackTrace();
-				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
-			}
-			
-		});
-	}
-	
-	private static void registerGet(Javalin app) {
-		Key ctxKey = new Key<AppContext>("Context");
-		app.get(basepath + "/{wid}", ctx -> {
-			String wid = ctx.pathParam("wid");
-			Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
 			AppContext appCtx = (AppContext) ctx.appData(ctxKey);
 			User usr = RestUtils.getAuthorizedUser(ctx);
 			
 			if(usr == null) {
 				// noone's logged in
-				logger.debug("no user logged in");
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
 				return;
 			}
 			
 			UUID wgid = UUID.fromString(wid);
-			
-			
+		
 			if(!usr.isUserInWG(wgid)) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+			if(!req.validate()) {
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 				return;
 			}
 			
-			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
-			if(wg == null) {
-				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
-				logger.debug("no such WG");
-				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-				return;
-			}
+			// either this succeeds, or an exception gets thrown
+			WG newWG = appCtx.wgManager.create(usr, req.name);
 			
-			WGInformationResponse resp = new WGInformationResponse(wg);
-			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			CreateWGResponse resp = new CreateWGResponse(newWG);
+			
 			ctx.contentType(ContentType.JSON);
 			ctx.result(gson.toJson(resp));
 			ctx.status(HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
+	}
+	
+	private static void registerCreate(Javalin app) {
+		app.post(basepath + "/create", ctx -> {
+			epCreate(ctx);
 		});
+	}
+	
+	public static void epGet(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		String wid = ctx.pathParam("wid");
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		
+		if(!wgid.equals(usr.getWgID())) {
+			// wrong WG
+			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+			return;
+		}
+		
+		WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+		if(wg == null) {
+			// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+			logger.debug("no such WG");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+			return;
+		}
+		
+		WGInformationResponse resp = new WGInformationResponse(wg);
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		ctx.contentType(ContentType.JSON);
+		ctx.result(gson.toJson(resp));
+		ctx.status(HttpStatus.OK);
+	}
+	
+	private static void registerGet(Javalin app) {
+		app.get(basepath + "/{wid}", ctx -> {
+			epGet(ctx);
+		});
+	}
+	
+	public static void epDelete(Context ctx) {
+		String wid = ctx.pathParam("wid");
+		System.out.printf("Delete WG %s\n", wid);
+		
+		// TODO: functionality
+		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 	}
 	
 	private static void registerDelete(Javalin app) {
 		app.delete(basepath + "/{wid}", ctx -> {
-			String wid = ctx.pathParam("wid");
-			System.out.printf("Delete WG %s\n", wid);
-			
-			// TODO: functionality
-			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+			epDelete(ctx);
 		});
+	}
+	
+	public static void epPatch(Context ctx) {
+		String wid = ctx.pathParam("wid");
+		System.out.printf("Patch WG %s\n", wid);
+		
+		// TODO: the request body for this will probably use the regular WG class
+		// TODO: functionality
+		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 	}
 	
 	private static void registerPatch(Javalin app) {
 		app.patch(basepath + "/{wid}", ctx -> {
-			String wid = ctx.pathParam("wid");
-			System.out.printf("Patch WG %s\n", wid);
-			
-			// TODO: the request body for this will probably use the regular WG class
-			// TODO: functionality
-			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+			epPatch(ctx);
 		});
 	}
 	
 	// WG User endpoints
 	
+	public static void epGetUsers(Context ctx) {
+		String wid = ctx.pathParam("wid");
+		System.out.printf("Get WG %s users\n", wid);
+		
+		// TODO: functionality
+		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+	}
+	
 	private static void registerGetUsers(Javalin app) {
 		app.get(basepath + "/{wid}/user", ctx -> {
-			String wid = ctx.pathParam("wid");
-			System.out.printf("Get WG %s users\n", wid);
-			
-			// TODO: functionality
-			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+			epGetUsers(ctx);
 		});
+	}
+	
+	public static void epWGAddUser(Context ctx) {
+		String wid = ctx.pathParam("wid");
+		try {
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			WGAddUserRequest req = gson.fromJson(ctx.body(), WGAddUserRequest.class);
+			if(!req.validate()) {
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
+				return;
+			}
+			
+			// TODO: Authorisation
+			// TODO: proper functionality
+			System.out.println(String.format("Add user %s to WG %s", req.id, wid));
+			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		} catch(Exception e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerWGAddUser(Javalin app) {
 		app.post(basepath + "/{wid}/user", ctx -> {
-			String wid = ctx.pathParam("wid");
-			try {
-				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-				WGAddUserRequest req = gson.fromJson(ctx.body(), WGAddUserRequest.class);
-				if(!req.validate()) {
-					RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
-					return;
-				}
-				
-				// TODO: Authorisation
-				// TODO: proper functionality
-				System.out.println(String.format("Add user %s to WG %s", req.id, wid));
-				RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
-			} catch(Exception e) {
-				e.printStackTrace();
-				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
-			}
-			
+			epWGAddUser(ctx);	
 		});
 	}
 	
 	// single user endpoints
 	
+	public static void epGetUser(Context ctx) {
+		String wid = ctx.pathParam("wid");
+		String uid = ctx.pathParam("uid");
+		System.out.printf("Get WG %s user %s\n", wid, uid);
+		
+		// TODO: functionality
+		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+	}
+	
 	private static void registerGetUser(Javalin app) {
 		app.get(basepath + "/{wid}/user/{uid}", ctx -> {
-			String wid = ctx.pathParam("wid");
-			String uid = ctx.pathParam("uid");
-			System.out.printf("Get WG %s user %s\n", wid, uid);
-			
-			// TODO: functionality
-			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+			epGetUser(ctx);
 		});
+	}
+	
+	public static void epDeleteUser(Context ctx) {
+		String wid = ctx.pathParam("wid");
+		String uid = ctx.pathParam("uid");
+		System.out.printf("Remove WG %s user %s\n", wid, uid);
+		
+		// TODO: functionality
+		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
 	}
 	
 	private static void registerDeleteUser(Javalin app) {
 		app.delete(basepath + "/{wid}/user/{uid}", ctx -> {
-			String wid = ctx.pathParam("wid");
-			String uid = ctx.pathParam("uid");
-			System.out.printf("Remove WG %s user %s\n", wid, uid);
-			
-			// TODO: functionality
-			RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+			epDeleteUser(ctx);
 		});
 	}
 	
@@ -244,6 +281,16 @@ public class WGEndpoints {
 			ctx.contentType(ContentType.JSON);
 			ctx.result(gson.toJson(resp));
 			ctx.status(HttpStatus.OK);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
+	}
+	
+	private static void registerGetLists(Javalin app) {
+		app.get(basepath + "/{wid}/list", ctx -> {
+			epGetLists(ctx);
 		});
 	}
 }

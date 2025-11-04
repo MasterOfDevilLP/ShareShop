@@ -11,6 +11,7 @@ import io.javalin.config.Key;
 import io.javalin.http.ContentType;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
+import jakarta.servlet.http.HttpSession;
 import shareshop.AppContext;
 import shareshop.User;
 import shareshop.rest.requests.CreateUserRequest;
@@ -117,27 +118,26 @@ public class UsersEndpoints {
 		});
 	}
 	
+	public static void epLogout(Context ctx) {
+		try {
+			HttpSession session = ctx.req().getSession(false); 
+			if(session != null) {
+				// this does not delete the session cookie, but since the session is invalidated anyways, that doesn't matter
+				session.invalidate();
+			}
+			ctx.status(HttpStatus.OK);			
+		} catch(Exception e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
+	}
+	
 	private static void registerLogout(Javalin app) {
 		app.post(basepath + "/logout", ctx -> {
-			try {
-				User oldusr = RestUtils.getAuthorizedUser(ctx);
-				if(oldusr != null) {
-					// some user is logged in, invalidate that session
-					ctx.req().getSession().invalidate();	// somehow this fails
-					// this does not delete the session cookie, but since the session is invalidated anyways, that doesn't matter
-				}
-				
-				ctx.status(HttpStatus.OK);
-				
-			} catch(Exception e) {
-				e.printStackTrace();
-				RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
-			}
-			
+			epLogout(ctx);
 		});
 	}
 			
-	
 	public static void epGet(Context ctx) {
 		User usr = RestUtils.getAuthorizedUser(ctx);
 		if(usr != null) {

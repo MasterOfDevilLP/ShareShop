@@ -1,332 +1,391 @@
-// === Shared Language Store ===
+// === API and Constants ===
+const API_BASE = 'http://localhost:8001'; // ← API-Basis-URL
+const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
+const { reactive, createApp } = Vue;
+
+// 1. Translation Dictionary (Key-based i18n)
+const translations = {
+  // General UI Texts
+    'LOGIN_TITLE': { de: 'Login', en: 'Sign In' },
+    'REGISTER_TITLE': { de: 'Registrieren', en: 'Register' },
+    'EMAIL_PLACEHOLDER': { de: 'E-Mail', en: 'Email' },
+    'PASSWORD_PLACEHOLDER': { de: 'Passwort', en: 'Password' },
+    'REPEAT_PASSWORD_PLACEHOLDER': { de: 'Passwort wiederholen', en: 'Repeat Password' },
+    'LOGIN_BUTTON': { de: 'Einloggen', en: 'Log In' },
+    'REGISTER_BUTTON': { de: 'Registrieren', en: 'Register' },
+    'NO_ACCOUNT_PRE': { de: 'Noch kein Account? ', en: 'No account? ' },
+    'NO_ACCOUNT_LINK': { de: 'Jetzt registrieren', en: 'Register here' },
+    'ALREADY_REGISTERED_PRE': { de: 'Bereits registriert? ', en: 'Already registered? ' },
+    'ALREADY_REGISTERED_LINK': { de: 'Zum Login', en: 'Login here' },
+
+    // Messages/Errors
+    'ERR_FILL_FIELDS': { de: 'Bitte alle Felder ausfüllen.', en: 'Please fill in all fields.' },
+    'ERR_INVALID_EMAIL': { de: 'Ungültiges E-Mail-Format.', en: 'Invalid email format.' },
+    // Function for dynamic messages
+    'ERR_PASSWORD_LENGTH': { de: (len) => `Das Passwort muss mindestens ${len} Zeichen lang sein.`, en: (len) => `Password must be at least ${len} characters long.` },
+    'ERR_PASSWORD_MISMATCH': { de: 'Passwörter stimmen nicht überein.', en: 'Passwords do not match.' },
+    'ERR_LOGIN_FAILED': { de: 'Falsche E-Mail oder Passwort.', en: 'Incorrect email or password.' },
+    'ERR_INPUT_INVALID': { de: 'Ungültige Eingabe. Bitte überprüfe deine Daten.', en: 'Invalid input. Please check your data.' },
+    'ERR_GENERIC': { de: 'Fehler beim Einloggen. Server nicht erreichbar.', en: 'Error logging in. Server unreachable.' },
+    'ERR_NETWORK': { de: 'Netzwerkfehler. Bitte versuche es später erneut.', en: 'Network error. Please try again later.' },
+    'SUCCESS_LOGIN': { de: 'Erfolgreich eingeloggt. Weiterleitung...', en: 'Successfully logged in. Redirecting...' },
+    'SUCCESS_REGISTER': { de: 'Registrierung erfolgreich! Bitte loggen Sie sich nun ein.', en: 'Registration successful! Please sign in now.' },
+    'ERR_EMAIL_TAKEN': { de: 'Ungültige Eingabe oder E-Mail bereits registriert.', en: 'Invalid input or email already registered.' },
+};
+
+// === 2. Shared Language Store ===
 // Reactive store for current language setting (default: German)
-const LanguageStore = Vue.reactive({
+const LanguageStore = reactive({
   language: 'de'
 });
 
-// === Translation Helper === 
+// === 3. Translation Helper === 
 // returns the correct text based on current language
-const t = (de, en) => LanguageStore.language === 'de' ? de : en;
+const t = (key, ...args) => {
+    const currentLang = LanguageStore.language;
+    const translationObject = translations[key];
 
-// === Input Validation Helpers === 
-const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
+    if (!translationObject) return key;
+
+    // Prioritize current language, fall back to English, then the key itself
+    const text = translationObject[currentLang] || translationObject['en'] || key;
+
+    // Handle parameterized messages
+    if (typeof text === 'function') {
+        return text(...args);
+    }
+    return text;
+};
+
+// === 4. Input Validation Helpers ===
 const isValidEmail = (email) => {
   // Simple regex for basic email format validation
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
-// === Shared Language Switcher ===
+// === 5. Shared Vue Mixin ===
+// Centralizes message state and error handling logic
+const AuthMixin = {
+  data() {
+    return {
+      errorMessage: '',
+      successMessage: ''
+    };
+  },
+   methods: {
+        t, // Include the global translation function
+        // Clears error/success messages
+        clearMessages() {
+            this.errorMessage = '';
+            this.successMessage = '';
+        },
+        // Centralized API error handling logic
+        handleApiError(res, isRegister = false) {
+            this.clearMessages();
+            if (res.status === 401) {
+                this.errorMessage = t('ERR_LOGIN_FAILED');
+            } else if (res.status === 400) {
+                // Use different message for register vs login 400
+                this.errorMessage = t(isRegister ? 'ERR_EMAIL_TAKEN' : 'ERR_INPUT_INVALID');
+            } else {
+                this.errorMessage = t('ERR_GENERIC');
+            }
+        },
+        handleNetworkError(error) {
+            console.error('Fetch error:', error);
+            this.clearMessages();
+            this.errorMessage = t('ERR_NETWORK');
+        }
+    }
+};
+
+// === 6. Shared Components ===
+// Language Switcher Component
 const LanguageSwitcher = {
-  template: `
-    <div class="lang-buttons">
-      <button :class="{ active: language === 'de' }" @click="language = 'de'">
-        <img src="icons/flag-de.png" alt="German Flag" class="flag-icon" /> DE
-      </button>
-      <button :class="{ active: language === 'en' }" @click="language = 'en'">
-        <img src="icons/flag-en.png" alt="German Flag" class="flag-icon" /> EN
-      </button>
-    </div>
-  `,
-  computed: {
-    // Bind component language to shared reactive LanguageStore
-    language: {
-      get() {
-        return LanguageStore.language;
-      },
-      set(val) {
-        LanguageStore.language = val;
-      }
+    template: `
+        <div class="lang-buttons">
+            <button :class="{ active: language === 'de' }" @click="language = 'de'">
+                <img src="icons/flag-de.png" alt="German Flag" class="flag-icon" /> DE
+            </button>
+            <button :class="{ active: language === 'en' }" @click="language = 'en'">
+                <img src="icons/flag-en.png" alt="English Flag" class="flag-icon" /> EN
+            </button>
+        </div>
+    `,
+    computed: {
+        language: {
+            get() {
+                return LanguageStore.language;
+            },
+            set(val) {
+                LanguageStore.language = val;
+            }
+        }
     }
-  }
 };
 
-const API_BASE = 'http://localhost:8001'; // ← API-Basis-URL
+// AuthInput: Reusable component for input fields, handles v-model and password visibility.
+const AuthInput = {
+    props: {
+        modelValue: String, // v-model binding
+        placeholderKey: { type: String, required: true },
+        icon: { type: String, required: true },
+        isPassword: { type: Boolean, default: false },
+        // Use an explicit type prop for email/text input
+        inputType: { type: String, default: 'text' }
+    },
+    mixins: [AuthMixin],
+    template: `
+        <div class="input-with-icon">
+            <!-- Email/Lock Icon -->
+            <img 
+                :src="icon" 
+                :class="{ 'email-icon': icon.includes('email'), 'lock-icon': icon.includes('lock') }"
+                :alt="t(placeholderKey)" 
+            />
+            
+            <input 
+                :type="resolvedType" 
+                :placeholder="t(placeholderKey)" 
+                :value="modelValue" 
+                @input="$emit('update:modelValue', $event.target.value)"
+                :autocomplete="isPassword ? 'off' : 'email'"
+            />
+            
+            <img
+                v-if="isPassword"
+                :src="showPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
+                class="eye-icon"
+                @click="togglePassword"
+                alt="Toggle Password Visibility"
+            />
+        </div>
+    `,
+    data() {
+        return {
+            showPassword: false,
+        };
+    },
+    computed: {
+        resolvedType() {
+            // Logic to handle password visibility toggle
+            if (!this.isPassword) return this.inputType;
+            return this.showPassword ? 'text' : 'password';
+        }
+    },
+    methods: {
+        togglePassword() {
+            this.showPassword = !this.showPassword;
+        }
+    }
+};
 
-// === Login Form ===
+
+// === 7. Login Form (Uses Mixin and AuthInput) ===
 const LoginForm = {
-  components: { LanguageSwitcher },
-  template: `
-    <div class="auth-form">
-      <h2>{{ t('Login', 'Sign In') }}</h2>
-      <LanguageSwitcher />
+    components: { LanguageSwitcher, AuthInput },
+    mixins: [AuthMixin],
+    template: `
+        <div class="auth-form">
+            <h2>{{ t('LOGIN_TITLE') }}</h2>
+            <LanguageSwitcher />
 
-    <!-- Email input -->
-    <div class="input-with-icon">
-      <img src="icons/email.png" class="email-icon" />
-      <input type="email" :placeholder="t('E-Mail', 'Email')" v-model="email" />
-    </div>
+            <AuthInput
+                icon="icons/email.png"
+                placeholderKey="EMAIL_PLACEHOLDER"
+                inputType="email"
+                :modelValue="email"
+                @update:modelValue="email = $event; clearMessages()"
+            />
+            
+            <AuthInput
+                icon="icons/lock.png"
+                placeholderKey="PASSWORD_PLACEHOLDER"
+                :isPassword="true"
+                :modelValue="password"
+                @update:modelValue="password = $event; clearMessages()"
+            />
+            
+            <button @click="login">{{ t('LOGIN_BUTTON') }}</button>
+            
+            <p class="link">
+                <span>{{ t('NO_ACCOUNT_PRE') }}</span>
+                <span class="link-highlight" @click="$emit('switchMode')">
+                    {{ t('NO_ACCOUNT_LINK') }}
+                </span>
+            </p>
 
-     <!-- Password input with toggle visibility-->
-    <div class="input-with-icon">
-      <img src="icons/lock.png" class="lock-icon" />
-      <input :type="showPassword ? 'text' : 'password'" :placeholder="t('Passwort', 'Password')" v-model="password" />
-      <img
-        :src="showPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
-        class="eye-icon"
-        @click="togglePassword"
-        alt="Toggle Password Visibility"
-      />  
-    </div>
-
-       <!-- Login Button -->
-      <button @click="login">{{ t('Einloggen', 'Log In') }}</button>
-      
-      <!-- Switch to register form -->
-      <p class="link">
-       <span>{{ t('Noch kein Account? ', 'No account? ') }}</span>
-        <span class="link-highlight" @click="$emit('switchMode')">
-         {{ t('Jetzt registrieren', 'Register here') }}
-      </span>
-      </p>
-
-      <!-- Display message -->
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <p v-if="successMessage" class="success">{{ successMessage }}</p>
-    </div>
-  `,
-  data() {
-    return {
-      email: '',
-      password: '',
-      showPassword: false,
-      errorMessage: '',
-      successMessage: ''
-    };
-  },
-  methods: {
-    t,  // Use global translation function
-
-    // Toggle password visibility
-    togglePassword() {
-    this.showPassword = !this.showPassword;
+            <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+            <p v-if="successMessage" class="success">{{ successMessage }}</p>
+        </div>
+    `,
+    data() {
+        return {
+            email: '',
+            password: '',
+        };
     },
+    methods: {
+        async login() {
+            this.clearMessages();
 
-    // Handle login logic
-   async login() {
-      this.errorMessage = '';
-      this.successMessage = '';
+            // --- Client-Side Validation ---
+            if (!this.email || !this.password) {
+                this.errorMessage = t('ERR_FILL_FIELDS');
+                return;
+            }
+            if (!isValidEmail(this.email)) {
+                this.errorMessage = t('ERR_INVALID_EMAIL');
+                return;
+            }
 
-      // --- Client-Side Validation ---
-      if (!this.email || !this.password) {
-        this.errorMessage = t('Bitte alle Felder ausfüllen.', 'Please fill in all fields.');
-        return;
-      }
-      if (!isValidEmail(this.email)) {
-        this.errorMessage = t('Ungültiges E-Mail-Format. Bitte eine gültige E-Mail-Adresse eingeben.', 'Invalid email format. Please enter a valid email address.');
-        return;
-      }
+            try {
+                const res = await fetch(`${API_BASE}/user/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: this.email, password: this.password }),
+                    credentials: 'include'
+                });
 
-      try {
-        const res = await fetch(`${API_BASE}/user/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: this.password }),
-          credentials: 'include'
-        });
+                if (res.ok) {
+                    this.successMessage = t('SUCCESS_LOGIN');
+                    setTimeout(() => {
+                        window.location.href = '/Startseitendesign/startseite.html';
+                    }, 1500);
+                } else {
+                    this.handleApiError(res, false);
+                }
 
-        // Backend response handling based on Java code statuses
-        if (res.ok) { // HTTP Status 200 (HttpStatus.OK)
-          this.successMessage = t('Erfolgreich eingeloggt. Weiterleitung...', 'Successfully logged in. Redirecting...');
-          setTimeout(() => {
-            window.location.href = '/Startseitendesign/startseite.html';
-          }, 1500);
-          
-        } else if (res.status === 401) { // HTTP Status 401 (HttpStatus.UNAUTHORIZED)
-          // This covers login failure (email/password mismatch)
-          this.errorMessage = t('Falsche E-Mail oder Passwort.', 'Incorrect email or password.');
-          
-        } else if (res.status === 400) { // HTTP Status 400 (HttpStatus.BAD_REQUEST)
-          // This covers validation failure in the backend (req.validate() fail)
-          this.errorMessage = t('Ungültige Eingabe. Bitte überprüfe deine Daten.', 'Invalid input. Please check your data.');
-        
-        } else {
-          // General error case
-          this.errorMessage = t('Fehler beim Einloggen. Server nicht erreichbar.', 'Error logging in. Server unreachable.');
+            } catch (error) {
+                this.handleNetworkError(error);
+            }
         }
-
-      } catch (error) {
-        console.error('Fehler bei der Anfrage:', error);
-        this.errorMessage = t('Netzwerkfehler. Bitte versuche es später erneut oder registrieren Sie sich.', 'Network error. Please try again later or register.');
-      }
     }
-  }
 };
 
-// === Register Form ===
+// === 8. Register Form (Uses Mixin and AuthInput) ===
 const RegisterForm = {
-  components: { LanguageSwitcher },
-  template: `
-    <div class="auth-form">
-      <h2>{{ t('Registrieren', 'Register') }}</h2>
-      <LanguageSwitcher />
+    components: { LanguageSwitcher, AuthInput },
+    mixins: [AuthMixin],
+    template: `
+        <div class="auth-form">
+            <h2>{{ t('REGISTER_TITLE') }}</h2>
+            <LanguageSwitcher />
 
-    <!-- Email input -->
-    <div class="input-with-icon">
-      <img src="icons/email.png" class="email-icon" />
-      <input type="email" :placeholder="t('E-Mail', 'Email')" v-model="email" />
-    </div>
+            <AuthInput
+                icon="icons/email.png"
+                placeholderKey="EMAIL_PLACEHOLDER"
+                inputType="email"
+                :modelValue="email"
+                @update:modelValue="email = $event; clearMessages()"
+            />
 
-    <!-- Password input -->
-    <div class="input-with-icon">
-      <img src="icons/lock.png" class="lock-icon" />
-      <input :type="showPassword ? 'text' : 'password'" :placeholder="t('Passwort', 'Password')" v-model="password" />
-      <img
-        :src="showPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
-        class="eye-icon"
-        @click="togglePassword"
-        alt="Toggle Password Visibility"
-      />  
-    </div>
+            <AuthInput
+                icon="icons/lock.png"
+                placeholderKey="PASSWORD_PLACEHOLDER"
+                :isPassword="true"
+                :modelValue="password"
+                @update:modelValue="password = $event; clearMessages()"
+            />
+            
+            <AuthInput
+                icon="icons/lock.png"
+                placeholderKey="REPEAT_PASSWORD_PLACEHOLDER"
+                :isPassword="true"
+                :modelValue="repeatPassword"
+                @update:modelValue="repeatPassword = $event; clearMessages()"
+            />
 
-    <!-- Repeat Password input -->
-    <div class="input-with-icon">
-      <img src="icons/lock.png" class="lock-icon" />
-      <input :type="showRepeatPassword ? 'text' : 'password'" :placeholder="t('Passwort wiederholen', 'Repeat Password')" v-model="repeatPassword" />
-      <img
-        :src="showRepeatPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
-        class="eye-icon"
-        @click="toggleRepeatPassword"
-        alt="Toggle Password Visibility"
-      />  
-    </div>
+            <button @click="register">{{ t('REGISTER_BUTTON') }}</button>
 
-      <!-- Register button -->
-      <button @click="register">{{ t('Registrieren', 'Register') }}</button>
+            <p class="link">
+                <span>{{ t('ALREADY_REGISTERED_PRE') }}</span>
+                <span class="link-highlight" @click="$emit('switchMode')">
+                    {{ t('ALREADY_REGISTERED_LINK') }}
+                </span>
+            </p>
 
-      <!-- Switch to login form -->
-      <p class="link">
-        <span>{{ t('Bereits registriert? ', 'Already registered? ') }}</span>
-        <span class="link-highlight" @click="$emit('switchMode')">
-         {{ t('Zum Login', 'Login here') }}
-        </span>
-      </p>
-
-
-      <!-- msg -->
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-      <p v-if="successMessage" class="success">{{ successMessage }}</p>
-    </div>
-  `,
-  
-  data() {
-    return {
-      email: '',
-      password: '',
-      repeatPassword: '',
-      showRepeatPassword: false,
-      showPassword: false,
-      errorMessage: '',
-      successMessage: ''
-    };
-  },
-  methods: {
-    t,
-
-    togglePassword() {
-      this.showPassword = !this.showPassword;
+            <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+            <p v-if="successMessage" class="success">{{ successMessage }}</p>
+        </div>
+    `,
+    data() {
+        return {
+            email: '',
+            password: '',
+            repeatPassword: '',
+        };
     },
-    toggleRepeatPassword() {
-      this.showRepeatPassword = !this.showRepeatPassword;
-    },
-    
-    // Handle registration logic
-    async register() {
-      this.errorMessage = '';
-      this.successMessage = '';
+    methods: {
+        async register() {
+            this.clearMessages();
 
-      // --- Client-Side Validation ---
-      if (!this.email || !this.password || !this.repeatPassword) {
-        this.errorMessage = t('Bitte alle Felder ausfüllen.', 'Please fill in all fields.');
-        return;
-      }
-      if (!isValidEmail(this.email)) {
-        this.errorMessage = t('Ungültiges E-Mail-Format.', 'Invalid email format.');
-        return;
-      }
+            // --- Client-Side Validation ---
+            if (!this.email || !this.password || !this.repeatPassword) {
+                this.errorMessage = t('ERR_FILL_FIELDS');
+                return;
+            }
+            if (!isValidEmail(this.email)) {
+                this.errorMessage = t('ERR_INVALID_EMAIL');
+                return;
+            }
+            if (this.password.length < MIN_PASSWORD_LENGTH) {
+                this.errorMessage = t('ERR_PASSWORD_LENGTH', MIN_PASSWORD_LENGTH);
+                return;
+            }
+            if (this.password !== this.repeatPassword) {
+                this.errorMessage = t('ERR_PASSWORD_MISMATCH');
+                return;
+            }
 
-      // Check password length
-      if (this.password.length < MIN_PASSWORD_LENGTH) {
-        this.errorMessage = t(
-          `Das Passwort muss mindestens ${MIN_PASSWORD_LENGTH} Zeichen lang sein.`, 
-          `Password must be at least ${MIN_PASSWORD_LENGTH} characters long.`
-        );
-        return;
-      }
-      // Check password match
-      if (this.password !== this.repeatPassword) {
-        this.errorMessage = t('Passwörter stimmen nicht überein.', 'Passwords do not match.');
-        return;
-      }
+            try {
+                const res = await fetch(`${API_BASE}/user/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: this.email, password: this.password }),
+                    credentials: 'include'
+                });
 
-      try {
-        const res = await fetch(`${API_BASE}/user/create`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: this.email, password: this.password }),
-          credentials: 'include'
-        });
+                if (res.ok) {
+                    this.successMessage = t('SUCCESS_REGISTER');
+                    setTimeout(() => {
+                        this.$emit('switchMode');
+                    }, 3000);
+                } else {
+                    this.handleApiError(res, true);
+                }
 
-        // Backend response handling based on Java code statuses
-        if (res.ok) { // HTTP Status 200 (HttpStatus.OK)
-          // Register success --> weiterleiten to login page
-          this.successMessage = t(
-            'Registrierung erfolgreich! Bitte loggen Sie sich nun ein.',
-            'Registration successful! Please sign in now.'
-          );
-          // Instead of redirecting to /Login/index.html, switch back to login form for better UX
-          setTimeout(() => {
-            this.$emit('switchMode');
-            this.successMessage = ''; // Clear success message after switch
-          }, 3000);
-
-        } else if (res.status === 400) { // HTTP Status 400 (HttpStatus.BAD_REQUEST)
-          // a general 'invalid input' warning or assume the email is taken
-          this.errorMessage = t(
-            'Ungültige Eingabe oder E-Mail bereits registriert.',
-            'Invalid input or email already registered.');
-        } else {
-          // General error case
-          this.errorMessage = t('Registrierung nicht erfolgreich. Serverfehler.', 'Registration failed. Server error.');
+            } catch (err) {
+                this.handleNetworkError(err);
+            }
         }
-        
-      } catch (err) {
-       console.error('Fehler bei der Anfrage:', err);
-       this.errorMessage = t('Netzwerkfehler bei der Registrierung.', 'Network error during registration.');
-      }
     }
-  }
 };
 
-// === Auth Wrapper ===
-// Parent component to toggle between login and register form
+// === 9. Auth Wrapper ===
 const AuthWrapper = {
-  components: { LoginForm, RegisterForm },
-  template: `
-    <div class="auth-wrapper">
-      <component :is="isLogin ? 'LoginForm' : 'RegisterForm'" @switchMode="toggleForm" />
-    </div>
-  `,
-  data() {
-    return {
-      isLogin: true
-    };
-  },
-  methods: {
-    // Toggle between login and register
-    toggleForm() {
-      this.isLogin = !this.isLogin;
-      // Clear all potential messages when switching views
-      const currentForm = this.isLogin ? this.$refs.loginForm : this.$refs.registerForm;
-      if (currentForm) {
-        currentForm.errorMessage = '';
-        currentForm.successMessage = '';
-      }
+    components: { LoginForm, RegisterForm },
+    template: `
+        <div class="auth-wrapper">
+            <!-- Ensure components are accessed as component name strings -->
+            <component :is="isLogin ? 'LoginForm' : 'RegisterForm'" @switchMode="toggleForm" />
+        </div>
+    `,
+    data() {
+        return {
+            isLogin: true
+        };
+    },
+    methods: {
+        toggleForm() {
+            this.isLogin = !this.isLogin;
+        }
     }
-  }
 };
 
-// === Mount App ===
-const app = Vue.createApp(AuthWrapper);
+// === 10. Mount App ===
+const app = createApp(AuthWrapper);
 app.component('LanguageSwitcher', LanguageSwitcher);
+app.component('AuthInput', AuthInput);
 app.mount('#app');

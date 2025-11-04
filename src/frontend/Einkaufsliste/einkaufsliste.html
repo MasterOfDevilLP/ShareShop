@@ -60,7 +60,7 @@
              <button class="btn btn-outline-success custom-button":title="product.ticked ? 'Zurücksetzen' : 'Als gekauft markieren'" @click="toggleTick(product)">
             {{ product.ticked ? '←' : '✓' }}
           </button>
-          <button class="delete-button" @click="removeFromList(product)">x</button>
+          <button class="delete-product-button" @click="removeFromList(product)">x</button>
             </div>
           </div>
         </main>

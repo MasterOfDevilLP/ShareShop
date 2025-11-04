@@ -86,6 +86,14 @@ paths:
         "401": 
           $ref: "#/components/responses/unauthorized"
         
+  /user/logout:
+    post:
+      summary: log out
+      tags:
+        - users
+      responses:
+        "200":
+          description: successfully logged out, or was not logged in
 
   /user:
     get:

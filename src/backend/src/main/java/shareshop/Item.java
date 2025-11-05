@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.math.BigDecimal;
 
 public class Item {
+    private DBConnectionHandler connectionHandler;
     private UUID itemID;
     private UUID wgID;
     private int lastCachedChangeID;
@@ -18,6 +19,7 @@ public class Item {
 
     /**
      * Constructor of Class Item
+     * @param connectionHandler
      * @param itemID
      * @param wgID
      * @param lastCachedChangeID
@@ -25,7 +27,8 @@ public class Item {
      * @param itemDescription
      * @param price
      */
-    public Item(UUID itemID, UUID wgID, int lastCachedChangeID, String itemName, String itemDescription, BigDecimal price) {
+    public Item(DBConnectionHandler connectionHandler, UUID itemID, UUID wgID, int lastCachedChangeID, String itemName, String itemDescription, BigDecimal price) {
+        this.connectionHandler = connectionHandler;
         this.itemID = itemID;
         this.wgID = wgID;
         this.lastCachedChangeID = lastCachedChangeID;
@@ -52,6 +55,7 @@ public class Item {
      * @throws SQLException
      */
     public Item(DBConnectionHandler connectionHandler, UUID itemID) throws SQLException {
+        this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT * FROM items WHERE itemid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
@@ -74,6 +78,7 @@ public class Item {
     // create a new Item
     // TODO: create an initial change entry as well
     public Item(DBConnectionHandler connectionHandler, WG wg, String name, String description, BigDecimal price) throws SQLException {
+        this.connectionHandler = connectionHandler;
     	String statementStr = "INSERT INTO items (itemid, wgid, itemname, itemdescription, price) VALUES (?, ?, ?, ?, ?)";
         connectionHandler.makeSureItsOpen();
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
@@ -101,11 +106,10 @@ public class Item {
 
     /**
      * "generates" the next ID for a new change entry in the itemchanges table
-     * @param connectionHandler
      * @return
      * @throws SQLException
      */
-    private int newChangeID(DBConnectionHandler connectionHandler) throws SQLException {
+    private int newChangeID() throws SQLException {
         String lastChangesString = new String("SELECT MAX(itemchangeid) FROM itemchanges WHERE itemid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
@@ -122,11 +126,10 @@ public class Item {
 
     /**
      * update item name
-     * @param connectionHandler
      * @param itemName
      * @throws SQLException
      */
-    public void setItemName(DBConnectionHandler connectionHandler, String itemName) throws SQLException {
+    public void setItemName(String itemName) throws SQLException {
         String updateString = new String("UPDATE items SET itemname = ? WHERE itemid = ?");
         String itemChangeString = new String("INSERT INTO itemchanges(itemid, itemchangeid, change, changedate, columnchange, itemname) VALUES(?, ?, ?, ?, ?, ?)");
         connectionHandler.makeSureItsOpen();
@@ -138,7 +141,7 @@ public class Item {
             update.setObject(2, this.itemID);
 
             itemChange.setObject(1, this.itemID);
-            itemChange.setInt(2, newChangeID(connectionHandler));
+            itemChange.setInt(2, newChangeID());
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMNAME");
@@ -159,11 +162,10 @@ public class Item {
 
     /**
      * update item description
-     * @param connectionHandler
      * @param itemDescription
      * @throws SQLException
      */
-    public void setItemDescription(DBConnectionHandler connectionHandler, String itemDescription) throws SQLException {
+    public void setItemDescription(String itemDescription) throws SQLException {
         String updateString = new String("UPDATE items SET itemdescription = ? WHERE itemid = ?");
         String itemChangeString = new String("INSERT INTO itemchanges(itemid, itemchangeid, change, changedate, columnchange, itemdescription) VALUES(?, ?, ?, ?, ?, ?)");
         connectionHandler.makeSureItsOpen();
@@ -175,7 +177,7 @@ public class Item {
             update.setObject(2, this.itemID);
 
             itemChange.setObject(1, this.itemID);
-            itemChange.setInt(2, newChangeID(connectionHandler));
+            itemChange.setInt(2, newChangeID());
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMDESCR");
@@ -196,11 +198,10 @@ public class Item {
 
     /**
      * update price
-     * @param connectionHandler
      * @param price
      * @throws SQLException
      */
-    public void setPrice(DBConnectionHandler connectionHandler, BigDecimal price) throws SQLException {
+    public void setPrice(BigDecimal price) throws SQLException {
         String updateString = new String("UPDATE items SET price = ? WHERE itemid = ?");
         String itemChangeString = new String("INSERT INTO itemchanges(itemid, itemchangeid, change, changedate, columnchange, price) VALUES(?, ?, ?, ?, ?, ?)");
         connectionHandler.makeSureItsOpen();
@@ -212,7 +213,7 @@ public class Item {
             update.setObject(2, this.itemID);
 
             itemChange.setObject(1, this.itemID);
-            itemChange.setInt(2, newChangeID(connectionHandler));
+            itemChange.setInt(2, newChangeID());
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMPRICE");
@@ -275,10 +276,9 @@ public class Item {
 
     /**
      * removes the item from the database
-     * @param connectionHandler
      * @throws SQLException
      */
-    public void remove(DBConnectionHandler connectionHandler) throws SQLException {
+    public void remove() throws SQLException {
         String removeString = new String("DELETE FROM items WHERE itemid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteItem = connectionHandler.conn.prepareStatement(removeString)) {

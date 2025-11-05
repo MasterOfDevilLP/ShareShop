@@ -58,6 +58,7 @@ public class ShoppingList {
          */
         private int newChangeID(DBConnectionHandler connectionHandler) throws SQLException {
             String lastChangesString = new String("SELECT MAX(listchangeid) FROM listchanges WHERE shoppinglistid = ?");
+            connectionHandler.makeSureItsOpen();
             PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
             lastChanges.setObject(1, this.shoppingListID);
             ResultSet rs = lastChanges.executeQuery();
@@ -79,6 +80,7 @@ public class ShoppingList {
         public void setAmount(DBConnectionHandler connectionHandler, int amount) throws SQLException {
             String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?");
             String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, amount) VALUES(?, ?, ?, ?, ?, ?)");
+            connectionHandler.makeSureItsOpen();
             try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                 connectionHandler.conn.setAutoCommit(false);
@@ -167,6 +169,7 @@ public class ShoppingList {
      */
     public ShoppingList(DBConnectionHandler connectionHandler, UUID shoppingListID) throws SQLException {
         String selectString = new String ("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
+        connectionHandler.makeSureItsOpen();
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, shoppingListID);
         ResultSet rs = select.executeQuery();
@@ -341,6 +344,7 @@ public class ShoppingList {
                     if (itemAllocation.getItem().equals(item)) {
                         String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?"); // will get put into updateCache() later
                         String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                        connectionHandler.makeSureItsOpen();
                         try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                                 PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                             connectionHandler.conn.setAutoCommit(false);
@@ -377,6 +381,7 @@ public class ShoppingList {
                 // if the item is not on the list, it gets added onto the list with the amount
                 String insertString = new String("INSERT INTO itemallocation(itemid, shoppinglistid, creationdate, amount) VALUES(?, ?, ?, ?)");
                 String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                connectionHandler.makeSureItsOpen();
                 try (   PreparedStatement insert = connectionHandler.conn.prepareStatement(insertString);
                         PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                     connectionHandler.conn.setAutoCommit(false);
@@ -416,6 +421,7 @@ public class ShoppingList {
                         if (itemAllocation.getAmount() - amount <= 0) { // the item gets completely removed from the shoppinglist
                             String deleteString = new String("DELETE FROM itemallocation WHERE itemid = ? AND shoppinglistid = ?");
                             String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                            connectionHandler.makeSureItsOpen();
                             try (   PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(deleteString);
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);
@@ -491,6 +497,7 @@ public class ShoppingList {
                         if (itemAllocation.getAmount() - amount <= 0) { // the item gets completely removed from the shoppinglist
                             String deleteString = new String("DELETE FROM itemallocation WHERE itemid = ? AND shoppinglistid = ?");
                             String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+                            connectionHandler.makeSureItsOpen();
                             try (   PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(deleteString);
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);
@@ -524,6 +531,7 @@ public class ShoppingList {
                         } else {
                             String updateString = new String("UPDATE itemallocation SET amount = ? WHERE itemid = ? AND shoppinglistid = ?"); // will get put into updateCache() later
                             String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, itemid, userid, amount, price) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+                            connectionHandler.makeSureItsOpen();
                             try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                                     PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
                                 connectionHandler.conn.setAutoCommit(false);

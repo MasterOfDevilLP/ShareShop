@@ -62,9 +62,9 @@ public class ListEndpoints {
 			
 			UUID wgid = UUID.fromString(wid);
 			
-			if(!wgid.equals(usr.getWgID())) {
+			if(!usr.isUserInWG(wgid)) {
 				// wrong WG
-				logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
@@ -119,22 +119,22 @@ public class ListEndpoints {
 		
 		UUID wgid = UUID.fromString(wid);
 		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
-		}
-		
-		WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
-		if(wg == null) {
-			// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
-			logger.debug("no such WG");
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
-		}
-		
 		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		
 			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
 			if(slist == null) {
 				logger.debug("no such list");
@@ -184,23 +184,22 @@ public class ListEndpoints {
 		}
 		
 		UUID wgid = UUID.fromString(wid);
-		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
-		}
-		
-		WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
-		if(wg == null) {
-			// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
-			logger.debug("no such WG");
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
-		}
-		
 		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		
 			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
 			if(slist == null) {
 				logger.debug("no such list");

@@ -1,5 +1,6 @@
 package shareshop.rest;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -56,14 +57,18 @@ public class ItemEndpoints {
 		}
 		
 		UUID wgid = UUID.fromString(wid);
-		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			return;
 		}
-		
 		// TODO: search is effectively stubbed currently
 		Item[] items = appCtx.itemManager.search(appCtx.wgManager.getWG(wgid), "");
 		
@@ -104,10 +109,16 @@ public class ItemEndpoints {
 		
 		UUID wgid = UUID.fromString(wid);
 		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			return;
 		}
 		
@@ -181,10 +192,16 @@ public class ItemEndpoints {
 		
 		UUID wgid = UUID.fromString(wid);
 		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			return;
 		}
 		

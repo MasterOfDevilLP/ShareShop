@@ -2,6 +2,7 @@ package shareshop.rest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.notNull;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.matchers.Not;
 
@@ -25,6 +27,7 @@ import io.javalin.config.Key;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import shareshop.AppContext;
 import shareshop.User;
 import shareshop.Manager.UserManager;
@@ -36,6 +39,7 @@ class TCRestUser {
 	private final User testusr = mock(User.class);
 	private final UserManager usermgr = mock(UserManager.class);
 	private final HttpServletRequest req = mock(HttpServletRequest.class);
+	private final HttpSession session = mock(HttpSession.class);
 	
 	@BeforeEach
 	void setup() {
@@ -43,6 +47,8 @@ class TCRestUser {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		when(ctx.appData(ctxKey)).thenReturn(appctx);
 		when(ctx.req()).thenReturn(req);
+		when(req.getSession()).thenReturn(session);
+		when(req.getSession(anyBoolean())).thenReturn(session);
 		appctx.userManager = usermgr;
 		when(testusr.getUserID()).thenReturn(UUID.randomUUID());
 		when(usermgr.create(not(eq("existuser")), anyString())).thenReturn(testusr);
@@ -88,6 +94,15 @@ class TCRestUser {
 		when(ctx.body()).thenReturn("{\"email\":\"testuser\", \"password\":\"p\"}");
 		UsersEndpoints.epLogin(ctx);
 		verify(ctx, atLeastOnce()).status(HttpStatus.UNAUTHORIZED);
+		verify(ctx, never()).sessionAttribute(eq("AuthorizedUID"), notNull());
+	}
+	
+	// there isn't really a case where a logout should fail
+	@Test
+	void testLogout() {
+		UsersEndpoints.epLogout(ctx);
+		verify(ctx, atLeastOnce()).status(HttpStatus.OK);
+		verify(session).invalidate();
 		verify(ctx, never()).sessionAttribute(eq("AuthorizedUID"), notNull());
 	}
 

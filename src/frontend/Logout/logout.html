@@ -15,21 +15,24 @@
   <body>
     <div id="app">
       <div class="iphone-app">
-        <header class="app-header">
-          <h2>{{ t('Profil', 'Profile') }}</h2>
-        </header>
-
         <main class="app-content profile-page">
           <section class="profile-section">
             <div class="profile-header">
               <img
-                src="../Startseitendesign/icons/user-placeholder.png"
+                src="../Startseitendesign/icons/User_alt.svg"
                 class="profile-pic"
               />
               <div class="profile-info">
                 <h3>{{ user.name }}</h3>
                 <p>{{ user.email }}</p>
               </div>
+              <!-- ✏️ Stift-Icon zum Bearbeiten -->
+              <button class="edit-btn" @click="editProfile">
+                <img
+                  src="../Startseitendesign/icons/pen.svg"
+                  alt="Profil bearbeiten"
+                />
+              </button>
             </div>
 
             <hr />

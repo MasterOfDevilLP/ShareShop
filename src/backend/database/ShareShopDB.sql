@@ -388,7 +388,7 @@ ALTER TABLE ONLY public.users
 --
 
 -- unique email constraint
-ALTER TABLE users ADD CONSTRAINT unique_email UNIQUE (email);
+ALTER TABLE public.users ADD CONSTRAINT unique_email UNIQUE (email);
 
 -- adding allocation table for user to wg
 CREATE TABLE public.userallocation (

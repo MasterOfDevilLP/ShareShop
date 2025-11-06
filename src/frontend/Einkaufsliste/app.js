@@ -257,10 +257,9 @@ new Vue({
       })
       .then(res => res.json())
       .then(updatedList => {
-        this.listItems = this.parseListItems(updatedList).map(item => ({
-          ...item,
-          einheit: item.einheit || 'Stück' // giữ đơn vị cũ
-        }));;
+        this.listItems = this.parseListItems(updatedList);
+        this.loadList();
+        this.loadWGItems()
       })
       .catch(err => console.error('Cannot tick item', err));
     },
@@ -329,4 +328,3 @@ new Vue({
 //     });
 //   });
 // }
-

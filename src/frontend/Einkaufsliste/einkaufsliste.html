@@ -49,15 +49,20 @@
                 <!-- <img src="icons/default.png" alt="Icon" class="nav-icon" /> -->
               </div>
               <div class="product-info">
-                <div class="product-name" :style="{ textDecoration: product.ticked ? 'line-through' : 'none' }">{{ product.name }}</div> 
+                <!-- <div class="product-name" :style="{ textDecoration: product.ticked ? 'line-through' : 'none' }">{{ product.name }}</div>  -->
+                <div class="product-name" >{{ product.name }}</div> 
+
                 <div class="product-meta">
-                  <span v-if="product.ticked"> Gekauft: {{ product.datum }} </br></span> 
+                  <!-- <span v-if="product.ticked"> Gekauft: {{ product.datum }} </br></span>  -->
+                  Menge: {{ product.amount }} {{ product.einheit }}
                 </div>
               </div>
               <div class="product-price">{{ product.preis || '—' }} €</div>
               <button class="btn btn-outline-info  custom-button" title="Artikel anpassen" @click ="openChangeProduct(product)">...</button>
-             <button class="btn btn-outline-success custom-button":title="product.ticked ? 'Zurücksetzen' : 'Als gekauft markieren'" @click="toggleTick(product)">
-            {{ product.ticked ? '←' : '✓' }}
+             <!-- <button class="btn btn-outline-success custom-button":title="product.ticked ? 'Zurücksetzen' : 'Als gekauft markieren'" @click="toggleTick(product)">
+            {{ product.ticked ? '←' : '✓' }} -->
+             <button class="btn btn-outline-success custom-button" title="Als gekauft markieren" @click="toggleTick(product)">
+            {{ '✓' }}
           </button>
           <button class="delete-product-button" @click="removeFromList(product)">x</button>
             </div>

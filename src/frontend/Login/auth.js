@@ -122,7 +122,7 @@ const LoginForm = {
         }
 
         if (res.ok) {
-          window.location.href = '/Startseitendesign/startseite.html';
+          window.location.href = '../Startseitendesign/startseite.html';
         } else if (res.status === 401) {
           this.errorMessage = t('Falsche Email oder Passwort.', 'Incorrect email or password.');
         } else {

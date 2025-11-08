@@ -14,6 +14,9 @@ BEGIN;
     ALTER TABLE ONLY public.userallocation
     	ADD CONSTRAINT userallocation_wgid_fkey FOREIGN KEY (wgid) REFERENCES public.wg(wgid) ON DELETE CASCADE;
     
+    -- keep users in their WGs
+   	INSERT INTO public.userallocation (userid, wgid, joindate) SELECT users.userid, users.wgid, NOW() FROM public.users as users WHERE users.wgid IS NOT NULL;
+    
     -- removing wgid from users table
     ALTER TABLE ONLY public.users
         DROP CONSTRAINT users_wgid_fkey;

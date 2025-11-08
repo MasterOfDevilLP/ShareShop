@@ -1,5 +1,6 @@
 package shareshop.rest;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -56,14 +57,18 @@ public class ItemEndpoints {
 		}
 		
 		UUID wgid = UUID.fromString(wid);
-		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			return;
 		}
-		
 		// TODO: search is effectively stubbed currently
 		Item[] items = appCtx.itemManager.search(appCtx.wgManager.getWG(wgid), "");
 		
@@ -83,6 +88,7 @@ public class ItemEndpoints {
 	
 	private static void registerGet(Javalin app) {
 		app.get(basepath, ctx -> {
+<<<<<<< HEAD
 			String wid = ctx.pathParam("wid");
 			
 			// search parameters
@@ -125,6 +131,9 @@ public class ItemEndpoints {
 			ctx.contentType(ContentType.JSON);
 			ctx.result(gson.toJson(resp));
 			ctx.status(HttpStatus.OK);
+=======
+			epGet(ctx);
+>>>>>>> merge_fix
 		});
 	}
 	
@@ -145,10 +154,16 @@ public class ItemEndpoints {
 		
 		UUID wgid = UUID.fromString(wid);
 		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			return;
 		}
 		
@@ -170,6 +185,7 @@ public class ItemEndpoints {
 	
 	private static void registerGetItem(Javalin app) {
 		app.get(basepath + "/{iid}", ctx -> {
+<<<<<<< HEAD
 			String wid = ctx.pathParam("wid");
 			String iid = ctx.pathParam("iid");
 			
@@ -206,6 +222,9 @@ public class ItemEndpoints {
 			ctx.contentType(ContentType.JSON);
 			ctx.result(gson.toJson(resp));
 			ctx.status(HttpStatus.OK);
+=======
+			epGetItem(ctx);
+>>>>>>> merge_fix
 		});
 	}
 	
@@ -257,10 +276,16 @@ public class ItemEndpoints {
 		
 		UUID wgid = UUID.fromString(wid);
 		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 			return;
 		}
 		
@@ -284,6 +309,7 @@ public class ItemEndpoints {
 	
 	private static void registerPost(Javalin app) {
 		app.post(basepath, ctx -> {
+<<<<<<< HEAD
 			String wid = ctx.pathParam("wid");
 			Logger logger = LoggerFactory.getLogger(ItemEndpoints.class);
 			AppContext appCtx = (AppContext) ctx.appData(ctxKey);
@@ -320,6 +346,9 @@ public class ItemEndpoints {
 			ctx.contentType(ContentType.JSON);
 			ctx.result(gson.toJson(resp));
 			ctx.status(HttpStatus.OK);
+=======
+			epPost(ctx);
+>>>>>>> merge_fix
 		});
 	}
 }

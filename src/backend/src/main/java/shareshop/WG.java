@@ -59,11 +59,12 @@ public class WG {
     	UUID wid = UUID.randomUUID();
     	try {
     		Date creationDate = Date.valueOf(LocalDate.now());
-    		connectionHandler.conn.setAutoCommit(true);
+    		connectionHandler.conn.setAutoCommit(false);
     		statement.setObject(1, wid);
     		statement.setString(2, name);
     		statement.setDate(3, creationDate);
     		statement.execute();
+    		connectionHandler.conn.commit();
     		statement.close();
     		this.wgID = wid;
     		this.wgName = name;
@@ -169,6 +170,7 @@ public class WG {
         statement.setObject(1, user.getUserID());
         statement.setObject(2, this.wgID);
         statement.setDate(3, joinDate);
+        statement.execute();
         connectionHandler.conn.commit();
         statement.close();
         //user.setWgID(connectionHandler, this.wgID);

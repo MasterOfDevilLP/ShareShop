@@ -59,12 +59,6 @@ public class WGEndpoints {
 				return;
 			}
 			
-			UUID wgid = UUID.fromString(wid);
-		
-			if(!usr.isUserInWG(wgid)) {
-				// wrong WG
-				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
-				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 			if(!req.validate()) {
 				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
 				return;
@@ -105,27 +99,32 @@ public class WGEndpoints {
 		}
 		
 		UUID wgid = UUID.fromString(wid);
-		
-		if(!wgid.equals(usr.getWgID())) {
-			// wrong WG
-			logger.debug("wrong WG. Expected {}, got {}", usr.getWgID(), wgid);
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WGInformationResponse resp = new WGInformationResponse(wg);
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
 		}
-		
-		WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
-		if(wg == null) {
-			// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
-			logger.debug("no such WG");
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
-			return;
-		}
-		
-		WGInformationResponse resp = new WGInformationResponse(wg);
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		ctx.contentType(ContentType.JSON);
-		ctx.result(gson.toJson(resp));
-		ctx.status(HttpStatus.OK);
 	}
 	
 	private static void registerGet(Javalin app) {
@@ -237,25 +236,25 @@ public class WGEndpoints {
 		});
 	}
 	
-	private static void registerGetLists(Javalin app) {
-		Key ctxKey = new Key<AppContext>("Context");
-		app.get(basepath + "/{wid}/list", ctx -> {
-			String wid = ctx.pathParam("wid");
-			
-			
-			Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
-			AppContext appCtx = (AppContext) ctx.appData(ctxKey);
-			User usr = RestUtils.getAuthorizedUser(ctx);
-			
-			if(usr == null) {
-				// noone's logged in
-				logger.debug("no user logged in");
-				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
-				return;
-			}
-			
-			UUID wgid = UUID.fromString(wid);
-			
+	public static void epGetLists(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		String wid = ctx.pathParam("wid");
+		
+		
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		
+		try {
 			if(!usr.isUserInWG(wgid)) {
 				// wrong WG
 				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
@@ -270,8 +269,9 @@ public class WGEndpoints {
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
 				return;
 			}
-			
-			var lists = wg.lists(appCtx.conn);
+		
+			ArrayList<ShoppingList> lists;
+			lists = wg.lists(appCtx.conn);
 			ArrayList<ListContentResponse> resp = new ArrayList<ListContentResponse>();
 			for(var l : lists) {
 				resp.add(new ListContentResponse(l));

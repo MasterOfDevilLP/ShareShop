@@ -1,5 +1,7 @@
 package shareshop.rest;
 
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,14 +142,21 @@ public class UsersEndpoints {
 			
 	public static void epGet(Context ctx) {
 		User usr = RestUtils.getAuthorizedUser(ctx);
-		if(usr != null) {
-			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-			UserInformationResponse resp = new UserInformationResponse(usr);
-			ctx.contentType(ContentType.JSON);
-			ctx.result(gson.toJson(resp));
-			ctx.status(HttpStatus.OK);
-		} else {				
-			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+		try {
+			if(usr != null) {
+				Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+				UserInformationResponse resp = new UserInformationResponse(usr);
+				ctx.contentType(ContentType.JSON);
+				ctx.result(gson.toJson(resp));
+				ctx.status(HttpStatus.OK);
+			} else {				
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+			return;
 		}
 	}
 	

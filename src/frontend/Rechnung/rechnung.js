@@ -4,37 +4,50 @@ const { createApp, ref, computed, toRaw } = Vue;
 const App = {
     // Component setup function (Composition API)
     setup() {
-        // --- State/Data (Reactive References) ---
-        
+        // State/Data (Reactive References)
+
         // Modal state
         const isModalOpen = ref(false);
         const selectedTransaction = ref(null);
 
         // Core transaction data
+        // !!!! To-Do: fetch from a backend API !!!!
         const transactions = ref([
-            { id: 1, store: 'REWE', date: '21/04/2025', total: 9.21, paidBy: 'Mir', participants: ['Mir', 'Woman'], myShare: 4.61, myStatus: 'verlangen',
-              splits: [{ person: 'Mir', amount: 9.21, isPayer: true, isMe: true }, { person: 'Woman', amount: 4.61, isPayer: false, isMe: false }] },
-            { id: 2, store: 'dm', date: '30/04/2025', total: 14.19, paidBy: 'Woman', participants: ['Woman', 'Mir'], myShare: 7.10, myStatus: 'bezahlen',
-              splits: [{ person: 'Woman', amount: 14.19, isPayer: true, isMe: false }, { person: 'Mir', amount: 7.10, isPayer: false, isMe: true }] },
-            { id: 3, store: 'REWE', date: '21/04/2025', total: 10.07, paidBy: 'Mir', participants: ['Mir', 'Woman'], myShare: 5.04, myStatus: 'verlangen',
-              splits: [{ person: 'Mir', amount: 10.07, isPayer: true, isMe: true }, { person: 'Woman', amount: 5.04, isPayer: false, isMe: false }] },
-            { id: 4, store: 'Woman', date: '15/04/2025', total: 75, paidBy: 'Woman', participants: ['Woman', 'Mir'], myShare: 37.5, myStatus: 'verrechnen',
-              splits: [{ person: 'Woman', amount: 75, isPayer: true, isMe: false }, { person: 'Mir', amount: 37.5, isPayer: false, isMe: true }] },
-            { id: 5, store: 'Bob', date: '10/04/2025', total: 12, paidBy: 'Bob', participants: ['Bob', 'Mir'], myShare: 6, myStatus: 'verlangen',
-              splits: [{ person: 'Bob', amount: 12, isPayer: true, isMe: false }, { person: 'Mir', amount: 6, isPayer: false, isMe: true }] },
-            { id: 6, store: 'Value', date: '05/04/2025', total: 12, paidBy: 'Mir', participants: ['Mir', 'A'], myShare: 6, myStatus: 'fertig',
-              splits: [{ person: 'Mir', amount: 12, isPayer: true, isMe: true }, { person: 'A', amount: 6, isPayer: false, isMe: false }] }
+            {
+                id: 1, store: 'REWE', date: '21/04/2025', total: 9.21, paidBy: 'Mir', participants: ['Mir', 'Woman'], myShare: 4.61, myStatus: 'verlangen',
+                splits: [{ person: 'Mir', amount: 9.21, isPayer: true, isMe: true }, { person: 'Woman', amount: 4.61, isPayer: false, isMe: false }]
+            },
+            {
+                id: 2, store: 'dm', date: '30/04/2025', total: 14.19, paidBy: 'Woman', participants: ['Woman', 'Mir'], myShare: 7.10, myStatus: 'bezahlen',
+                splits: [{ person: 'Woman', amount: 14.19, isPayer: true, isMe: false }, { person: 'Mir', amount: 7.10, isPayer: false, isMe: true }]
+            },
+            {
+                id: 3, store: 'REWE', date: '21/04/2025', total: 10.07, paidBy: 'Mir', participants: ['Mir', 'Woman'], myShare: 5.04, myStatus: 'verlangen',
+                splits: [{ person: 'Mir', amount: 10.07, isPayer: true, isMe: true }, { person: 'Woman', amount: 5.04, isPayer: false, isMe: false }]
+            },
+            {
+                id: 4, store: 'Woman', date: '15/04/2025', total: 75, paidBy: 'Woman', participants: ['Woman', 'Mir'], myShare: 37.5, myStatus: 'verrechnen',
+                splits: [{ person: 'Woman', amount: 75, isPayer: true, isMe: false }, { person: 'Mir', amount: 37.5, isPayer: false, isMe: true }]
+            },
+            {
+                id: 5, store: 'Bob', date: '10/04/2025', total: 12, paidBy: 'Bob', participants: ['Bob', 'Mir'], myShare: 6, myStatus: 'verlangen',
+                splits: [{ person: 'Bob', amount: 12, isPayer: true, isMe: false }, { person: 'Mir', amount: 6, isPayer: false, isMe: true }]
+            },
+            {
+                id: 6, store: 'Value', date: '05/04/2025', total: 12, paidBy: 'Mir', participants: ['Mir', 'A'], myShare: 6, myStatus: 'fertig',
+                splits: [{ person: 'Mir', amount: 12, isPayer: true, isMe: true }, { person: 'A', amount: 6, isPayer: false, isMe: false }]
+            }
         ]);
 
         // --- Utility Functions/Computed Properties ---
-    
-        // Helper function (now a method)
+
+        // Maps the internal status keys ('verlangen', 'bezahlen', etc.) to display labels.
         const getStatusLabel = (status) => {
             const labels = { verrechnen: 'Verrechnen', verlangen: 'Verlangen', bezahlen: 'Bezahlen', fertig: 'Fertig' };
             return labels[status] || status;
         };
-        
-        // Helper function (now a method)
+
+        // Calculates the specific amount the user either owes (-) or is owed (+) for a transaction.
         const getTransactionAmount = (t) => {
             if (t.myStatus === 'verlangen') return t.myShare;
             if (t.myStatus === 'bezahlen') return -t.myShare;
@@ -57,23 +70,40 @@ const App = {
                 .toFixed(2).replace('.', ','); // Formatting for German locale
         });
 
+        // Navigation to Startseite
         const goToStartseite = () => {
             window.location.href = '../Startseitendesign/startseite.html';
         };
 
         // --- Methods/Actions ---
+        // Opens the modal with transaction details
         const openModal = (transaction) => {
-            // Vue automatically unwraps the ref when used in the template, 
-            // but here we assign the raw object or a copy for safety
+            // toRaw unwraps the reactive object to ensure we store a clean JS object in state.
             selectedTransaction.value = toRaw(transaction);
             isModalOpen.value = true;
         };
 
+        // Closes the modal and clears the selected transaction state.
         const closeModal = () => {
             isModalOpen.value = false;
             selectedTransaction.value = null;
         };
-        
+
+        // A placeholder function that would handle all status changes (Pay, Request, Settle)
+        const handleStatusAction = (status) => {
+            // TODO: Implement actual backend API call.
+            // 1. Get transaction ID: selectedTransaction.value.id
+            // 2. Determine new status (e.g., 'fertig' after payment/settlement).
+            // 3. Send a request to API (e.g., /api/transactions/{id}) to update the status in db.
+            // 4. On success, update the local 'transactions' ref and call closeModal().
+
+            console.log(`Action requested for transaction ID ${selectedTransaction.value.id}: ${status}`);
+
+            // This is just a placeholder for immediate UI feedback:
+            closeModal();
+            // TODO: Remove the console.log and placeholder closeModal() when implementing the API logic.
+        };
+
         // Return everything needed in the template
         return {
             transactions,
@@ -85,10 +115,11 @@ const App = {
             getTransactionAmount,
             openModal,
             closeModal,
-            goToStartseite
+            goToStartseite,
+            handleStatusAction // Make the action handler available to the template
         };
     },
-    
+
     // --- Vue Template  ---
     template: `
         <div class="header">

@@ -1,4 +1,5 @@
 import { API_BASE } from '../config.js';
+const QRCode = window.QRCode;
 new Vue({ 
   el: '#app',
   data: {
@@ -25,7 +26,12 @@ new Vue({
     inviteLink: "https://link",
     showCopyToast: false,
     showEmailInput: false,
-    emailToShare: ""
+    emailToShare: "",
+    qrCodeDataUrl: "",   
+  },
+
+    mounted() {
+    this.generateQRCode();
   },
 
 
@@ -46,6 +52,17 @@ new Vue({
         }
       },
       
+      async generateQRCode() {
+          try {
+            this.qrCodeDataUrl = await QRCode.toDataURL(this.inviteLink);
+          } catch (err) {
+            console.error("Fehler beim Generieren des QR Codes:", err);
+          }
+        },
+      scanOtherQR() {
+        alert("The feature to scan another QR code will be added later.");
+      },
+
       add_list() {
       this.showPopup = true;
       this.showListOptions = false;

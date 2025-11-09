@@ -1,5 +1,7 @@
 package shareshop.rest.requests;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.google.gson.annotations.Expose;
@@ -12,16 +14,16 @@ public class UserInformationResponse {
 	UUID uid;
 	
 	@Expose
-	UUID wid;
+	ArrayList<UUID> wid;
 	
 	@Expose
 	String firstname;
 	@Expose
 	String lastname;
 	
-	public UserInformationResponse(User user) {
+	public UserInformationResponse(User user) throws SQLException {
 		uid = user.getUserID();
-		wid = user.getWgID();
+		wid = user.getWgIDList();
 		
 		firstname = user.getFirstName();
 		lastname = user.getLastName();

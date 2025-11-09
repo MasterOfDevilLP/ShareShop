@@ -1,0 +1,72 @@
+= ShareShop Projekt, Meeting 18 (SE2)
+Kevin (Product Owner)
+28.10.2025
+
+== Teilnehmer
+* Kevin (abwesend)
+* Benni
+* Han
+* Florian
+* Emil
+* Valencia (abwesend)
+* Anni
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1) Ticketqualität (APIs, Pfade, Beschreibungstiefe)
+* Fehlerhafte API-Pfade in mehreren Tickets.
+* Konsens: Lieber **keine** konkreten Pfade als **falsche**. Beschreibungen auf **Funktionsziel** fokussieren (z. B. „Operationen auf Listen funktionieren“) statt auf spekulative Routen.
+* Action: Kevin/Bearbeitende bereinigen inkonsistente Tickets (Pfade streichen/vereinheitlichen, Funktionsziel klar formulieren).
+
+=== 2) Backend-Fortschritt & Branching
+* Feature „User in mehreren WGs“ fast fertig; eigene Feature-Branches nutzen.
+* Branching-Regel: Pro Feature eigener Branch, für Querschnittsthemen (z. B. Connection-Handler) separater Branch. Ticketnummer in Branch-Namen aufnehmen.
+
+=== 3) Frontend-Fortschritt & Arbeitsweise
+* Wenig Aktivität sichtbar. Bitte Tickets starten und in Review schieben, sobald Änderungen da sind.
+* Falls Endpoints fehlen: Frontend mockt API-Payloads in JS und dokumentiert Datenbedarf (im Ticket + @Ping).
+
+=== 4) API-Status & Abgleich FE/BE
+* Derzeit: Erstellen & Lesen (Listen, Items) funktionieren weitgehend, Löschen/Bearbeiten teils noch offen/nicht gemerged.
+* Änderungswünsche an Responses/Struktur bitte im Ticket beschreiben und pingen; bei Bedarf kurzer API-Abgleichtermin (nur wenn Async nicht reicht).
+
+=== 5) Tests & Refactoring
+* Ziel: Mindestens 2 Tests je Pfad (positiv/negativ).
+* Aktuell blockierend: Lambda-Handler im Request-Flow → für testbare Architektur in „normale“ Funktionen extrahieren.
+* Mockito/Mocking für DB/Context einsetzen; Tests können eine Ebene unterhalb der API starten, wenn nötig.
+* Große Commits möglich → eng abstimmen & häufig pullen.
+
+=== 6) Prioritäten & Scope
+* Fokus: Grundfunktionalität stabilisieren; Rechnungen/Einkaufsmodus später.
+* Hinweis zur Vorlesung (DDD/Validierung): Informativ, nicht verpflichtend; aktuelle FE/BE-Validierungsaufteilung bleibt (u. a. wegen PWA/offline).
+
+== Aufgaben / ToDos
+
+* Ticketqualität bereinigen
+** Falsche Pfade/Methoden aus Tickets entfernen, Ziele klar und technologieunabhängig formulieren.
+** FE/BE-Datenbedarf im Ticket dokumentieren, bei Unklarheit @BE pingen.
+
+* Board-Disziplin
+** FE: Tickets starten, Status fortschieben, Reviews einfordern.
+** Alle: PRs zeitnah reviewen (insb. Fehlerobjekt-PR).
+
+* Branching & Workflow
+** Feature-Branches pro Thema; Ticketnummer im Branch-Namen.
+** Evaluieren: Master/Develop einführen.
+
+* Frontend
+** Endpoints fehlend? Mocken; erwartete Payloads im Ticket notieren.
+
+* Backend
+** Offene Delete/Update-Funktionalitäten für Listen/Items fertigstellen & mergen.
+** Fehlerobjekte final prüfen/mergen; danach refactor-freundlich weiterarbeiten.
+
+* Tests & Refactoring
+** Lambda-Handler in testbare Funktionen extrahieren.
+** Mockito einsetzen; Positiv/Negativ-Tests je Anwendungsfall.
+
+* Abgleich
+** Bei Bedarf kurzen API-Workshop ansetzen; primär asynchron per Discord/Tickets klären.

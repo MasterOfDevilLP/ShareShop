@@ -22,7 +22,12 @@ new Vue({
     selectedList: null,
     showRenameModal: false,
     renameListName: '',
+    inviteLink: "https://link",
+    showCopyToast: false,
+    showEmailInput: false,
+    emailToShare: ""
   },
+
 
     methods: {
       //Fragen Einkaufliste von DB ab 
@@ -80,6 +85,8 @@ new Vue({
         this.selectedList = null;
         this.showListOptions = false;
       },
+
+
 
       /* pseudocode
       //Liste erstellen
@@ -369,6 +376,38 @@ async createNewGroup() {
     alert("Umbenennen fehlgeschlagen: " + error.message);
   }
 },*/
+
+      copyInviteLink() {
+        navigator.clipboard.writeText(this.inviteLink)
+          .then(() => {
+            this.showCopyToast = true;
+            setTimeout(() => {
+              this.showCopyToast = false; // disappear after 2 seconds
+            }, 2000);
+          })
+          .catch(err => console.error("Fehler beim Kopieren:", err));
+      },
+
+      toggleEmailInput() {
+        this.showEmailInput = !this.showEmailInput;
+      },
+      sendLink() {
+        const form = this.$refs.emailForm;
+        if (!this.emailToShare.trim()) {
+          alert("Bitte Email eingeben.");
+          return;
+        }
+        if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+        }
+
+      // Just show a temporary message — email sending not implemented yet
+        alert(`Link gesendet an ${this.emailToShare}`);
+
+        this.emailToShare = "";
+        this.showEmailInput = false;
+      },
 
   }
 });

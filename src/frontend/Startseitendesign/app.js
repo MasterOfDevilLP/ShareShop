@@ -38,7 +38,12 @@ new Vue({
     showRenameModal: false,
     renameListName: "",
     isWGOpen: false,
-    wgDropdownOpen: false
+    showCopyToast: false,
+    showEmailInput: false,
+    emailToShare: "",
+    qrCodeDataUrl: "", 
+    wgDropdownOpen: false,
+    inviteLink: localStorage.getItem("inviteLink")
   },
 
   computed: {
@@ -50,9 +55,21 @@ new Vue({
 
 
     this.fetchUserWG();
-},
+  },
 
-  methods: {
+
+  methods: {      
+    async generateQRCode() {
+        try {
+          this.qrCodeDataUrl = await QRCode.toDataURL(this.inviteLink);
+        } catch (err) {
+          console.error("Fehler beim Generieren des QR Codes:", err);
+        }
+      },
+    scanOtherQR() {
+      alert("The feature to scan another QR code will be added later.");
+    },
+    
     async fetchUserWG() {
       try {
         const userResp = await fetch(`${API_BASE}/user`, {
@@ -188,8 +205,48 @@ async saveList() {
     console.error(err);
     alert("Fehler beim Erstellen: " + err.message);
   }
-},
+  },
 
+    copyInviteLink() {
+      navigator.clipboard.writeText(this.inviteLink)
+        .then(() => {
+          this.showCopyToast = true;
+            setTimeout(() => {
+              this.showCopyToast = false; // disappear after 2 seconds
+            }, 2000);
+          })
+          .catch(err => console.error("Fehler beim Kopieren:", err));
+      },
+
+    toggleEmailInput() {
+        this.showEmailInput = !this.showEmailInput;
+      },
+      sendLink() {
+        const form = this.$refs.emailForm;
+        if (!this.emailToShare.trim()) {
+          alert("Bitte Email eingeben.");
+          return;
+        }
+        if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+        }
+      // Create mailto link
+        const subject = encodeURIComponent("Einladung zur WG-Gruppe");
+        const body = encodeURIComponent(
+          `Hallo,\n\nhier ist dein Einladungslink zur WG-Gruppe:\n${this.inviteLink}\n\n Viele Grüße`
+        );
+        try {
+          // try open with mailto
+          window.location.href = `mailto:${this.emailToShare}?subject=${subject}&body=${body}`;
+        } catch (e) {
+          // if mailto not work, change toGmail
+          const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(this.emailToShare)}&su=${subject}&body=${body}`;
+          window.open(gmailLink, "_blank");
+        }
+        this.emailToShare = "";
+        this.showEmailInput = false;
+      },
 
     // ─────────────────────────────
     // WG aus Dropdown auswählen
@@ -399,7 +456,7 @@ async saveList() {
       localStorage.removeItem("wgList");
       localStorage.removeItem("selectedWG");
       localStorage.removeItem("selectedWGName");
-      window.location.href = "../Login/index.html";
+      window.location.href = "../Login/login.html";
     },
 
     goToList(list) {

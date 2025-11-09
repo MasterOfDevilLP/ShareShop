@@ -72,45 +72,65 @@
     <!-- Button: neue Produkt hinzufugen -->
           <button class="add-product" @click="add_product"><span>+</span> Produkte hinzufügen</button>
 
-    <!-- POPUP: neues Item hinzugen und Item anpassen  -->
-    <div class="bottom-sheet" :class="{ visible: showPopup }">
-        <div class="sheet-header"> 
-          <span v-if="isEditing">Produkt bearbeiten</span>
-          <span v-else>Produkte hinzufügen</span>     
-          <button class="close-btn" @click="closePopup">✕</button>
+        <!-- POPUP: neues Produkt hinzufügen oder bearbeiten -->
+        <div class="bottom-sheet" :class="{ visible: showPopup }">
+          <!-- Header des Popups -->
+          <div class="sheet-header">
+            <span v-if="isEditing">Produkt bearbeiten</span>
+            <span v-else>Produkte hinzufügen</span>
+            <button class="close-btn" @click="closePopup">✕</button>
+          </div>
+          <!-- Body des Popups: Formular -->
+          <div class="sheet-body">
+            <label>Name:</label>
+            <input
+              list="wg-products"
+              v-model="newProduct.name"
+              @input="onProductNameInput"
+            />
+            <datalist id="wg-products">
+              <option
+                v-for="p in products"
+                :key="p.id"
+                :value="p.name"
+              ></option>
+            </datalist>
+
+            <label>Kategorie:</label>
+            <select
+              v-model="newProduct.kategorie"
+              :disabled="newProduct.fromWG"
+            >
+              <option value="">--Wähle Kategorie--</option>
+              <option v-for="k in kategorien" :key="k" :value="k">
+                {{ k }}
+              </option>
+            </select>
+
+            <label>Menge:</label>
+            <input
+              type="number"
+              v-model="newProduct.menge"
+              placeholder="z.B. 500"
+              min="0"
+            />
+
+            <!-- <label>Einheit:</label>
+            <select v-model="newProduct.einheit">
+              <option disabled value="">Bitte wählen</option>
+              <option>Gramm</option>
+              <option>Kilogramm</option>
+              <option>Milliliter</option>
+              <option>Liter</option>
+              <option>Stück</option>
+            </select> -->
+
+            <label>Preis:</label>
+            <input type="number" v-model="newProduct.preis" step="0.01" />
+
+            <button id="saveList" @click="saveProduct">Speichern</button>
+          </div>
         </div>
-        <div class="sheet-body">
-          <label>Name:</label>
-        <input list="wg-products" v-model="newProduct.name" @input="onProductNameInput" />
-        <datalist id="wg-products">
-          <option v-for="p in products" :key="p.id" :value="p.name"></option>
-        </datalist>
-
-        <label>Kategorie:</label>
-        <select v-model="newProduct.kategorie" :disabled="newProduct.fromWG"> <!-- Disable if product selected from wg  -->
-          <option value="">--Wähle Kategorie--</option>
-          <option v-for="k in kategorien" :key="k" :value="k">{{ k }}</option>
-        </select>
-
-        <label>Menge:</label>
-        <input type="number" v-model="newProduct.menge" placeholder="z.B. 500" min="0"/>
-
-        <label>Einheit:</label>
-        <select v-model="newProduct.einheit">
-          <option disabled value="">Bitte wählen</option>
-          <option>Gramm</option>
-          <option>Kilogramm</option>
-          <option>Milliliter</option>
-          <option>Liter</option>
-          <option>Stück</option>
-        </select>
-
-        <label>Preis:</label>
-        <input type="number" v-model="newProduct.preis" step="0.01" />
-
-        <button id="saveList" @click="saveProduct">Speichern</button>
-        </div>
-    </div>
  
     <!-- Navigation -->
         <nav class="bottom-nav">

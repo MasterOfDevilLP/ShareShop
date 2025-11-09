@@ -65,7 +65,7 @@ const isValidEmail = (email) => {
 };
 
 // HILFSFUNKTION: Simuliert eine Verzögerung für das Testen des Spinners
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 // === 5. Shared Vue Mixin ===
 // Centralizes message state and error handling logic
@@ -251,7 +251,7 @@ const LoginForm = {
             this.isLoading = true; // activate loading state
 
             try {
-                await delay(3000); 
+                // await delay(3000); 
                 const res = await fetch(`${API_BASE}/user/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

@@ -80,9 +80,14 @@
             <div v-for="list in lists" :key="list.id" class="list-card">
               <a href="../Einkaufsliste/einkaufsliste.html" class="list-left">
                 <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
-                {{ list.name }}
+                <div class="list-text">
+                  <div class="list-title">{{ list.name }}</div>
+                  <div v-if="list.beschreibung" class="list-desc">
+                    {{ list.beschreibung }}
+                  </div>
+                </div>
               </a>
-              <button class="list-dots" @click="openListOptions(list)">
+              <button class="list-dots" @click.stop="openListOptions(list)">
                 <img src="icons/dots.svg" alt="Mehr Optionen" />
               </button>
             </div>

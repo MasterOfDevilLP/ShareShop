@@ -35,7 +35,7 @@ new Vue({
   },
   computed: {
     isListValid() {
-      return this.newList.name.trim() !== '' && this.newList.beschreibung.trim() !== '';
+      return this.newList.name.trim() !== '';
     }
   },
 

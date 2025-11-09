@@ -579,6 +579,31 @@
       cursor: not-allowed;
     }
 
+  /* Einkaufslistenbeschreibung*/
+  .list-left {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.list-text {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.list-title {
+  font-weight: 600;
+}
+
+.list-desc {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
 
 
       

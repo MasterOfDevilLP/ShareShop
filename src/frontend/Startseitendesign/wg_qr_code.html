@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Einstellungen</title>
+    <link rel="stylesheet" href="wg_qr_code_style.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- Load Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+    <!--Header-->
+    <div id="app">
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <a href="setting_wg_and_users.html" class="back-link" title="Zurück zur WG Einstellungen">
+            <img src="icons/arrow_back.png" class="back-icon" alt="Zurück" />
+          </a>
+          <span class="site-titel">QR Code zum Einladen</span>
+        </header>
+
+        <!-- Inhalt -->
+        <main class="app-content settings-page">
+            <p class="qr-card-text">
+            Scannen Sie diesen QR-Code, um der WG beizutreten.
+            </p>
+            <hr>
+            <div class="qr-card">
+               <div class="qr-card-icon">
+            <img src="icons/User_alt.svg" alt="WG Icon" />
+            </div>
+            <!--WG Name -->
+            <h2 class="qr-card-title">{{ selectedWGName || 'WG Name' }}</h2>
+                
+            <!--QR Code Bild-->
+                <div class="qr-code-container">
+                <img :src="qrCodeDataUrl" alt="WG Einladungs QR-Code" class="qr-code-image" />
+                </div>
+            </div>
+
+          <button class="scan-btn" @click="scanOtherQR">
+            Andere WG beitreten
+          </button>  
+                    
+        </main>
+      </div>
+    
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

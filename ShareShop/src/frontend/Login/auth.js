@@ -1,18 +1,29 @@
+// === 1. Shared Language Store ===
+// Reactive store for current language setting (default: German)
+const LanguageStore = Vue.reactive({
+  language: 'de'
+});
+
 // === API and Constants ===
 const API_BASE = 'http://localhost:8001'; // ← API-Basis-URL
 const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
 const { reactive, createApp } = Vue;
 
-// 1. Translation Dictionary (Key-based i18n)
+// 2. Translation Dictionary (Key-based i18n)
 const translations = {
   // General UI Texts
     'LOGIN_TITLE': { de: 'Login', en: 'Sign In' },
     'REGISTER_TITLE': { de: 'Registrieren', en: 'Register' },
+
     'EMAIL_PLACEHOLDER': { de: 'E-Mail', en: 'Email' },
     'PASSWORD_PLACEHOLDER': { de: 'Passwort', en: 'Password' },
     'REPEAT_PASSWORD_PLACEHOLDER': { de: 'Passwort wiederholen', en: 'Repeat Password' },
+
     'LOGIN_BUTTON': { de: 'Einloggen', en: 'Log In' },
+    'LOGIN_LOADING': { de: 'Logge ein...', en: 'Logging in...' },
     'REGISTER_BUTTON': { de: 'Registrieren', en: 'Register' },
+    'REGISTER_LOADING': { de: 'Registriert...', en: 'Registering...' },
+
     'NO_ACCOUNT_PRE': { de: 'Noch kein Account? ', en: 'No account? ' },
     'NO_ACCOUNT_LINK': { de: 'Jetzt registrieren', en: 'Register here' },
     'ALREADY_REGISTERED_PRE': { de: 'Bereits registriert? ', en: 'Already registered? ' },
@@ -33,26 +44,15 @@ const translations = {
     'ERR_EMAIL_TAKEN': { de: 'Ungültige Eingabe oder E-Mail bereits registriert.', en: 'Invalid input or email already registered.' },
 };
 
-// === 2. Shared Language Store ===
-// Reactive store for current language setting (default: German)
-const LanguageStore = reactive({
-  language: 'de'
-});
-
 // === 3. Translation Helper === 
-// returns the correct text based on current language
-const t = (key, ...args) => {
+// Returns the correct translated text based on key and interpolates arguments
+const t = (key, arg1) => {
     const currentLang = LanguageStore.language;
-    const translationObject = translations[key];
-
-    if (!translationObject) return key;
-
-    // Prioritize current language, fall back to English, then the key itself
-    const text = translationObject[currentLang] || translationObject['en'] || key;
-
-    // Handle parameterized messages
+    let text = translations[key]?.[currentLang] || key;
+    
+    // Handle function-based dynamic messages (like password length)
     if (typeof text === 'function') {
-        return text(...args);
+        return text(arg1);
     }
     return text;
 };
@@ -64,13 +64,17 @@ const isValidEmail = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
+// HILFSFUNKTION: Simuliert eine Verzögerung für das Testen des Spinners
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 // === 5. Shared Vue Mixin ===
 // Centralizes message state and error handling logic
 const AuthMixin = {
   data() {
     return {
       errorMessage: '',
-      successMessage: ''
+      successMessage: '',
+      isLoading: false,   // loading state
     };
   },
    methods: {
@@ -207,8 +211,12 @@ const LoginForm = {
                 @update:modelValue="password = $event; clearMessages()"
             />
             
-            <button @click="login">{{ t('LOGIN_BUTTON') }}</button>
-            
+            <button @click="login" :disabled="isLoading" :class="{ 'loading-content': isLoading }">
+                <!-- Text wird nur angezeigt, wenn NICHT geladen wird -->
+                <span v-if="!isLoading">{{ t('LOGIN_BUTTON') }}</span>
+                <div v-if="isLoading" class="spinner"></div>                  
+            </button>
+
             <p class="link">
                 <span>{{ t('NO_ACCOUNT_PRE') }}</span>
                 <span class="link-highlight" @click="$emit('switchMode')">
@@ -240,7 +248,10 @@ const LoginForm = {
                 return;
             }
 
+            this.isLoading = true; // activate loading state
+
             try {
+                await delay(3000); 
                 const res = await fetch(`${API_BASE}/user/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -259,8 +270,10 @@ const LoginForm = {
 
             } catch (error) {
                 this.handleNetworkError(error);
-            }
-        }
+            } finally {
+                this.isLoading = false; // deactivate loading state
+            } 
+        } 
     }
 };
 
@@ -297,7 +310,14 @@ const RegisterForm = {
                 @update:modelValue="repeatPassword = $event; clearMessages()"
             />
 
-            <button @click="register">{{ t('REGISTER_BUTTON') }}</button>
+            <!-- Hinzugefügte visuelle Anzeige: Spinner und loading-content Klasse -->
+            <button @click="register" :disabled="isLoading" :class="{ 'loading-content': isLoading }">
+                <!-- Text wird nur angezeigt, wenn NICHT geladen wird -->
+                <span v-if="!isLoading">{{ t('REGISTER_BUTTON') }}</span>
+                <!-- Spinner-Element wird nur bei Ladezustand angezeigt -->
+                <div v-if="isLoading" class="spinner"></div>
+            </button>
+
 
             <p class="link">
                 <span>{{ t('ALREADY_REGISTERED_PRE') }}</span>
@@ -339,6 +359,8 @@ const RegisterForm = {
                 return;
             }
 
+            this.isLoading = true; // activate loading state
+
             try {
                 const res = await fetch(`${API_BASE}/user/create`, {
                     method: 'POST',
@@ -358,6 +380,9 @@ const RegisterForm = {
 
             } catch (err) {
                 this.handleNetworkError(err);
+            }
+            finally {
+                this.isLoading = false; // deactivate loading state
             }
         }
     }

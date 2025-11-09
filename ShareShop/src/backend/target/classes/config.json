@@ -1,0 +1,11 @@
+{
+    "DatabaseConfig": {
+        "user":     "backendusr",
+        "password": "passwd",
+        "server":   "127.0.0.1",
+        "port":     5432,
+        "max_connection_tries": 4
+    },
+    "webPort": 8001,
+    "webHost": "127.0.0.1"
+}

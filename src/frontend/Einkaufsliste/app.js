@@ -296,7 +296,15 @@ new Vue({
         this.showDeleteListPopup = false;
       },
 
-      deleteList(){
+      deleteList(wid, lid){
+        fetch(`/wgs/${wid}/lists/${lid}`, { method: "DELETE" })
+         .then(res => {
+          if (res.status === 204) {
+            setLists(prev => prev.filter(list => list.id !== lid));
+          } else {
+            console.error("Fehler beim Löschen:", res.status);
+          }
+        });
         window.location.href = '../Startseitendesign/startseite.html';
       },
 

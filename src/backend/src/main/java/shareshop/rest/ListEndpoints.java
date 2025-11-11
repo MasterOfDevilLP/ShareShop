@@ -77,7 +77,7 @@ public class ListEndpoints {
 				return;
 			}
 			
-			ShoppingList slist = wg.createList(appCtx.conn, usr, req.name);
+			ShoppingList slist = wg.createList(usr, req.name);
 			if(slist == null) {
 				logger.error("Failed to create shopping list");
 				RestUtils.setResponseError(ctx, HttpStatus.FORBIDDEN, "failed to create list");
@@ -135,7 +135,7 @@ public class ListEndpoints {
 				return;
 			}
 		
-			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
+			ShoppingList slist = wg.getList(UUID.fromString(lid));
 			if(slist == null) {
 				logger.debug("no such list");
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect list");
@@ -200,7 +200,7 @@ public class ListEndpoints {
 				return;
 			}
 		
-			ShoppingList slist = wg.getList(appCtx.conn, UUID.fromString(lid));
+			ShoppingList slist = wg.getList(UUID.fromString(lid));
 			if(slist == null) {
 				logger.debug("no such list");
 				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect list");
@@ -217,13 +217,13 @@ public class ListEndpoints {
 			// TODO: validate amounts
 			switch(req.type) {
 			case "add":
-				slist.addChange(appCtx.conn, usr, item, Change.ADD, req.amount);
+				slist.addChange(usr, item, Change.ADD, req.amount);
 				break;
 			case "remove":
-				slist.addChange(appCtx.conn, usr, item, Change.REMOVE, req.amount);
+				slist.addChange(usr, item, Change.REMOVE, req.amount);
 				break;
 			case "tick":
-				slist.addChange(appCtx.conn, usr, item, Change.TICK, req.amount, req.price == null ? new BigDecimal(0) : req.price);
+				slist.addChange(usr, item, Change.TICK, req.amount, req.price == null ? new BigDecimal(0) : req.price);
 				break;
 			default:
 				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "unknown change type");

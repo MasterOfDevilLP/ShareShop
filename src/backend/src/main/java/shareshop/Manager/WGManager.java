@@ -24,7 +24,7 @@ public class WGManager {
 		// TODO: ideally, this would be done in one transaction
 		// currently, with an untimely crash, this can result in an orphan, which isn't ideal (it just takes up unnecessary storage)
 		WG newwg = new WG(conn, name);
-		newwg.addUser(conn, owner);
+		newwg.addUser(owner);
 		
 		return newwg;
 	}

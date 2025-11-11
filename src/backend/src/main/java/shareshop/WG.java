@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class WG {
+    private DBConnectionHandler connectionHandler;
     private UUID wgID;
     private String wgName;
     private Date creationDate;
-    private DBConnectionHandler connectionHandler;
     
     /**
      * Constructor of Class WG
+     * @param connectionHandler
      * @param wgID
      * @param wgName
      * @param creationDate
@@ -51,8 +52,14 @@ public class WG {
         }
     }
     
-    // creates a new WG
+    /**
+     * Constructor that creates a new WG
+     * @param connectionHandler
+     * @param name
+     * @throws SQLException
+     */
     public WG(DBConnectionHandler connectionHandler, String name) throws SQLException {
+        this.connectionHandler = connectionHandler;
     	String statementStr = "INSERT INTO wg (wgid, wgname, creationdate) VALUES (?, ?, ?)";
         connectionHandler.makeSureItsOpen();
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
@@ -78,13 +85,12 @@ public class WG {
 
     /**
      * private function to update the DB after a change of any attribute of the wg
-     * @param connectionHandler
      * @param wgID
      * @param wgName
      * @param creationDate
      * @throws SQLException
      */
-    private void updateDB(DBConnectionHandler connectionHandler, String wgName, Date creationDate) throws SQLException {
+    private void updateDB(String wgName, Date creationDate) throws SQLException {
         String updateString = new String("UPDATE wg SET wgname = ?, creationdate = ? WHERE wgid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(updateString)) {
@@ -106,23 +112,21 @@ public class WG {
 
     /**
      * update wg name
-     * @param connectionHandler
      * @param wgName
      * @throws SQLException
      */
-    public void setWgName(DBConnectionHandler connectionHandler, String wgName) throws SQLException {
-        this.updateDB(connectionHandler, wgName, this.creationDate);
+    public void setWgName(String wgName) throws SQLException {
+        this.updateDB(wgName, this.creationDate);
         this.wgName = wgName;
     }
 
     /**
      * update creation date
-     * @param connectionHandler
      * @param creationDate
      * @throws SQLException
      */
-    public void setCreationDate(DBConnectionHandler connectionHandler, Date creationDate) throws SQLException {
-        this.updateDB(connectionHandler, this.wgName, creationDate);
+    public void setCreationDate(Date creationDate) throws SQLException {
+        this.updateDB(this.wgName, creationDate);
         this.creationDate = creationDate;
     }
 
@@ -157,11 +161,10 @@ public class WG {
 
     /**
      * adds a user to the wg
-     * @param connectionHandler
      * @param user
      * @throws SQLException
      */
-    public void addUser(DBConnectionHandler connectionHandler, User user) throws SQLException {
+    public void addUser(User user) throws SQLException {
         String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate) VALUES (?, ?, ?)");
         connectionHandler.makeSureItsOpen();
         PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
@@ -178,11 +181,10 @@ public class WG {
 
     /**
      * removes a user from the wg
-     * @param connectionHandler
      * @param user
      * @throws SQLException
      */
-    public void removeUser(DBConnectionHandler connectionHandler, User user) throws SQLException {
+    public void removeUser(User user) throws SQLException {
         String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
@@ -195,13 +197,12 @@ public class WG {
 
     /**
      * get the Shoppinglist as an Object corresponding to the ID
-     * @param connectionHandler
      * @param shoppingListID
      * @return  Shoppinglist Object,
      *          or null if there is no shoppinglist with this ID.
      * @throws SQLException
      */
-    public ShoppingList getList(DBConnectionHandler connectionHandler, UUID shoppingListID) throws SQLException {
+    public ShoppingList getList(UUID shoppingListID) throws SQLException {
     	return new ShoppingList(connectionHandler, shoppingListID);
         /*String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
@@ -224,14 +225,13 @@ public class WG {
 
     /**
      * creates a new list on the database, adds the first change to the changelist ('CREATED') and returns the object of the new ShoppingList
-     * @param connectionHandler
      * @param user
      * @param name
      * @return  ShoppingList Object,
      *          or null when something goes wrong.
      * @throws SQLException
      */
-    public ShoppingList createList(DBConnectionHandler connectionHandler, User user, String name) throws SQLException {
+    public ShoppingList createList(User user, String name) throws SQLException {
         Date currentDate = Date.valueOf(LocalDate.now());
         UUID uuid = UUID.randomUUID();//ShareShopUtility.genNewUUID(connectionHandler);
         String insertString = new String("INSERT INTO shoppinglists(shoppinglistid, wgid, lastcachedchangeid, creationdate, listname, creatoruserid) VALUES(?, ?, ?, ?, ?, ?)");
@@ -259,7 +259,7 @@ public class WG {
             connectionHandler.conn.commit();
             insertStatement.close();
             listChangeStatement.close();
-            return new ShoppingList(uuid, this.wgID, 1, currentDate, name, user.getUserID());
+            return new ShoppingList(connectionHandler, uuid, this.wgID, 1, currentDate, name, user.getUserID());
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {
@@ -272,7 +272,6 @@ public class WG {
 
     /**
      * get a list of ShoppingList Objects from the wg
-     * @param connectionHandler
      * @return
      * @throws SQLException
      */
@@ -284,7 +283,7 @@ public class WG {
         ResultSet rs = selectStatement.executeQuery();
         ArrayList<ShoppingList> lists = new ArrayList<ShoppingList>();
         while (rs.next()) {
-            lists.add(this.getList(connectionHandler, (UUID)rs.getObject("shoppinglistid")));
+            lists.add(this.getList((UUID)rs.getObject("shoppinglistid")));
         }
         selectStatement.close();
 
@@ -293,7 +292,6 @@ public class WG {
 
     /**
      * removes the wg from the database
-     * @param connectionHandler
      * @throws SQLException
      */
     public void remove(DBConnectionHandler connectionHandler) throws SQLException {

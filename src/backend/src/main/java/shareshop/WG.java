@@ -59,6 +59,7 @@ public class WG {
      * @throws SQLException
      */
     public WG(DBConnectionHandler connectionHandler, String name) throws SQLException {
+        this.connectionHandler = connectionHandler;
     	String statementStr = "INSERT INTO wg (wgid, wgname, creationdate) VALUES (?, ?, ?)";
         connectionHandler.makeSureItsOpen();
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);

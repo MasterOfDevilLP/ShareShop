@@ -23,7 +23,7 @@ new Vue({
     selectedList: null,
     showRenameModal: false,
     renameListName: '',
-    inviteLink: "https://link",
+    inviteLink: "http://localhost:8080/Startseitendesign/startseite.html",
     showCopyToast: false,
     showEmailInput: false,
     emailToShare: "",
@@ -418,10 +418,19 @@ async createNewGroup() {
         form.reportValidity();
         return;
         }
-
-      // Just show a temporary message — email sending not implemented yet
-        alert(`Link gesendet an ${this.emailToShare}`);
-
+      // Create mailto link
+        const subject = encodeURIComponent("Einladung zur WG-Gruppe");
+        const body = encodeURIComponent(
+          `Hallo,\n\nhier ist dein Einladungslink zur WG-Gruppe:\n${this.inviteLink}\n\n Viele Grüße`
+        );
+        try {
+          // try open with mailto
+          window.location.href = `mailto:${this.emailToShare}?subject=${subject}&body=${body}`;
+        } catch (e) {
+          // if mailto not work, change toGmail
+          const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(this.emailToShare)}&su=${subject}&body=${body}`;
+          window.open(gmailLink, "_blank");
+        }
         this.emailToShare = "";
         this.showEmailInput = false;
       },

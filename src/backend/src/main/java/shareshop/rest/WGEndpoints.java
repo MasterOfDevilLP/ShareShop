@@ -22,6 +22,7 @@ import shareshop.WG;
 import shareshop.rest.requests.CreateWGRequest;
 import shareshop.rest.requests.CreateWGResponse;
 import shareshop.rest.requests.ListContentResponse;
+import shareshop.rest.requests.PatchWGRequest;
 import shareshop.rest.requests.WGAddUserRequest;
 import shareshop.rest.requests.WGInformationResponse;
 
@@ -148,12 +149,56 @@ public class WGEndpoints {
 	}
 	
 	public static void epPatch(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
-		System.out.printf("Patch WG %s\n", wid);
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
 		
-		// TODO: the request body for this will probably use the regular WG class
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		PatchWGRequest req = gson.fromJson(ctx.body(), PatchWGRequest.class);
+		
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		if(!req.validate()) {
+			RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			// now check whatever needs to be changed (probably more in the future)
+			// once permissions are a thing, also check for those
+			if(req.name != null) {
+				wg.setWgName(req.name);
+			}
+			
+			ctx.status(HttpStatus.OK);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerPatch(Javalin app) {

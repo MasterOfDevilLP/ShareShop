@@ -293,7 +293,7 @@ public class ShoppingList {
         if (start >= end) {throw new IllegalArgumentException("end has to be bigger then start");}
         String selectString = new String("SELECT * FROM listchanges WHERE shoppinglistid = ? ORDER BY listchangeid ASC");
         connectionHandler.makeSureItsOpen();
-        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
+        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         selectStatement.setObject(1, this.shoppingListID);
 
         ResultSet rs = selectStatement.executeQuery();

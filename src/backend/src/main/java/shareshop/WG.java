@@ -200,10 +200,13 @@ public class WG {
      * @param shoppingListID
      * @return  Shoppinglist Object,
      *          or null if there is no shoppinglist with this ID.
-     * @throws SQLException
      */
-    public ShoppingList getList(UUID shoppingListID) throws SQLException {
-    	return new ShoppingList(connectionHandler, shoppingListID);
+    public ShoppingList getList(UUID shoppingListID){
+    	try {
+    		return new ShoppingList(connectionHandler, shoppingListID);
+    	} catch(SQLException e) {
+    		return null;
+    	}
         /*String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);

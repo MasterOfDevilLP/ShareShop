@@ -24,6 +24,7 @@ import shareshop.WG;
 import shareshop.rest.requests.AddChangeRequest;
 import shareshop.rest.requests.CreateListRequest;
 import shareshop.rest.requests.CreateListResponse;
+import shareshop.rest.requests.ListAuditResponse;
 import shareshop.rest.requests.ListContentResponse;
 
 public class ListEndpoints {
@@ -249,12 +250,54 @@ public class ListEndpoints {
 	}
 	
 	public static void epDelete(Context ctx) {
+		Key ctxKey = new Key<AppContext>("Context");
+		
 		String wid = ctx.pathParam("wid");
 		String lid = ctx.pathParam("lid");
-		System.out.printf("Delete WG %s list %s\n", wid, lid);
 		
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			ShoppingList slist = wg.getList(UUID.fromString(lid));
+			if(slist == null) {
+				logger.debug("no such list");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect list");
+				return;
+			}
+			
+				// TODO: permission management for deleting lists
+				slist.remove();
+			
+			ctx.status(HttpStatus.OK);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerDelete(Javalin app) {
@@ -264,12 +307,59 @@ public class ListEndpoints {
 	}
 	
 	public static void epGetAudit(Context ctx) {
+		Key ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
 		String lid = ctx.pathParam("lid");
-		System.out.printf("Get WG %s list %s Audit log\n", wid, lid);
 		
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			ShoppingList slist = wg.getList(UUID.fromString(lid));
+			if(slist == null) {
+				logger.debug("no such list");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect list");
+				return;
+			}
+		
+			// TODO: add pagination
+			ListAuditResponse lar = new ListAuditResponse(slist);
+			
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(lar));
+			ctx.status(HttpStatus.OK);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad boundaries");
+		}
 	}
 	
 	private static void registerGetAudit(Javalin app) {

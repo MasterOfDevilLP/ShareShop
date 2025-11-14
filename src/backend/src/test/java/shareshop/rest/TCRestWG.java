@@ -38,54 +38,12 @@ import shareshop.Manager.WGManager;
 
 class TCRestWG {
 	
-	private final Context ctx = mock(Context.class);
-	private final AppContext appctx = mock(AppContext.class);
-	private final User testusr = mock(User.class);
-	private final UserManager usermgr = mock(UserManager.class);
-	private final WGManager wgmgr = mock(WGManager.class);
-	private final WG testwg = mock(WG.class);
-	private final HttpServletRequest req = mock(HttpServletRequest.class);
-	private final HttpSession session = mock(HttpSession.class);
+	private RESTTestEnvironment env;
 	
 	@BeforeEach
 	void setup() throws SQLException {
-		Key<AppContext> ctxKey = new Key<AppContext>("Context");
-		when(ctx.appData(ctxKey)).thenReturn(appctx);
-		when(ctx.req()).thenReturn(req);
-		when(req.getSession()).thenReturn(session);
-		when(req.getSession(anyBoolean())).thenReturn(session);
-		appctx.userManager = usermgr;
-		appctx.wgManager = wgmgr;
-		UUID uid = UUID.randomUUID();
-		when(testusr.getUserID()).thenReturn(uid);
-		when(usermgr.create(not(eq("existuser")), anyString())).thenReturn(testusr);
-		when(usermgr.create(eq("existuser"), anyString())).thenReturn(null);
-		
-		when(usermgr.login("testuser", "pw")).thenReturn(testusr);
-		when(usermgr.getUser(eq(testusr.getUserID()))).thenReturn(testusr);
-		when(usermgr.getUser(not(eq(testusr.getUserID())))).thenReturn(null);
-		
-		// WG stuff
-		UUID wid = UUID.randomUUID();
-		when(testwg.getWgID()).thenReturn(wid);
-		when(testwg.getWgName()).thenReturn("unit test wg");
-		when(testwg.getCreationDate()).thenReturn(new Date(58913));	// just a random number
-		when(wgmgr.create(any(), any())).thenReturn(testwg);
-		when(wgmgr.getWG(eq(wid))).thenReturn(testwg);
-		when(wgmgr.getWG(not(eq(wid)))).thenReturn(null);
-		
-		when(testusr.isUserInWG(eq(wid))).thenReturn(true);
-		when(testusr.isUserInWG(not(eq(wid)))).thenReturn(false);
-		
-	}
-	
-	void setUserLoggedIn(boolean loggedIn) {
-		if(loggedIn) {
-			UUID uid = testusr.getUserID();
-			when(session.getAttribute("AuthorizedUID")).thenReturn(uid);
-		} else {
-			when(session.getAttribute("AuthorizedUID")).thenReturn(null);
-		}
+		env = new RESTTestEnvironment();
+		env.setup();
 	}
 	
 	@BeforeAll
@@ -99,44 +57,44 @@ class TCRestWG {
 
 	@Test
 	void testEpCreate() throws SQLException {
-		when(ctx.body()).thenReturn("{\"name\":\"unit test wg\"}");
-		setUserLoggedIn(true);
-		WGEndpoints.epCreate(ctx);
-		verify(ctx, atLeastOnce()).status(HttpStatus.OK);
-		verify(wgmgr, atLeastOnce()).create(any(), eq("unit test wg"));
+		when(env.ctx.body()).thenReturn("{\"name\":\"unit test wg\"}");
+		env.setUserLoggedIn(true);
+		WGEndpoints.epCreate(env.ctx);
+		verify(env.ctx, atLeastOnce()).status(HttpStatus.OK);
+		verify(env.wgmgr, atLeastOnce()).create(any(), eq("unit test wg"));
 	}
 
 	@Test
 	void testEpCreateNoUser() throws SQLException {
-		when(ctx.body()).thenReturn("{\"name\":\"unit test wg\"}");
-		setUserLoggedIn(false);
-		WGEndpoints.epCreate(ctx);
-		verify(ctx, atLeastOnce()).status(HttpStatus.UNAUTHORIZED);
-		verify(wgmgr, never()).create(any(), eq("unit test wg"));
+		when(env.ctx.body()).thenReturn("{\"name\":\"unit test wg\"}");
+		env.setUserLoggedIn(false);
+		WGEndpoints.epCreate(env.ctx);
+		verify(env.ctx, atLeastOnce()).status(HttpStatus.UNAUTHORIZED);
+		verify(env.wgmgr, never()).create(any(), eq("unit test wg"));
 	}
 	
 	@Test
 	void testEpPatch() throws SQLException {
-		when(ctx.body()).thenReturn("{\"name\":\"edit test wg\"}");
-		UUID wid = testwg.getWgID();
-		when(ctx.pathParam("wid")).thenReturn(wid.toString());
-		setUserLoggedIn(true);
-		WGEndpoints.epPatch(ctx);
-		verify(ctx, atLeastOnce()).status(HttpStatus.OK);
-		verify(testwg, atLeastOnce()).setWgName(eq("edit test wg"));
+		when(env.ctx.body()).thenReturn("{\"name\":\"edit test wg\"}");
+		UUID wid = env.testwg.getWgID();
+		when(env.ctx.pathParam("wid")).thenReturn(wid.toString());
+		env.setUserLoggedIn(true);
+		WGEndpoints.epPatch(env.ctx);
+		verify(env.ctx, atLeastOnce()).status(HttpStatus.OK);
+		verify(env.testwg, atLeastOnce()).setWgName(eq("edit test wg"));
 	}
 	
 	@Test
 	void testEpPatchWrongWID() throws SQLException {
-		when(ctx.body()).thenReturn("{\"name\":\"edit test wg\"}");
+		when(env.ctx.body()).thenReturn("{\"name\":\"edit test wg\"}");
 		UUID wid = UUID.randomUUID();
-		while(wid.equals(testwg.getWgID())) {
+		while(wid.equals(env.testwg.getWgID())) {
 			wid = UUID.randomUUID();
 		}
-		when(ctx.pathParam("wid")).thenReturn(wid.toString());
-		setUserLoggedIn(true);
-		WGEndpoints.epPatch(ctx);
-		verify(ctx, atLeastOnce()).status(HttpStatus.UNAUTHORIZED);
-		verify(testwg, never()).setWgName(any());
+		when(env.ctx.pathParam("wid")).thenReturn(wid.toString());
+		env.setUserLoggedIn(true);
+		WGEndpoints.epPatch(env.ctx);
+		verify(env.ctx, atLeastOnce()).status(HttpStatus.UNAUTHORIZED);
+		verify(env.testwg, never()).setWgName(any());
 	}
 }

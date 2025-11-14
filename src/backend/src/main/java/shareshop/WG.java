@@ -168,13 +168,12 @@ public class WG {
         String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate) VALUES (?, ?, ?)");
         connectionHandler.makeSureItsOpen();
         PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
-        connectionHandler.conn.setAutoCommit(false);
+        connectionHandler.conn.setAutoCommit(true);
         Date joinDate = Date.valueOf(LocalDate.now());
         statement.setObject(1, user.getUserID());
         statement.setObject(2, this.wgID);
         statement.setDate(3, joinDate);
         statement.execute();
-        connectionHandler.conn.commit();
         statement.close();
         //user.setWgID(connectionHandler, this.wgID);
     }
@@ -188,9 +187,10 @@ public class WG {
         String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
+        connectionHandler.conn.setAutoCommit(true);
         deleteStatement.setObject(1, user.getUserID());
         deleteStatement.setObject(2, this.wgID);
-        connectionHandler.conn.commit();
+        deleteStatement.execute();
         deleteStatement.close();
         //user.setWgID(connectionHandler, null);
     }

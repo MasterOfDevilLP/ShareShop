@@ -103,8 +103,8 @@
 
                     <!-- Test includes -->
                     <includes>
-                        <include>**/*TCUser.java</include>
-                        <include>**/*TCRestUser.java</include>
+                        <include>**/TC*.java</include>
+                        <!--<include>**/*TCRestUser.java</include>-->
                     </includes>
                 </configuration>
             </plugin>

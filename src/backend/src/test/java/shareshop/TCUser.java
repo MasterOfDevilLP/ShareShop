@@ -3,6 +3,7 @@ package shareshop;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.nullable;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -40,7 +42,13 @@ public class TCUser {
     private static final UUID testUserWgUUID = UUID.randomUUID();
     private static final String testUserWgName = new String("TCUserWgTestName");
     private static final Date testUserWgCreationDate = Date.valueOf(LocalDate.now());
+    private UUID testUserCleanupUUID = null;
 
+    /**
+     * creates a connection to the DB and opens it
+     * @return DBConnectionHandler
+     * @throws SQLException
+     */
     static DBConnectionHandler getDBconnection() throws SQLException {
         // opening connection to Database (compiling now needs running Database)
         String[] args = {};
@@ -110,7 +118,6 @@ public class TCUser {
     @Tag("DB")
     static void tearDownAfterClass() throws SQLException {
         DBConnectionHandler connectionHandler = getDBconnection();
-        System.out.println("TCUser test 1");
         connectionHandler.makeSureItsOpen();
         String testUserString = "DELETE FROM users WHERE userid = ?";
         String testWgString = "DELETE FROM wg WHERE wgid = ?";
@@ -130,6 +137,23 @@ public class TCUser {
         testWgStmnt.setObject(1, testUserWgUUID);
         testWgStmnt.execute();
         testWgStmnt.close();
+
+        connectionHandler.close();
+    }
+
+    @AfterEach
+    @Tag("DB")
+    void cleanUpInTestUsers() throws SQLException {
+        if (this.testUserCleanupUUID == null) {return;} // so it doesn't try to delete something that doesn't exist (to safe on DB traffic)
+        DBConnectionHandler connectionHandler = getDBconnection();
+
+        // cleanup of in test created Users
+        String testUserCleanupString = "DELETE FROM users WHERE userid = ?";
+        PreparedStatement testUserCleanupStmnt = connectionHandler.conn.prepareStatement(testUserCleanupString);
+        connectionHandler.conn.setAutoCommit(true);
+        testUserCleanupStmnt.setObject(1, this.testUserCleanupUUID);
+        testUserCleanupStmnt.execute();
+        testUserCleanupStmnt.close();
 
         connectionHandler.close();
     }
@@ -168,7 +192,7 @@ public class TCUser {
         String testEmail = "TCUser2@test.test";
         String testPw = "TCUserTestPW";
         User testUser = new User(connectionHandler, testEmail, testPw);
-        UUID testUserCleanUp = testUser.getUserID();
+        this.testUserCleanupUUID = testUser.getUserID();
         assertTrue(testUser.getEmail().equals(testEmail));
         assertTrue(testUser.getPassword().equals(testPw));
 
@@ -176,14 +200,6 @@ public class TCUser {
         assertTrue(testUserDB.getUserID().equals(testUser.getUserID()));
         assertTrue(testUserDB.getEmail().equals(testEmail));
         assertTrue(testUserDB.getPassword().equals(testPw));
-
-        // cleanup (can only be done inside here)
-        String testUserCleanupString = "DELETE FROM users WHERE userid = ?";
-        PreparedStatement testUserCleanupStmnt = connectionHandler.conn.prepareStatement(testUserCleanupString);
-        connectionHandler.conn.setAutoCommit(true);
-        testUserCleanupStmnt.setObject(1, testUserCleanUp);
-        testUserCleanupStmnt.execute();
-        testUserCleanupStmnt.close();
 
         connectionHandler.close();
     }

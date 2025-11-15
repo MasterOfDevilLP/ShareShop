@@ -134,11 +134,45 @@ public class WGEndpoints {
 	}
 	
 	public static void epDelete(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
-		System.out.printf("Delete WG %s\n", wid);
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
 		
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			// point of (almost) no return
+			// TODO: at some point, there should maybe be a permission system
+			wg.remove();
+			ctx.status(HttpStatus.OK);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerDelete(Javalin app) {

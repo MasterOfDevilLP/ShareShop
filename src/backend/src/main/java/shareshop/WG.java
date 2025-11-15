@@ -294,7 +294,7 @@ public class WG {
      * removes the wg from the database
      * @throws SQLException
      */
-    public void remove(DBConnectionHandler connectionHandler) throws SQLException {
+    public void remove() throws SQLException {
         String removeString = new String("DELETE FROM wg WHERE wgid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteWG = connectionHandler.conn.prepareStatement(removeString)) {

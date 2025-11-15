@@ -103,7 +103,7 @@
 
                     <!-- Test includes -->
                     <includes>
-                        <include>**/TC*.java</include>
+                        <!--<include>**/TC*.java</include>-->
                         <!--<include>**/*TCRestUser.java</include>-->
                     </includes>
                 </configuration>

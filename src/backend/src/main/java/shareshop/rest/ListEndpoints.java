@@ -26,6 +26,7 @@ import shareshop.rest.requests.CreateListRequest;
 import shareshop.rest.requests.CreateListResponse;
 import shareshop.rest.requests.ListAuditResponse;
 import shareshop.rest.requests.ListContentResponse;
+import shareshop.rest.requests.PatchListRequest;
 
 public class ListEndpoints {
 	
@@ -37,6 +38,7 @@ public class ListEndpoints {
 		registerPost(app);
 		registerDelete(app);
 		registerGetAudit(app);
+		registerPatch(app);
 	}
 	
 	public static void epCreate(Context ctx) {
@@ -367,5 +369,70 @@ public class ListEndpoints {
 			epGetAudit(ctx);
 		});
 	}
+	
+	public static void epPatch(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		String wid = ctx.pathParam("wid");
+		String lid = ctx.pathParam("lid");
+		
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		PatchListRequest req = gson.fromJson(ctx.body(), PatchListRequest.class);
+		if(!req.validate()) {
+			RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+		
+			ShoppingList slist = wg.getList(UUID.fromString(lid));
+			if(slist == null) {
+				logger.debug("no such list");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect list");
+				return;
+			}
+			
+			// now apply the changes. TODO: also check permissions once those are a thing
+			if(req.name != null) {
+				slist.setListName(req.name);
+			}
+			
+			ctx.status(HttpStatus.OK);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
+	}
 
+	private static void registerPatch(Javalin app) {
+		app.patch(basepath + "/{lid}", ctx -> {
+			epPatch(ctx);
+		});
+	}
+	
 }

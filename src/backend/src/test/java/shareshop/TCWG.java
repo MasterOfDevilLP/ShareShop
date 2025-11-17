@@ -315,11 +315,12 @@ public class TCWG {
         ShoppingList testWgShoppingList = testWg.createList(new User(connectionHandler, testWgUserUUID), testWgShoppingListName);
 
         String selectListString = "SELECT shoppinglistid, wgid, lastcachedchangeid, listname, creatoruserid FROM shoppinglists WHERE shoppinglistid = ?";
-        String selectListChangeString = "SELECT shoppinglistid, change, userid FROM listchanges WHERE listchangeid = ?";
+        String selectListChangeString = "SELECT shoppinglistid, change, userid FROM listchanges WHERE listchangeid = ? AND shoppinglistid = ?";
         PreparedStatement selectListStmnt = connectionHandler.conn.prepareStatement(selectListString);
         PreparedStatement selectListChangeStmnt = connectionHandler.conn.prepareStatement(selectListChangeString);
         selectListStmnt.setObject(1, testWgShoppingList.getShoppingListId());
         selectListChangeStmnt.setInt(1, 1);
+        selectListChangeStmnt.setObject(2, testWgShoppingList.getShoppingListId());
         ResultSet rsList = selectListStmnt.executeQuery();
         ResultSet rsListChange = selectListChangeStmnt.executeQuery();
         if (rsList.next()) {

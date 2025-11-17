@@ -1,0 +1,94 @@
+= ShareShop Projekt, Meeting 19 (SE2)
+Kevin (Product Owner)
+04.11.2025
+
+== Teilnehmer
+* Benni
+* Kevin
+* Emil
+* Florian
+* Han
+* Valencia
+* Anni (abwesend)
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1) GitHub-Workflow: Branches direkt aus Tickets
+* Hinweis auf GitHub-Feature: Aus einem Ticket heraus kann direkt ein **Branch** erzeugt werden.
+* Ziel: **Klarer Zusammenhang Ticket <--> Branch**, einfacheres Review (Branch-Name steht direkt am Ticket).
+* Empfehlung:
+** Für größere Aufgaben/Tickets immer **eigenen Branch** anlegen.
+** Branch direkt im Ticket erstellen, dann lokal pullen bzw. in VS Code aktualisieren.
+
+=== 2) Feature „Nutzer in mehreren WGs“ & fehlender Backend-Subtask
+* Story „WG-Beitritt“ (u. a. Story 180) existiert, aber **Backend-Subtask fehlte** → wird nachgezogen.
+* Implementierung: Nutzer können mehreren WGs beitreten; Funktion ist **fertig und manuell getestet**:
+** Nutzer anlegen.
+** Nutzer einer WG hinzufügen.
+** Nutzer mehreren WGs zuordnen.
+* Aktuell **keine Unit-Tests direkt im Feature-Ticket**, da die dafür nötige Testgrundlage (Refactoring) in separatem PR vorbereitet wird.
+* PR soll **zeitnah erstellt** und gemerged werden, da weitere Arbeiten (Connection-Handler-Refactoring) darauf aufbauen.
+
+=== 3) Refactoring für Tests & allgemeine Unit-Test-Strategie
+* Es existiert ein PR, der **Logik aus Lambda-Funktionen herauszieht**, um Tests überhaupt sinnvoll schreiben zu können.
+* Ticketlage dazu ist historisch etwas diffus (Grundlagenarbeit, nicht klar einem Einzel-Ticket zugeordnet).
+* Strategie:
+** Bestehende, „alte“ Features werden nach und nach mit Tests nachgerüstet.
+** Für **neue** Tickets sollen **Unit-Tests direkt mit entstehen**.
+
+=== 4) Items & Endpoints: Kontext und Verhalten
+* Klärung Ticket 171/172/173:
+** Items gehören aus fachlicher Sicht zu **Listen** (nicht direkt zu WGs).
+** Momentan existieren Endpoints für **Erstellen** und **Abrufen** von Items sowie **Add/Remove** von Items zu Listen.
+* Wunsch/Fokus:
+** Ein **Update-/Modify-Endpoint** für Items in Listen wird benötigt (Ticket 172 wurde entsprechend präzisiert).
+** Im Frontend aktuell Workaround: Änderungen sind nur lokal, nach Reload wieder weg -> zeigt Bedarf für echten Update-Endpoint.
+
+=== 5) Fachliches Verhalten: Preis- und Mengenlogik
+* Diskussion, wie das **Preisfeld** verwendet werden soll:
+** Entscheidung: Aktuell wird der Preis als **Einkaufspreis** verstanden, der beim **Einkaufsmodus** gesetzt wird.
+** Use Case: Im Einkaufsmodus wird beim „Abhaken“ eingetragen, was das Produkt tatsächlich gekostet hat.
+** Die spätere Kostenverteilung (wer hat wie viel ausgegeben) basiert auf diesen Preisen.
+* „Suggested Price“:
+** Idee: Vorab-Preis zur groben Planung (z. B. Nudeln ~ 0,99 €) ist **nice-to-have**, aber kein Pflichtumfang des aktuellen Sprints.
+** Fachliche Notiz: Kann später als Erweiterung/Feature aufgenommen werden (Backlog).
+* **Menge**:
+** Menge existiert bereits im Modell und soll **vor dem Einkauf** festgelegt werden.
+** Änderung der Menge (z. B. 100 g → 500 g) soll praktikabel möglich sein.
+** Technisch sinnvoller: Änderung über einen **Update-/Modify-Endpoint**, statt über „Remove + Add“
+
+=== 6) Einheiten (kg, l, Stück) – späteres Thema
+* Aktuell sind **Einheiten** (kg, l, Stück etc.) im Backend **noch nicht abgebildet**.
+* Entscheidung:
+** Kurzfristig reicht **Menge** (z. B. „500“), Darstellung im Frontend kann vorerst generisch bleiben.
+** Einheiten werden als **spätere Erweiterung** betrachtet (neue Tickets nötig), wenn der Kernfunktionsumfang stabil ist.
+
+== Aufgaben / ToDos
+
+* **GitHub-Workflow**
+** Branch-Erstellung über Ticket-Button etablieren.
+** Branch-Namen konsistent mit Ticketnummern verknüpfen.
+
+* **WG-Mehrfachbeitritt**
+** Backend-Subtask zur bestehenden Story ergänzen (WG-Beitritt).
+** PR für „Nutzer in mehreren WGs“ erstellen, Ticket durch den Workflow (In Progress -> In Review -> Done) führen.
+** Merge-Konflikte prüfen/rebasen.
+
+* **Refactoring & Tests**
+** Refactoring-PR (Logik aus Lambda-Funktionen) reviewen und mergen.
+** Für neue Backend-Tickets: direkt **Unit-Tests** mitliefern (positiv/negativ).
+
+* **Endpoints Items/Listen**
+** Ticket 172: Update-/Modify-Endpoint für Items in Listen konkret ausimplementieren (Menge/Preis anpassbar).
+** Frontend auf aktuelle Backend-Version bringen, damit Fehler/Not-Implemented sauber sichtbar werden.
+
+* **Fachliche Klarstellung Preis/Menge**
+** Preisfeld vorerst als **Einkaufspreis** definieren (Dokumentation/Backlog-Notiz).
+** Idee „Preis-Suggestion“ als späteres Feature im Backlog notieren.
+** Sicherstellen, dass Menge bearbeitbar bleibt (über zukünftigen Update-Endpoint).
+
+* **Einheiten**
+** Einheiten (kg/l/Stück) als spätere Erweiterung vormerken; aktuell nicht im Scope des laufenden Sprints.

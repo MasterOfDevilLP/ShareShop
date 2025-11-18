@@ -3,7 +3,6 @@ package shareshop;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.nullable;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -17,7 +16,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 // Notes: not testing the itemchanges yet, because they are not used currently
 // TODO: edit tests to test itemchanges after adding the using of those

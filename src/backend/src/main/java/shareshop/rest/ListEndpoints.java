@@ -419,7 +419,7 @@ public class ListEndpoints {
 			
 			// now apply the changes. TODO: also check permissions once those are a thing
 			if(req.name != null) {
-				slist.setListName(req.name);
+				slist.setListName(req.name, usr);
 			}
 			
 			ctx.status(HttpStatus.OK);

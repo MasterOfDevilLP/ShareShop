@@ -3,10 +3,10 @@ new Vue({
     el: '#app',
     data: {
       baseUrl: API_BASE,
-      fakeWGID: '966cff22-3b6f-4c5b-b0b6-014f94a04415',
-      fakelistID: '78260ade-fd36-4ca7-9d77-46fb45361723',
+      wgID: localStorage.getItem("selectedWGID") || '',
+      listID: localStorage.getItem("selectedListID") || '',
       products: [], //item in WG
-      listItems: [],   //Items in shopping list
+      listItems: [],   //Items in shopping list (Listeeinträge)
       kategorien: ['Obst', 'Gemüse', 'Getränke', 'Fleisch', 'Backwaren', 'Snacks', 'Haushalt', 'Sonstiges'],
       newProduct: {
         id:'',
@@ -25,34 +25,27 @@ new Vue({
     },
     
  mounted() {
-    this.loginAndLoadData(); 
+    if (this.wgID && this.listID) {
+      this.initData();
+    } else {
+      console.warn("WG or list not selected. Please select from Startseite first.");
+    }
   },
 
   methods: {
-    loginAndLoadData() {
-      fetch(`${this.baseUrl}/user/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: '001@gmail.com', password: '001' }),
-        credentials: 'include',     
-      })
-            .then(res => {
-        console.log('Login status:', res.status);
-        return res.text();  // read raw text, avoid json() error
-      })
-      .then(data => {
-        console.log('Login successful', data);
-        // only load data after login
-        this.loadWGItems();
-        this.loadList();
-      })
-      .catch(err => console.error('Login failed', err));
+    async initData() {
+      try {
+        await this.loadWGItems();
+        await this.loadList();
+      } catch (err) {
+        console.error('Initialization failed', err);
+      }
     },
 
     // Handle adding a new product to the list
     // Load items from WG: when entering product name, if it exists in WG, show the corresponding product to choose
     loadWGItems() {
-        fetch(`${this.baseUrl}/wg/${this.fakeWGID}/item`, {
+        fetch(`${this.baseUrl}/wg/${this.wgID}/item`, {
             credentials: 'include'
         })
         .then(res => {
@@ -110,7 +103,7 @@ new Vue({
 
     // Load items from shopping list
     loadList() {
-    fetch(`${this.baseUrl}/wg/${this.fakeWGID}/list/${this.fakelistID}`, {
+    fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
       credentials: 'include'
     })
       .then(res => res.ok ? res.json() : [])
@@ -185,7 +178,7 @@ new Vue({
           type: "add",     // action: add
           amount: parseFloat(this.newProduct.menge) || 1  
         };
-        fetch(`${self.baseUrl}/wg/${self.fakeWGID}/list/${self.fakelistID}`, {
+        fetch(`${self.baseUrl}/wg/${self.wgID}/list/${self.listID}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -217,7 +210,7 @@ new Vue({
           description: this.newProduct.kategorie || "",
           price: parseFloat(this.newProduct.preis) || 0
         };
-        fetch(`${this.baseUrl}/wg/${this.fakeWGID}/item`, {
+        fetch(`${this.baseUrl}/wg/${this.wgID}/item`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -249,7 +242,7 @@ new Vue({
     //tick the item in the list
     toggleTick(item) {
       const payload = { iid: item.iid, type: 'tick', amount: item.amount, price: item.price || 0 };
-      fetch(`${this.baseUrl}/wg/${this.fakeWGID}/list/${this.fakelistID}`, {
+      fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -267,7 +260,7 @@ new Vue({
     //delete item from the list
     removeFromList(item) {
       const payload = { iid: item.iid, type: 'remove', amount: item.amount };
-      fetch(`${this.baseUrl}/wg/${this.fakeWGID}/list/${this.fakelistID}`, {
+      fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

@@ -168,13 +168,12 @@ public class WG {
         String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate) VALUES (?, ?, ?)");
         connectionHandler.makeSureItsOpen();
         PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
-        connectionHandler.conn.setAutoCommit(false);
+        connectionHandler.conn.setAutoCommit(true);
         Date joinDate = Date.valueOf(LocalDate.now());
         statement.setObject(1, user.getUserID());
         statement.setObject(2, this.wgID);
         statement.setDate(3, joinDate);
         statement.execute();
-        connectionHandler.conn.commit();
         statement.close();
         //user.setWgID(connectionHandler, this.wgID);
     }
@@ -189,10 +188,10 @@ public class WG {
         connectionHandler.makeSureItsOpen();
         connectionHandler.conn.setAutoCommit(false);
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
+        connectionHandler.conn.setAutoCommit(true);
         deleteStatement.setObject(1, user.getUserID());
         deleteStatement.setObject(2, this.wgID);
         deleteStatement.execute();
-        connectionHandler.conn.commit();
         deleteStatement.close();
         //user.setWgID(connectionHandler, null);
     }
@@ -202,10 +201,13 @@ public class WG {
      * @param shoppingListID
      * @return  Shoppinglist Object,
      *          or null if there is no shoppinglist with this ID.
-     * @throws SQLException
      */
-    public ShoppingList getList(UUID shoppingListID) throws SQLException {
-    	return new ShoppingList(connectionHandler, shoppingListID);
+    public ShoppingList getList(UUID shoppingListID){
+    	try {
+    		return new ShoppingList(connectionHandler, shoppingListID);
+    	} catch(SQLException e) {
+    		return null;
+    	}
         /*String selectString = new String("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);

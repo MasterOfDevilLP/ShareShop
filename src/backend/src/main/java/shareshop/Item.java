@@ -56,7 +56,7 @@ public class Item {
      */
     public Item(DBConnectionHandler connectionHandler, UUID itemID) throws SQLException {
         this.connectionHandler = connectionHandler;
-        String selectString = new String ("SELECT * FROM items WHERE itemid = ?");
+        String selectString = new String ("SELECT wgid, lastcachedchangeid, itemname, itemdescription, CAST(price AS NUMERIC) AS price FROM items WHERE itemid = ?");
         connectionHandler.makeSureItsOpen();
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, itemID);
@@ -139,6 +139,7 @@ public class Item {
 
             update.setString(1, itemName);
             update.setObject(2, this.itemID);
+            update.executeUpdate();
 
             itemChange.setObject(1, this.itemID);
             itemChange.setInt(2, newChangeID());
@@ -146,6 +147,7 @@ public class Item {
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMNAME");
             itemChange.setString(6, itemName);
+            itemChange.execute();
 
             connectionHandler.conn.commit();
             update.close();
@@ -175,6 +177,7 @@ public class Item {
 
             update.setString(1, itemDescription);
             update.setObject(2, this.itemID);
+            update.executeUpdate();
 
             itemChange.setObject(1, this.itemID);
             itemChange.setInt(2, newChangeID());
@@ -182,6 +185,7 @@ public class Item {
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMDESCR");
             itemChange.setString(6, itemDescription);
+            itemChange.execute();
 
             connectionHandler.conn.commit();
             update.close();
@@ -211,6 +215,7 @@ public class Item {
 
             update.setBigDecimal(1, price);
             update.setObject(2, this.itemID);
+            update.executeUpdate();
 
             itemChange.setObject(1, this.itemID);
             itemChange.setInt(2, newChangeID());
@@ -218,6 +223,7 @@ public class Item {
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMPRICE");
             itemChange.setBigDecimal(6, price);
+            itemChange.execute();
 
             connectionHandler.conn.commit();
             update.close();

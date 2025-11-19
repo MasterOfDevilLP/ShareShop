@@ -226,9 +226,9 @@ public class ShoppingList {
      * @param listName
      * @throws SQLException
      */
-    public void setListName(String listName) throws SQLException {
+    public void setListName(String listName, User user) throws SQLException {
         String updateString = new String("UPDATE shoppinglists SET listname = ? WHERE shoppinglistid = ?");
-        String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, listname) VALUES(?, ?, ?, ?, ?)");
+        String listChangeString = new String("INSERT INTO listchanges(shoppinglistid, listchangeid, change, changedate, listname, userid) VALUES(?, ?, ?, ?, ?, ?)");
         connectionHandler.makeSureItsOpen();
         try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                 PreparedStatement listChange = connectionHandler.conn.prepareStatement(listChangeString)) {
@@ -236,12 +236,15 @@ public class ShoppingList {
 
             update.setString(1, listName);
             update.setObject(2, this.shoppingListID);
+            update.execute();
 
             listChange.setObject(1, this.shoppingListID);
             listChange.setInt(2, newChangeID());
             listChange.setString(3, "EDITED");
             listChange.setDate(4, Date.valueOf(LocalDate.now()));
             listChange.setString(5, listName);
+            listChange.setObject(6, user.getUserID());
+            listChange.execute();
 
             connectionHandler.conn.commit();
             update.close();
@@ -293,7 +296,7 @@ public class ShoppingList {
         if (start >= end) {throw new IllegalArgumentException("end has to be bigger then start");}
         String selectString = new String("SELECT * FROM listchanges WHERE shoppinglistid = ? ORDER BY listchangeid ASC");
         connectionHandler.makeSureItsOpen();
-        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
+        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         selectStatement.setObject(1, this.shoppingListID);
 
         ResultSet rs = selectStatement.executeQuery();

@@ -39,7 +39,7 @@ public class User {
     // Constructors using the DB
     
     /** 
-     * Constrcutor that creates a new user
+     * Constructor that creates a new user
      * @param conn
      * @param email
      * @param pwdhash
@@ -64,7 +64,7 @@ public class User {
     }
 
     /**
-     * Construcot of Class User via userID and DB query
+     * Constructor of Class User via userID and DB query
      * @param connectionHandler
      * @param userID
      * @throws SQLException

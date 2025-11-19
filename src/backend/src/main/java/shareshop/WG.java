@@ -187,9 +187,11 @@ public class WG {
     public void removeUser(User user) throws SQLException {
         String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(false);
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
         deleteStatement.setObject(1, user.getUserID());
         deleteStatement.setObject(2, this.wgID);
+        deleteStatement.execute();
         connectionHandler.conn.commit();
         deleteStatement.close();
         //user.setWgID(connectionHandler, null);
@@ -294,7 +296,7 @@ public class WG {
      * removes the wg from the database
      * @throws SQLException
      */
-    public void remove(DBConnectionHandler connectionHandler) throws SQLException {
+    public void remove() throws SQLException {
         String removeString = new String("DELETE FROM wg WHERE wgid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteWG = connectionHandler.conn.prepareStatement(removeString)) {

@@ -94,6 +94,20 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.4</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+
+                    <!-- Test includes -->
+                    <includes>
+                        <!--<include>**/TC*.java</include>-->
+                        <!--<include>**/*TCRestUser.java</include>-->
+                    </includes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

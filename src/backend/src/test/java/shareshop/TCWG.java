@@ -198,11 +198,14 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgConstructorFromUUID() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
+        // acting
         WG testWg = new WG(connectionHandler, testWgUUID);
 
+        // validating
         assertEquals(testWg.getWgID(), testWgUUID);
         assertEquals(testWg.getWgName(), testWgName);
         assertEquals(testWg.getCreationDate(), testWgDate);
@@ -213,9 +216,11 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgConstructorFromWrongUUID() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
+        // acting and validating
         Exception e = assertThrows(SQLException.class, () -> {
             new WG(connectionHandler, UUID.randomUUID());
         });
@@ -227,16 +232,20 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgConstructorNewWg() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
         String testWgName = "TCWgName2";
 
+        // acting
         WG testWg = new WG(connectionHandler, testWgName);
         this.testWgCleanupUUID = testWg.getWgID();
+        WG testWgDB = new WG(connectionHandler, testWg.getWgID());
+
+        // validating
         assertEquals(testWg.getWgName(), testWgName);
 
-        WG testWgDB = new WG(connectionHandler, testWg.getWgID());
         assertEquals(testWg.getWgID(), testWgDB.getWgID());
         assertEquals(testWg.getWgName(), testWgDB.getWgName());
         assertEquals(testWg.getCreationDate(), testWgDB.getCreationDate());
@@ -247,17 +256,20 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgSetter() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
         String testWgNewName = "TCWgNewName";
-
         WG testWg = new WG(connectionHandler, testWgSetterUUID);
 
+        // acting
         testWg.setWgName(testWgNewName);
+        WG testWgDB = new WG(connectionHandler, testWg.getWgID());
+
+        // validating
         assertEquals(testWg.getWgName(), testWgNewName);
 
-        WG testWgDB = new WG(connectionHandler, testWg.getWgID());
         assertEquals(testWg.getWgID(), testWgDB.getWgID());
         assertEquals(testWg.getWgName(), testWgDB.getWgName());
 
@@ -267,11 +279,14 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgHasUser() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
+        // acting
         WG testWg = new WG(connectionHandler, testWgUUID);
 
+        // validating
         assertTrue(testWg.hasUser(new User(connectionHandler, testWgUserUUID)));
 
         connectionHandler.close();
@@ -280,12 +295,16 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgAddUser() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
         WG testWg = new WG(connectionHandler, testWgUUID);
 
+        // acting
         testWg.addUser(new User(connectionHandler, testWgUser2UUID));
+
+        // validating
         assertTrue(testWg.hasUser(new User(connectionHandler, testWgUser2UUID)));
 
         connectionHandler.close();
@@ -294,12 +313,16 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgRemoveUser() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
         WG testWg = new WG(connectionHandler, testWgUUID);
 
+        // acting
         testWg.removeUser(new User(connectionHandler, testWgUser3UUID));
+
+        // validating
         assertFalse(testWg.hasUser(new User(connectionHandler, testWgUser3UUID)));
 
         connectionHandler.close();
@@ -308,10 +331,13 @@ public class TCWG {
     @Test
     @Tag("DB")
     void testWgShoppingList() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
         WG testWg = new WG(connectionHandler, testWgUUID);
+
+        // acting
         ShoppingList testWgShoppingList = testWg.createList(new User(connectionHandler, testWgUserUUID), testWgShoppingListName);
 
         String selectListString = "SELECT shoppinglistid, wgid, lastcachedchangeid, listname, creatoruserid FROM shoppinglists WHERE shoppinglistid = ?";
@@ -323,6 +349,8 @@ public class TCWG {
         selectListChangeStmnt.setObject(2, testWgShoppingList.getShoppingListId());
         ResultSet rsList = selectListStmnt.executeQuery();
         ResultSet rsListChange = selectListChangeStmnt.executeQuery();
+        
+        // validating
         if (rsList.next()) {
             assertEquals((UUID)rsList.getObject("shoppinglistid"), testWgShoppingList.getShoppingListId());
             assertEquals((UUID)rsList.getObject("wgid"), testWg.getWgID());
@@ -344,7 +372,10 @@ public class TCWG {
         selectListStmnt.close();
         selectListChangeStmnt.close();
 
+        // acting
         ArrayList<ShoppingList> testWgShoppingListList = testWg.lists(connectionHandler);
+
+        // validating
         assertEquals(testWgShoppingListList.size(), 1);
         assertEquals(testWgShoppingListList.get(0).getShoppingListId(), testWgShoppingList.getShoppingListId());
 

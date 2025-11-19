@@ -161,9 +161,14 @@ public class TCUser {
     @Test
     @Tag("DB")
     void testUserConstructorFromUUID() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
+
+        // acting
         User testUser = new User(connectionHandler, testUserUUID);
+
+        // validating
         assertTrue(testUser.getUserID().equals(testUserUUID));
         assertTrue(testUser.getEmail().equals(testUserEmail));
         assertTrue(testUser.getPassword().equals(testUserPw));
@@ -173,9 +178,11 @@ public class TCUser {
     @Test
     @Tag("DB")
     void testUserConstructorFromWrongUUID() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
+        // acting and validating
         Exception e = assertThrows(SQLException.class, () -> {
             new User(connectionHandler, UUID.randomUUID());
         });
@@ -187,16 +194,21 @@ public class TCUser {
     @Test
     @Tag("DB")
     void testUserConstructorNewUser() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
         String testEmail = "TCUser2@test.test";
         String testPw = "TCUserTestPW";
+
+        // acting
         User testUser = new User(connectionHandler, testEmail, testPw);
         this.testUserCleanupUUID = testUser.getUserID();
+        User testUserDB = new User(connectionHandler, testUser.getUserID());
+
+        // validating
         assertTrue(testUser.getEmail().equals(testEmail));
         assertTrue(testUser.getPassword().equals(testPw));
 
-        User testUserDB = new User(connectionHandler, testUser.getUserID());
         assertTrue(testUserDB.getUserID().equals(testUser.getUserID()));
         assertTrue(testUserDB.getEmail().equals(testEmail));
         assertTrue(testUserDB.getPassword().equals(testPw));
@@ -207,38 +219,55 @@ public class TCUser {
     @Test
     @Tag("DB")
     void testUserGetWgList() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
+
+        // acting
         User testUser = new User(connectionHandler, testUserUUID);
         ArrayList<UUID> wgList = testUser.getWgIDList();
+
+        // validating
         assertEquals(1, wgList.size());
         assertTrue(wgList.get(0).equals(testUserWgUUID));
+
         connectionHandler.close();
     }
 
     @Test
     @Tag("DB")
     void testUserInWg() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
+
+        // acting
         User testUser = new User(connectionHandler, testUserUUID);
+
+        // validating
         assertTrue(testUser.isUserInWG(testUserWgUUID));
+
         connectionHandler.close();
     }
 
     @Test
     @Tag("DB")
     void testUserRemove() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
+
+        // acting
         User testUser = new User(connectionHandler, testUserRemoveUUID);
         testUser.remove();
         
+        // validating
         Exception e = assertThrows(SQLException.class, () -> {
             new User(connectionHandler, testUserRemoveUUID);
         });
 
         assertTrue(e.getMessage().contains("there is no user with userID"));
+
         connectionHandler.close();
     }
 }

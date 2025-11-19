@@ -146,11 +146,11 @@ public class TCShoppingList {
         User testListUser = new User(connectionHandler, testListUserUUID);
         String testListNewName = "newListName";
 
-        // using
+        // acting
         testListNaming.setListName(testListNewName, testListUser);
-        
-        // testing
         ShoppingList testListNamingDB = new ShoppingList(connectionHandler, testListNaming.getShoppingListId());
+        
+        // validating
         assertEquals(testListNaming.getShoppingListId(), testListNamingDB.getShoppingListId());
         assertEquals(testListNaming.getName(), testListNamingDB.getName());
 
@@ -164,10 +164,10 @@ public class TCShoppingList {
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
-        // using
+        // acting
         ArrayList<Pair<Item, Integer>> testListItems = testList.getItemsOnList();
 
-        // testing
+        // validating
         assertEquals(1, testListItems.size());
         assertEquals(testListItem1.getItemID(), testListItems.get(0).getValue0().getItemID());
         assertEquals(testListItemAmount, testListItems.get(0).getValue1().intValue());
@@ -184,12 +184,12 @@ public class TCShoppingList {
 
         User testListUser = new User(connectionHandler, testListUserUUID);
 
-        // using
+        // acting
         testListNaming.addChange(testListUser, testListItem2, ShoppingList.Change.ADD, 5);
         ArrayList<Pair<Item, Integer>> testListItems = testListNaming.getItemsOnList();
         ArrayList<ListChange> testListChanges = testListNaming.getChangeLog(0, 9);
 
-        // testing
+        // validating
         assertEquals(1, testListItems.size());
         assertEquals(5, testListItems.get(0).getValue1().intValue());
         assertEquals(2, testListChanges.size());

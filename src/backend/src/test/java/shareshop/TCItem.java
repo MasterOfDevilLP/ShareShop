@@ -167,11 +167,14 @@ public class TCItem {
     @Test
     @Tag("DB")
     void testItemConstructorFromUUID() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
+        // acting
         Item testItem = new Item(connectionHandler, testItemUUID);
 
+        // validating
         assertEquals(testItem.getItemID(), testItemUUID);
         assertEquals(testItem.getWgID(), testItemWgUUID);
         assertEquals(testItem.getItemName(), testItemName);
@@ -184,9 +187,11 @@ public class TCItem {
     @Test
     @Tag("DB")
     void testUserConstructorFromWrongUUID() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
+        // acting and validating
         Exception e = assertThrows(SQLException.class, () -> {
             new Item(connectionHandler, UUID.randomUUID());
         });
@@ -198,6 +203,7 @@ public class TCItem {
     @Test
     @Tag("DB")
     void testItemConstructorNewItem() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
@@ -205,14 +211,17 @@ public class TCItem {
         String testItemDescription = "TCItemDescription2";
         BigDecimal testItemPrice = new BigDecimal(3621.0);
 
+        // acting
         Item testItem = new Item(connectionHandler, testItemWG, testItemName, testItemDescription, testItemPrice);
         this.testItemCleanupUUID = testItem.getItemID();
+        Item testItemDB = new Item(connectionHandler, testItem.getItemID());
+        
+        // validating
         assertEquals(testItem.getWgID(), testItemWG.getWgID());
         assertEquals(testItem.getItemName(), testItemName);
         assertEquals(testItem.getItemDescription(), testItemDescription);
         assertEquals(testItem.getPriceAsDouble(), testItemPrice.doubleValue());
 
-        Item testItemDB = new Item(connectionHandler, testItem.getItemID());
         assertEquals(testItem.getWgID(), testItemDB.getWgID());
         assertEquals(testItem.getItemName(), testItemDB.getItemName());
         assertEquals(testItem.getItemDescription(), testItemDB.getItemDescription());
@@ -224,6 +233,7 @@ public class TCItem {
     @Test
     @Tag("DB")
     void testItemSetter() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
@@ -231,18 +241,19 @@ public class TCItem {
         String testItemNewDescription = "TCItemNewDescription";
         BigDecimal testItemNewPrice = new BigDecimal(3621.0);
 
+        // acting
         Item testItem = new Item(connectionHandler, testItemSetterUUID);
-        
         testItem.setItemName(testItemNewName);
         testItem.setItemDescription(testItemNewDescription);
         testItem.setPrice(testItemNewPrice);
-
+        Item testItemDB = new Item(connectionHandler, testItemSetterUUID);
+        
+        // validating
         assertEquals(testItem.getWgID(), testItemWG.getWgID());
         assertEquals(testItem.getItemName(), testItemNewName);
         assertEquals(testItem.getItemDescription(), testItemNewDescription);
         assertEquals(testItem.getPriceAsDouble(), testItemNewPrice.doubleValue());
 
-        Item testItemDB = new Item(connectionHandler, testItemSetterUUID);
         assertEquals(testItem.getWgID(), testItemDB.getWgID());
         assertEquals(testItem.getItemName(), testItemDB.getItemName());
         assertEquals(testItem.getItemDescription(), testItemDB.getItemDescription());
@@ -254,19 +265,20 @@ public class TCItem {
     @Test
     @Tag("DB")
     void testItemRemove() throws SQLException {
+        // preparing
         DBConnectionHandler connectionHandler = getDBconnection();
         connectionHandler.makeSureItsOpen();
 
+        // acting
         Item testItem = new Item(connectionHandler, testItemRemoveUUID, testItemWgUUID, 0, null, null, null);
         testItem.remove();
 
+        // validating
         Exception e = assertThrows(SQLException.class, () -> {
             new Item(connectionHandler, testItemRemoveUUID);
         });
 
         assertTrue(e.getMessage().contains("there is no item with itemID"));
-        connectionHandler.close();
-
         connectionHandler.close();
     }
 }

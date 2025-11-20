@@ -26,7 +26,7 @@ new Vue({
     },
     showPopup: false,
     showCreateGroupModal: false,
-    newGroupName: '',
+    //newGroupName: '',
     showListOptions: false,
     selectedList: null,
     showRenameModal: false,
@@ -260,7 +260,7 @@ async saveList() {
           alert("Fehler beim Wechseln der WG");
         }
       },*/
-      
+/* --> Formular für WG erstellung branch #145      
 async createNewGroup() {
     if (!this.newGroupName.trim()) {
         alert("Bitte einen Gruppennamen eingeben.");
@@ -322,7 +322,7 @@ async createNewGroup() {
         alert("Fehler beim Erstellen der WG. Details: " + error.message);
     }
 },
-
+*/
       /* Lokal
       createNewGroup() {
         if (!this.newGroupName.trim()) {

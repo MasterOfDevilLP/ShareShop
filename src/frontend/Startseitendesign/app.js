@@ -106,43 +106,54 @@ new Vue({
   alert("Liste erfolgreich gespeichert");
       },
 
-      /* pseudocode
+ 
       //Liste erstellen
-      async saveList() {
-        if (!this.newList.name) {
-          alert('Bitte alle Felder ausfüllen.');
-          return;
-        }
+async saveList() {
+  if (!this.newList.name) {
+    alert("Bitte einen Namen eingeben.");
+    return;
+  }
 
-        const now = new Date();
-        const creationDate = now.toISOString().slice(0, 10); // YYYY-MM-DD
-        const listID = Date.now().toString(36);
+  try {
+    const response = await fetch(`${API_BASE_URL}/wg/${this.selectedWG}/list`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ name: this.newList.name })
+    });
 
-        fetch('/api/List/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            listID: listID,
-            listName: this.newList.name,
-            creationDate: creationDate,
-          })
-        })
-        .then(response => {
-          if (!response.ok) throw new Error('API fehlgeschlagen');
-          return response.json();
-        })
-        .then(data => {
-          this.lists.push({ id:listID, name: this.newList.name });
-          this.closePopup();
-        })
-        .catch(error => {
-          alert('Fehler beim Erstellen der Liste: ' + error.message);
-        });
-        }
+    let data;
+
+    try {
+      data = await response.json();
+    } catch (err) {
+      data = null;
+    }
+
+    if (!response.ok) {
+      throw new Error(data?.message || `Fehler ${response.status}`);
+    }
+
+    if (!data || !data.id) {
+      throw new Error("Backend hat keine Listen-ID zurückgegeben.");
+    }
+
+    this.lists.push({
+      id: data.id,
+      name: this.newList.name.trim()
+    });
+
+    this.closePopup();
+
+  } catch (error) {
+    alert("Fehler beim Erstellen der Liste: " + error.message);
+  }
+},
+
+
 
       //Liste anpassen
+      /*
       async updateList(){
        const list = this.lists.find(l => l.id === listID);
         if (!list) {
@@ -175,7 +186,8 @@ new Vue({
           console.error(error);
           alert("Fehler beim Netzwerk"); 
         }
-      }
+      }/*
+      /*
 
       //Liste loeschen
       async deleteList(listID) {
@@ -194,7 +206,7 @@ new Vue({
       }
     },
 
-       */
+       
   selectWG(id) {
         document.getElementById("dropdown-toggle").checked = false;
 
@@ -211,7 +223,7 @@ new Vue({
           this.selectedWGName = wg.name;
           //this.switchWG();
         }
-      },
+      },*/
 
   selectWGForNewList(name) {
       this.newList.wg = name;

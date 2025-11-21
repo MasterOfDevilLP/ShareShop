@@ -64,16 +64,20 @@
         </header>
 
         <!-- Modal pop up neue WG erstellen -->
+        <!-- Modal: Neue WG erstellen -->
         <div v-if="showCreateGroupModal" class="modal-overlay">
           <div class="modal-content">
             <h3>Gruppe Erstellen</h3>
+
             <input v-model="newGroupName" placeholder="Gruppenname" />
+
             <div class="modal-actions">
               <button @click="createNewGroup">Erstellen</button>
               <button @click="showCreateGroupModal = false">Abbrechen</button>
             </div>
           </div>
         </div>
+
         <!-- Main Content -->
         <main class="app-content">
           <div class="shopping-list">

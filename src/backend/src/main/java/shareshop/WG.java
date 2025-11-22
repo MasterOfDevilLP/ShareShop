@@ -346,6 +346,7 @@ public class WG {
         boolean canJoin = invite.checkIfValidForUser(user); // only need to check this, since it also checks the validity of the invite itself
         if (canJoin) {
             this.addUser(user);
+            if (invite.getUserID() != null) {invite.remove();}  // deletes the invite on the DB when it was a specific invite for this user
             return canJoin;
         } else {
             System.out.println("Invite was invalid either to having expired or not being for this user");

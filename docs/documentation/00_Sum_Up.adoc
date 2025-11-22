@@ -304,3 +304,13 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Offline-Einkaufsmodus: Diskussion „Diffs vs. kompletter Zustand“: Backend bevorzugt diff-basierte Updates, Feedback vom Frontend steht noch aus.
 * Tickets: Titel sollen den fachlichen Kontext (z. B. Listenbedienung) tragen; alte KI-generierte Details (falsche Pfade) werden bereinigt.
 * WG-Invites: Einladung per Link wird vorbereitet; Backend braucht eigenes Invite-Ticket (DB-Struktur und Einlöse-Logik), Mailversand ist optionales Add-on.
+
+== 21. Team-Meeting, 19.11.2025
+
+* Reviews: Frontend-Features werden künftig gegenseitig reviewed (kein Self-Review); Kevin unterstützt bei Bedarf, Benni übernimmt Backend-Reviews.
+* WG-Invites: Ticket #227 existiert bereits im Epic „WG-Bedienung“ und wird in den Sprint gezogen.
+* Tests: Vollständige Testabdeckung aktuell nicht priorisiert; Test-Hinweise in Tickets sind vorerst nicht blockierend.
+* Ticket #172: Performanceanforderung wird entschärft oder entfernt, da zu unkonkret.
+* Frontend: Hardcodes (Logins/IDs) entfernen; Branches bereinigen und lauffähigen `develop` herstellen. Danach PRs.
+* Live-Umgebung: Backend läuft bereits; Frontend wird zusätzlich als Live-Version bereitgestellt (eigenes Ticket).
+* Repo-Hygiene: Nur relevante Dateien committen; konsistente Dateinamen (case-sensitive, Icons).

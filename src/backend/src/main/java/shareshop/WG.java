@@ -4,7 +4,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -292,6 +295,62 @@ public class WG {
         selectStatement.close();
 
         return lists;
+    }
+
+    /**
+     * creates an Invite. Set user to null to make it valid for everyone. Sert expireDate to -1 to make it infinite
+     * @param user
+     * @param expireTime (in seconds)
+     * @return Invite
+     * @throws SQLException
+     */
+    public Invite createInvite(User user, long expireTime) throws SQLException {
+        Timestamp currrentTime = Timestamp.valueOf(LocalDateTime.now());
+        Timestamp expiringTime = expireTime != -1 ? ShareShopUtility.createTimestampInAmountOfTime(currrentTime, expireTime * 1000) : null;
+        return new Invite(connectionHandler, this.wgID, user != null ? user.getUserID() : null, currrentTime, expiringTime);
+    }
+
+    /**
+     * returns a list of all invites of this WG
+     * @return ArrayList<Invite>
+     * @throws SQLException
+     */
+    public ArrayList<Invite> getInvites() throws SQLException {
+        connectionHandler.makeSureItsOpen();
+        ArrayList<Invite> invites = new ArrayList<Invite>();
+        String selectString = "SELECT token FROM invites WHERE wgid = ?";
+        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
+        selectStatement.setObject(1, this.wgID);
+        ResultSet rs = selectStatement.executeQuery();
+        while (rs.next()) {
+            invites.add(new Invite(connectionHandler, (UUID)rs.getObject("token")));
+        }
+
+        invites.trimToSize();
+        return invites;
+    }
+
+    /**
+     * tries to add the user to the wg via the invite. Returns true if invite was valid, returns false if invite was not valid and doesn't add User to wg
+     * @param invite
+     * @param user
+     * @return boolean
+     * @throws SQLException
+     */
+    public boolean joinViaInvite(Invite invite, User user) throws SQLException {
+        if (user.isUserInWG(this.wgID)) {
+            System.out.println("user is already in this wg");
+            return false;
+        }
+
+        boolean canJoin = invite.checkIfValidForUser(user); // only need to check this, since it also checks the validity of the invite itself
+        if (canJoin) {
+            this.addUser(user);
+            return canJoin;
+        } else {
+            System.out.println("Invite was invalid either to having expired or not being for this user");
+            return canJoin;
+        }
     }
 
     /**

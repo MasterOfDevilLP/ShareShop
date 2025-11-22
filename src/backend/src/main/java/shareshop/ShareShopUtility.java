@@ -1,8 +1,11 @@
 package shareshop;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 
 public class ShareShopUtility {
 
@@ -23,5 +26,15 @@ public class ShareShopUtility {
         }
         stmt.close();
         return uuid;
+    }
+
+    /**
+     * adds an amount of time (in milliseconds) to the startingTime timestamp and returns new Timestamp
+     * @param startingTime
+     * @param timeToAdd (in milliseconds)
+     * @return Timestamp
+     */
+    public static Timestamp createTimestampInAmountOfTime(Timestamp startingTime, long timeToAdd) {
+        return new Timestamp(startingTime.getTime() + timeToAdd);
     }
 }

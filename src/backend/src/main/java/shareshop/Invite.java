@@ -156,4 +156,9 @@ public class Invite {
         deleteStatement.execute();
         deleteStatement.close();
     }
+
+    @Override
+    public String toString() {
+        return new String("Invite with token: " + this.token + "\nfrom wg: " + this.wgid + "\nfor user: " + this.userid + "\ncreated at: " + this.creationdatetime + "\n valid until: " + this.expirydatetime);
+    }
 }

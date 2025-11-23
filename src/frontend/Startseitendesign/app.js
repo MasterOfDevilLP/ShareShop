@@ -3,22 +3,20 @@ import { API_BASE_URL } from "../config.js";
 new Vue({
   el: "#app",
   data: {
-    // Beispiel-Listen
-    lists: [
-      { id: "1", name: "Wocheneinkauf" }
-    ],
+    // Listen in der aktuell ausgewählten WG
+    lists: [],
 
-    // WG-Liste (IDs als STRING!)
+    // WGs (aus localStorage)
     wgList: JSON.parse(localStorage.getItem("wgList")) || [],
 
-    // Auswahl der aktuellen WG
-    selectedWG: localStorage.getItem("selectedWGID") || "1",
-    selectedWGName: localStorage.getItem("selectedWGName") || "WG Sonnenstraße",
+    // aktuell ausgewählte WG
+    selectedWG: localStorage.getItem("selectedWG") || null,
+    selectedWGName: localStorage.getItem("selectedWGName") || "",
 
     // für später, aktuell egal
     benutzerID: 123,
 
-    // *** HIER: Name aus deinem WG-Modal ***
+    // Name für neue WG (im Modal)
     newGroupName: "",
 
     // Daten für neue Liste
@@ -48,161 +46,160 @@ new Vue({
     }
   },
 
-
-
-    methods: {
-      
-      add_list() {
+  methods: {
+    // Popup "Liste hinzufügen" öffnen
+    add_list() {
+      if (!this.selectedWG) {
+        alert("Bitte zuerst eine WG erstellen und auswählen.");
+        return;
+      }
       this.showPopup = true;
       this.showListOptions = false;
-      },
+    },
 
-      closePopup() {
-        this.showPopup = false;
-        this.resetNewList();
-      },
+    closePopup() {
+      this.showPopup = false;
+      this.resetNewList();
+    },
 
-      resetNewList() {
-      this.newList = { name: '', beschreibung: '', wg: '' };
+    resetNewList() {
+      this.newList = { name: "", beschreibung: "", wg: "" };
       this.touched = { name: false, beschreibung: false };
-      },
+    },
 
-
-     openListOptions(list) {
+    openListOptions(list) {
       this.selectedList = list;
       this.showListOptions = true;
       this.showPopup = false;
-      },
+    },
 
-      closeListOptions() {
-        this.selectedList = null;
-        this.showListOptions = false;
-      },
+    closeListOptions() {
+      this.selectedList = null;
+      this.showListOptions = false;
+    },
 
-      /*saveList() {
-          if (!this.isListValid) {
-    this.touched.name = true;
-    this.touched.beschreibung = true;
-    return;
-  }
+    // ─────────────────────────────
+    // Liste erstellen
+    // ─────────────────────────────
+    async saveList() {
+      if (!this.newList.name.trim()) return;
 
-  const listID = Date.now().toString(36);
-  const newListData = {
-    id: listID,
-    name: this.newList.name,
-    beschreibung: this.newList.beschreibung,
-    wg: this.newList.wg
-  }
-  // Lokal speichern
-  this.lists.push(newListData);
-  this.resetNewList();
-  this.showPopup = false;
-  alert("Liste erfolgreich gespeichert");
-      },*/
+      // ⚠️ WG bestimmt durch Modal-Auswahl – oder fallback auf ausgewählte WG
+      const wgId = this.newList.wg?.id || this.selectedWG;
 
- 
-//Liste erstellen
-async saveList() {
-  if (!this.newList.name.trim()) return;
+      if (!wgId) {
+        alert("Bitte zuerst eine WG auswählen.");
+        return;
+      }
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/wg/${this.selectedWG}/list`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ name: this.newList.name.trim() })
-    });
+      try {
+        const response = await fetch(`${API_BASE_URL}/wg/${wgId}/list`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name: this.newList.name.trim() })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data?.message || "Fehler");
 
-    if (!response.ok) {
-      throw new Error(data?.message || "Fehler");
-    }
+        // WG-spezifischer Speicher
+        const key = `lists_${wgId}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || [];
 
-    // Name für das UI speichern
-    let saved = JSON.parse(localStorage.getItem("lists")) || [];
-    saved.push({
-      id: data.id,
-      name: this.newList.name.trim(),
-      beschreibung: this.newList.beschreibung || ""
-    });
+        const newItem = {
+          id: data.id,
+          name: this.newList.name.trim(),
+          beschreibung: this.newList.beschreibung || ""
+        };
 
-    localStorage.setItem("lists", JSON.stringify(saved));
+        saved.push(newItem);
+        localStorage.setItem(key, JSON.stringify(saved));
 
-    // Listen neu laden
-    await this.fetchLists();
+        // Nur ins UI pushen wenn aktuell angezeigte WG = ausgewählte WG
+        if (this.selectedWG === wgId) {
+          this.lists.push(newItem);
+        }
 
-    this.closePopup();
+        this.closePopup();
 
-  } catch (err) {
-    console.error(err);
-    alert("Fehler beim Erstellen: " + err.message);
-  }
-},
+      } catch (err) {
+        console.error(err);
+        alert("Fehler beim Erstellen: " + err.message);
+      }
+    },
 
 
-       
-// WG aus Dropdown auswählen
-selectWG(id) {
-  if (id === "__create__") {
-    this.showCreateGroupModal = true;
-    return;
-  }
+    // ─────────────────────────────
+    // WG aus Dropdown auswählen
+    // ─────────────────────────────
+    selectWG(id) {
+      if (id === "__create__") {
+        this.showCreateGroupModal = true;
+        return;
+      }
 
-  const wg = this.wgList.find(w => w.id === id);
+      const wg = this.wgList.find(w => w.id === id);
+      if (!wg) return;
 
-  if (wg) {
-    this.selectedWG = wg.id;
-    this.selectedWGName = wg.name;
+      this.selectedWG = wg.id;
+      this.selectedWGName = wg.name;
 
-    localStorage.setItem("selectedWGID", wg.id);
-    localStorage.setItem("selectedWGName", wg.name);
+      localStorage.setItem("selectedWG", wg.id);
+      localStorage.setItem("selectedWGName", wg.name);
 
-    this.fetchLists();  // <--- WICHTIG
-  }
-},
-
-
-
+      // Listen der neuen WG laden
+      this.lists = [];
+      this.fetchLists();
+    },
 
     // WG für neue Liste auswählen (falls du so ein Dropdown hast)
-    selectWGForNewList(name) {
-      this.newList.wg = name;
+    selectWGForNewList(wg) {
+      this.newList.wg = {
+        id: wg.id,
+        name: wg.name
+      };
       this.isWGOpen = false;
     },
 
-    // GET List
-  async fetchLists() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/wg/${this.selectedWG}/list`, {
-      credentials: "include"
-    });
 
-    if (!response.ok) {
-      throw new Error("Fehler beim Laden der Listen");
-    }
 
-    // Backend liefert: ["id1", "id2", ...]
-    const ids = await response.json();
+    // ─────────────────────────────
+    // Listen der aktuellen WG laden
+    // ─────────────────────────────
+    async fetchLists(wgIdOverride = null) {
+      const wgId = wgIdOverride || this.selectedWG;
+      if (!wgId) return;
 
-    // Namen aus localStorage holen
-    const saved = JSON.parse(localStorage.getItem("lists")) || [];
+      try {
+        const response = await fetch(`${API_BASE_URL}/wg/${wgId}/list`, {
+          credentials: "include"
+        });
 
-    // IDs in Objekte mit Name umwandeln
-    this.lists = ids.map(id => {
-      const existing = saved.find(x => x.id === id);
-      return existing || { id, name: "Neue Liste", beschreibung: "" };
-    });
+        if (!response.ok) {
+          throw new Error("Fehler beim Laden der Listen");
+        }
 
-  } catch (err) {
-    console.error(err);
-    alert("Konnte Listen nicht laden");
-  }
-},
+        // Backend liefert: ["id1", "id2", ...]
+        const ids = await response.json();
 
-  
- 
-// Neue WG erstellen API
+        const key = `lists_${wgId}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || [];
+
+        // IDs mit gespeicherten Namen verknüpfen
+        this.lists = ids.map(id => {
+          const existing = saved.find(x => x.id === id);
+          return existing || { id, name: "neue Liste", beschreibung: "" };
+        });
+      } catch (err) {
+        console.error(err);
+        alert("Konnte Listen nicht laden: " + err.message);
+      }
+    },
+
+    // ─────────────────────────────
+    // Neue WG erstellen
+    // ─────────────────────────────
     async createNewGroup() {
       if (!this.newGroupName.trim()) {
         alert("Bitte einen Gruppennamen eingeben.");
@@ -227,23 +224,26 @@ selectWG(id) {
           throw new Error("Backend hat keine WG-ID zurückgegeben.");
         }
 
-       const newGroup = {
-        id: data.id,                // <-- WICHTIG!
-        name: this.newGroupName
-      };
+        const newGroup = {
+          id: data.id,
+          name: this.newGroupName.trim()
+        };
 
-
-        // Liste im Frontend ergänzen
+        // WG-Liste im Frontend & localStorage ergänzen
         this.wgList.push(newGroup);
+        localStorage.setItem("wgList", JSON.stringify(this.wgList));
 
-        // Auswahl aktualisieren + speichern
+        // leeren Listen-Speicher für diese WG erzeugen
+        localStorage.setItem(`lists_${newGroup.id}`, JSON.stringify([]));
+
+        // Auswahl auf neue WG setzen
         this.selectedWG = newGroup.id;
         this.selectedWGName = newGroup.name;
-        localStorage.setItem("wgList", JSON.stringify(this.wgList));
-        localStorage.setItem("selectedWGID", newGroup.id);
+        localStorage.setItem("selectedWG", newGroup.id);
         localStorage.setItem("selectedWGName", newGroup.name);
 
-        // Modal schließen
+        // UI-Reset
+        this.lists = [];
         this.newGroupName = "";
         this.showCreateGroupModal = false;
 
@@ -254,6 +254,9 @@ selectWG(id) {
       }
     },
 
+    // ─────────────────────────────
+    // Liste umbenennen
+    // ─────────────────────────────
     openRenameModal() {
       if (!this.selectedList) return;
       this.renameListName = this.selectedList.name;
@@ -266,36 +269,63 @@ selectWG(id) {
         return;
       }
 
-      const index = this.lists.findIndex(
-        l => l.id === this.selectedList.id
-      );
+      const newName = this.renameListName.trim();
+      const wgId = this.selectedWG;
+      if (!wgId) return;
+
+      // UI aktualisieren
+      const index = this.lists.findIndex(l => l.id === this.selectedList.id);
       if (index !== -1) {
-        this.lists[index].name = this.renameListName.trim();
-        this.showRenameModal = false;
-        this.showListOptions = false;
+        this.lists[index].name = newName;
       }
+
+      // localStorage aktualisieren (WG-spezifisch)
+      const key = `lists_${wgId}`;
+      const saved = JSON.parse(localStorage.getItem(key)) || [];
+      const sIndex = saved.findIndex(x => x.id === this.selectedList.id);
+
+      if (sIndex !== -1) {
+        saved[sIndex].name = newName;
+        localStorage.setItem(key, JSON.stringify(saved));
+      }
+
+      this.showRenameModal = false;
+      this.showListOptions = false;
     },
 
     openWGCreateModal() {
-    this.showCreateGroupModal = true;
-     },
+      this.showCreateGroupModal = true;
+    }
+  },
 
+  mounted() {
+    // WGs aus localStorage holen
+    const wgList = JSON.parse(localStorage.getItem("wgList")) || [];
+    this.wgList = wgList;
 
-mounted() {
-  const wid = localStorage.getItem("selectedWG");
+    if (wgList.length === 0) {
+      // noch keine WG vorhanden → User muss zuerst eine WG erstellen
+      this.selectedWG = null;
+      this.selectedWGName = "";
+      return;
+    }
 
-  if (!wid) {
-    console.error("Keine WG ausgewählt!");
-    alert("Bitte zuerst eine WG auswählen!");
-    window.location.href = "startseite.html"; // oder deine WG-Auswahl
-    return;
-  }
+    // vorhandene Auswahl wiederherstellen oder erste WG nehmen
+    const storedWG = localStorage.getItem("selectedWG");
+    const storedWGName = localStorage.getItem("selectedWGName");
 
-  this.selectedWG = wid;
-  this.fetchLists();
-},
+    if (storedWG && wgList.find(w => w.id === storedWG)) {
+      this.selectedWG = storedWG;
+      this.selectedWGName = storedWGName || wgList.find(w => w.id === storedWG).name;
+    } else {
+      this.selectedWG = wgList[0].id;
+      this.selectedWGName = wgList[0].name;
+      localStorage.setItem("selectedWG", this.selectedWG);
+      localStorage.setItem("selectedWGName", this.selectedWGName);
+    }
 
-
+    // Listen der aktuellen WG laden
+    this.fetchLists();
   }
 });
 

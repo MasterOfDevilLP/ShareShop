@@ -128,13 +128,13 @@
                 class="dropdown-checkbox"
               />
               <label for="wgDropdown" class="dropdown-label">
-                {{ newList.wg || 'WG auswählen' }}
+                {{ newList.wg?.name || 'WG auswählen' }}
               </label>
               <ul class="dropdown-options">
                 <li
                   v-for="wg in wgList"
                   :key="wg.id"
-                  @click="selectWGForNewList(wg.name); isWGOpen = false"
+                  @click="selectWGForNewList(wg)"
                 >
                   {{ wg.name }}
                 </li>

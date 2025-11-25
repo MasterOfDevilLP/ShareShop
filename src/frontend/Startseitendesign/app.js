@@ -176,26 +176,34 @@ new Vue({
           credentials: "include"
         });
 
+        // 👉 hier abfangen: keine Listen / keine Berechtigung = einfach leer lassen
+        if (response.status === 403 || response.status === 404) {
+          console.warn("Keine Listen für diese WG (neuer User / keine Berechtigung).");
+          this.lists = [];
+          return;
+        }
+
         if (!response.ok) {
           throw new Error("Fehler beim Laden der Listen");
         }
 
-        // Backend liefert: ["id1", "id2", ...]
         const ids = await response.json();
 
         const key = `lists_${wgId}`;
         const saved = JSON.parse(localStorage.getItem(key)) || [];
 
-        // IDs mit gespeicherten Namen verknüpfen
         this.lists = ids.map(id => {
           const existing = saved.find(x => x.id === id);
           return existing || { id, name: "neue Liste", beschreibung: "" };
         });
+
       } catch (err) {
         console.error(err);
-        alert("Konnte Listen nicht laden: " + err.message);
+        // für echte Fehler kannst du den Alert lassen, wenn du willst:
+        // alert("Konnte Listen nicht laden: " + err.message);
       }
     },
+
 
     // ─────────────────────────────
     // Neue WG erstellen
@@ -298,35 +306,33 @@ new Vue({
     }
   },
 
-  mounted() {
-    // WGs aus localStorage holen
-    const wgList = JSON.parse(localStorage.getItem("wgList")) || [];
-    this.wgList = wgList;
+ mounted() {
+  const wgList = JSON.parse(localStorage.getItem("wgList")) || [];
+  this.wgList = wgList;
 
-    if (wgList.length === 0) {
-      // noch keine WG vorhanden → User muss zuerst eine WG erstellen
-      this.selectedWG = null;
-      this.selectedWGName = "";
-      return;
-    }
-
-    // vorhandene Auswahl wiederherstellen oder erste WG nehmen
-    const storedWG = localStorage.getItem("selectedWG");
-    const storedWGName = localStorage.getItem("selectedWGName");
-
-    if (storedWG && wgList.find(w => w.id === storedWG)) {
-      this.selectedWG = storedWG;
-      this.selectedWGName = storedWGName || wgList.find(w => w.id === storedWG).name;
-    } else {
-      this.selectedWG = wgList[0].id;
-      this.selectedWGName = wgList[0].name;
-      localStorage.setItem("selectedWG", this.selectedWG);
-      localStorage.setItem("selectedWGName", this.selectedWGName);
-    }
-
-    // Listen der aktuellen WG laden
-    this.fetchLists();
+  if (wgList.length === 0) {
+    // neuer User / noch keine WG
+    this.selectedWG = null;
+    this.selectedWGName = "";
+    return; // KEIN fetchLists()
   }
+
+  const storedWG = localStorage.getItem("selectedWG");
+  const storedWGName = localStorage.getItem("selectedWGName");
+
+  if (storedWG && wgList.find(w => w.id === storedWG)) {
+    this.selectedWG = storedWG;
+    this.selectedWGName = storedWGName || wgList.find(w => w.id === storedWG).name;
+  } else {
+    this.selectedWG = wgList[0].id;
+    this.selectedWGName = wgList[0].name;
+    localStorage.setItem("selectedWG", this.selectedWG);
+    localStorage.setItem("selectedWGName", this.selectedWGName);
+  }
+
+  this.fetchLists();
+}
+
 });
 
 // Service Worker (optional behalten)

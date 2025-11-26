@@ -1,0 +1,110 @@
+= Projektplan: ShareShop
+
+* Benjamin Banse benjamin.banse@stud.htw-dresden.de
+* Kevin Bürger kevin.bueger@stud.htw-dresden.de
+* Anni Nguyen anni.nguyen@stud.htw-dresden.de
+* Emil Hempel emil.hempel@stud.htw-dresden.de
+* Valencia Melvika valencia.melvika@stud.htw-dresden.de
+* Florian Süßmann florian.suessmann@stud.htw-dresden.de
+* Han Nguyen huyenbaohan.nguyen@stud.htw-dresden.de
+
+2025-05-29
+include::../_includes/default-attributes.inc.adoc[]
+
+
+== Einführung
+In diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil davon sind unter anderem Terminplanung, Sprint-Details und Vorgaben zur Ticketgestaltung.
+
+
+== Projektorganisation
+
+=== Teammitglieder
+[cols="1,2", options="header"]
+|===
+| Name           | Rolle
+
+| Benjamin Banse  | Projektleiter, Scrum Master
+| Anni Nguyen     | Front-End Leader, Front-End Developer
+| Kevin Bürger    | Product Owner, Dokumentation
+| Emil Hempel     | Back-End Developer
+| Valencia Melvika| Front-End Developer
+| Florian Süßmann | Back-End Developer
+| Han Nguyen      | Front-End Developer
+|===
+
+=== Termine
+* **Dailies**:
+** Dienstags: 18:30 Uhr – 19:00 Uhr (Pflicht)
+** Donnerstags: 20:30 Uhr – 21:00 Uhr (Freiwillig)
+
+* **Sprint-Planning**:
+** Immer mittwochs vor Sprintbeginn, Zeit wird flexibel im Team abgestimmt (z. B. 21.05.2025, 17:00 Uhr)
+
+* **Sprint-Review**:
+**Hat stattgefunden am 15.06.2025, Feedback wurde in Tickets umgewandelt, konnte jedoch für den Prototypen aus zeitlichen Gründen nicht mehr umgesetzt werden.
+
+* **Sprint-Retrospektive**:
+** Jeweils freitags, eine Woche vor Sprint-Ende, 14:00 Uhr – 15:00 Uhr
+** Erste Retro fand am 16.05.2025 statt (Meeting 09)
+** Zweite Retro fand am 20.06.2025 statt
+
+
+== Praktiken und Bewertung
+
+=== Sprint-Taktiken
+Wir arbeiten im vierwöchigen Sprint-Zyklus. Das Team nutzt ein gemeinsames Kanban-Board mit Review-Spalte, um Fortschritt und Codequalität sichtbar zu machen. Neben GitHub nutzen wir Figma und Miro zur UI-Modellierung und kollaborativen Designarbeit.
+
+=== Definition of Ready
+* Das Ticket ist klar und verständlich formuliert.
+* Akzeptanzkriterien sind enthalten.
+* Storypoints wurden geschätzt (z. B. 6h = 6 SP-Regel).
+* Keine offenen Blocker oder Abhängigkeiten.
+* Umfang ist für eine Person in einem Sprint machbar.
+* Freigabe oder Absprache mit dem PO erfolgte.
+* Alle nötigen Infos und Anhänge liegen bei.
+
+=== Definition of Done
+* Code ist vollständig und korrekt implementiert.
+* Alle Akzeptanzkriterien sind erfüllt.
+* Unit-Tests vorhanden und erfolgreich. (Für Prototypen erstmalig nicht so wichtig)
+* Manuelles Testing (v. a. Front-End) abgeschlossen.
+* Code Review erfolgt und freigegeben.
+* Doku wurde angepasst/aktualisiert.
+* Änderung ist in Testumgebung deployed.
+* Abnahme durch PO ist erfolgt.
+
+== Deployment (bereitstellung der Software)
+
+Aktuell arbeiten wir daran, unsere Software so vorzubereiten, dass sie einfach gestartet und genutzt werden kann. 
+Das für uns im Team als auch später für andere.
+
+Neu: Aktuell arbeiten wir daran, den Prototypen vorführfertig zu machen, und gewisse Features zu überarbeiten, sodass im nächsten Sprint jeder weiß, was noch auf uns zu kommt.
+
+Folgende Schritte haben wir bereits unternommen:
+
+* **Datenbank vorbereiten**: Florian hat eine Test-Datenbank erstellt und ein Skript entwickelt, mit dem diese Datenbank automatisch eingerichtet werden kann. Das bedeutet, dass niemand die Datenbank manuell einrichten muss; das Skript übernimmt das für uns.
+
+* **Automatischer Start der Anwendung**: Wir planen, unsere Anwendung so zu verpacken, dass sie mit einem einzigen Befehl gestartet werden kann. Dafür nutzen wir ein Tool namens Docker. Es sorgt dafür, dass alle benötigten Teile der Anwendung zusammenarbeiten und auf jedem Computer gleich funktionieren.
+
+Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwendung problemlos starten und verwenden kann, ohne sich um technische Details kümmern zu müssen.
+
+* **Entwicklung Frontend**: Wir haben zuerst das Design und Anwendung des Frontends geplant und nun in Code übersetzt. Funktionen, welche durch die REST-API noch nicht übernommen werden, sind momentan durch plain json/js "gemocked".
+
+== Erkenntnisse (Lessons Learned)
+
+* Zwei Pflicht-Dailies pro Woche waren zunächst zu viel – Donnerstagstermin wurde als freiwillig deklariert.
+* Das frühzeitige Definieren von Branching- und Pull-Request-Standards war sinnvoll zur Qualitätssicherung.
+* Modellierung ist essenziell für gute Sprintplanung – besonders beim Backend hilfreich für Ticketdefinition.
+* Storypoints helfen bei realistischeren Aufwandseinschätzungen, müssen aber noch stärker im Team verankert werden.
+* Die Dokumentation (Adoc-Struktur) braucht klare Rollenverteilung – PO und Entwicklerteams strukturieren Backend/Frontend getrennt.
+* Als ProjektOwner/Scrum-Master muss man aktiv auf seine Kollegen zugehen - Fragen werden damit schneller geklärt.
+* Code-Spezifikationen wie Schreibweise (CamelCase oder snake_case) sowie die Strukturierung und Namensgebung von Ordner und Dateien sollte wenn möglich bereits zu Beginn des Projektes festgehalten sein, damit NameErrors nicht passieren und der Code strukturiert bleibt.
+* Die Aufteilung des Teams in einzelne Unterteams war zwar anfangs effektiv, jedoch hat sich zum Ende des 1. Semesters gezeigt, dass die Kommunikation bzw. auch die Kompetenz gefehlt hat, um die jeweiligen Fachgebiete wieder zusammen zu führen. Hier hätte man für mehr Kommunikation sorgen sollen, sodass beide Teams wissen, wie die Verbindung gebaut werden kann.
+
+== Links
+* GitHub Sprint-Backlog:
+** https://github.com/users/MasterOfDevilLP/projects/3/views/1
+* GitHub Product-Backlog:
+** https://github.com/users/MasterOfDevilLP/projects/3/views/6
+* Miro
+** https://miro.com/app/board/uXjVIEsf25w=/

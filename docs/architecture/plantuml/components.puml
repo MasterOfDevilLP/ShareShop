@@ -1,0 +1,52 @@
+@startuml components
+!include <c4/C4_Component.puml> 
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram
+
+Container_Boundary(pwa, "Frontent"){
+
+}
+
+ContainerDb(db, "Database")
+
+Container_Boundary(backend, "Backend"){
+    Component(rest, "REST-API Code", "will be split up more (probably)")
+
+    Component(users, "UserManager", "also User class")
+    Component(sessions, "SessionsManager", "also Sessions")
+
+    Component(wg, "WGManager", "also WG class")
+    Component(slist, "Shopping List")
+
+    Component(items, "ItemManager", "also Item class")
+
+    ' these are for data hierarchy
+    Rel(rest, sessions, "Authenticates with")
+    Rel(sessions, users, "resolves to")
+
+    Rel_Neighbor(users, wg, "accesses shared resources", "like shopping lists")
+    Rel(wg, slist, "has")
+    Rel(wg, items, "has")
+
+    ' and these for what actually interacts with which parts, somewhat messy
+    Rel(rest, users, "operates on", "requires user unless creating")
+    Rel(rest, wg, "operates on", "requires user, wg")
+    Rel(rest, items, "operates on, queries searches", "requires user, wg")
+    Rel(rest, slist, "operates on", "requires user, wg, slist")
+
+    ' and all the DB connections
+    Rel(users, db, "uses", "JDBC")
+    Rel(wg, db, "uses", "JDBC")
+    Rel(slist, db, "uses", "JDBC")
+    Rel(items, db, "uses", "JDBC")
+
+    ' Sessions might also be included in the DB, but don't have to be for now
+
+}
+
+Rel(pwa, backend, "Uses", "JSON/HTTP")
+
+
+@enduml

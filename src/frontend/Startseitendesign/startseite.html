@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Startseite</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <!-- Load Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+    <div id="app">
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <div class="header-row">
+            <div class="wg-selector">
+              <div class="dropdown">
+                <input
+                  type="checkbox"
+                  id="dropdown-toggle"
+                  class="dropdown-checkbox"
+                />
+                <label for="dropdown-toggle" class="dropdown-label">
+                  {{ selectedWGName || 'WG auswählen' }}
+                </label>
+                <ul class="dropdown-options">
+                  <li
+                    v-for="wg in wgList"
+                    :key="wg.id"
+                    @click="selectWG(wg.id)"
+                  >
+                    {{ wg.name }}
+                  </li>
+                  <li class="divider">──────────</li>
+                  <li @click="selectWG('__create__')">+ neue Gruppe</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="icon-group">
+              <button class="qr-btn" title="QR">
+                <img src="icons/barcode.png" class="nav-icon" />
+              </button>
+              <a
+                href="settings.html"
+                class="settings-btn"
+                title="Einstellungen"
+              >
+                <img
+                  src="icons/settings.svg"
+                  alt="Einstellungen"
+                  class="nav-icon"
+                />
+              </a>
+            </div>
+          </div>
+        </header>
+
+        <!-- Modal pop up neue WG erstellen -->
+        <div v-if="showCreateGroupModal" class="modal-overlay">
+          <div class="modal-content">
+            <h3>Gruppe Erstellen</h3>
+            <input v-model="newGroupName" placeholder="Gruppenname" />
+            <div class="modal-actions">
+              <button @click="createNewGroup">Erstellen</button>
+              <button @click="showCreateGroupModal = false">Abbrechen</button>
+            </div>
+          </div>
+        </div>
+        <!-- Main Content -->
+        <main class="app-content">
+          <div class="shopping-list">
+            <div v-for="list in lists" :key="list.id" class="list-card">
+              <a href="../Einkaufsliste/einkaufsliste.html" class="list-left">
+                <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
+                {{ list.name }}
+              </a>
+              <button class="list-dots" @click="openListOptions(list)">
+                <img src="icons/dots.svg" alt="Mehr Optionen" />
+              </button>
+            </div>
+          </div>
+
+          <button class="add-list" @click="add_list">
+            <span>+</span> Liste hinzufügen
+          </button>
+        </main>
+
+        <!-- Bottom sheet Liste hinzufügen -->
+        <div class="bottom-sheet" :class="{ visible: showPopup }">
+          <div class="sheet-header">
+            Neue Liste erstellen
+            <button class="close-btn" id="closePopup" @click="closePopup">
+              ✕
+            </button>
+          </div>
+          <div class="sheet-body">
+            <input
+              type="text"
+              v-model="newList.name"
+              placeholder="Name der neuen Liste"
+            />
+            <button id="saveList" @click="saveList">Erstellen</button>
+          </div>
+        </div>
+
+        <!-- Bottom Sheet für Listenoptionen -->
+        <div class="bottom-sheet full" :class="{ visible: showListOptions }">
+          <div class="sheet-header">
+            Liste verwalten
+            <button class="close-btn" @click="closeListOptions">✕</button>
+          </div>
+          <div class="sheet-body list-actions">
+            <button @click="openRenameModal">
+              <img src="icons/pen.svg" alt="Bearbeiten" />
+              <span>Umbenennen</span>
+            </button>
+            <button disabled>
+              <img src="icons/external.svg" alt="Teilen" />
+              <span>Teilen</span>
+            </button>
+            <button disabled>
+              <img src="icons/copy.svg" alt="Kopieren" />
+              <span>Kopieren</span>
+            </button>
+            <button
+              class="danger"
+              @click="selectedList && deleteList(selectedList.id)"
+            >
+              <img src="icons/Trash.svg" alt="Löschen" />
+              <span>Löschen</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal: Liste umbenennen -->
+        <div v-if="showRenameModal" class="modal-overlay">
+          <div class="modal-content">
+            <h3>Liste umbenennen</h3>
+            <input
+              v-model="renameListName"
+              placeholder="Neuer Name der Liste"
+            />
+            <div class="modal-actions">
+              <button @click="renameList">Speichern</button>
+              <button @click="showRenameModal = false">Abbrechen</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+          <button class="nav-item active">
+            <img
+              src="icons/Liste.png"
+              alt="Start"
+              class="nav-icon"
+            /><br />Liste
+          </button>
+          <button class="nav-item">
+            <img
+              src="icons/Rechnung.png"
+              alt="Start"
+              class="nav-icon"
+            /><br />Rechnungen
+          </button>
+          <button class="nav-item">
+            <img
+              src="icons/Kalender.png"
+              alt="Start"
+              class="nav-icon"
+            /><br />Kalender
+          </button>
+          <button class="nav-item">
+            <img
+              src="icons/Rezepte.png"
+              alt="Start"
+              class="nav-icon"
+            /><br />Rezepte
+          </button>
+          <button class="nav-item">
+            <img
+              src="icons/Profil.png"
+              alt="Start"
+              class="nav-icon"
+            /><br />Profil
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- type model damit die config datei damit vue richtig gerendert wird -->
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+= ShareShop Projekt - Meeting 11
+Kevin (Product Owner)
+2025-06-04
+
+== Teilnehmer
+* Kevin
+* Benni
+* Emil
+* Florian
+* Anni
+* Valencia
+
+== Datum und Uhrzeit
+[Datum bitte ergänzen], ca. [Uhrzeit]
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Frontend-Fortschritt
+
+* Fortschritt bei Login- und Registrierungsseite: HTML und Styles sind fertig.
+* Keine weiteren Fragen oder Blocker gemeldet.
+
+=== 2. Backend-Status
+
+* Emil hat Docker-Setup für das Backend umgesetzt:
+  ** Zwei Container: Postgres und Java-App
+  ** REST-Endpunkte sind noch nicht integriert (noch nicht gemerged)
+* Offen bleibt Docker für das Frontend - noch Klärungsbedarf.
+
+=== 3. Objektmodell & Funktionalität
+
+* Florian hat Objektklassen wie User, Item, Session und ShoppingList implementiert.
+* Noch offen:
+  ** `GetListLog` & `CreateList`
+  ** `UpdateCache` wird später mit `ChangeBase` umgesetzt
+* Review der Klassen nach Fertigstellung geplant.
+* Kein separater Branch für Datenbankdateien notwendig (nur einzelne `.sql`-Files betroffen).
+
+=== 4. Aufgabenverteilung & Sprintboard
+
+* Aufgaben sind aktuell im Fortschritt; Reviewaufgaben können übernommen werden, wenn jemand Leerlauf hat.
+* Neue ToDos werden im Laufe der Woche im Sprintbot ergänzt.
+
+=== 5. Vorbereitung des Reviews mit anderer Projektgruppe
+
+* Benni organisiert einen Termin für gegenseitige Review-Session.
+* Ziel: Feedback zur User Experience (nicht zur Codebasis).
+* Erwartung: Frontend-Team (Anni + 1 weitere Person) präsentiert, Benni übernimmt ggf. Moderation.
+
+=== 6. UX-Diskussion: Erklärmodus
+
+* Diskussion über Einführung eines "Erklärmodus" nach Registrierung (Einführungshilfe).
+* Erste Umsetzung kann optional sein - wichtig für finale App.
+* Funktion: Tooltip-/Text-basierte Hilfe auf der Übersichtsseite.
+
+=== 7. Sonstiges
+
+* Interner Hinweis auf Ticket #43 (Erklärhilfe) und dessen genaue Platzierung.
+* Abschließende allgemeine Fragen & Verabschiedung.
+

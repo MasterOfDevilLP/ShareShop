@@ -1,0 +1,54 @@
+= ShareShop Projekt - Meeting 12
+Kevin (Product Owner -> heute Vertretung für Benni) 
+2025-06-10
+
+== Teilnehmer
+* Anni
+* Emil
+* Florian
+* Kevin
+
+== Datum und Uhrzeit
+10.06.2025, ca. 18:30
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1. Projektorganisation & Vertretung
+* Kevin übernimmt kurzfristig die Leitung, da Benni unterwegs ist
+* Dokumentationsaufgaben sollen mit Benni aufgeteilt und bis zur Abgabe (4.7.) finalisiert werden
+* Präsentationsvorbereitung wird auf ein künftiges Meeting verschoben
+
+=== 2. Backend-Fortschritt & Teststrategie
+* Backend kompiliert fehlerfrei - Ausführung wird im Laufe der Woche getestet
+* Ziel: Sicherstellen, dass Datenbankanbindung (Insert/Query) stabil funktioniert
+* Docker-Compose-Konfigurationen überarbeitet; Backend und DB werden bei Bedarf getrennt gestartet
+
+=== 3. Objektmodell & Test-Setup
+* Klassen wurden gemerged, Fokus liegt nun auf der Integration
+* Scalar wird zur API-Interaktion genutzt, alternative Tools wie Swagger optional
+
+=== 4. Shoppinglist-Funktionalität
+* Priorisierung: WG-Erstellung, Item-Erstellung, Listenzugriff & -anzeige
+* Suchfunktion darf Stub sein - Rückgabe aller Items reicht zur Demo
+* Manager-Klassen (UserManager etc.) werden Schritt für Schritt ergänzt
+
+=== 5. Frontend-Status & Anbindung
+* Tickets im Frontend weitgehend erledigt, v. a. Listenerstellung & Registrierung
+* Rechnungsfunktion vorerst zurückgestellt, Fokus auf Listennutzung & Anzeige
+* Diskussion über Deployment-Strategie: Live Server (VS Code) vs. Container
+
+=== 6. Build & Docker-Setup für gemeinsames Testing
+* Backend läuft testweise lokal, DB-Container wird automatisch gestartet
+* Wunsch nach Containerlösung für gesamtes System besteht, aber nicht zwingend für Entwicklungsphase
+
+=== 7. Dokumentation & Codekommentare
+* Javadoc wird bereits verwendet (Methoden & Klassen)
+* Für SE1 reicht grobe Selbstreflexion, erweiterte Doku erst in SE2 gefordert
+
+=== 8. Aufgaben & Ausblick
+* Backend- & Frontend-Abstimmung wird fortgesetzt
+* Nächstes Treffen geplant für Donnerstag, 20:30 Uhr (Mit Anni, Benni, Kevin)
+

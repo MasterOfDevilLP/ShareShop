@@ -1,0 +1,83 @@
+= Vision: ShareShop
+{localtime}
+include::../_includes/default-attributes.inc.adoc[]
+// Platzhalter für weitere Dokumenten-Attribute
+
+
+== Einführung
+Der Zweck dieses Dokuments ist es, die wesentlichen Bedarfe und Funktionalitäten des Systems ShareShop überblicksartig zu beschreiben. Der Fokus liegt auf den Fähigkeiten, die von Stakeholdern und adressierten Nutzern benötigt werden, und der Begründung dieser Bedarfe. Die Details, wie das System ShareShop diese Bedarfe erfüllt, werden durch User Stories im Product Backlog sowie dem UX-Konzept beschrieben.
+
+=== Gültigkeitsbereich (Scope)
+Dieses Visions-Dokument bezieht sich auf das System ShareShop, das von SE1-Team 4 entwickelt wird. Das System wird es Wohngemeinschaften (WGs) erlauben, gemeinsam Einkaufslisten zu verwalten, wiederkehrende Einkäufe zu strukturieren und Ausgaben transparent aufzuteilen, um damit den Alltag effizienter zu organisieren.
+
+=== Definitionen, Akronyme und Abkürzungen
+//Verweis passend zum Belegabgabe-Template se1_belegabgabe_t00.adoc
+* `xref:./glossary.adoc[Glossar]`
+//Siehe <<./glossary.adoc#glossary, Glossar>>.
+
+=== Referenzen
+* Product Backlog
+* Figma-Wireframes
+* Miro-Board
+* Sprint-Meetings (Protokolle)
+* Vorlesung Systementwicklung 1
+
+== Positionierung
+
+=== Fachliche Motivation
+Das Einkaufen in WGs ist häufig schlecht koordiniert: es wird doppelt gekauft, nichts abgesprochen, Rechnungen geraten in Vergessenheit. ShareShop möchte genau dort ansetzen. Die App bietet einen zentralen Ort für das gemeinsame Verwalten von Einkäufen, Listen und Abrechnungen – abgestimmt auf den WG-Alltag.
+
+=== Produktvision
+[cols="1,3"]
+|===
+| Für | Mitglieder von Wohngemeinschaften
+| der / die | ihre Einkäufe gemeinsam organisieren und abrechnen möchten
+| ist der | ShareShop
+| eine | Web-App zur digitalen Haushaltsorganisation
+| der / die | einfache Koordination und Übersicht ermöglicht
+| anders als | Notizzettel oder Messenger-Gruppen
+| kann unser Produkt | Einkaufslisten teilen, Rechnungen aufteilen, Templates speichern
+|===
+
+== Stakeholder Beschreibungen
+
+=== Zusammenfassung der Stakeholder
+[%header, cols="1,3,3"]
+|===
+| Name | Beschreibung | Verantwortlichkeiten
+| WG-Mitglied | Endnutzer:in der App | Erstellt Listen, prüft Einkäufe, nutzt Templates
+| Product Owner | Vertritt Nutzerinteressen im Team | Pflegt Backlog, priorisiert Funktionen
+| Entwickler:innen | Team für Frontend und Backend | Implementieren Features, testen Funktionalität
+| Modulbetreuung / Coach | Lehrende des Moduls SE1 | Begleiten das Projekt, bewerten Umsetzung und Vorgehen
+| Scrum Master | Prozessverantwortliche Person im Team | Achtet auf Abläufe, sorgt für Hindernisbeseitigung
+|===
+
+== Produktüberblick
+
+=== Bedarfe und Hauptfunktionen
+[%header, cols="4,1,4,1"]
+|===
+| Bedarf | Priorität | Features / Funktionen | Geplantes Release
+| Gemeinsame Einkaufsliste | Hoch | Änderungen in Echtzeit, Sperrmodus bei Nutzung | Sprint 2
+| Listen-Templates | Mittel | Vorlagen für wiederkehrende Einkäufe | Sprint 3/4
+| Ausgabenaufteilung | Hoch | Rechnungserfassung, automatische Zuordnung | Sprint 3/4
+| Vorratsübersicht | Niedrig | Artikelstatus, Haltbarkeitsinfos (optional) | offen
+| Benutzerverwaltung | Hoch | WG beitreten, Mitgliederverwaltung | Sprint 2
+| Offline-Nutzung | Mittel | Nutzung im Laden ohne Internet | Sprint 3/4
+| Responsives UI | Mittel | Mobile First Design | Sprint 2
+|===
+
+=== Zusätzliche Produktanforderungen
+[%header, cols="4,1,1"]
+|===
+| Anforderung | Priorität | Geplantes Release
+| Unterstützung aktueller Webbrowser | Hoch | Sprint 2
+| Nutzung auf Smartphone | Hoch | Sprint 2
+| Umsetzung als PWA | Hoch | Sprint 2
+| REST-API für Datenzugriff | Hoch | Sprint 2
+| Kurze Ladezeiten (<2s) | Niedrig/Mittel | durchgängig
+| Einfache Nutzerführung | Mittel | durchgängig
+| Datenschutz: keine Cloud, keine Weitergabe | Hoch | durchgängig
+| Speicherung im lokalen Speicher (Browser) | Hoch | Sprint 2/3
+| Barrierearme Gestaltung | Mittel | durchgängig
+|===

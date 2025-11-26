@@ -5,7 +5,7 @@ const LanguageStore = Vue.reactive({
 });
 
 // === API and Constants ===
-const API_BASE = 'http://localhost:8001'; // ← API-Basis-URL
+import { API_BASE_URL as API_BASE } from '../config.js';  // Import Configuration
 const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
 const { reactive, createApp } = Vue;
 

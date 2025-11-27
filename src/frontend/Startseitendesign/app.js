@@ -101,7 +101,7 @@ new Vue({
     },
 
     resetNewList() {
-      this.newList = { name: "", beschreibung: "", wg: "" };
+      this.newList = { name: "", beschreibung: "" };
       this.touched = { name: false, beschreibung: false };
     },
 
@@ -122,11 +122,10 @@ new Vue({
 async saveList() {
   if (!this.newList.name.trim()) return;
 
-  // WG xác định: ưu tiên dropdown trong modal, fallback sang WG hiện tại
-  const wgId = this.newList.wg?.id || this.selectedWG;
+  const wgId =  this.selectedWG;
 
   if (!wgId) {
-    alert("Bitte zuerst eine WG auswählen."); // <-- đây là điều kiện quan trọng
+    alert("Bitte zuerst eine WG auswählen."); 
     return;
   }
 
@@ -213,7 +212,11 @@ async saveList() {
     // ─────────────────────────────
     async fetchLists(wgIdOverride = null) {
       const wgId = wgIdOverride || this.selectedWG;
-      if (!wgId) return;
+      if (!wgId) {
+          console.warn("Keine WG ausgewählt! → fetchLists übersprungen");
+          this.lists = [];
+          return;
+      };
 
       try {
         const response = await fetch(`${API_BASE_URL}/wg/${wgId}/list`, {
@@ -359,8 +362,11 @@ async saveList() {
     if (this.wgList.length > 0) {
       this.selectedWG = localStorage.getItem("selectedWG") || this.wgList[0].id;
       this.selectedWGName = localStorage.getItem("selectedWGName") || this.wgList[0].name;
-      this.fetchLists(this.selectedWG);
-    } else {    this.fetchUserWG();}
+      if (this.selectedWG) {
+        this.fetchLists(this.selectedWG);
+      }
+    } else {    
+      this.fetchUserWG();}
   }
 });
 

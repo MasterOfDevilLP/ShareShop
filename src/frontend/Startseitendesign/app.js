@@ -1,7 +1,8 @@
-import { API_BASE_URL } from "../config.js";
 
-new Vue({
-  el: "#app",
+import { API_BASE } from '../config.js';
+
+new Vue({ 
+  el: '#app',
   data: {
     // Listen in der aktuell ausgewählten WG
     lists: [],
@@ -47,13 +48,14 @@ new Vue({
   },
   mounted() {
 
+
     this.fetchUserWG();
 },
 
   methods: {
     async fetchUserWG() {
       try {
-        const userResp = await fetch(`${API_BASE_URL}/user`, {
+        const userResp = await fetch(`${API_BASE}/user`, {
           credentials: "include"
         });
 
@@ -63,7 +65,7 @@ new Vue({
         const wid = userData.wid;
         if (!wid) throw new Error("User hat keine WG");
 
-        const wgResp = await fetch(`${API_BASE_URL}/wg/${wid}`, {
+        const wgResp = await fetch(`${API_BASE}/wg/${wid}`, {
           credentials: "include"
         });
 
@@ -123,14 +125,14 @@ async saveList() {
 
   const wgId =  this.selectedWG;
 
-
   if (!wgId) {
     alert("Bitte zuerst eine WG auswählen."); 
+
     return;
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/wg/${wgId}/list`, {
+    const response = await fetch(`${API_BASE}/wg/${wgId}/list`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -219,7 +221,7 @@ async saveList() {
       };
 
       try {
-        const response = await fetch(`${API_BASE_URL}/wg/${wgId}/list`, {
+        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, {
           credentials: "include"
         });
 
@@ -267,7 +269,7 @@ async saveList() {
       }
 
       try {
-        const response = await fetch(`${API_BASE_URL}/wg/create`, {
+        const response = await fetch(`${API_BASE}/wg/create`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

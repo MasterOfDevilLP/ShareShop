@@ -33,7 +33,8 @@ const LanguageSwitcher = {
   }
 };
 
-const API_BASE = 'http://localhost:8001'; // ← API-Basis-URL
+
+import { API_BASE } from '../config.js';
 
 // === Login Form ===
 const LoginForm = {

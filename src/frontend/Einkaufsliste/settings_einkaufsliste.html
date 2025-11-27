@@ -70,32 +70,32 @@
         </main>
 
         <!-- Dialogfenster zur Bestätigeung zum löschen -->
-    <div class="popup-overlay" v-if="showDeleteListPopup">
-      <div class="popup-content">
-        <h4>Liste löschen</h4><br>
-        <span>Möchtest du die Liste wirklich löschen?</span><br>
-        <div class="popup-buttons mt-4  d-flex justify-content-center"> <!--mt-3 ist margin top - Abstand mit Inhalte in <span>-->
-          <button @click="closeDeleteListPopup" class="btn btn-outline-secondary me-3">Abbrechen</button> <!--m2 ist margin end - Abstand zwischen 2 Buttons-->
-          <button @click="deleteList"  class="btn btn-outline-danger">Löschen</button>
+        <div class="popup-overlay" v-if="showDeleteListPopup">
+          <div class="popup-content">
+            <h4>Liste löschen</h4><br>
+            <span>Möchtest du die Liste wirklich löschen?</span><br>
+            <div class="popup-buttons mt-4  d-flex justify-content-center"> <!--mt-3 ist margin top - Abstand mit Inhalte in <span>-->
+              <button @click="closeDeleteListPopup" class="btn btn-outline-secondary me-3">Abbrechen</button> <!--m2 ist margin end - Abstand zwischen 2 Buttons-->
+              <button @click="deleteList"  class="btn btn-outline-danger">Löschen</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Bottom Slide Popup zur Umbenennung der List-->
-      <div class="bottom-sheet" :class="{ visible: showChangeListName }">
-        <div class="sheet-header"> Liste umbenennen          
-            <button class="close-btn" @click="closeChangeListName">✕</button>
+        <!-- Bottom Slide Popup zur Umbenennung der List-->
+        <div class="bottom-sheet" :class="{ visible: showChangeListName }">
+          <div class="sheet-header"> Liste umbenennen          
+              <button class="close-btn" @click="closeChangeListName">✕</button>
+          </div>
+          <div class="sheet-body">
+            <input
+              type="text"
+              v-model="list_name" 
+              placeholder="Neuer Name"
+            />
+            <button id="saveList" @click="changeListName">OK</button>
+          </div>
         </div>
-        <div class="sheet-body">
-          <input
-            type="text"
-            v-model="list_name" 
-            placeholder="Neuer Name"
-          />
-          <button id="saveList" @click="changeListName">OK</button>
-        </div>
-      </div>
-    <!-- Navigation -->
+        <!-- Navigation -->
         <nav class="bottom-nav">
           <button class="nav-item active"  @click="goToStartseite">
             <img src="icons/Liste.png" alt="Start" class="nav-icon" /><br />Liste
@@ -113,8 +113,8 @@
             <img src="icons/Profil.png" alt="Profil" class="nav-icon" /><br />Profil
           </button>
         </nav>
-        </div>
-     </div>
-    <script src="./app.js"></script>
+      </div>
+    </div>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>

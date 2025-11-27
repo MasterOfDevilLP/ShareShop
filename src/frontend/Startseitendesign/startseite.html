@@ -81,8 +81,8 @@
         <!-- Main Content -->
         <main class="app-content">
           <div class="shopping-list">
-            <div v-for="list in lists" :key="list.id" class="list-card">
-              <a href="../Einkaufsliste/einkaufsliste.html" class="list-left">
+            <div v-for="list in lists" :key="list.id" class="list-card"   @click="goToList(list)" >
+              <div class="list-left">
                 <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
                 <div class="list-text">
                   <div class="list-title">{{ list.name }}</div>
@@ -96,6 +96,7 @@
               </button>
             </div>
           </div>
+
 
           <button class="add-list" @click="add_list">
             <span>+</span> Liste hinzufügen

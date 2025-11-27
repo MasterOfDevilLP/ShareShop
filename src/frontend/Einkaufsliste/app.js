@@ -5,6 +5,7 @@ new Vue({
       baseUrl: API_BASE,
       wgID: localStorage.getItem("selectedWGID") || '',
       listID: localStorage.getItem("selectedListID") || '',
+      list_name: localStorage.getItem("selectedListName") || 'Meine Einkaufsliste',
       products: [], //item in WG
       listItems: [],   //Items in shopping list (Listeeinträge)
       kategorien: ['Obst', 'Gemüse', 'Getränke', 'Fleisch', 'Backwaren', 'Snacks', 'Haushalt', 'Sonstiges'],
@@ -17,7 +18,7 @@ new Vue({
         preis:'',
         fromWG: false
       },
-    list_name: 'Meine Einkaufsliste',
+
     showPopup:false,
     showDeleteListPopup:false,
     showChangeListName: false,

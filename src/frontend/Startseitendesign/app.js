@@ -245,7 +245,7 @@ async saveList() {
         const data = await response.json();
 
         this.lists = data.map(l => ({
-          id: l.id,
+          id: l.lid,
           name: l.name || "neue Liste",
           beschreibung: l.beschreibung || ""
         }));
@@ -364,8 +364,16 @@ async saveList() {
       localStorage.removeItem("selectedWG");
       localStorage.removeItem("selectedWGName");
       window.location.href = "../Login/index.html";
+    },
 
+    goToList(list) {
+      localStorage.setItem("selectedWGID", this.selectedWG);
+      localStorage.setItem("selectedListID", list.id);
+      localStorage.setItem("selectedListName", list.name);
+
+      window.location.href = "../Einkaufsliste/einkaufsliste.html";
     }
+
   },
 
 

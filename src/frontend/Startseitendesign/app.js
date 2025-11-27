@@ -84,7 +84,7 @@ new Vue({
     async saveList() {
       if (!this.newList.name.trim()) return;
 
-      // ⚠️ WG bestimmt durch Modal-Auswahl – oder fallback auf ausgewählte WG
+      // WG bestimmt durch Modal-Auswahl – oder fallback auf ausgewählte WG
       const wgId = this.newList.wg?.id || this.selectedWG;
 
       if (!wgId) {
@@ -153,7 +153,7 @@ new Vue({
       this.fetchLists();
     },
 
-    // WG für neue Liste auswählen (falls du so ein Dropdown hast)
+    // WG für neue Liste auswählen
     selectWGForNewList(wg) {
       this.newList.wg = {
         id: wg.id,
@@ -176,7 +176,7 @@ new Vue({
           credentials: "include"
         });
 
-        // 👉 hier abfangen: keine Listen / keine Berechtigung = einfach leer lassen
+        // keine Listen / keine Berechtigung = einfach leer lassen
         if (response.status === 403 || response.status === 404) {
           console.warn("Keine Listen für diese WG (neuer User / keine Berechtigung).");
           this.lists = [];
@@ -270,7 +270,7 @@ new Vue({
       this.renameListName = this.selectedList.name;
       this.showRenameModal = true;
     },
-
+    //lokale änderung
     renameList() {
       if (!this.renameListName.trim()) {
         alert("Name darf nicht leer sein.");
@@ -314,7 +314,7 @@ new Vue({
     // neuer User / noch keine WG
     this.selectedWG = null;
     this.selectedWGName = "";
-    return; // KEIN fetchLists()
+    return; 
   }
 
   const storedWG = localStorage.getItem("selectedWG");

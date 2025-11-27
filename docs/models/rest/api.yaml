@@ -86,6 +86,14 @@ paths:
         "401": 
           $ref: "#/components/responses/unauthorized"
         
+  /user/logout:
+    post:
+      summary: log out
+      tags:
+        - users
+      responses:
+        "200":
+          description: successfully logged out, or was not logged in
 
   /user:
     get:
@@ -345,6 +353,23 @@ paths:
           $ref: "#/components/responses/unauthorized"
         "403":
           $ref: "#/components/responses/forbidden"
+    patch:
+      summary: edit list (not list entries)
+      tags:
+        - list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: list modified
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
 
   /wg/{wid}/list/{lid}/audit:
     get:

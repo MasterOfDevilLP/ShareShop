@@ -1,3 +1,29 @@
+/* Custom properties */
+:root {
+    /* Color Palette */
+    --color-primary: #3b82f6;       /* Blue (Links, Active) */
+    --color-secondary: #7DCFB6;     /* Teal (Main Button CTA) */
+    --color-hover: #66bba4;         /* Darker Teal for hover */
+    --color-active: #5aa893;        /* Darkest Teal for active */
+    --color-background: #f9f9f9;
+    --color-card-bg: white;
+    --color-text-dark: #333;
+    --color-text-light: white;
+    --color-text-link: #3b82f6;
+    --color-border: #ccc;
+    --color-error: #e11d48;
+    --color-success: #16a34a;
+
+    /* Border Radii */
+    --radius-card: 20px;
+    --radius-input: 12px;
+    --radius-flag: 2px;
+    --radius-lang-btn: 10px;
+
+    /* Shadows */
+    --shadow-card: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
 /* Reset and Base */
 * {
   box-sizing: border-box;
@@ -7,58 +33,27 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f9f9f9;
+  background-color: var(--color-background);
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Use min-height for content that might exceed the viewport */
   min-height: 100vh; 
   padding: 20px; /* Add padding for small screens */
 }
 
-/* 1. Desktop/Default Container: Now responsive */
-.iphone-app {
+/* 1. App Layout and responsiveness */
+.app-container {
   position: relative;
-  /* The frame is gone! Use max-width to constrain the app's size 
-     on large screens so it doesn't stretch too wide. */
   width: 90%; 
   max-width: 420px; /* New: Defines the maximum width for desktop view */
-  /* Remove the fixed height, let content define height */
-  /* height: 844px; <--- Removed */
-  
-  background-color: white;
-  /* Keep some styling for a nice card look on desktop */
-  border-radius: 20px; 
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-card-bg);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
   display: flex;
   justify-content: center;  
   align-items: center;
 }
-
-/* 2. Mobile-Specific Overrides (The Media Query) */
-/* When the screen is 480px or smaller (standard for phones) */
-@media screen and (max-width: 480px) {
-    body {
-        /* On small screens, remove padding and center alignment */
-        padding: 0;
-        align-items: flex-start; /* Start content at the top */
-    }
-
-    .iphone-app {
-        /* Crucial: Make the container take up the full screen width and height */
-        width: 100%;
-        min-height: 100vh; 
-        max-width: none; /* No max width limitation */
-        
-        /* Remove the "phone frame" look for a native app feel */
-        border-radius: 0; 
-        box-shadow: none; 
-    }
-}
-
-
-/* All other styles remain mostly the same */
 
 /* Auth form inside UI */
 .auth-form {
@@ -74,8 +69,27 @@ body {
     text-align: center;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text-dark);
     margin-bottom: 20px; /* Add space below headline */
+}
+
+/* 2. Mobile-Specific Overrides (The Media Query) */
+/* When the screen is 480px or smaller (standard for phones) */
+@media screen and (max-width: 480px) {
+    body {
+        /* On small screens, remove padding and center alignment */
+        padding: 0;
+        align-items: flex-start; /* Start content at the top */
+    }
+
+    .app-container {
+        /* Crucial: Make the container take up the full screen width and height */
+        width: 100%;
+        min-height: 100vh; 
+        max-width: none; /* No max width limitation */
+        border-radius: 0; 
+        box-shadow: none; 
+    }
 }
 
 input, button {
@@ -86,9 +100,16 @@ input, button {
 input {
     width: 100%;
     padding: 12px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--color-border);
     font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
 }
 
 .input-with-icon {
@@ -96,7 +117,7 @@ input {
     margin-bottom: 1em;
 }
 
-.input-with-icon .lock-icon, .email-icon {
+.lock-icon, .email-icon {
     position: absolute;
     left: 10px;
     top: 50%;
@@ -129,9 +150,9 @@ input {
 button {
     width: 100%;
     padding: 12px;
-    border-radius: 12px;
-    background-color: #7DCFB6;
-    color: white;
+    border-radius: var(--radius-input);
+    background-color: var(--color-secondary);
+    color: var(--color-text-light);
     font-weight: 600;
     font-size: 16px;
     border: none;
@@ -141,11 +162,11 @@ button {
 }
 
 button:hover {
-    background-color: #66bba4;
+    background-color: var(--color-hover);
 }
 
 button:active {
-    background-color: #5aa893;
+    background-color: var(--color-active);
 }
 
 /* Language Switcher */
@@ -162,10 +183,10 @@ button:active {
     justify-content: center;
     gap: 6px;
     padding: 8px 14px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background-color: white;
-    color: #333;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lang-btn);
+    background-color: var(--color-card-bg);
+    color: var(--color-text-dark);
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
@@ -173,21 +194,21 @@ button:active {
 }
 
 .lang-buttons button:hover {
-    background-color: #f5f5f5;
-    border-color: #999;
+    background-color: var(--color-hover);
+    border-color: var(--color-border-hover);
 }
 
 .lang-buttons button.active {
-    background-color: #3b82f6;
-    color: white;
-    border-color: #3b82f6;
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    border-color: var(--color-primary);
 }
 
 .flag-icon {
     width: 20px;
     height: 14px;
     object-fit: cover;
-    border-radius: 2px;
+    border-radius: var(--radius-flag);
 }
 
 /* Link Text */
@@ -195,11 +216,11 @@ button:active {
     text-align: center;
     font-size: 14px;
     margin-top: 30px;
-    color: #333;
+    color: var(--color-text-dark);
 }
 
 .link-highlight {
-    color: #3b82f6;
+    color: var(--color-text-link);
     cursor: pointer;
     text-decoration: none;
     font-weight: 600;
@@ -213,15 +234,40 @@ button:active {
 
 /* Error/Success Messages */
 .error {
-    color: #e11d48;
+    color: var(--color-error);
     text-align: center;
     font-size: 14px;
     margin-top: 4px;
 }
 
 .success {
-    color: #16a34a;
+    color: var(--color-success);
     text-align: center;
     font-size: 14px;
     margin-top: 4px;
+}
+
+/* 7. LOADING SPINNER STYLES */
+
+button.loading-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Make sure the animation actually runs */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -97,14 +97,14 @@
             </div>
           </div>
 
-
-          <button class="add-list" @click="add_list">
-            <span>+</span> Liste hinzufügen
-          </button>
           <button class="dev_logout" @click="dev_logout">
             <span>+</span> Dev Logout
           </button>
         </main>
+        <!-- Button: neue Liste hinzufugen -->
+        <button class="add-list" @click="add_list">
+            <span>+</span> Liste hinzufügen
+        </button>
 
         <!-- Bottom sheet Liste hinzufügen  (erweitert)-->
         <div class="bottom-sheet" :class="{ visible: showPopup }">

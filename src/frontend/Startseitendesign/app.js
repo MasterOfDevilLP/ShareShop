@@ -232,17 +232,15 @@ async saveList() {
           throw new Error("Fehler beim Laden der Listen");
         }
 
-        // Backend liefert: ["id1", "id2", ...]
-        const ids = await response.json();
+        // Backend liefert: ["id1,name1,item", "id2,name2,item", ...]
+        const data = await response.json();
 
-        const key = `lists_${wgId}`;
-        const saved = JSON.parse(localStorage.getItem(key)) || [];
-
-        // IDs mit gespeicherten Namen verknüpfen
-        this.lists = ids.map(id => {
-          const existing = saved.find(x => x.id === id);
-          return existing || { id, name: "neue Liste", beschreibung: "" };
-        });
+        this.lists = data.map(l => ({
+          id: l.id,
+          name: l.name || "neue Liste",
+          beschreibung: l.beschreibung || ""
+        }));
+        
       } catch (err) {
         console.error(err);
         alert("Konnte Listen nicht laden: " + err.message);

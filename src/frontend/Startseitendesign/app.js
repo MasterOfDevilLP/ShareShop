@@ -10,8 +10,8 @@ new Vue({
     wgList: JSON.parse(localStorage.getItem("wgList")) || [],
 
     // aktuell ausgewählte WG
-    selectedWG: localStorage.getItem("selectedWG") || null,
-    selectedWGName: localStorage.getItem("selectedWGName") || "",
+    selectedWG: null,
+    selectedWGName: "",
 
     // für später, aktuell egal
     benutzerID: 123,
@@ -45,6 +45,10 @@ new Vue({
       return this.newList.name.trim() !== "";
     }
   },
+  mounted() {
+
+    this.fetchUserWG();
+},
 
   methods: {
     async fetchUserWG() {
@@ -67,17 +71,11 @@ new Vue({
 
         const wgData = await wgResp.json();
 
-        const newWG = { id: wgData.id, name: wgData.name };
-        this.wgList = [newWG];
-        this.selectedWG = newWG.id;
-        this.selectedWGName = newWG.name;
-
-        localStorage.setItem("wgList", JSON.stringify(this.wgList));
-        localStorage.setItem("selectedWG", newWG.id);
-        localStorage.setItem("selectedWGName", newWG.name);
-
-        this.lists = [];
-        this.fetchLists(newWG.id);
+        this.wgList = [wgData];
+        this.selectedWG = wgData.wid;
+        this.selectedWGName = wgData.name;
+        await this.fetchLists();
+        
 
       } catch (err) {
         console.error(err);
@@ -85,6 +83,7 @@ new Vue({
         alert("Konnte WG nicht laden: " + err.message);
       }
     },
+
     // Popup "Liste hinzufügen" öffnen
     add_list() {
       if (!this.selectedWG) {
@@ -362,38 +361,12 @@ async saveList() {
       localStorage.removeItem("wgList");
       localStorage.removeItem("selectedWG");
       localStorage.removeItem("selectedWGName");
+      window.location.href = "../Login/index.html";
+
     }
   },
 
 
-  mounted() {
-    this.wgList = JSON.parse(localStorage.getItem("wgList")) || [];
-
-    if (this.wgList.length > 0) {
-      this.selectedWG = localStorage.getItem("selectedWG") || this.wgList[0].id;
-      this.selectedWGName = localStorage.getItem("selectedWGName") || this.wgList[0].name;
-      if (this.selectedWG) {
-        this.fetchLists(this.selectedWG);
-      }
-    } else {    
-      this.fetchUserWG();}
-
-
-  const storedWG = localStorage.getItem("selectedWG");
-  const storedWGName = localStorage.getItem("selectedWGName");
-
-  if (storedWG && wgList.find(w => w.id === storedWG)) {
-    this.selectedWG = storedWG;
-    this.selectedWGName = storedWGName || wgList.find(w => w.id === storedWG).name;
-  } else {
-    this.selectedWG = wgList[0].id;
-    this.selectedWGName = wgList[0].name;
-    localStorage.setItem("selectedWG", this.selectedWG);
-    localStorage.setItem("selectedWGName", this.selectedWGName);
-  }
-
-  this.fetchLists();
-}
 
 });
 

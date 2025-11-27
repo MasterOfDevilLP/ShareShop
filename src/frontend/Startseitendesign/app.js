@@ -124,6 +124,7 @@ async saveList() {
 
   const wgId =  this.selectedWG;
 
+
   if (!wgId) {
     alert("Bitte zuerst eine WG auswählen."); 
     return;
@@ -196,7 +197,7 @@ async saveList() {
       this.fetchLists();
     },
 
-    // WG für neue Liste auswählen (falls du so ein Dropdown hast)
+    // WG für neue Liste auswählen
     selectWGForNewList(wg) {
       this.newList.wg = {
         id: wg.id,
@@ -223,6 +224,13 @@ async saveList() {
           credentials: "include"
         });
 
+        // keine Listen / keine Berechtigung = einfach leer lassen
+        if (response.status === 403 || response.status === 404) {
+          console.warn("Keine Listen für diese WG (neuer User / keine Berechtigung).");
+          this.lists = [];
+          return;
+        }
+
         if (!response.ok) {
           if (response.status === 500) {
         console.warn("Backend 500 → set lists leer");
@@ -241,11 +249,14 @@ async saveList() {
           beschreibung: l.beschreibung || ""
         }));
         
+
       } catch (err) {
         console.error(err);
-        alert("Konnte Listen nicht laden: " + err.message);
+        // für echte Fehler kannst du den Alert lassen, wenn du willst:
+        // alert("Konnte Listen nicht laden: " + err.message);
       }
     },
+
 
     // ─────────────────────────────
     // Neue WG erstellen
@@ -312,7 +323,7 @@ async saveList() {
       this.renameListName = this.selectedList.name;
       this.showRenameModal = true;
     },
-
+    //lokale änderung
     renameList() {
       if (!this.renameListName.trim()) {
         alert("Name darf nicht leer sein.");
@@ -354,6 +365,7 @@ async saveList() {
     }
   },
 
+
   mounted() {
     this.wgList = JSON.parse(localStorage.getItem("wgList")) || [];
 
@@ -365,7 +377,24 @@ async saveList() {
       }
     } else {    
       this.fetchUserWG();}
+
+
+  const storedWG = localStorage.getItem("selectedWG");
+  const storedWGName = localStorage.getItem("selectedWGName");
+
+  if (storedWG && wgList.find(w => w.id === storedWG)) {
+    this.selectedWG = storedWG;
+    this.selectedWGName = storedWGName || wgList.find(w => w.id === storedWG).name;
+  } else {
+    this.selectedWG = wgList[0].id;
+    this.selectedWGName = wgList[0].name;
+    localStorage.setItem("selectedWG", this.selectedWG);
+    localStorage.setItem("selectedWGName", this.selectedWGName);
   }
+
+  this.fetchLists();
+}
+
 });
 
 // Service Worker (optional behalten)

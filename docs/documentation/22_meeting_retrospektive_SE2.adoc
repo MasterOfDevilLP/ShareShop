@@ -1,0 +1,82 @@
+= ShareShop Projekt, Retrospektive (SE2)
+20.11.2025
+
+== Teilnehmer
+* Kevin
+* Emil
+* Han
+* Valencia
+* Florian
+* Anni (abwesend)
+
+== Ort
+Online-Meeting (Discord)
+
+== 1) Stimmungsrunde
+* Alle sollen eine Farbe + ein Wort für ihre Sprint-Stimmung nennen.
+* Kevin: neutral, hat Dinge gelernt in Git
+* Emil: neutral, aber genervt davon, dass Informationen ignoriert werden
+* Han: viele neue Dinge, aber „Interesse nicht mehr wie am Anfang“, aktuell eher kleine Fixes statt neue Features.
+* Valencia: fühlt sich generell gut, aber hat weniger Lust als früher; fühlt sich teils „unsicher über das ganze Projekt“.
+* Florian: Anfang des Sprints war schwierig, weil Wiedereinstieg und Überblick fehlten; sonst ok.
+* Benni: empfindet Teamstimmung insgesamt „stockend“, da viele Abhängigkeiten + Fixes -> Motivation sinkt.
+
+== 2) Start der Retrospektive (Zettelphase)
+* Auf Miro sollen Probleme, Störungen oder Plus/Minus-Punkte gesammelt werden.
+* Zusätzlich dürfen plus-eins-Votes direkt auf Zetteln markiert werden.
+* Themenvorschläge u. a.: Kommunikationsprobleme, Interesse verlieren, viele Fixes statt Weiterentwicklung.
+
+== 3) Kommunikation
+* Emil beschreibt zwei konkrete Situationen:
+** API-Spezifikation war dokumentiert -> trotzdem Nachfragen.
+** Backend/Live-Umgebung war erklärt -> trotzdem nochmal nachgefragt.
+* Sein Punkt: „Warum schreibe ich das, wenn es nicht gelesen wird?“
+* Emil erkennt, dass seine Nachrichten manchmal „Wall of Text“ sind.
+* Gruppe diskutiert kurz, ob Missverständnisse oder Überlesen dahinterstehen.
+
+== 4) Thema: Interesse & Motivation
+* Alle stimmen zu, dass Interesse gesunken ist, Gründe:
+** viel Bugfixing,
+** viele parallele Projekte außerhalb von SE2,
+** wenig neue Features.
+* Einigkeit: Durch Bewertung von SE1 und vorherige Fehler wurdde alles etwas "Langweiliger" -> sollte sich demnächst wieder bessern, da aufarbeitung so gut wie abgeschlossen. Thema soll später erneut aufgegriffen werden, wenn nötig.
+
+== 5) Großthema: Git-Workflow & Branching
+* Probleme laut Team:
+** Frontend-Branches sind groß,
+** vieles hängt an der nicht fertigen Startseite,
+** gemeinsames Testen schwer,
+** PRs schwer zu mergen.
+* Benni erklärt:
+** Viele dieser Probleme stammen aus „Altlasten“ aus Semester 1 (große Tickets, ganze Seiten als Tickets).
+** Neue Tickets sollen kleiner sein (z. B. nur ein Dialog oder Popup statt komplette Seite).
+* schlägt vor:
+** Für jedes neue Ticket einen eigenen Branch nutzen.
+** Branch über GitHub aus Ticket erstellen.
+** Nach einigen Stunden Arbeit PR öffnen.
+* Han fragt nach: „Heißt das: Ein Task = ein Branch?“  
+-> Benni: Ja, außer es gibt starke Abhängigkeiten zwischen Tasks.
+
+== 6) Thema: Reviews
+* Valencia sagt: viele Reviews, oft Backend-Reviews -> sie kann wenig beitragen.
+* Benni erklärt:
+** Teammitglieder sollen nur das reviewen, was sie können.
+** Frontend reviewt Frontend.
+** Backend reviewt Backend.
+* Han merkt an, dass viele E-Mails entstehen (PR-Notifications + GitHub-Mails + andere Projekte) -> Reviews gehen unter.
+* Lösungsvorschlag:
+** wieder den Discord-Kanal „Review-Pings“ nutzen (Ticketnummer + Ping der Person).
+** So fallen Reviews nicht unter den Tisch.
+
+== 7) Review-Qualität
+* Emil sagt, seine Reviews seien teils technisch unsauber, da er manche Module selbst nicht nutzt.
+* Er will sich weiter einarbeiten.
+* Bei Merge-Konflikten: unbedingt nachfragen, nicht alleine raten.
+
+== 8) Fragen aus dem Team
+* Han fragt, wie man ein Review macht, wenn Hardcodings entfernt wurden und man die Resultate nicht mehr sehen kann.
+* Benni zeigt im Stream:
+** Man kann jeden Commit einzeln prüfen.
+** Code-Diffs ansehen.
+** Comments im GitHub-PR hinterlassen.
+** Funktionstest ist optional, wenn nicht möglich.

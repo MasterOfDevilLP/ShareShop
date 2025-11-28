@@ -116,7 +116,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
   ** Übergreifend:
     *** Recherche zu Java-Buildsystemen (z. B. Gradle)
 * Organisation:
-  ** Nutzung des GitHub-Boards (To Do → In Progress → Review → Done)
+  ** Nutzung des GitHub-Boards (To Do -> In Progress -> Review -> Done)
   ** Wöchentliche Check-up-Meetings (dienstags um 18:00 Uhr)
   ** Kommunikation primär über Discord
 
@@ -273,7 +273,7 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 
 * `xref:./17_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
 
-* Backlog konsequent nutzerzentriert umgebaut: Epics → Stories → Subtasks (Tech-Aufteilung erst unten).
+* Backlog konsequent nutzerzentriert umgebaut: Epics -> Stories -> Subtasks (Tech-Aufteilung erst unten).
 * Sprint-Fokus: Epic „Registrierung & Login“ vollständig abschließen (inkl. sinnvollen Fehlermeldungen ohne Informationslecks).
 * Repo-Hygiene: `node_modules` per `.gitignore` entfernen; Vue-CDN später durch Bundle (z. B. Vite) ersetzen.
 * Mobile/Device: Tickets für Responsive-Issues sammeln; API-Base-URL konfigurierbar machen; Compose/How-To & Seed-Daten dokumentieren.
@@ -307,6 +307,8 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 
 == 21. Team-Meeting, 19.11.2025
 
+* `xref:./21_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
 * Reviews: Frontend-Features werden künftig gegenseitig reviewed (kein Self-Review); Kevin unterstützt bei Bedarf, Benni übernimmt Backend-Reviews.
 * WG-Invites: Ticket #227 existiert bereits im Epic „WG-Bedienung“ und wird in den Sprint gezogen.
 * Tests: Vollständige Testabdeckung aktuell nicht priorisiert; Test-Hinweise in Tickets sind vorerst nicht blockierend.
@@ -314,3 +316,24 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Frontend: Hardcodes (Logins/IDs) entfernen; Branches bereinigen und lauffähigen `develop` herstellen. Danach PRs.
 * Live-Umgebung: Backend läuft bereits; Frontend wird zusätzlich als Live-Version bereitgestellt (eigenes Ticket).
 * Repo-Hygiene: Nur relevante Dateien committen; konsistente Dateinamen (case-sensitive, Icons).
+
+== 22. Retrospektive, 20.11.2025
+
+* `xref:./22_meeting_retrospektive_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* Stimmung: Mehrheit berichtet sinkende Motivation (viel Fixing, viele parallele Projekte).  
+* Kommunikation: Mehrfach werden dokumentierte Infos überlesen; Emil spricht zwei konkrete Fälle an.  
+* Branching: Frontend hat große, lange lebende Branches; Benni schlägt „Ein Task = ein Branch“ vor.  
+* Reviews: Frontend reviewt Frontend, Backend reviewt Backend; viele Mails -> Review-Pings-Channel wieder nutzen.  
+* Merge-Konflikte & Review-Qualität: Nachfragen statt raten; Emil will technisch sauberer reviewen.  
+* Unsicherheiten im Frontend: Han fragt, wie man PRs testet, wenn Hardcodes entfernt wurden -> Benni zeigt Commit-basierte Reviews.
+
+== 23. Meeting, 25.11.2025
+
+* `xref:./23_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* Startseite: Viele Probleme; Han & Valencia sprechen Donnerstag mit Anni, um den aktuellen Stand zu verstehen und übernehmen zu können.
+* Frontend: API-Pfade auf `develop` teils noch hardcoded; muss korrigiert werden.  
+* Aufgaben: Nur Tickets im aktuellen Scope (Registrierung, Startseite, Listenerstellung, WG-Erstellung) bearbeiten.
+* Permissions: Kevin erstellt Ticket + Story für ein neues Berechtigungssystem im Epic „WG-Bedienung“ (Owner, Nutzer kicken, WG löschen).
+* Ticketpflege: Alte „No Status“-Tickets prüfen und ggf. als deprecated markieren; Filter/Ansicht für Sprint-Backlog verbessern.

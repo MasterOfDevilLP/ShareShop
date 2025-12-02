@@ -229,14 +229,26 @@ public class WG {
     }
 
     /**
-     * removes a user from the wg
+     * removes a user from the wg.
+     * If it was the last user, the WG gets removed too
      * @param user
      * @throws SQLException
      */
     public void removeUser(User user) throws SQLException {
         String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
+        boolean lastUser = false;
         connectionHandler.makeSureItsOpen();
-        connectionHandler.conn.setAutoCommit(false);
+        if (isOwner(user)) {    // test if the user is the Owner, to transfer Ownership if true
+            String selectString = "SELECT userid FROM userallocation WHERE wgid = ? AND owner_flag = false";
+            PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
+            selectStmnt.setObject(1, this.wgID);
+            ResultSet rs = selectStmnt.executeQuery();
+            if (rs.next()) {
+                transferOwnership(user, new User(connectionHandler, (UUID)rs.getObject("userid")));
+            } else {
+                lastUser = true;    // no other users in WG
+            }
+        }
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
         connectionHandler.conn.setAutoCommit(true);
         deleteStatement.setObject(1, user.getUserID());
@@ -244,6 +256,10 @@ public class WG {
         deleteStatement.execute();
         deleteStatement.close();
         //user.setWgID(connectionHandler, null);
+
+        if (lastUser) { // if this was last user, delete the WG (because empty)
+            this.remove();
+        }
     }
 
     /**

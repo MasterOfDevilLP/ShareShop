@@ -429,3 +429,6 @@ ALTER TABLE ONLY public.invites
 ALTER TABLE ONLY public.invites
     ADD CONSTRAINT invites_userid_fkey FOREIGN KEY (userid) REFERENCES public.users(userid) ON DELETE CASCADE;
         
+-- adding owner perm
+ALTER TABLE ONLY public.userallocation
+    ADD owner_flag BOOLEAN DEFAULT false NOT NULL;

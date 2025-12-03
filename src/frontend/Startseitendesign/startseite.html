@@ -26,11 +26,12 @@
                   type="checkbox"
                   id="dropdown-toggle"
                   class="dropdown-checkbox"
+                  v-model="wgDropdownOpen"
                 />
                 <label for="dropdown-toggle" class="dropdown-label">
                   {{ selectedWGName || 'WG auswählen' }}
                 </label>
-                <ul class="dropdown-options">
+                <ul class="dropdown-options" v-if="wgDropdownOpen">
                   <li
                     v-for="wg in wgList"
                     :key="wg.wid"
@@ -86,9 +87,6 @@
                 <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
                 <div class="list-text">
                   <div class="list-title">{{ list.name }}</div>
-                  <div v-if="list.beschreibung" class="list-desc">
-                    {{ list.beschreibung }}
-                  </div>
                 </div>
               </a>
               <button class="list-dots" @click.stop="openListOptions(list)">
@@ -125,10 +123,6 @@
               @blur="touched.name = true"
             />
             <p>WG: {{ selectedWGName }}</p>
-
-
-            <label>Beschreibung</label>
-            <input type="text" v-model="newList.beschreibung" />
 
             <button id="saveList" :disabled="!isListValid" @click="saveList">
               Erstellen

@@ -17,238 +17,252 @@
  *  - Einige Daten werden lokal im localStorage gespeichert
  */
 
+console.log("app.js loaded", location.href);
+
 import { API_BASE } from "../config.js";
+
+function wgIdOf(w) {
+  return w?.id ?? w?.wid ?? w?._id;
+}
+
+function listIdOf(l) {
+  return l?.lid ?? l?.id ?? l?._id;
+}
 
 new Vue({
   el: "#app",
 
-  /**
-   * Datenmodell der Vue-App
-   */
   data: {
-    // Listen in der aktuell ausgewählten WG
+    // Daten
+    userId: null,
+    wgList: [],
+    selectedWG: null,
+    selectedWGName: "WG auswählen",
     lists: [],
 
-    // Liste der WGs aus localStorage oder leer initialisieren
-    wgList: JSON.parse(localStorage.getItem("wgList")) || [],
-    wgDropdownOpen: false,  
+    // UI
+    showPopup: false,
+    showCreateGroupModal: false,
+    showListOptions: false,
+    showRenameModal: false,
+    selectedList: null,
 
-    // aktuell ausgewählte WG
-    selectedWG: null,
-    selectedWGName: "",
-    isWGOpen: false, 
+    // Form (Liste)
+    newList: { name: "" },
+    touched: { name: false },
+    renameListName: "",
 
-    // Name für neue WG (im Modal)
-    newGroupName: "",
+    // Dropdown
+    wgDropdownOpen: false,
 
-    // Daten für neue Liste
-    touched: { name: false }, // für Validierung
-    newList: { name: "", wg: "" }, 
+    // Form (WG)
+    newGroup: {
+      name: "",
+      description: "",
+      preview: null,     // Base64 für Preview + localStorage
+      imageFile: null,   // nur lokal
+    },
+    errors: {
+      name: null,
+      description: null,
+    },
+    formValid: false,
+    isSaving: false,
+    saveSuccess: false,
+    saveError: null,
 
-    // UI-Zustände
-    showPopup: false,                                           // Bottom Sheet "Liste hinzufügen"
-    showCreateGroupModal: false,                                // Modal "Neue WG erstellen"
-    showListOptions: false,                                     // Bottom Sheet "Listenoptionen": inklusive Umbenennen/Löschen/Teilen/Kopieren
-    selectedList: null,                                         // aktuell ausgewählte Liste
-    showRenameModal: false,                                     // Modal "Liste umbenennen"
-    renameListName: "",          
-    
-    //Invite / QR
-    showCopyToast: false,                                       // Kurzes "Link kopiert"-Toast
-    showEmailInput: false,                                      // Email Input anzeigen
-    emailToShare: "",                                           // Email für Teilen
-    inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI"), // Einladungslink vom Backend
-    token: "",                                                    // Token aus dem Einladungslink
-    frontendLink: "",                                             // Einladungslink, der an invite/invite.html weiterleitet
-    baseUrl: window.location.origin,                             //baseURL von Invite Link
+    // Invite / Share
+    baseUrl: window.location.origin,
+    showCopyToast: false,
+    showEmailInput: false,
+    emailToShare: "",
+    inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
+    token: "",
+    frontendLink: "",
   },
 
-  /**
-   * Berechnete Eigenschaften
-   */
   computed: {
-    /**
-     * Prüft, ob die neue Liste gültig ist (Name nicht leer)
-     */
     isListValid() {
       return this.newList.name.trim() !== "";
     },
   },
 
-  mounted() {
-    /**
-     * Lade alle WGs des Users
-     */
-    this.fetchUserWG();
-    
-    /**
-     * Initialisiere Invite-Link (falls vorhanden)
-     */
-    this.inviteLinkfromAPI = localStorage.getItem("inviteLinkfromAPI") || "";
+  async mounted() {
+    try {
+      await this.loadUserAndWGs();
 
-    if (this.inviteLinkfromAPI) {
-      this.token = this.inviteLinkfromAPI.split("/").pop();
-      this.frontendLink = `${this.baseUrl}/invite/invite.html?token=${this.token}`;
+      if (this.selectedWG) {
+        await this.fetchLists(this.selectedWG);
+      }
+
+      // Invite-Link aus localStorage initialisieren (falls vorhanden)
+      this.inviteLinkfromAPI = localStorage.getItem("inviteLinkfromAPI") || "";
+      this.rebuildFrontendInviteLinkFromStored();
+    } catch (e) {
+      console.error("mounted crashed:", e);
+      this.wgList = [];
+      this.lists = [];
+      this.selectedWG = null;
+      this.selectedWGName = "WG auswählen";
     }
-
-    localStorage.setItem("frontendLink", this.frontendLink);
   },
 
   methods: {
-    /* =========================
-    * WG Management
-    * ========================= */
-    /**
-     * Lädt alle WGs des Benutzers vom Backend
-     */
-    async fetchUserWG() {
-      try {
-        const userResp = await fetch(`${API_BASE}/user`, {
-          credentials: "include",
-        });
+    // damit Startseite.html :key="wgIdOf(wg)" sicher funktioniert
+    wgIdOf,
 
-        if (!userResp.ok) throw new Error("Fehler beim Laden der User-Daten");
+    // -----------------------------
+    // Helper: frontendLink aus inviteLinkfromAPI bauen
+    // -----------------------------
+    rebuildFrontendInviteLinkFromStored() {
+      if (!this.inviteLinkfromAPI) {
+        this.token = "";
+        this.frontendLink = "";
+        localStorage.removeItem("frontendLink");
+        return;
+      }
+      this.token = this.inviteLinkfromAPI.split("/").pop();
+      this.frontendLink = `${this.baseUrl}/invite/invite.html?token=${this.token}`;
+      localStorage.setItem("frontendLink", this.frontendLink);
+    },
 
-        const userData = await userResp.json();
-        let widList = userData.wid;
+    // -----------------------------
+    // Bootstrap: User + WGs laden
+    // -----------------------------
+    async loadUserAndWGs() {
+      const meRes = await fetch(`${API_BASE}/user`, { credentials: "include" });
 
-        if (!widList) throw new Error("User hat keine WG");
-
-        // Falls widList String ist → Array
-        if (typeof widList === "string") {
-          widList = widList.split(",").map((s) => s.trim());
-        }
-
+      if (!meRes.ok) {
+        this.userId = null;
         this.wgList = [];
-
-        // Hole Details für jede WG
-        for (const wid of widList) {
-          try {
-            const wgResp = await fetch(`${API_BASE}/wg/${wid}`, {
-              credentials: "include",
-            });
-            if (!wgResp.ok) continue;
-
-            const wgData = await wgResp.json();
-            this.wgList.push(wgData);
-          } catch (innerErr) {
-            console.error("Fehler beim Laden einer WG:", innerErr);
-          }
-        }
-
-        // Auswahl der aktuellen WG aus localStorage oder erste WG
-        if (this.wgList.length > 0) {
-          this.selectedWG = this.wgList[0].wid;
-          this.selectedWGName = this.wgList[0].name;
-          localStorage.setItem("selectedWGName", this.selectedWGName);
-          await this.fetchLists();
-        }
-      } catch (err) {
-        console.error(err);
         this.lists = [];
+        this.selectedWG = null;
+        this.selectedWGName = "WG auswählen";
+        localStorage.removeItem("selectedWG");
+        localStorage.removeItem("selectedWGName");
+        return;
+      }
+
+      const me = await meRes.json().catch(() => ({}));
+      this.userId = me?.uid ?? me?.id ?? null;
+
+      let widList = me?.wid;
+      if (!widList) widList = [];
+
+      if (typeof widList === "string") {
+        widList = widList
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+      if (!Array.isArray(widList)) widList = [];
+
+      const wgs = [];
+      for (const wid of widList) {
+        try {
+          const r = await fetch(`${API_BASE}/wg/${wid}`, { credentials: "include" });
+          if (!r.ok) continue;
+          const wgData = await r.json();
+          // normalisieren: id immer vorhanden
+          const norm = { ...wgData, id: wgIdOf(wgData) };
+          if (norm.id) wgs.push(norm);
+        } catch (e) {
+          console.warn("WG fetch failed:", wid, e);
+        }
+      }
+
+      this.wgList = wgs;
+      localStorage.setItem("wgList", JSON.stringify(this.wgList));
+
+      const savedWG = localStorage.getItem("selectedWG");
+      const savedName = localStorage.getItem("selectedWGName");
+
+      const exists =
+        savedWG && this.wgList.some((w) => String(w.id) === String(savedWG));
+
+      if (exists) {
+        const match = this.wgList.find((w) => String(w.id) === String(savedWG));
+        this.selectedWG = match.id;
+        this.selectedWGName = savedName || match?.name || "WG auswählen";
+      } else if (this.wgList.length > 0) {
+        this.selectedWG = this.wgList[0].id;
+        this.selectedWGName = this.wgList[0]?.name || "WG auswählen";
+      } else {
+        this.selectedWG = null;
+        this.selectedWGName = "WG auswählen";
+      }
+
+      if (this.selectedWG) {
+        localStorage.setItem("selectedWG", this.selectedWG);
+        localStorage.setItem("selectedWGName", this.selectedWGName);
+      } else {
+        localStorage.removeItem("selectedWG");
+        localStorage.removeItem("selectedWGName");
       }
     },
 
-    /**
-     * Auswahl der WG aus Dropdown
-     */
-    selectWG(id) {
+    // -----------------------------
+    // WG auswählen
+    // -----------------------------
+    async selectWG(id) {
       if (id === "__create__") {
         this.showCreateGroupModal = true;
         return;
       }
 
-      const wg = this.wgList.find((w) => w.wid === id);
+      const wg = this.wgList.find((w) => String(w.id) === String(id));
       if (!wg) return;
 
-      this.selectedWG = wg.wid;
-      this.selectedWGName = wg.name;
-
-      localStorage.setItem("selectedWG", wg.wid);
-      localStorage.setItem("selectedWGName", wg.name);
-
-      this.lists = [];
-      this.fetchLists();
+      this.selectedWG = wg.id;
+      this.selectedWGName = wg.name || "WG auswählen";
       this.wgDropdownOpen = false;
+
+      localStorage.setItem("selectedWG", this.selectedWG);
+      localStorage.setItem("selectedWGName", this.selectedWGName);
+
+      await this.fetchLists(this.selectedWG);
     },
 
-    /**
-     * Neue WG erstellen
-     */
-    async createNewGroup() {
-      if (!this.newGroupName.trim()) {
-        alert("Bitte einen Gruppennamen eingeben.");
-        return;
-      }
-
-      try {
-        const response = await fetch(`${API_BASE}/wg/create`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ name: this.newGroupName.trim() }),
-        });
-
-        const data = await response.json();
-        if (!response.ok) throw new Error(data?.message || `Fehler ${response.status}`);
-        if (!data || !data.id) throw new Error("Backend hat keine WG-ID zurückgegeben.");
-
-        const newGroup = { id: data.id, name: this.newGroupName.trim() };
-        this.wgList.push(newGroup);
-        localStorage.setItem("wgList", JSON.stringify(this.wgList));
-        localStorage.setItem(`lists_${newGroup.id}`, JSON.stringify([]));
-        this.selectedWG = newGroup.id;
-        this.selectedWGName = newGroup.name;
-        localStorage.setItem("selectedWG", newGroup.id);
-        localStorage.setItem("selectedWGName", newGroup.name);
-        this.lists = [];
-        this.newGroupName = "";
-        this.showCreateGroupModal = false;
-      } catch (err) {
-        console.error("Fehler beim Erstellen der WG:", err);
-        alert("Fehler beim Erstellen der WG: " + err.message);
-      }
-    },
-
-    openWGCreateModal() {
-      this.showCreateGroupModal = true;
-    },
-    
-    /* =========================
-     * Listen Management
-     * ========================= */
-    /**
-     * Lädt Listen für eine WG vom Backend
-     */
+    // -----------------------------
+    // Listen laden
+    // -----------------------------
     async fetchLists(wgIdOverride = null) {
       const wgId = wgIdOverride || this.selectedWG;
       if (!wgId) {
-        console.warn("Keine WG ausgewählt! → fetchLists übersprungen");
         this.lists = [];
         return;
       }
 
       try {
-        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/wg/${wgId}/list`, {
+          credentials: "include",
+        });
 
-        if (response.status === 403 || response.status === 404) {
-          console.warn("Keine Listen für diese WG.");
+        if (res.status === 403 || res.status === 404) {
+          this.lists = [];
+          return;
+        }
+        if (!res.ok) {
           this.lists = [];
           return;
         }
 
-        if (!response.ok) throw new Error("Fehler beim Laden der Listen");
+        const data = await res.json().catch(() => []);
+        this.lists = (data || []).map((l) => ({
+          id: listIdOf(l),
+          name: l?.name || "neue Liste",
+        }));
 
-        const data = await response.json();
-        this.lists = data.map((l) => ({ id: l.lid, name: l.name || "neue Liste" }));
-      } catch (err) {
-        console.error(err);
+        localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
+      } catch (e) {
+        console.error("fetchLists failed:", e);
+        this.lists = [];
       }
     },
 
-    /**
-     * Öffnet das Popup für "Liste hinzufügen"
-     */
+    // -----------------------------
+    // Liste hinzufügen
+    // -----------------------------
     add_list() {
       if (!this.selectedWG) {
         alert("Bitte zuerst eine WG erstellen und auswählen.");
@@ -258,43 +272,15 @@ new Vue({
       this.showListOptions = false;
     },
 
-    /**
-     * Schließt das "Liste hinzufügen"-Popup
-     */
     closePopup() {
       this.showPopup = false;
-      this.resetNewList();
-    },
-
-    /**
-     * Setzt das neue List-Objekt zurück
-     */
-    resetNewList() {
       this.newList = { name: "" };
+      this.touched = { name: false };
     },
 
-    /**
-     * Öffnet die Optionen für eine Liste
-     */
-    openListOptions(list) {
-      this.selectedList = list;
-      this.showListOptions = true;
-      this.showPopup = false;
-    },
-
-    /**
-     * Schließt die Optionen einer Liste
-     */
-    closeListOptions() {
-      this.selectedList = null;
-      this.showListOptions = false;
-    },
-
-    /**
-     * Speichert eine neue Liste im Backend & localStorage
-     */
     async saveList() {
       if (!this.newList.name.trim()) return;
+
       const wgId = this.selectedWG;
       if (!wgId) {
         alert("Bitte zuerst eine WG auswählen.");
@@ -302,95 +288,123 @@ new Vue({
       }
 
       try {
-        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, {
+        const res = await fetch(`${API_BASE}/wg/${wgId}/list`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({ name: this.newList.name.trim() }),
         });
 
-        let data = null;
-        try {
-          data = await response.json();
-        } catch (e) {
-          console.warn("Response ist kein JSON:", e);
-        }
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data?.message || `Fehler ${res.status}`);
 
-        if (!response.ok) throw new Error(data?.message || `Fehler ${response.status}`);
+        const newItem = {
+          id: listIdOf(data) ?? data?.lid ?? data?.id ?? `temp-${Date.now()}`,
+          name: this.newList.name.trim(),
+        };
 
-        // LocalStorage aktualisieren
-        const key = `lists_${wgId}`;
-        const saved = JSON.parse(localStorage.getItem(key)) || [];
-        const newItem = { id: data?.id || `temp-${Date.now()}`, name: this.newList.name.trim() };
-        saved.push(newItem);
-        localStorage.setItem(key, JSON.stringify(saved));
+        this.lists.push(newItem);
+        localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
 
-        if (this.selectedWG === wgId) this.lists.push(newItem);
         this.closePopup();
-      } catch (err) {
-        console.error(err);
-        alert("Fehler beim Erstellen: " + err.message);
+      } catch (e) {
+        console.error(e);
+        alert("Fehler beim Erstellen: " + e.message);
       }
     },
 
-    /**
-     * Modal: Liste umbenennen
-     */
+    // -----------------------------
+    // Listen Optionen
+    // -----------------------------
+    openListOptions(list) {
+      this.selectedList = list;
+      this.showListOptions = true;
+      this.showPopup = false;
+    },
+
+    closeListOptions() {
+      this.selectedList = null;
+      this.showListOptions = false;
+    },
+
     openRenameModal() {
       if (!this.selectedList) return;
       this.renameListName = this.selectedList.name;
       this.showRenameModal = true;
+      this.showListOptions = false;
     },
 
-    /**
-     * Speichert den neuen Namen der Liste im Backend & localStorage
-     */
     async renameList() {
-      if (!this.renameListName.trim()) {
+      const newName = this.renameListName.trim();
+      if (!newName) {
         alert("Name darf nicht leer sein.");
         return;
       }
 
-      const newName = this.renameListName.trim();
       const wgId = this.selectedWG;
       const listId = this.selectedList?.id;
       if (!wgId || !listId) return;
 
       try {
-        const response = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
+        const res = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({ name: newName }),
         });
 
-        if (!response.ok) {
-          const data = await response.json().catch(() => null);
-          throw new Error(data?.message || `Fehler ${response.status}`);
-        }
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data?.message || `Fehler ${res.status}`);
 
-        const index = this.lists.findIndex((l) => l.id === listId);
-        if (index !== -1) this.lists[index].name = newName;
+        const idx = this.lists.findIndex((l) => String(l.id) === String(listId));
+        if (idx !== -1) this.lists[idx].name = newName;
 
-        const key = `lists_${wgId}`;
-        const saved = JSON.parse(localStorage.getItem(key)) || [];
-        const sIndex = saved.findIndex((x) => x.id === listId);
-        if (sIndex !== -1) {
-          saved[sIndex].name = newName;
-          localStorage.setItem(key, JSON.stringify(saved));
-        }
+        localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
 
         this.showRenameModal = false;
-        this.showListOptions = false;
-      } catch (err) {
-        console.error("Fehler beim Umbenennen der Liste:", err);
-        alert("Fehler beim Umbenennen der Liste: " + err.message);
+        this.selectedList = null;
+      } catch (e) {
+        console.error(e);
+        alert("Fehler beim Umbenennen: " + e.message);
       }
     },
 
-    /**
-     * Öffnet die ausgewählte Liste
-    */
+    async deleteList(listId) {
+      const wgId = this.selectedWG;
+      if (!wgId || !listId) return;
+
+      if (!confirm("Liste wirklich löschen?")) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          let msg = text || `HTTP ${res.status}`;
+          try {
+            const j = JSON.parse(text);
+            if (j?.message) msg = j.message;
+          } catch (_) {}
+          throw new Error(msg);
+        }
+
+        this.lists = this.lists.filter((l) => String(l.id) !== String(listId));
+        localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
+
+        this.showListOptions = false;
+        this.selectedList = null;
+      } catch (e) {
+        console.error(e);
+        alert("Fehler beim Löschen: " + e.message);
+      }
+    },
+
+    // -----------------------------
+    // Navigation
+    // -----------------------------
     goToList(list) {
       localStorage.setItem("selectedWGID", this.selectedWG);
       localStorage.setItem("selectedListID", list.id);
@@ -398,40 +412,138 @@ new Vue({
       window.location.href = "../Einkaufsliste/einkaufsliste.html";
     },
 
-    /* =========================
-     * Invite Link
-     * ========================= */
+    // -----------------------------
+    // WG Form: Validierung / Image lokal
+    // -----------------------------
+    validateGroupForm() {
+      this.errors.name = this.newGroup.name.trim() ? null : "Name ist erforderlich.";
+
+      // Beschreibung optional lassen (oder Pflicht machen, wenn du willst)
+      this.errors.description = null;
+
+      this.formValid = !this.errors.name && !this.errors.description;
+    },
+
+    handleImageUpload(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      this.newGroup.imageFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.newGroup.preview = reader.result; // Base64
+      };
+      reader.readAsDataURL(file);
+    },
+
+    closeModal() {
+      this.showCreateGroupModal = false;
+      this.newGroup = { name: "", description: "", preview: null, imageFile: null };
+      this.errors = { name: null, description: null };
+      this.formValid = false;
+      this.isSaving = false;
+      this.saveSuccess = false;
+      this.saveError = null;
+    },
+
+    // -----------------------------
+    // Neue WG erstellen (Backend ohne Bild) + Bild lokal speichern
+    // -----------------------------
+    async saveGroup() {
+      this.validateGroupForm();
+      if (!this.formValid) return;
+
+      this.isSaving = true;
+      this.saveError = null;
+      this.saveSuccess = false;
+
+      try {
+        const res = await fetch(`${API_BASE}/wg/create`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            name: this.newGroup.name.trim(),
+            description: this.newGroup.description?.trim() || "",
+          }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data?.message || `Fehler ${res.status}`);
+
+        const newId = data?.id ?? data?.wid ?? data?._id;
+        if (!newId) throw new Error("Backend hat keine WG-ID zurückgegeben.");
+
+        // ✅ Bild/Desc lokal speichern (weil Backend kein Bild erwartet)
+        if (this.newGroup.preview) {
+          localStorage.setItem(`wg_image_${newId}`, this.newGroup.preview);
+        }
+        if (this.newGroup.description?.trim()) {
+          localStorage.setItem(`wg_desc_${newId}`, this.newGroup.description.trim());
+        }
+
+        await this.loadUserAndWGs();
+
+        this.selectedWG = String(newId);
+        const wg = this.wgList.find((w) => String(w.id) === String(newId));
+        this.selectedWGName = wg?.name || this.newGroup.name.trim();
+
+        localStorage.setItem("selectedWG", this.selectedWG);
+        localStorage.setItem("selectedWGName", this.selectedWGName);
+
+        await this.fetchLists(this.selectedWG);
+
+        this.saveSuccess = true;
+        setTimeout(() => this.closeModal(), 500);
+      } catch (e) {
+        console.error(e);
+        this.saveError = "Fehler beim Erstellen der WG: " + e.message;
+      } finally {
+        this.isSaving = false;
+      }
+    },
+
+    // -----------------------------
+    // Invite Link
+    // -----------------------------
     async createInviteLink() {
+      if (!this.selectedWG) {
+        alert("Bitte zuerst eine WG auswählen.");
+        return;
+      }
+
       try {
         const response = await fetch(`${API_BASE}/wg/${this.selectedWG}/invite`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({
-            expires: null,
-            targetUser: null,
-          }),
+          body: JSON.stringify({ expires: null, targetUser: null }),
         });
 
         if (!response.ok) {
-          const text = await response.text();
+          const text = await response.text().catch(() => "");
           throw new Error(text || `Fehler ${response.status}`);
         }
 
-        const data = await response.json();
-
+        const data = await response.json().catch(() => ({}));
         this.inviteLinkfromAPI = `${window.location.origin}/invite/${data.id}`;
         localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
 
+        this.rebuildFrontendInviteLinkFromStored();
       } catch (err) {
         console.error("Invite Fehler:", err.message);
       }
     },
-    /**
-     * Kopiert den Invite-Link in die Zwischenablage
-     */
+
     copyInviteLink() {
-      navigator.clipboard.writeText(this.frontendLink)
+      if (!this.frontendLink) {
+        alert("Kein Invite-Link vorhanden. Bitte erst erstellen.");
+        return;
+      }
+
+      navigator.clipboard
+        .writeText(this.frontendLink)
         .then(() => {
           this.showCopyToast = true;
           setTimeout(() => (this.showCopyToast = false), 2000);
@@ -439,39 +551,33 @@ new Vue({
         .catch((err) => console.error("Fehler beim Kopieren:", err));
     },
 
-    /**
-     * Toggle für die Email-Input-Box
-     */
     toggleEmailInput() {
       this.showEmailInput = !this.showEmailInput;
     },
 
-    /**
-     * Senden des Invite-Links per Email
-     */
     sendLink() {
       const form = this.$refs.emailForm;
+
       if (!this.emailToShare.trim()) {
         alert("Bitte Email eingeben.");
         return;
       }
-      if (!form.checkValidity()) {
+      if (form && !form.checkValidity()) {
         form.reportValidity();
+        return;
+      }
+      if (!this.frontendLink) {
+        alert("Kein Invite-Link vorhanden. Bitte erst erstellen.");
         return;
       }
 
       const subject = encodeURIComponent("Einladung zur WG-Gruppe");
       const body =
-      encodeURIComponent("Hallo,\n\nHier ist dein Einladungslink:\n\n") +
-      this.frontendLink +
-      encodeURIComponent("\n\nViele Grüße");
+        encodeURIComponent("Hallo,\n\nHier ist dein Einladungslink:\n\n") +
+        this.frontendLink +
+        encodeURIComponent("\n\nViele Grüße");
 
-      try {
-        window.location.href = `mailto:${this.emailToShare}?subject=${subject}&body=${body}`;
-      } catch (e) {
-        const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(this.emailToShare)}&su=${subject}&body=${body}`;
-        window.open(gmailLink, "_blank");
-      }
+      window.location.href = `mailto:${this.emailToShare}?subject=${subject}&body=${body}`;
 
       this.emailToShare = "";
       this.showEmailInput = false;

@@ -33,8 +33,8 @@
                 <ul class="dropdown-options">
                   <li
                     v-for="wg in wgList"
-                    :key="wg.id"
-                    @click="selectWG(wg.id)"
+                    :key="wg.wid"
+                    @click="selectWG(wg.wid)"
                   >
                     {{ wg.name }}
                   </li>

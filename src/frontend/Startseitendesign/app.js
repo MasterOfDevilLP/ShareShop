@@ -1,5 +1,6 @@
 
 import { API_BASE } from '../config.js';
+console.log("API_BASE=", API_BASE);
 
 new Vue({ 
   el: '#app',
@@ -62,27 +63,45 @@ new Vue({
         if (!userResp.ok) throw new Error("Fehler beim Laden der User-Daten");
 
         const userData = await userResp.json();
-        const wid = userData.wid;
-        if (!wid) throw new Error("User hat keine WG");
 
-        const wgResp = await fetch(`${API_BASE}/wg/${wid}`, {
-          credentials: "include"
-        });
+        // userData.wid is a array or comma-separated string
+        let widList = userData.wid;
 
-        if (!wgResp.ok) throw new Error("Fehler beim Laden der WG-Daten");
+        if (!widList) throw new Error("User hat keine WG");
 
-        const wgData = await wgResp.json();
+        // if widList is a string, convert to array
+        if (typeof widList === "string") {
+          widList = widList.split(",").map(s => s.trim());
+        }
 
-        this.wgList = [wgData];
-        this.selectedWG = wgData.wid;
-        this.selectedWGName = wgData.name;
-        await this.fetchLists();
-        
+        this.wgList = [];
+
+        // LOOP through WGs and fetch details
+        for (const wid of widList) {
+          try {
+            const wgResp = await fetch(`${API_BASE}/wg/${wid}`, {
+              credentials: "include"
+            });
+
+            if (!wgResp.ok) continue; 
+            const wgData = await wgResp.json();
+
+            this.wgList.push(wgData);
+          } catch (innerErr) {
+            console.error("Fehler beim Laden einer WG:", innerErr);
+          }
+        }
+
+        // choose selected WG from localStorage or default to first WG
+        if (this.wgList.length > 0) {
+          this.selectedWG = this.wgList[0].wid;
+          this.selectedWGName = this.wgList[0].name;
+          await this.fetchLists();
+        }
 
       } catch (err) {
         console.error(err);
         this.lists = [];
-        alert("Konnte WG nicht laden: " + err.message);
       }
     },
 
@@ -184,13 +203,13 @@ async saveList() {
         return;
       }
 
-      const wg = this.wgList.find(w => w.id === id);
+      const wg = this.wgList.find(w => w.wid === id);
       if (!wg) return;
 
-      this.selectedWG = wg.id;
+      this.selectedWG = wg.wid;
       this.selectedWGName = wg.name;
 
-      localStorage.setItem("selectedWG", wg.id);
+      localStorage.setItem("selectedWG", wg.wid);
       localStorage.setItem("selectedWGName", wg.name);
 
       // Listen der neuen WG laden

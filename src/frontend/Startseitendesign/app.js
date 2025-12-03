@@ -340,8 +340,8 @@ async saveList() {
       this.renameListName = this.selectedList.name;
       this.showRenameModal = true;
     },
-    //lokale änderung
-    renameList() {
+    
+    async renameList() {
       if (!this.renameListName.trim()) {
         alert("Name darf nicht leer sein.");
         return;
@@ -349,26 +349,46 @@ async saveList() {
 
       const newName = this.renameListName.trim();
       const wgId = this.selectedWG;
-      if (!wgId) return;
+      const listId = this.selectedList?.id;
 
-      // UI aktualisieren
-      const index = this.lists.findIndex(l => l.id === this.selectedList.id);
-      if (index !== -1) {
-        this.lists[index].name = newName;
+      if (!wgId || !listId) return;
+
+      try {
+        // PATCH an Backend
+        const response = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name: newName })
+        });
+
+        if (!response.ok) {
+          const data = await response.json().catch(() => null);
+          throw new Error(data?.message || `Fehler ${response.status}`);
+        }
+
+        // update UI
+        const index = this.lists.findIndex(l => l.id === listId);
+        if (index !== -1) {
+          this.lists[index].name = newName;
+        }
+
+        // update localStorage
+        const key = `lists_${wgId}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || [];
+        const sIndex = saved.findIndex(x => x.id === listId);
+        if (sIndex !== -1) {
+          saved[sIndex].name = newName;
+          localStorage.setItem(key, JSON.stringify(saved));
+        }
+
+        this.showRenameModal = false;
+        this.showListOptions = false;
+
+      } catch (err) {
+        console.error("Fehler beim Umbenennen der Liste:", err);
+        alert("Fehler beim Umbenennen der Liste: " + err.message);
       }
-
-      // localStorage aktualisieren (WG-spezifisch)
-      const key = `lists_${wgId}`;
-      const saved = JSON.parse(localStorage.getItem(key)) || [];
-      const sIndex = saved.findIndex(x => x.id === this.selectedList.id);
-
-      if (sIndex !== -1) {
-        saved[sIndex].name = newName;
-        localStorage.setItem(key, JSON.stringify(saved));
-      }
-
-      this.showRenameModal = false;
-      this.showListOptions = false;
     },
 
     openWGCreateModal() {

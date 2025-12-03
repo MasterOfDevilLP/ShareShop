@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Startseite</title>
-    <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
@@ -65,50 +64,75 @@
         </header>
 
         <!-- Modal pop up neue WG erstellen -->
+        <!-- Modal: Neue WG erstellen -->
         <div v-if="showCreateGroupModal" class="modal-overlay">
           <div class="modal-content">
             <h3>Gruppe Erstellen</h3>
+
             <input v-model="newGroupName" placeholder="Gruppenname" />
+
             <div class="modal-actions">
               <button @click="createNewGroup">Erstellen</button>
               <button @click="showCreateGroupModal = false">Abbrechen</button>
             </div>
           </div>
         </div>
+
         <!-- Main Content -->
         <main class="app-content">
           <div class="shopping-list">
-            <div v-for="list in lists" :key="list.id" class="list-card">
-              <a href="../Einkaufsliste/einkaufsliste.html" class="list-left">
+            <div v-for="list in lists" :key="list.id" class="list-card"   @click="goToList(list)" >
+              <div class="list-left">
                 <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
-                {{ list.name }}
+                <div class="list-text">
+                  <div class="list-title">{{ list.name }}</div>
+                  <div v-if="list.beschreibung" class="list-desc">
+                    {{ list.beschreibung }}
+                  </div>
+                </div>
               </a>
-              <button class="list-dots" @click="openListOptions(list)">
+              <button class="list-dots" @click.stop="openListOptions(list)">
                 <img src="icons/dots.svg" alt="Mehr Optionen" />
               </button>
             </div>
           </div>
 
-          <button class="add-list" @click="add_list">
-            <span>+</span> Liste hinzufügen
+          <button class="dev_logout" @click="dev_logout">
+            <span>+</span> Dev Logout
           </button>
         </main>
+        <!-- Button: neue Liste hinzufugen -->
+        <button class="add-list" @click="add_list">
+            <span>+</span> Liste hinzufügen
+        </button>
 
-        <!-- Bottom sheet Liste hinzufügen -->
+        <!-- Bottom sheet Liste hinzufügen  (erweitert)-->
         <div class="bottom-sheet" :class="{ visible: showPopup }">
           <div class="sheet-header">
             Neue Liste erstellen
-            <button class="close-btn" id="closePopup" @click="closePopup">
-              ✕
-            </button>
+            <button class="close-btn" @click="closePopup">✕</button>
           </div>
           <div class="sheet-body">
+            <div class="form-label-row">
+              <label>Listenname *</label>
+              <span class="err-inline" v-if="touched.name && !newList.name"
+                >Pflichtfeld</span
+              >
+            </div>
             <input
               type="text"
               v-model="newList.name"
-              placeholder="Name der neuen Liste"
+              @blur="touched.name = true"
             />
-            <button id="saveList" @click="saveList">Erstellen</button>
+            <p>WG: {{ selectedWGName }}</p>
+
+
+            <label>Beschreibung</label>
+            <input type="text" v-model="newList.beschreibung" />
+
+            <button id="saveList" :disabled="!isListValid" @click="saveList">
+              Erstellen
+            </button>
           </div>
         </div>
 

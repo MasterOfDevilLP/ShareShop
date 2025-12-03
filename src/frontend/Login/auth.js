@@ -5,7 +5,7 @@ const LanguageStore = Vue.reactive({
 });
 
 // === API and Constants ===
-import { API_BASE_URL as API_BASE } from '../config.js';
+import { API_BASE } from '../config.js';
 const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
 const { reactive, createApp } = Vue;
 
@@ -56,6 +56,7 @@ const t = (key, arg1) => {
     }
     return text;
 };
+
 
 // === 4. Input Validation Helpers ===
 const isValidEmail = (email) => {
@@ -176,6 +177,7 @@ const AuthInput = {
             // Logic to handle password visibility toggle
             if (!this.isPassword) return this.inputType;
             return this.showPassword ? 'text' : 'password';
+
         }
     },
     methods: {

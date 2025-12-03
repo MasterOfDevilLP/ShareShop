@@ -139,6 +139,27 @@
         box-shadow: 0 1px 4px rgba(0,0,0,0.1);
         border: 1px solid #ddd;
         transition: transform 0.3s ease;
+        position: relative;
+      }
+      .delete-product-button {
+        position: absolute;
+        top: -2.25px;
+        right: -2.25px;
+        color: rgb(180, 54, 54);
+        border: 1px solid rgba(219, 52, 52, 0.2);;
+        background: transparent; 
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .delete-product-button:hover {
+        background: rgb(247, 179, 179);
       }
 
       .product-card:hover {

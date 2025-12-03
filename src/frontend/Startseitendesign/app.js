@@ -24,11 +24,9 @@ new Vue({
     // Daten für neue Liste
     touched: {
       name: false,
-      beschreibung: false
     },
     newList: {
       name: "",
-      beschreibung: "",
       wg: ""
     },
 
@@ -39,7 +37,8 @@ new Vue({
     selectedList: null,
     showRenameModal: false,
     renameListName: "",
-    isWGOpen: false
+    isWGOpen: false,
+    wgDropdownOpen: false
   },
 
   computed: {
@@ -121,8 +120,7 @@ new Vue({
     },
 
     resetNewList() {
-      this.newList = { name: "", beschreibung: "" };
-      this.touched = { name: false, beschreibung: false };
+      this.newList = { name: ""};
     },
 
     openListOptions(list) {
@@ -174,8 +172,7 @@ async saveList() {
 
     const newItem = {
       id: data?.id || `temp-${Date.now()}`,
-      name: this.newList.name.trim(),
-      beschreibung: this.newList.beschreibung || ""
+      name: this.newList.name.trim()
     };
 
     saved.push(newItem);
@@ -215,6 +212,7 @@ async saveList() {
       // Listen der neuen WG laden
       this.lists = [];
       this.fetchLists();
+      this.wgDropdownOpen = false;
     },
 
     // WG für neue Liste auswählen
@@ -265,8 +263,7 @@ async saveList() {
 
         this.lists = data.map(l => ({
           id: l.lid,
-          name: l.name || "neue Liste",
-          beschreibung: l.beschreibung || ""
+          name: l.name || "neue Liste"
         }));
         
 

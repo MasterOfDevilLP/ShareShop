@@ -264,7 +264,7 @@ const LoginForm = {
                 if (res.ok) {
                     this.successMessage = t('SUCCESS_LOGIN');
                     setTimeout(() => {
-                        window.location.href = '/Startseitendesign/startseite.html';
+                        window.location.href = '../Startseitendesign/startseite.html';
                     }, 1500);
                 } else {
                     this.handleApiError(res, false);

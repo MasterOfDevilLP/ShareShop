@@ -1,0 +1,67 @@
+= ShareShop Projekt, Meeting 24 (SE2)
+Kevin (Product Owner)
+Datum: 02.12.2025
+
+== Teilnehmer
+* Kevin
+* Emil
+* Valencia
+* Han
+* Florian
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1) Nutzung der Live-Umgebung (Frontend -> Backend)
+* Valencia und Han hatten Probleme mit der Nutzung der von Emil bereitgestellten HTTPS-Instanz.
+* Emil erklärt:
+** In der `config.js` muss lediglich die API-Base-URL durch die neue URL ersetzt werden.
+** Weitere Schritte sind nicht nötig.
+
+=== 2) Owner-/Berechtigungssystem (Backend)
+* Florian:
+** Umsetzung des Berechtigungssystems ist abgeschlossen.
+** Muss noch auf den Invite-Branch rebased werden.
+** Danach wird ein Pull-Request erstellt.
+* Emil übernimmt später die Nutzung der Permissions innerhalb der Invite-Logik.
+
+=== 3) Stand Backend allgemein
+* Backend hat weitere offene Punkte:
+** ältere Endpunkte, die noch nicht umgesetzt wurden
+** Kategorien
+** Suchfunktion
+** diverse Verwaltungsendpunkte
+* Kevin und Benni wollen ein kurzes internes Planning durchführen, um verlorene oder veraltete Tickets zu identifizieren bzw eine geeignete Übersicht über den Stand des Projekts im Miro anfertigen.
+
+=== 4) Frontend: Pull Requests + Aufgabenstatus
+* Han:
+** Neuester PR ist mergeable; wurde bereits mit `develop` zusammengeführt.
+** Valencia soll das Review formal bestätigen (Approve setzen).
+* Valencia:
+** Ein älterer PR („UI für Item-Verwaltung“) wird nicht mehr benötigt.
+** Benni erklärt: Löschen ist möglich, wenn sichergestellt ist, dass alle relevanten Änderungen bereits in einem anderen Branch enthalten sind.
+* Hinweis für das Frontend:
+** Für jede neue Task sollte über GitHub direkt ein Branch erstellt werden (`Create Branch from Issue`), um die Nachverfolgbarkeit zu sichern.
+** Nach Merge müssen die korrespondierenden Tasks geschlossen oder aktualisiert werden.
+
+=== 5) Technische Probleme Frontend
+* Valencia:
+** Erstellung mehrerer WGs funktioniert aktuell nicht.
+** Docker-Umgebung (Frontend + Backend) funktioniert nicht zuverlässig.
+* Emil bietet Unterstützung bei Docker-Problemen an.
+
+== Aufgaben / ToDos
+
+* **Frontend**
+** Valencia: PR für Item-/Startseiten-Formular reviewen und approven.
+** Hann: PRs sauber referenzieren und zugehörige Tasks im Board aktualisieren.
+** Probleme mit Mehrfach-WG-Erstellung und Docker testen; bei Bedarf Emil einbeziehen.
+
+* **Backend**
+** Florian: Rebase des Permission-Branches auf Invite-Branch durchführen und PR erstellen.
+** Emil: Permission-Checks später im Invite-Branch integrieren.
+
+* **Orga**
+** Benni + Kevin: Kurzes Planning durchführen, um Ticketstand zu ordnen.

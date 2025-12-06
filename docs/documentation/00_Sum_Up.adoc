@@ -337,3 +337,12 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Aufgaben: Nur Tickets im aktuellen Scope (Registrierung, Startseite, Listenerstellung, WG-Erstellung) bearbeiten.
 * Permissions: Kevin erstellt Ticket + Story für ein neues Berechtigungssystem im Epic „WG-Bedienung“ (Owner, Nutzer kicken, WG löschen).
 * Ticketpflege: Alte „No Status“-Tickets prüfen und ggf. als deprecated markieren; Filter/Ansicht für Sprint-Backlog verbessern.
+
+=== Meeting 24 (02.12.2025)
+* `xref:./24_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* Live-Umgebung: API-Base-URL muss im Frontend korrekt gesetzt werden; danach funktioniert die Anbindung.  
+* Berechtigungssystem: Backend-Implementierung fertig; Rebase auf Invite-Branch + PR folgen.  
+* Backend-Stand: Offene Themen (ältere Endpunkte, Kategorien, Suche); Benni & Kevin planen internes Struktur-/Ticket-Review.  
+* Frontend: Neuer PR mergeable; Reviews notwendig. Überflüssiger PR kann gelöscht werden (Änderungen bereits enthalten).  
+* Technische Probleme: Mehrfach-WG-Erstellung & Docker funktionieren nicht zuverlässig; Emil unterstützt bei der Analyse.  

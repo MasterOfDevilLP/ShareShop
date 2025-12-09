@@ -347,7 +347,14 @@ public class WGEndpoints {
 			
 			// point of (almost) no return
 			// TODO: at some point, there should maybe be a permission system
-			wg.removeUser(targetusr);
+			// since you currently leave a wg by removing yourself, that should work for everyone, but the owner can remove anyone
+			if(userid.equals(usr.getUserID()) || wg.isOwner(usr)) {
+				wg.removeUser(targetusr);				
+			} else {
+				RestUtils.setResponseError(ctx, HttpStatus.FORBIDDEN, "permission denied");
+				return;
+			}
+			
 			ctx.status(HttpStatus.OK);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

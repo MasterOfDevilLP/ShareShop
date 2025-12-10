@@ -94,6 +94,11 @@ Ein typischer Ablauf für `POST /wg/{wid}/item` sieht so aus:
 Mehr Infos zum genauen Aufbau der Logik gibt es hier:  
 <<../models/backend_general/backend.adoc#, backend.adoc>>
 
+=== Invite-System
+
+Nutzer können einer WG nur über Einladungen hinzugefügt werden. Der Einfachheit halber werden keine Einladungen direkt verschickt (Einbindung von E-Mailversand wäre zu viel unnötiger Aufwand, und ein Versand innerhalb der Applikation würde ebenfalls mehr zusätzlichen Aufwand bedeuten), sondern nur Einladungscodes generiert, welche über externe Wege an die Zielnutzer weitergegeben werden müssen.
+Die Nutzerfreundlichkeit dieses Systems ist nicht ideal, Erweiterungen für einfachere Bedienung wären jedoch nicht zu kompliziert umzusetzen.
+
 === Frontend-Architektur & Designentscheidungen
 
 * **Framework & Build-Tool**  

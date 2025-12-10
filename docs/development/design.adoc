@@ -99,6 +99,46 @@ Mehr Infos zum genauen Aufbau der Logik gibt es hier:
 Nutzer können einer WG nur über Einladungen hinzugefügt werden. Der Einfachheit halber werden keine Einladungen direkt verschickt (Einbindung von E-Mailversand wäre zu viel unnötiger Aufwand, und ein Versand innerhalb der Applikation würde ebenfalls mehr zusätzlichen Aufwand bedeuten), sondern nur Einladungscodes generiert, welche über externe Wege an die Zielnutzer weitergegeben werden müssen.
 Die Nutzerfreundlichkeit dieses Systems ist nicht ideal, Erweiterungen für einfachere Bedienung wären jedoch nicht zu kompliziert umzusetzen.
 
+Ablauf:
+```
+Nutzer A                      Anwendung
+    Invite für meine WG x bitte
+  -------------------------------->
+        Invite-Code
+  <--------------------------------
+
+Nutzer A schickt Code an Nutzer B
+
+Nutzer B                      Anwendung
+        Invite Code y einlösen
+  -------------------------------->
+                OK
+  <--------------------------------
+```
+
+Detailliert
+```
+Client                        Backend
+     POST create invite for WG
+  ------------------------------->
+          Invite code/Error
+  <-------------------------------
+
+
+Client 2                      Backend
+|---                               ---|
+|      GET invite info for code       |
+|  ------------------------------->   |
+|        Invite info/Error            |
+|  <-------------------------------   |
+|___                               ___|
+
+      POST accept invite code
+  ------------------------------->
+            OK/Error
+  <-------------------------------
+```
+
 === Frontend-Architektur & Designentscheidungen
 
 * **Framework & Build-Tool**  

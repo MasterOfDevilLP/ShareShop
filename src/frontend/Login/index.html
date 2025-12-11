@@ -5,6 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Share Shop</title>
   <link rel="stylesheet" href="style.css" />
+
+
+  <script type="module">
+    import { API_BASE } from "../config.js";
+
+    // Check if user is logged in BEFORE loading the login UI
+    fetch(`${API_BASE}/user/`, {
+      method: "GET",
+      credentials: "include"
+    })
+    .then(async res => {
+      if (res.ok) {
+        // ✔ Logged in: send to start page
+        window.location.href = "../Startseitendesign/startseite.html";
+      } 
+      else {
+        // ❌ Not logged in: stay here (login page)
+      }
+    })
+    .catch(() => {
+      // Network errors also show login page
+    });
+  </script>
+  
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>

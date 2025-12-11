@@ -111,10 +111,10 @@ const LanguageSwitcher = {
     template: `
         <div class="lang-buttons">
             <button :class="{ active: language === 'de' }" @click="language = 'de'">
-                <img src="icons/flag-de.png" alt="German Flag" class="flag-icon" /> DE
+                <img src="Login/icons/flag-de.png" alt="German Flag" class="flag-icon" /> DE
             </button>
             <button :class="{ active: language === 'en' }" @click="language = 'en'">
-                <img src="icons/flag-en.png" alt="English Flag" class="flag-icon" /> EN
+                <img src="Login/icons/flag-en.png" alt="English Flag" class="flag-icon" /> EN
             </button>
         </div>
     `,
@@ -160,7 +160,7 @@ const AuthInput = {
             
             <img
                 v-if="isPassword"
-                :src="showPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
+                :src="showPassword ? 'Login/icons/eye-off.png' : 'Login/icons/eye.png'"
                 class="eye-icon"
                 @click="togglePassword"
                 alt="Toggle Password Visibility"
@@ -198,7 +198,7 @@ const LoginForm = {
             <LanguageSwitcher />
 
             <AuthInput
-                icon="icons/email.png"
+                icon="Login/icons/email.png"
                 placeholderKey="EMAIL_PLACEHOLDER"
                 inputType="email"
                 :modelValue="email"
@@ -206,7 +206,7 @@ const LoginForm = {
             />
             
             <AuthInput
-                icon="icons/lock.png"
+                icon="Login/icons/lock.png"
                 placeholderKey="PASSWORD_PLACEHOLDER"
                 :isPassword="true"
                 :modelValue="password"
@@ -289,7 +289,7 @@ const RegisterForm = {
             <LanguageSwitcher />
 
             <AuthInput
-                icon="icons/email.png"
+                icon="Login/icons/email.png"
                 placeholderKey="EMAIL_PLACEHOLDER"
                 inputType="email"
                 :modelValue="email"
@@ -297,7 +297,7 @@ const RegisterForm = {
             />
 
             <AuthInput
-                icon="icons/lock.png"
+                icon="Login/icons/lock.png"
                 placeholderKey="PASSWORD_PLACEHOLDER"
                 :isPassword="true"
                 :modelValue="password"
@@ -305,7 +305,7 @@ const RegisterForm = {
             />
             
             <AuthInput
-                icon="icons/lock.png"
+                icon="Login/icons/lock.png"
                 placeholderKey="REPEAT_PASSWORD_PLACEHOLDER"
                 :isPassword="true"
                 :modelValue="repeatPassword"

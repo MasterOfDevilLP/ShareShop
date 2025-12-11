@@ -28,10 +28,17 @@ import shareshop.rest.requests.ListAuditResponse;
 import shareshop.rest.requests.ListContentResponse;
 import shareshop.rest.requests.PatchListRequest;
 
+/**
+ * Implementation of the shopping list endpoints (under /wg/{wid}/list) 
+ */
 public class ListEndpoints {
 	
 	private final static String basepath = "/wg/{wid}/list";
 	
+	/**
+	 * Register all endpoints to the Javalin instance
+	 * @param app The Javalin instance
+	 */
 	public static void register(Javalin app) {
 		registerCreate(app);
 		registerGet(app);
@@ -41,6 +48,10 @@ public class ListEndpoints {
 		registerPatch(app);
 	}
 	
+	/**
+	 * Implementation of POST /wg/{wid}/list
+	 * @param ctx The Javalin request context
+	 */
 	public static void epCreate(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -104,6 +115,10 @@ public class ListEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of GET /wg/{wid}/list/{lid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGet(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -163,6 +178,10 @@ public class ListEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of POST /wg/{wid}/list/{lid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epPost(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -251,6 +270,10 @@ public class ListEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of DELETE /wg/{wid}/list/{lid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epDelete(Context ctx) {
 		Key ctxKey = new Key<AppContext>("Context");
 		
@@ -308,6 +331,10 @@ public class ListEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of GET /wg/{wid}/list/{lid}/audit
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGetAudit(Context ctx) {
 		Key ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -370,6 +397,10 @@ public class ListEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of PATCH /wg/{wid}/list/{lid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epPatch(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");

@@ -26,10 +26,17 @@ import shareshop.rest.requests.PatchWGRequest;
 import shareshop.rest.requests.WGAddUserRequest;
 import shareshop.rest.requests.WGInformationResponse;
 
+/**
+ * Implementation of the WG endpoints (under /wg) 
+ */
 public class WGEndpoints {
 	
 	private final static String basepath = "/wg";
 	
+	/**
+	 * Register all endpoints to the Javalin instance
+	 * @param app The Javalin instance
+	 */
 	public static void register(Javalin app) {
 		registerCreate(app);
 		registerGet(app);
@@ -45,6 +52,10 @@ public class WGEndpoints {
 		registerGetLists(app);
 	}
 	
+	/**
+	 * Implementation of POST /wg/create
+	 * @param ctx The Javalin request context
+	 */
 	public static void epCreate(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		try {
@@ -85,6 +96,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of GET /wg/{wid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGet(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -134,6 +149,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of DELETE /wg/{wid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epDelete(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -182,6 +201,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of PATCH /wg/{wid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epPatch(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -243,6 +266,10 @@ public class WGEndpoints {
 	
 	// WG User endpoints
 	
+	/**
+	 * Implementation of GET /wg/{wid}/user (stubbed)
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGetUsers(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		System.out.printf("Get WG %s users\n", wid);
@@ -257,6 +284,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of POST /wg/{wid}/user (stubbed)
+	 * @param ctx The Javalin request context
+	 */
 	public static void epWGAddUser(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		try {
@@ -284,7 +315,10 @@ public class WGEndpoints {
 	}
 	
 	// single user endpoints
-	
+	/**
+	 * Implementation of GET /wg/{wid}/user/{uid} (stubbed)
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGetUser(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		String uid = ctx.pathParam("uid");
@@ -300,6 +334,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of DELETE /wg/{wid}/user/{uid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epDeleteUser(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -369,6 +407,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of GET /wg/{wid}/list
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGetLists(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");

@@ -24,10 +24,17 @@ import shareshop.rest.requests.CreateWGRequest;
 import shareshop.rest.requests.CreateWGResponse;
 import shareshop.rest.requests.ItemInformationResponse;
 
+/**
+ * Implementation of the item endpoints (under /wg/{wid}/item)
+ */
 public class ItemEndpoints {
 	
 	private final static String basepath = "/wg/{wid}/item";
 	
+	/**
+	 * Register all endpoints to the javalin instance
+	 * @param app the javalin instance
+	 */
 	public static void register(Javalin app) {
 		registerGet(app);
 		registerGetItem(app);
@@ -36,6 +43,10 @@ public class ItemEndpoints {
 		registerPatch(app);
 	}
 	
+	/**
+	 * Implementation of the endpoint GET /wg/{wid}/item, item search is currently stubbed
+	 * @param ctx the javalin request context
+	 */
 	public static void epGet(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -92,6 +103,10 @@ public class ItemEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of the endpoint GET /wg/{wid}/item/{iid}
+	 * @param ctx the javalin request context
+	 */
 	public static void epGetItem(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -144,6 +159,10 @@ public class ItemEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of the endpoint DELETE /wg/{wid}/item/{iid}, stubbed
+	 * @param ctx the javalin request context
+	 */
 	public static void epDelete(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		String iid = ctx.pathParam("iid");
@@ -160,6 +179,10 @@ public class ItemEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of the endpoint PATCH /wg/{wid}/item/{iid}, stubbed
+	 * @param ctx the javalin request context
+	 */
 	public static void epPatch(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		String iid = ctx.pathParam("iid");
@@ -177,6 +200,10 @@ public class ItemEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of the endpoint POST /wg/{wid}/item
+	 * @param ctx the javalin request context
+	 */
 	public static void epPost(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");

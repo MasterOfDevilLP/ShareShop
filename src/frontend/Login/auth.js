@@ -193,7 +193,7 @@ const LoginForm = {
     components: { LanguageSwitcher, AuthInput },
     mixins: [AuthMixin],
     template: `
-        <div class="auth-form">
+        <div class="auth-form" @keydown.enter="login">
             <h2>{{ t('LOGIN_TITLE') }}</h2>
             <LanguageSwitcher />
 
@@ -284,7 +284,7 @@ const RegisterForm = {
     components: { LanguageSwitcher, AuthInput },
     mixins: [AuthMixin],
     template: `
-        <div class="auth-form">
+        <div class="auth-form" @keydown.enter="register">
             <h2>{{ t('REGISTER_TITLE') }}</h2>
             <LanguageSwitcher />
 

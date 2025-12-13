@@ -34,13 +34,20 @@ new Vue({
       "Sonstiges",
     ],
 
-    /** @type {Object} Daten des aktuell neuen/zu bearbeitenden Produkts */
+    /** @type {Object} Daten des aktuell neuen/zu bearbeitenden Produkts 
+     * @property {string} id - Produkt-ID, falls bereits in der WG vorhanden
+     * @property {string} name - Name des Produkts
+     * @property {string} kategorie - Kategorie des Produkts
+     * @property {number|string} menge - Menge des Produkts in der Liste
+     * @property {number|string} preis - Preis des Produkts
+     * @property {boolean} fromWG - Flag, ob das Produkt bereits in der WG existiert
+    */
     newProduct: {
       id: "",
       name: "",
       kategorie: "",
       menge: "",
-      einheit: "",
+      //einheit: "",
       preis: "",
       fromWG: false,
     },
@@ -60,13 +67,13 @@ new Vue({
 
   mounted() {
     /**
-     * Beim Laden der Seite: Daten initial laden, wenn WG und Liste ausgewählt sind
+     * Lädt initial die WG-Produkte und die Einkaufsliste, falls IDs vorhanden.
      */
     if (this.wgID && this.listID) {
       this.initData();
     } else {
       console.warn(
-        "WG oder Liste nicht ausgewählt. Bitte zuerst auf der Startseite auswählen."
+        "WG oder Liste nicht ausgewählt. Bitte zuerst auf der Startseite auswählen.",
       );
     }
   },
@@ -88,6 +95,8 @@ new Vue({
 
     /**
      * @description Lädt alle Produkte der WG vom Backend
+     * Speichert sie in `this.products` für Autocomplete und Popup.
+     * @returns {Promise<void>}
      */
     loadWGItems() {
       fetch(`${this.baseUrl}/wg/${this.wgID}/item`, { credentials: "include" })
@@ -131,7 +140,7 @@ new Vue({
     },
 
     /**
-     * @description Lädt die Items der aktuellen Einkaufsliste vom Backend
+     * @description Lädt die Items der aktuellen Einkaufsliste vom Backend. Speichert sie in `this.listItems`
      */
     loadList() {
       fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
@@ -148,7 +157,7 @@ new Vue({
           console.log("Einkaufsliste geladen:", this.listItems);
         })
         .catch((err) =>
-          console.error("Einkaufsliste konnte nicht geladen werden", err)
+          console.error("Einkaufsliste konnte nicht geladen werden", err),
         );
     },
 
@@ -188,7 +197,7 @@ new Vue({
     /** Füllt Produktfelder automatisch, wenn Name in WG existiert */
     onProductNameInput() {
       const matched = this.products.find(
-        (p) => p.name === this.newProduct.name
+        (p) => p.name === this.newProduct.name,
       );
       if (matched) {
         this.newProduct.id = matched.id;
@@ -228,7 +237,7 @@ new Vue({
     /** Bearbeitet ein bestehendes Produkt in der Liste */
     updateListItem() {
       const index = this.listItems.findIndex(
-        (p) => p.iid === this.newProduct.iid
+        (p) => p.iid === this.newProduct.iid,
       );
       if (index !== -1) {
         this.listItems[index] = {
@@ -243,7 +252,7 @@ new Vue({
     /** Prüft, ob Produkt existiert; sonst neu erstellen und zur Liste hinzufügen */
     addOrCreateProduct() {
       const existingItem = this.products.find(
-        (p) => p.name === this.newProduct.name
+        (p) => p.name === this.newProduct.name,
       );
 
       if (existingItem) {
@@ -338,7 +347,7 @@ new Vue({
           this.loadWGItems();
         })
         .catch((err) =>
-          console.error("Item konnte nicht abgehakt werden", err)
+          console.error("Item konnte nicht abgehakt werden", err),
         );
     },
 
@@ -358,7 +367,7 @@ new Vue({
           this.loadWGItems();
         })
         .catch((err) =>
-          console.error("Item konnte nicht gelöscht werden", err)
+          console.error("Item konnte nicht gelöscht werden", err),
         );
     },
 
@@ -395,7 +404,7 @@ new Vue({
             headers: { "Content-Type": "application/json" },
             credentials: "include",
             body: JSON.stringify({ name: this.list_name }),
-          }
+          },
         );
 
         if (!response.ok) {
@@ -406,7 +415,7 @@ new Vue({
           console.error("Fehler beim Ändern des Listennamens:", errorData);
           alert(
             "Fehler beim Umbenennen der Liste: " +
-              (errorData.message || response.statusText)
+              (errorData.message || response.statusText),
           );
           return;
         }
@@ -417,7 +426,7 @@ new Vue({
           console.log("Listename erfolgreich geändert:", data);
         } else {
           console.log(
-            "Listename erfolgreich geändert (kein JSON zurückgegeben)"
+            "Listename erfolgreich geändert (kein JSON zurückgegeben)",
           );
         }
 

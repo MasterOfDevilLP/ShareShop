@@ -1,6 +1,5 @@
+import { API_BASE } from '../config.js';
 const { createApp, reactive } = Vue;
-
-const API_BASE = "http://localhost:8001";
 
 // === Sprache & Übersetzung ===
 const LanguageStore = reactive({

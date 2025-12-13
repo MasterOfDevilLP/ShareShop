@@ -395,13 +395,6 @@ async saveList() {
       this.showCreateGroupModal = true;
     },
 
-    dev_logout(){
-      localStorage.removeItem("wgList");
-      localStorage.removeItem("selectedWG");
-      localStorage.removeItem("selectedWGName");
-      window.location.href = "../Login/index.html";
-    },
-
     goToList(list) {
       localStorage.setItem("selectedWGID", this.selectedWG);
       localStorage.setItem("selectedListID", list.id);
@@ -411,23 +404,4 @@ async saveList() {
     }
 
   },
-
-
-
 });
-
-// Service Worker (optional behalten)
-/*
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(registration => {
-        console.log('ServiceWorker registriert:', registration);
-      })
-      .catch(error => {
-        console.log('ServiceWorker Registrierung fehlgeschlagen:', error);
-      });
-  });
-  
-}
-*/

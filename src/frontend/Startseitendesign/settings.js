@@ -12,7 +12,6 @@ new Vue({
     },
     mounted() {
   console.log("Mounted: selectedWG =", this.selectedWG);
-  this.fetchWGUsers();
 
   this.createInviteLink().then(() => {
     console.log("InviteLink nach Erstellung:", this.inviteLink);
@@ -45,7 +44,7 @@ async createInviteLink() {
   }
 
   try {
-    const response = await fetch(`/wg/${this.selectedWG}/invite`, {
+    const response = await fetch(`${API_BASE}/wg/${this.selectedWG}/invite`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

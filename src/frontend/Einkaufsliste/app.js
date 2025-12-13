@@ -234,26 +234,47 @@ new Vue({
       this.closePopup();
     },
 
-    /** Bearbeitet ein bestehendes Produkt in der Liste */
-    updateListItem() {
-      const index = this.listItems.findIndex(
-        (p) => p.iid === this.newProduct.iid,
-      );
-      if (index !== -1) {
-        this.listItems[index] = {
-          ...this.listItems[index],
-          ...this.newProduct,
-          amount: this.newProduct.menge,
-        };
+    /** 
+     * Bearbeitet ein bestehendes Produkt in der Liste 
+    */
+    async updateListItem() {
+      const existingItem = this.products.find(p => p.name === this.newProduct.name);
+      if (!existingItem) return;
+
+      const iid = existingItem.id;
+      const currentItem = this.listItems.find(i => i.iid === iid);
+      const currentAmount = currentItem?.amount || 0;
+
+      const newAmount = parseFloat(this.newProduct.menge) || 1;
+      // wenn neue Menge größer als aktuell, hinzufügen
+      // wenn neue Menge kleiner als aktuell, entfernen
+      try {
+        if (newAmount > currentAmount) {
+          await this.addToList(iid, newAmount - currentAmount);
+        } else if (newAmount < currentAmount) {
+          await this.removeFromList({ iid, amount: currentAmount - newAmount });
+        }
+
+        await this.loadList();
+        await this.loadWGItems();
+      } catch (err) {
+        console.error("Cannot update item", err);
+        alert("Fehler beim Aktualisieren der Liste");
       }
+
       this.isEditing = false;
     },
+
 
     /** Prüft, ob Produkt existiert; sonst neu erstellen und zur Liste hinzufügen */
     addOrCreateProduct() {
       const existingItem = this.products.find(
         (p) => p.name === this.newProduct.name,
       );
+
+      //wenn Produkt neuer Preis im Vergleich mit dem in WG gespeichert hat, dann aktualisieren
+      const price = parseFloat(this.newProduct.preis) || 0;
+
 
       if (existingItem) {
         this.addToList(existingItem.id);
@@ -269,6 +290,7 @@ new Vue({
         description: this.newProduct.kategorie || "",
         price: parseFloat(this.newProduct.preis) || 0,
       };
+      const menge = parseFloat(this.newProduct.menge) || 1;
 
       fetch(`${this.baseUrl}/wg/${this.wgID}/item`, {
         method: "POST",
@@ -284,7 +306,7 @@ new Vue({
             kategorie: newItem.description,
             preis: newItem.price,
           });
-          this.addToList(newItem.id);
+          this.addToList(newItem.id, menge);
         })
         .catch((err) => {
           console.error("Item konnte nicht erstellt werden", err);
@@ -293,14 +315,18 @@ new Vue({
     },
 
     /** Fügt ein Produkt zur Einkaufsliste hinzu */
-    addToList(iid) {
+    addToList(iid, amount = null, deltaPrice = 0) {
+      const amt = amount !== null ? amount : parseFloat(this.newProduct.menge) || 1;
+      const price = parseFloat(this.newProduct.preis) || 0;
+
       const payload = {
-        iid: iid,
+        iid,
         type: "add",
-        amount: parseFloat(this.newProduct.menge) || 1,
+        amount: amt,
+        price: price, 
       };
 
-      fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
+      return fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -310,7 +336,7 @@ new Vue({
         .then((updatedList) => {
           this.listItems = this.parseListItems(updatedList).map((item) => ({
             ...item,
-            einheit: this.newProduct.einheit || item.einheit || "Stück",
+            preis: item.iid === iid ? price : item.preis, 
           }));
           this.loadList();
           this.loadWGItems();

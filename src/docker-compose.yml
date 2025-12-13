@@ -27,3 +27,9 @@ services:
       start_period: 30s
       timeout: 10s
 
+  frontend:
+    build: frontend/
+    ports:
+      - 8080:80
+    depends_on:
+      - backend

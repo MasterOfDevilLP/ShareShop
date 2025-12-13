@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Startseite</title>
-    <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
@@ -27,15 +26,16 @@
                   type="checkbox"
                   id="dropdown-toggle"
                   class="dropdown-checkbox"
+                  v-model="wgDropdownOpen"
                 />
                 <label for="dropdown-toggle" class="dropdown-label">
                   {{ selectedWGName || 'WG auswählen' }}
                 </label>
-                <ul class="dropdown-options">
+                <ul class="dropdown-options" v-if="wgDropdownOpen">
                   <li
                     v-for="wg in wgList"
-                    :key="wg.id"
-                    @click="selectWG(wg.id)"
+                    :key="wg.wid"
+                    @click="selectWG(wg.wid)"
                   >
                     {{ wg.name }}
                   </li>
@@ -65,34 +65,44 @@
         </header>
 
         <!-- Modal pop up neue WG erstellen -->
+        <!-- Modal: Neue WG erstellen -->
         <div v-if="showCreateGroupModal" class="modal-overlay">
           <div class="modal-content">
             <h3>Gruppe Erstellen</h3>
+
             <input v-model="newGroupName" placeholder="Gruppenname" />
+
             <div class="modal-actions">
               <button @click="createNewGroup">Erstellen</button>
               <button @click="showCreateGroupModal = false">Abbrechen</button>
             </div>
           </div>
         </div>
+
         <!-- Main Content -->
         <main class="app-content">
           <div class="shopping-list">
-            <div v-for="list in lists" :key="list.id" class="list-card">
-              <a href="../Einkaufsliste/einkaufsliste.html" class="list-left">
+            <div v-for="list in lists" :key="list.id" class="list-card"   @click="goToList(list)" >
+              <div class="list-left">
                 <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
-                {{ list.name }}
+                <div class="list-text">
+                  <div class="list-title">{{ list.name }}</div>
+                </div>
               </a>
-              <button class="list-dots" @click="openListOptions(list)">
+              <button class="list-dots" @click.stop="openListOptions(list)">
                 <img src="icons/dots.svg" alt="Mehr Optionen" />
               </button>
             </div>
           </div>
 
-          <button class="add-list" @click="add_list">
-            <span>+</span> Liste hinzufügen
+          <button class="dev_logout" @click="dev_logout">
+            <span>+</span> Dev Logout
           </button>
         </main>
+        <!-- Button: neue Liste hinzufugen -->
+        <button class="add-list" @click="add_list">
+            <span>+</span> Liste hinzufügen
+        </button>
 
         <!-- Bottom sheet Liste hinzufügen  (erweitert)-->
         <div class="bottom-sheet" :class="{ visible: showPopup }">
@@ -112,29 +122,7 @@
               v-model="newList.name"
               @blur="touched.name = true"
             />
-            <label>WG-Zuordnung:</label>
-            <div class="wg-dropdown-form">
-              <input
-                type="checkbox"
-                id="wgDropdown"
-                class="dropdown-checkbox"
-              />
-              <label for="wgDropdown" class="dropdown-label">
-                {{ newList.wg || 'WG auswählen' }}
-              </label>
-              <ul class="dropdown-options">
-                <li
-                  v-for="wg in wgList"
-                  :key="wg.id"
-                  @click="selectWGForNewList(wg.name); isWGOpen = false"
-                >
-                  {{ wg.name }}
-                </li>
-              </ul>
-            </div>
-
-            <label>Beschreibung</label>
-            <input type="text" v-model="newList.beschreibung" />
+            <p>WG: {{ selectedWGName }}</p>
 
             <button id="saveList" :disabled="!isListValid" @click="saveList">
               Erstellen

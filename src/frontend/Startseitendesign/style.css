@@ -143,28 +143,19 @@
         text-decoration:none;
         flex: 1;
       }
-       .add-list {
-        position: absolute;
-        right: 20px;
-        font-size: 18px;
-        font-weight: 500;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: none;
-        border: none;
-        color: inherit;
-        }
+
+      .add-list {
+          font-weight: bold;
+          font-size: 15px;
+          text-align: right;
+          background: none;
+          border: none;
+          padding: 20px 15px
+      }
 
       .add-list span {
         font-size: 24px;
         line-height: 0;
-      }
-
-      .add-list {
-      color: black; 
-      transition: color 0.2s ease;
       }
 
       .add-list:active {
@@ -578,6 +569,32 @@
       background: transparent;
       cursor: not-allowed;
     }
+
+  /* Einkaufslistenbeschreibung*/
+  .list-left {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.list-text {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.list-title {
+  font-weight: 600;
+}
+
+.list-desc {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+
 
 
 

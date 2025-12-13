@@ -1,0 +1,105 @@
+= ShareShop Projekt, Meeting 20 (SE2)
+Kevin (Product Owner)
+11.11.2025
+
+== Teilnehmer
+* Kevin
+* Emil
+* Florian
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1) Tests: DB vs. Mocking & Mockito
+* Diskussion, wie **Unit-Tests** im Backend aufgebaut werden sollen:
+** Option A: **echte Datenbank** verwenden (Test schreibt/liest/löscht echte Datensätze).
+** Option B: komplette **Datenbankzugriffe mocken**
+* Vorteil echte DB:
+** Findet auch Fehler in Konfiguration/SQL/Mapping.
+** Verhalten näher an „echtem“ System.
+* Nachteil echte DB:
+** Aufwändigeres Setup/Teardown, mehr Code.
+* Ergebnis:
+** Kein strenger Zwang -> Devs dürfen sich für eine der Varianten entscheiden.
+** Wichtig ist: Tests sind **nachvollziehbar** und **stabil**, nicht an implizite Annahmen gebunden.
+
+=== 2) Offline-Funktionalität & Diffs vs. kompletter Zustand
+* Kontext: **Einkaufsmodus** soll offline nutzbar sein.
+* Offline-Scope:
+** Offline-Bearbeitung ist nur für den **Einkaufsmodus** vorgesehen, nicht für alle App-Teile.
+** Bearbeiten im Einkaufsmodus: abhaken, Preise eintragen etc.
+* Varianten für Änderungen:
+** Variante 1: Frontend sendet **nur Diffs** (Änderungen, z. B. „+2 bei Menge“, Preis gesetzt).
+** Variante 2: Frontend sendet immer den **kompletten neuen Zustand** (z. B. ganze Liste mit neuem Stand).
+* Emil präferiert **Diff-basierten Ansatz**, weil:
+** Zusammenführen von Änderungen bei Offline-Nutzung einfacher (Änderungsverlauf existiert ohnehin).
+** Reihenfolge der Änderungen wird robuster handhabbar.
+** Server muss keinen eigenen „Diff-Mechanismus“ für komplette Zustände generieren.
+* Alternative: kompletter Zustand + **Timestamps** und serverseitiges Diffing wäre möglich, aber aufwändiger.
+* Frontend-Rückmeldung fehlt in diesem Meeting:
+** Emil schreibt seine Präferenz inkl. Begründung ins Frontend-/Team-Channel.
+** Finale Entscheidung soll mit FE abgestimmt werden.
+
+=== 3) Übersichtlichkeit im Sprintboard: Ticket-Titel & Hierarchien
+* Problem:
+** Im **Sprint Backlog** ist die Ticket-Hierarchie (Epics -> Stories -> Subtasks) sichtbar aber im **Sprintboard** fehlt diese Hierarchie. Dort sind Titel alleine teilweise nicht eindeutig.
+* Beispiel:
+** Ticket **#172 „Endpoints Items“** gehört fachlich zu **Listenbedienung**, ist im Board aber nicht auf den ersten Blick zuzuordnen.
+* Vorschlag:
+** Ticket-Titel um **Kontext/Epic** ergänzen (z. B. „[Backend] [Listen-Bedienung]  Endpoints Items“).
+
+=== 4) KI-Nutzung & Tickettexte
+* Kontext:
+** Ticketbeschreibungen wurden mit KI-Unterstützung erzeugt.
+** Falsche Pfade in Tickets hatten Backend verwirrt („man glaubt, dass die Endpoints genau so existieren“).
+* Risiko:
+** Aus dem Vorsemester ist bekannt, dass ein Team u. a. wegen unreflektierter KI-Nutzung durchgefallen ist.
+* Konsens:
+** KI darf genutzt werden, aber **alles wird manuell geprüft** und angepasst.
+
+=== 5) WG-Invites: Link-Verarbeitung & Backend-Struktur
+* Thema: **Einladung in WGs per Link** („Invite-Link“).
+* Mögliche Varianten:
+** Variante A: Link zeigt auf das **Frontend** (mit Invite-Code als URL-Parameter).  
+   -> Frontend sendet Invite-Code in einem separaten Request ans Backend.
+** Variante B: Link ist direkt ein **GET-Request ans Backend**.  
+   -> Backend verarbeitet Invite und leitet anschließend:
+*** entweder auf eine Seite „Beitritt erfolgreich“,
+*** oder „bitte zuerst einloggen“,
+*** oder „Invite ungültig“.
+   -> Backend müsste dafür die **Frontend-URL kennen/konfiguriert** haben.
+* E-Mail-Versand:
+** Versand eines Invite-Links per Mail (`mailto:`) wird als **nice-to-have** betrachtet, nicht als Fokus.
+* Offene Punkte:
+** Es gibt noch **kein Backend-Ticket** für die technische Invite-Verwaltung:
+*** Datenbank-Struktur für Invites (Token, Gültigkeit, WG-Zuordnung, Einmal-/Mehrfachnutzung etc.).
+*** Backend-Logik für „Invite einlösen“ (inkl. Fehlerfälle).
+* Vorgehen:
+** Emil beschreibt die Optionen auf Discord.
+
+== Aufgaben / ToDos
+
+* **Tests & DB-Nutzung**
+** Entscheidung pro Ticket/Feature: echte DB vs. Mocking dokumentieren (kurze Notiz ins Ticket).
+** Tests so schreiben, dass sie verständlich sind (Setup klar, kein „magisches“ Verhalten).
+
+* **Offline-Verhalten & Diffs**
+** Emil schreibt ins Frontend-/Team-Channel seine Präferenz (Diff-basierte Updates) plus Begründung.
+** Nach FE-Feedback ggf. Architekturbeschluss dokumentieren (Wiki/Backlog).
+
+* **Tickets & Titel**
+** Tickets wie#172 so umbenennen, dass der fachliche Kontext (z. B. Listenbedienung) im Titel sichtbar ist.
+** Alte Tickets/Epics perspektivisch überarbeiten, sobald neue Epics vollständig stehen.
+
+* **WG-Invites**
+** Neues Backend-Ticket für Invite-System anlegen (DB-Struktur, Einlöse-Endpunkt, Fehlerfälle).
+** Optional: spätere Erweiterung „Einladung per E-Mail“ im Backlog vermerken.
+ 
+== Nächste Schritte
+* Teststrategie je Feature klären (DB vs. Mock) und in den betreffenden Tickets transparent machen.
+* Emil schreibt Frontend bzgl. **Diff vs. kompletter Zustand** an und holt Feedback ein.
+* Tickettitel nach und nach kontextualisieren, damit das Sprintboard verständlicher wird.
+* Backend-Ticket für **WG-Invites** erstellen und mit groben Akzeptanzkriterien versehen.
+* KI-genutzte Tickettexte nachschärfen, damit keine falschen Pfade/Methoden mehr im Backlog liegen.

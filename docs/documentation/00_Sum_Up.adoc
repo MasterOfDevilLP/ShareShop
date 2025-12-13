@@ -278,3 +278,29 @@ Hier werden alle relevanten Meetings, Aufgaben und Arbeitsergebnisse kurz umriss
 * Repo-Hygiene: `node_modules` per `.gitignore` entfernen; Vue-CDN später durch Bundle (z. B. Vite) ersetzen.
 * Mobile/Device: Tickets für Responsive-Issues sammeln; API-Base-URL konfigurierbar machen; Compose/How-To & Seed-Daten dokumentieren.
 * Orga: Retro freitags
+
+== 18. Team-Meeting, 28.10.2025
+
+* `xref:./18_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* Ticketqualität geschärft: lieber keine als falsche API-Pfade; Fokus auf Funktionsziele. Board-Disziplin: Tickets sichtbar bewegen (FE/BE).
+* FE: fehlende Endpoints werden gemockt; erwartete Payloads im Ticket dokumentieren.
+* BE: Delete/Update schließen; Fehlerobjekt-PR mergen; Lambda-Handler testbar machen.
+* Tests: je Fall positiv/negativ; Mockito + Mock-DB. Branching: Ticketnummern in Branch-Namen; Option Master/Develop prüfen.
+
+== 19. Team-Meeting, 04.11.2025
+
+* `xref:./19_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* GitHub-Workflow anpassen: Branches direkt aus Tickets erstellen, klare Ticket<-->Branch-Zuordnung für Reviews.
+* Feature „Nutzer in mehreren WGs“ ist umgesetzt und manuell getestet; Backend-Subtask wird nachgezogen, PR soll zeitnah gemerged werden. Refactoring-PR macht Lambda-Handler testbar; neue Tickets sollen Unit-Tests direkt mitbringen.
+* Items/Listen: Bedarf an einem **Update-/Modify-Endpoint** geklärt; Preis wird aktuell als **Einkaufspreis im Einkaufsmodus** verwendet, Menge bleibt anpassbar, Einheiten (kg/l) sind als spätere Erweiterung vorgesehen.
+
+== 20. Team-Meeting, 11.11.2025
+
+* `xref:./20_meeting_SE2.adoc[Zur vollständigen Dokumentation]`
+
+* Tests: Devs können echte DB oder Mocking nutzen; wichtig ist ein nachvollziehbares Setup.
+* Offline-Einkaufsmodus: Diskussion „Diffs vs. kompletter Zustand“: Backend bevorzugt diff-basierte Updates, Feedback vom Frontend steht noch aus.
+* Tickets: Titel sollen den fachlichen Kontext (z. B. Listenbedienung) tragen; alte KI-generierte Details (falsche Pfade) werden bereinigt.
+* WG-Invites: Einladung per Link wird vorbereitet; Backend braucht eigenes Invite-Ticket (DB-Struktur und Einlöse-Logik), Mailversand ist optionales Add-on.

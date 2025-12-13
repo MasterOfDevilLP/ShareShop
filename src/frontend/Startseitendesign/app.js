@@ -1,406 +1,419 @@
-import { API_BASE_URL } from '../config.js';
+
+import { API_BASE } from '../config.js';
+console.log("API_BASE=", API_BASE);
+
 new Vue({ 
   el: '#app',
   data: {
-    lists: [
-      { id: "1", name: "Wocheneinkauf" }
-    ],
-    wgList: JSON.parse(localStorage.getItem("wgList")) || [
-      { id: 1, name: "WG Sonnenstraße" },
-      { id: 2, name: "WG Blumenweg" },
-      { id: 3, name: "WG Fuchsbau" },
-      { id: 4, name: "WG Mondhain" }
-    ],
-    
-    selectedWG: localStorage.getItem("selectedWGID") || 1,
-    selectedWGName: localStorage.getItem("selectedWGName") || "",
+    // Listen in der aktuell ausgewählten WG
+    lists: [],
+
+    // WGs (aus localStorage)
+    wgList: JSON.parse(localStorage.getItem("wgList")) || [],
+
+    // aktuell ausgewählte WG
+    selectedWG: null,
+    selectedWGName: "",
+
+    // für später, aktuell egal
     benutzerID: 123,
+
+    // Name für neue WG (im Modal)
+    newGroupName: "",
+
+    // Daten für neue Liste
     touched: {
-    name: false,
-    beschreibung: false
+      name: false,
     },
     newList: {
-    name: '',
-    beschreibung: '',
-    wg: ''
+      name: "",
+      wg: ""
     },
+
+    // UI-Zustände
     showPopup: false,
     showCreateGroupModal: false,
-    newGroupName: '',
     showListOptions: false,
     selectedList: null,
     showRenameModal: false,
-    renameListName: '',
+    renameListName: "",
     isWGOpen: false,
+    wgDropdownOpen: false
   },
+
   computed: {
     isListValid() {
-      return this.newList.name.trim() !== '' && this.newList.beschreibung.trim() !== '';
+      return this.newList.name.trim() !== "";
     }
   },
+  mounted() {
 
 
-    methods: {
-      
-      //Fragen Einkaufliste von DB ab 
-      async fetchLists() {
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/lists`); 
-          if (!response.ok) throw new Error('Fehler beim Laden der Listen');
-          const data = await response.json();
-          this.lists = data.map(item => ({
-            id: item.listID,
-            name: item.listName,
-          }));
-        } catch (error) {
-          console.error(error);
-          alert('Konnte Listen nicht laden');
+    this.fetchUserWG();
+},
+
+  methods: {
+    async fetchUserWG() {
+      try {
+        const userResp = await fetch(`${API_BASE}/user`, {
+          credentials: "include"
+        });
+
+        if (!userResp.ok) throw new Error("Fehler beim Laden der User-Daten");
+
+        const userData = await userResp.json();
+
+        // userData.wid is a array or comma-separated string
+        let widList = userData.wid;
+
+        if (!widList) throw new Error("User hat keine WG");
+
+        // if widList is a string, convert to array
+        if (typeof widList === "string") {
+          widList = widList.split(",").map(s => s.trim());
         }
-      },
-      
-      add_list() {
+
+        this.wgList = [];
+
+        // LOOP through WGs and fetch details
+        for (const wid of widList) {
+          try {
+            const wgResp = await fetch(`${API_BASE}/wg/${wid}`, {
+              credentials: "include"
+            });
+
+            if (!wgResp.ok) continue; 
+            const wgData = await wgResp.json();
+
+            this.wgList.push(wgData);
+          } catch (innerErr) {
+            console.error("Fehler beim Laden einer WG:", innerErr);
+          }
+        }
+
+        // choose selected WG from localStorage or default to first WG
+        if (this.wgList.length > 0) {
+          this.selectedWG = this.wgList[0].wid;
+          this.selectedWGName = this.wgList[0].name;
+          await this.fetchLists();
+        }
+
+      } catch (err) {
+        console.error(err);
+        this.lists = [];
+      }
+    },
+
+    // Popup "Liste hinzufügen" öffnen
+    add_list() {
+      if (!this.selectedWG) {
+        alert("Bitte zuerst eine WG erstellen und auswählen.");
+        return;
+      }
       this.showPopup = true;
       this.showListOptions = false;
-      },
+    },
 
-      closePopup() {
-        this.showPopup = false;
-        this.resetNewList();
-      },
+    closePopup() {
+      this.showPopup = false;
+      this.resetNewList();
+    },
 
-      resetNewList() {
-      this.newList = { name: '', beschreibung: '', wg: '' };
-      this.touched = { name: false, beschreibung: false };
-      },
+    resetNewList() {
+      this.newList = { name: ""};
+    },
 
-
-     openListOptions(list) {
+    openListOptions(list) {
       this.selectedList = list;
       this.showListOptions = true;
       this.showPopup = false;
-      },
+    },
 
-      closeListOptions() {
-        this.selectedList = null;
-        this.showListOptions = false;
-      },
+    closeListOptions() {
+      this.selectedList = null;
+      this.showListOptions = false;
+    },
 
-      saveList() {
-          if (!this.isListValid) {
-    this.touched.name = true;
-    this.touched.beschreibung = true;
+    // ─────────────────────────────
+    // Liste erstellen
+    // ─────────────────────────────
+async saveList() {
+  if (!this.newList.name.trim()) return;
+
+  const wgId =  this.selectedWG;
+
+  if (!wgId) {
+    alert("Bitte zuerst eine WG auswählen."); 
+
     return;
   }
 
-  const listID = Date.now().toString(36);
-  const newListData = {
-    id: listID,
-    name: this.newList.name,
-    beschreibung: this.newList.beschreibung,
-    wg: this.newList.wg
-  }
-  // Lokal speichern
-  this.lists.push(newListData);
-  this.resetNewList();
-  this.showPopup = false;
-  alert("Liste erfolgreich gespeichert");
-      },
+  try {
+    const response = await fetch(`${API_BASE}/wg/${wgId}/list`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ name: this.newList.name.trim() })
+    });
 
-      /* pseudocode
-      //Liste erstellen
-      async saveList() {
-        if (!this.newList.name) {
-          alert('Bitte alle Felder ausfüllen.');
-          return;
-        }
-
-        const now = new Date();
-        const creationDate = now.toISOString().slice(0, 10); // YYYY-MM-DD
-        const listID = Date.now().toString(36);
-
-        fetch('/api/List/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            listID: listID,
-            listName: this.newList.name,
-            creationDate: creationDate,
-          })
-        })
-        .then(response => {
-          if (!response.ok) throw new Error('API fehlgeschlagen');
-          return response.json();
-        })
-        .then(data => {
-          this.lists.push({ id:listID, name: this.newList.name });
-          this.closePopup();
-        })
-        .catch(error => {
-          alert('Fehler beim Erstellen der Liste: ' + error.message);
-        });
-        }
-
-      //Liste anpassen
-      async updateList(){
-       const list = this.lists.find(l => l.id === listID);
-        if (!list) {
-          alert("Die Liste nicht gefunden");
-          return;
-        }
-        
-        const listData = {
-          listID:  listID,
-          listName: newName,
-          creationDate: list.creationDate 
-        };
-
-        try {
-            const response = await fetch(`/api/list/update/${listID}`, { //wgID ist Parameter
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(listData)
-            });
-
-            if (response.ok) {
-              const idx = this.lists.findIndex(l => l.id === listID);
-              if (idx !== -1) {
-                this.lists[idx].name = newName;                      
-              }
-            } else {
-              alert("Fehler beim Aktualisieren der Liste"); 
-            }
-        } catch (error) {
-          console.error(error);
-          alert("Fehler beim Netzwerk"); 
-        }
-      }
-
-      //Liste loeschen
-      async deleteList(listID) {
-      try {
-        const response = await fetch(`api/list/delete/${listID}`, {
-          method: "DELETE"
-        });
-        if (response.ok) {
-          this.lists = this.lists.filter(l => l.id !== listID);
-        } else {
-          alert("Fehler beim Löschen der Liste");
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Fehler beim Netzwerk");
-      }
-    },
-
-       */
-  selectWG(id) {
-        document.getElementById("dropdown-toggle").checked = false;
-
-        if (id === '__create__') {
-          this.showCreateGroupModal = true;
-          this.selectedWG = null;
-          this.selectedWGName = "Neue Gruppe";
-          return;
-        }
-
-        const wg = this.wgList.find(w => w.id === id);
-        if (wg) {
-          this.selectedWG = wg.id;
-          this.selectedWGName = wg.name;
-          //this.switchWG();
-        }
-      },
-
-  selectWGForNewList(name) {
-      this.newList.wg = name;
-      this.isWGOpen = false;
-    },
-      
-      //Logik WG wechsel
-      /*
-      async switchWG() {
-        if (this.selectedWG === '__create__') {
-          this.showCreateGroupModal = true;
-          this.selectedWG = null;
-          return;
-        }
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/lists`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              benutzerID: this.benutzerID,
-              neueWGID: this.selectedWG
-            })
-          });
-
-          if (!response.ok) throw new Error("WG-Wechsel fehlgeschlagen");
-
-          const result = await response.json();
-          console.log("WG gewechselt:", result);
-          alert("WG erfolgreich gewechselt");
-
-        } catch (error) {
-          console.error("Fehler beim WG-Wechsel:", error);
-          alert("Fehler beim Wechseln der WG");
-        }
-      },*/
-      
-async createNewGroup() {
-    if (!this.newGroupName.trim()) {
-        alert("Bitte einen Gruppennamen eingeben.");
-        return;
-    }
-
+    let data = null;
     try {
-      console.log("Sende WG-Daten an Server:", JSON.stringify({ name: this.newGroupName }));
-        const response = await fetch(`${API_BASE_URL}/wg/create`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',  // Stellt sicher, dass der Cookie mitgesendet wird
-            body: JSON.stringify({
-                name: this.newGroupName
-            })
-        });
-
-        // Wenn die Antwort erfolgreich war, den JSON-Inhalt direkt extrahieren
-        const result = await response.json();
-
-        console.log("Serverantwort:", response.status, result);
-
-        // Wenn erfolgreich
-       if (response.ok) {
-            alert("WG erfolgreich erstellt: " + result.name);  // Die Antwort kann hier ein Text sein, kein JSON
-
-          // Neue WG zur Liste hinzufügen
-          this.wgList.push({
-              name:this.newGroupName
-          });
-
-          // Lokale Speicherung
-          localStorage.setItem("wgList", JSON.stringify(this.wgList));
-          localStorage.setItem("selectedWGID", result.id);
-          localStorage.setItem("selectedWGName", result.name);
-
-          // Auswahl updaten
-          this.selectedWG = result.id;
-          this.selectedWGName = result.name;
-
-          // Modal schließen & Eingabe zurücksetzen
-          this.showCreateGroupModal = false;
-          this.newGroupName = '';
-
-        } else if (response.status === 400) {
-            // Fehler bei 400 Bad Request - Server gibt möglicherweise mehr Details zurück
-            console.error("Fehler 400: Bad Request. Serverantwort:", result);
-            alert("Fehler beim Erstellen der WG. Serverantwort: " + result);
-        } else if (response.status === 401) {
-            // Authentifizierungsfehler
-            alert("Backend verweigert Zugriff (401). Bitte sicherstellen, dass der Benutzer eingeloggt ist.");
-        } else {
-            // Anderer Fehlercode
-            alert("Fehler beim Erstellen der WG. Serverantwort: " + result);
-            throw new Error("Fehlercode: " + response.status);
-        }
-    } catch (error) {
-        console.error("Fehler beim Erstellen der WG:", error);
-        alert("Fehler beim Erstellen der WG. Details: " + error.message);
+      data = await response.json();
+    } catch (e) {
+      console.warn("Response ist kein JSON:", e);
     }
+
+    if (!response.ok) {
+      throw new Error(data?.message || `Fehler ${response.status}`);
+    }
+
+    const key = `lists_${wgId}`;
+    const saved = JSON.parse(localStorage.getItem(key)) || [];
+
+    const newItem = {
+      id: data?.id || `temp-${Date.now()}`,
+      name: this.newList.name.trim()
+    };
+
+    saved.push(newItem);
+    localStorage.setItem(key, JSON.stringify(saved));
+
+    if (this.selectedWG === wgId) {
+      this.lists.push(newItem);
+    }
+
+    this.closePopup();
+
+  } catch (err) {
+    console.error(err);
+    alert("Fehler beim Erstellen: " + err.message);
+  }
 },
 
-      /* Lokal
-      createNewGroup() {
-        if (!this.newGroupName.trim()) {
-          alert("Bitte einen Gruppennamen eingeben.");
+
+    // ─────────────────────────────
+    // WG aus Dropdown auswählen
+    // ─────────────────────────────
+    selectWG(id) {
+      if (id === "__create__") {
+        this.showCreateGroupModal = true;
+        return;
+      }
+
+      const wg = this.wgList.find(w => w.wid === id);
+      if (!wg) return;
+
+      this.selectedWG = wg.wid;
+      this.selectedWGName = wg.name;
+
+      localStorage.setItem("selectedWG", wg.wid);
+      localStorage.setItem("selectedWGName", wg.name);
+
+      // Listen der neuen WG laden
+      this.lists = [];
+      this.fetchLists();
+      this.wgDropdownOpen = false;
+    },
+
+    // WG für neue Liste auswählen
+    selectWGForNewList(wg) {
+      this.newList.wg = {
+        id: wg.id,
+        name: wg.name
+      };
+      this.isWGOpen = false;
+    },
+
+
+
+    // ─────────────────────────────
+    // Listen der aktuellen WG laden
+    // ─────────────────────────────
+    async fetchLists(wgIdOverride = null) {
+      const wgId = wgIdOverride || this.selectedWG;
+      if (!wgId) {
+          console.warn("Keine WG ausgewählt! → fetchLists übersprungen");
+          this.lists = [];
           return;
+      };
+
+      try {
+        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, {
+          credentials: "include"
+        });
+
+        // keine Listen / keine Berechtigung = einfach leer lassen
+        if (response.status === 403 || response.status === 404) {
+          console.warn("Keine Listen für diese WG (neuer User / keine Berechtigung).");
+          this.lists = [];
+          return;
+        }
+
+        if (!response.ok) {
+          if (response.status === 500) {
+        console.warn("Backend 500 → set lists leer");
+        this.lists = [];
+        return;
+      }
+          throw new Error("Fehler beim Laden der Listen");
+        }
+
+        // Backend liefert: ["id1,name1,item", "id2,name2,item", ...]
+        const data = await response.json();
+
+        this.lists = data.map(l => ({
+          id: l.lid,
+          name: l.name || "neue Liste"
+        }));
+        
+
+      } catch (err) {
+        console.error(err);
+        // für echte Fehler kannst du den Alert lassen, wenn du willst:
+        // alert("Konnte Listen nicht laden: " + err.message);
+      }
+    },
+
+
+    // ─────────────────────────────
+    // Neue WG erstellen
+    // ─────────────────────────────
+    async createNewGroup() {
+      if (!this.newGroupName.trim()) {
+        alert("Bitte einen Gruppennamen eingeben.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/wg/create`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name: this.newGroupName.trim() })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data?.message || `Fehler ${response.status}`);
+        }
+
+        if (!data || !data.id) {
+          throw new Error("Backend hat keine WG-ID zurückgegeben.");
         }
 
         const newGroup = {
-          id: Date.now(),
-          name: this.newGroupName
+          id: data.id,
+          name: this.newGroupName.trim()
         };
 
+        // WG-Liste im Frontend & localStorage ergänzen
         this.wgList.push(newGroup);
+        localStorage.setItem("wgList", JSON.stringify(this.wgList));
+
+        // leeren Listen-Speicher für diese WG erzeugen
+        localStorage.setItem(`lists_${newGroup.id}`, JSON.stringify([]));
+
+        // Auswahl auf neue WG setzen
         this.selectedWG = newGroup.id;
         this.selectedWGName = newGroup.name;
-        this.newGroupName = '';
+        localStorage.setItem("selectedWG", newGroup.id);
+        localStorage.setItem("selectedWGName", newGroup.name);
+
+        // UI-Reset
+        this.lists = [];
+        this.newGroupName = "";
         this.showCreateGroupModal = false;
 
-        localStorage.setItem("wgList", JSON.stringify(this.wgList));
-        localStorage.setItem("selectedWGID", newGroup.id);
-        localStorage.setItem("selectedWGName", newGroup.name);
-      },*/
-      
+        alert("WG wurde erstellt!");
+      } catch (err) {
+        console.error("Fehler beim Erstellen der WG:", err);
+        alert("Fehler beim Erstellen der WG: " + err.message);
+      }
+    },
 
-      openRenameModal() {
-        if (!this.selectedList) return;
-        this.renameListName = this.selectedList.name;
-        this.showRenameModal = true;
-      },
-      //Lokale Umbennung Liste 
-      renameList() {
-        if (!this.renameListName.trim()) {
-          alert("Name darf nicht leer sein.");
-          return;
-        }
-
-        // optional nur lokal:
-        const index = this.lists.findIndex(l => l.id === this.selectedList.id);
-        if (index !== -1) {
-          this.lists[index].name = this.renameListName;
-          this.showRenameModal = false;
-          this.showListOptions = false;
-        }
-
-        // alternativ: updateList() aufrufen
-        // this.updateList();
-      }, 
-/* Logik Umbennung Liste 
+    // ─────────────────────────────
+    // Liste umbenennen
+    // ─────────────────────────────
+    openRenameModal() {
+      if (!this.selectedList) return;
+      this.renameListName = this.selectedList.name;
+      this.showRenameModal = true;
+    },
+    
     async renameList() {
-  if (!this.selectedList || !this.renameListName.trim()) {
-    alert("Name darf nicht leer sein.");
-    return;
-  }
+      if (!this.renameListName.trim()) {
+        alert("Name darf nicht leer sein.");
+        return;
+      }
 
-  const listID = this.selectedList.id;
-  const newName = this.renameListName;
+      const newName = this.renameListName.trim();
+      const wgId = this.selectedWG;
+      const listId = this.selectedList?.id;
 
-  try {
-    const response = await fetch(`/api/list/update/${listID}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        listID: listID,
-        listName: newName
-      })
-    });
+      if (!wgId || !listId) return;
 
-    if (!response.ok) {
-      const err = await response.text();
-      throw new Error(err || "Unbekannter Fehler");
+      try {
+        // PATCH an Backend
+        const response = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name: newName })
+        });
+
+        if (!response.ok) {
+          const data = await response.json().catch(() => null);
+          throw new Error(data?.message || `Fehler ${response.status}`);
+        }
+
+        // update UI
+        const index = this.lists.findIndex(l => l.id === listId);
+        if (index !== -1) {
+          this.lists[index].name = newName;
+        }
+
+        // update localStorage
+        const key = `lists_${wgId}`;
+        const saved = JSON.parse(localStorage.getItem(key)) || [];
+        const sIndex = saved.findIndex(x => x.id === listId);
+        if (sIndex !== -1) {
+          saved[sIndex].name = newName;
+          localStorage.setItem(key, JSON.stringify(saved));
+        }
+
+        this.showRenameModal = false;
+        this.showListOptions = false;
+
+      } catch (err) {
+        console.error("Fehler beim Umbenennen der Liste:", err);
+        alert("Fehler beim Umbenennen der Liste: " + err.message);
+      }
+    },
+
+    openWGCreateModal() {
+      this.showCreateGroupModal = true;
+    },
+
+    dev_logout(){
+      localStorage.removeItem("wgList");
+      localStorage.removeItem("selectedWG");
+      localStorage.removeItem("selectedWGName");
+      window.location.href = "../Login/index.html";
+    },
+
+    goToList(list) {
+      localStorage.setItem("selectedWGID", this.selectedWG);
+      localStorage.setItem("selectedListID", list.id);
+      localStorage.setItem("selectedListName", list.name);
+
+      window.location.href = "../Einkaufsliste/einkaufsliste.html";
     }
 
-    // Lokale Liste aktualisieren
-    const index = this.lists.findIndex(l => l.id === listID);
-    if (index !== -1) {
-      this.lists[index].name = newName;
-    }
+  },
 
-    this.showRenameModal = false;
-    this.showListOptions = false;
-    alert("Liste erfolgreich umbenannt.");
-  } catch (error) {
-    console.error("Fehler beim Umbenennen:", error);
-    alert("Umbenennen fehlgeschlagen: " + error.message);
-  }
-},*/
 
-  }
+
 });
 
 // Service Worker (optional behalten)

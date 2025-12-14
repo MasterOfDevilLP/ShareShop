@@ -20,6 +20,7 @@ createApp({
       language: LanguageStore.language,
       message: "",
       isLoggingOut: false,
+      showLogoutModal: false,
     };
   },
 
@@ -40,14 +41,9 @@ createApp({
       localStorage.setItem("language", lang);
     },
 
-    //  Logout mit Bestätigung, Token-Wipe und API-Request
-    async logout() {
-      // Nutzer bestätigen lassen
-      const confirmLogout = confirm(
-        this.t("Möchtest du dich wirklich ausloggen?", "Are you sure you want to log out?")
-      );
-      if (!confirmLogout) return;
-
+    // Logout bestätigen (wird vom Modal aufgerufen)
+    async confirmLogout() {
+      this.showLogoutModal = false;
       this.isLoggingOut = true;
       this.message = "";
 
@@ -61,7 +57,7 @@ createApp({
 
       //Versuch, Backend zu informieren (optional)
       try {
-        const res = await fetch(`${API_BASE}/user/logout`, { //?? API endpoint
+        const res = await fetch(`${API_BASE}/user/logout`, { 
           method: "POST",
           credentials: "include",
         });

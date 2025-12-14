@@ -72,12 +72,32 @@
           </section>
 
           <section class="logout-section">
-            <button @click="logout" class="logout-btn">
+            <button @click="showLogoutModal = true" class="logout-btn">
               <img src="../Startseitendesign/icons/logout.svg" alt="Logout" />
               {{ t('Logout', 'Log out') }}
             </button>
             <p v-if="message" class="logout-message">{{ message }}</p>
           </section>
+          <!-- Logout Modal -->
+        <div v-if="showLogoutModal" class="modal-overlay" @click="showLogoutModal = false">
+          <div class="modal-container" @click.stop>
+            <div class="modal-header">
+              <h3>{{ t('Abmelden', 'Log Out') }}</h3>
+            </div>
+            <div class="modal-body">
+              <p>{{ t('Möchtest du dich wirklich ausloggen?', 'Are you sure you want to log out?') }}</p>
+            </div>
+            <div class="modal-actions">
+              <button @click="showLogoutModal = false" class="btn-cancel">
+                {{ t('Abbrechen', 'Cancel') }}
+              </button>
+              <button @click="confirmLogout" class="btn-confirm" :disabled="isLoggingOut">
+                <span v-if="!isLoggingOut">{{ t('Ausloggen', 'Log Out') }}</span>
+                <span v-else>{{ t('Wird ausgeloggt...', 'Logging out...') }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
         </main>
         <!-- Navigation -->
         <nav class="bottom-nav">

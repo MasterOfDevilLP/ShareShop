@@ -1,3 +1,41 @@
+/**
+ * Diese Seite ermöglicht die Verwaltung der Einkaufsliste einer Wohngemeinschaft (WG).
+ *
+ * Funktionen und Features:
+ *  - Laden und Anzeigen von WG-Produkten und der aktuellen Einkaufsliste.
+ *  - Hinzufügen neuer Produkte zur Liste, inkl.:
+ *      * Autovervollständigung von WG-Produkten
+ *      * Erstellen neuer Produkte, falls sie noch nicht in der WG existieren
+ *  - Bearbeiten bestehender Produkte in der Liste.
+ *  - Produkte als gekauft markieren (Tick-Funktion).
+ *  - Löschen von Produkten aus der Liste.
+ *  - Ändern des Listennamens.
+ *  - Verwaltung von UI-Popups:
+ *      * Produkt hinzufügen/ändern
+ *      * Liste löschen bestätigen
+ *      * Listenname ändern
+ *
+ * Datenstruktur (data):
+ *  - wgID, listID, list_name: aktuelle WG- und Listeninformationen
+ *  - products: alle Produkte der WG (für Autocomplete und Popup)
+ *  - listItems: aktuelle Items der Einkaufsliste
+ *  - newProduct: Objekt für Produkt-Hinzufügen/Bearbeiten
+ *  - showPopup, showDeleteListPopup, showChangeListName, isEditing: UI-Zustände
+ *
+ * Methoden (methods):
+ *  - initData(), loadWGItems(), loadList(), parseListItems()
+ *  - add_product(), openChangeProduct(), onProductNameInput(), saveProduct()
+ *  - addOrCreateProduct(), createProductInWG(), addToList(), updateListItem()
+ *  - removeFromList(), toggleTick()
+ *  - changeListName(), goToStartseite()
+ *
+ * Mounted:
+ *  - Prüft, ob WG und Liste ausgewählt sind, und lädt Daten entsprechend.
+ *
+ * Hinweis:
+ *  - Alle API-Aufrufe nutzen die Basis-URL aus API_BASE.
+ *  - Produkte und Listen werden teilweise im localStorage zwischengespeichert.
+ */
 import { API_BASE } from "../config.js";
 
 new Vue({

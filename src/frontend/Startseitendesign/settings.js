@@ -18,9 +18,9 @@ new Vue({
   },
 
   methods: {
-    // ─────────────────────────────
-    // Einladungslink erstellen & teilen
-    // ─────────────────────────────
+    /**
+     * Einladungslink erstellen & teilen
+     */
     async createInviteLink() {
       if (!this.selectedWG) {
         this.showError("Bitte zuerst eine WG auswählen.");
@@ -54,6 +54,9 @@ new Vue({
       }
     },
 
+    /**
+     * WG auswählen 
+     */
     selectWG(id) {
       document.getElementById("dropdown-toggle").checked = false;
 

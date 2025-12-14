@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
@@ -45,7 +45,7 @@
               </div>
             </div>
 
-            <div class="icon-group"  @click="generateQRCode">
+            <div class="icon-group" @click="generateQRCode">
               <button class="qr-btn" title="QR">
                 <img src="icons/barcode.png" class="nav-icon" />
               </button>
@@ -82,26 +82,29 @@
         <!-- Main Content -->
         <main class="app-content">
           <div class="shopping-list">
-            <div v-for="list in lists" :key="list.id" class="list-card"   @click="goToList(list)" >
+            <div
+              v-for="list in lists"
+              :key="list.id"
+              class="list-card"
+              @click="goToList(list)"
+            >
               <div class="list-left">
                 <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
                 <div class="list-text">
                   <div class="list-title">{{ list.name }}</div>
                 </div>
-              </a>
-              <button class="list-dots" @click.stop="openListOptions(list)">
-                <img src="icons/dots.svg" alt="Mehr Optionen" />
-              </button>
+
+                <button class="list-dots" @click.stop="openListOptions(list)">
+                  <img src="icons/dots.svg" alt="Mehr Optionen" />
+                </button>
+              </div>
             </div>
           </div>
-
-          <button class="dev_logout" @click="dev_logout">
-            <span>+</span> Dev Logout
-          </button>
         </main>
+        
         <!-- Button: neue Liste hinzufugen -->
         <button class="add-list" @click="add_list">
-            <span>+</span> Liste hinzufügen
+          <span>+</span> Liste hinzufügen
         </button>
 
         <!-- Bottom sheet Liste hinzufügen  (erweitert)-->

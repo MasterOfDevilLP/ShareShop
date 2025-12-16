@@ -13,6 +13,8 @@ tags:
     description: items/products
   - name: wg
     description: wg management
+  - name: invite
+    description: invite management
   
 components:
   responses:
@@ -564,3 +566,137 @@ paths:
           $ref: "#/components/responses/unauthorized"
         "403":
           $ref: "#/components/responses/forbidden"
+
+  /wg/{wid}/invite:
+    post:
+      summary: create a new invite
+      tags:
+        - invite
+        - wg
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forUser: 
+                  type: string
+                  optional: true
+                expires:
+                  type: integer
+                  optional: true
+                  description: unixtime
+      responses:
+        "200":
+          description: invite created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+                
+    get:
+      summary: gets currently active invites for this WG (not implemented until further notice)
+      tags:
+        - wg
+        - invite
+    
+  /wg/{wid}/invite/{ivid}:
+    delete:
+      summary: deletes an invite
+      tags:
+        - wg
+        - invite
+      responses:
+        "200":
+          description: invite deleted
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+        "404":
+          description: invite not found
+      
+    get:
+      summary: get information about an invite
+      tags:
+        - wg
+        - invite
+      responses:
+        "200":
+          description: invite created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  forUser: 
+                    type: string
+                    optional: true
+                  expires:
+                    type: integer
+                    optional: true
+                    description: unixtime
+                  created:
+                    type: integer
+                    optional: true
+                    description: unixtime
+        "401":
+          $ref: "#/components/responses/unauthorized"
+        "403":
+          $ref: "#/components/responses/forbidden"
+
+  /invite/{ivid}:
+    get:
+      summary: get information about a specific invite (as a non-member)
+      tags:
+        - invite
+      responses:
+          "200":
+            description: invite information
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    wgname: 
+                      type: string
+                    once:
+                      type: boolean
+                      description: this invite can only be used once
+                    personal:
+                      type: boolean
+                      description: this invite can only be used by this user
+          "401":
+            $ref: "#/components/responses/unauthorized"
+
+  /invite:
+    post:
+      summary: accept an invite
+      tags:
+        - invite
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: the invite uuid/token
+      responses:
+        "200":
+          description: invite successfully accepted
+        "401":
+          $ref: "#/components/responses/unauthorized"  
+        "404":
+          description: the invite either does not exist, or is not available to this user
+      

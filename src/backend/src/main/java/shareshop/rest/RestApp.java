@@ -47,6 +47,7 @@ public class RestApp {
 		ListEndpoints.register(app);
 		ItemEndpoints.register(app);
 		CategoryEndpoints.register(app);
+		InviteEndpoints.register(app);
 		
 		app.start(host, port);
 	}

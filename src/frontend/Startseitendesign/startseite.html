@@ -45,8 +45,8 @@
               </div>
             </div>
 
-            <div class="icon-group" @click="generateQRCode">
-              <button class="qr-btn" title="QR">
+            <div class="icon-group" @click="generateQRCode()">
+              <button class="qr-btn" title="QR" >
                 <img src="icons/barcode.png" class="nav-icon" />
               </button>
               <a
@@ -217,6 +217,9 @@
         </nav>
       </div>
     </div>
+
+    <!-- QRCode library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
     <!-- type model damit die config datei damit vue richtig gerendert wird -->
     <script type="module" src="app.js"></script>

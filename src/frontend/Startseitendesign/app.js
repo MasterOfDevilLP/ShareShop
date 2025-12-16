@@ -4,7 +4,7 @@
  * Zweck:
  * Diese Seite ermöglicht dem Benutzer, seine mehrere Wohngemeinschaften (WGs) zu verwalten,
  * Listen anzulegen und bestehende Listen zu verwalten. Einladungen können über Link
- * oder QR-Code geteilt werden.
+ * oder QR-Code geteilt werden. 
  *
  * Haupt-Features:
  *  - WG-Verwaltung: Anzeigen, Auswählen, Erstellen
@@ -42,28 +42,25 @@ new Vue({
 
     // Daten für neue Liste
     touched: { name: false }, // für Validierung
-    newList: { name: "", wg: "" },
+    newList: { name: "", wg: "" }, 
 
     // UI-Zustände
-    showPopup: false, // Bottom Sheet "Liste hinzufügen"
+    showPopup: false,            // Bottom Sheet "Liste hinzufügen"
     showCreateGroupModal: false, // Modal "Neue WG erstellen"
-    showListOptions: false, // Bottom Sheet "Listenoptionen"
-    selectedList: null, // aktuell ausgewählte Liste
-    showRenameModal: false, // Modal "Liste umbenennen"
-    renameListName: "",
+    showListOptions: false,      // Bottom Sheet "Listenoptionen": inklusive Umbenennen/Löschen/Teilen/Kopieren
+    selectedList: null,          // aktuell ausgewählte Liste
+    showRenameModal: false,      // Modal "Liste umbenennen"
+    renameListName: "",          
 
-    isWGOpen: false, // Dropdown WG für neue Liste
-    showCopyToast: false, // Kurzes "Link kopiert"-Toast
-    showEmailInput: false, // Email Input anzeigen
-    emailToShare: "", // Email für Teilen
-    qrCodeDataUrl: "", // QR Code als Data URL
-    wgDropdownOpen: false, // Dropdown WG öffnen
+    isWGOpen: false,             
+    showCopyToast: false,        // Kurzes "Link kopiert"-Toast
+    showEmailInput: false,       // Email Input anzeigen
+    emailToShare: "",            // Email für Teilen
+    qrCodeDataUrl: "",           // QR Code als Data URL
+    wgDropdownOpen: false,      
     inviteLink: localStorage.getItem("inviteLink"), // Einladungslink
   },
 
-  /**
-   * Berechnete Eigenschaften
-   */
   computed: {
     /**
      * Prüft, ob die neue Liste gültig ist (Name nicht leer)
@@ -73,24 +70,30 @@ new Vue({
     },
   },
 
-  /**
-   * Lifecycle Hook: mounted
-   * Wird ausgeführt, sobald die Vue-App gemountet wurde
-   */
   mounted() {
     this.fetchUserWG(); // WGs des Users laden
+    this.inviteLink = localStorage.getItem("inviteLink") || "";
+
+    if (this.inviteLink) {
+      QRCode.toDataURL(this.inviteLink)
+        .then(url => {
+          this.qrCodeDataUrl = url;
+          localStorage.setItem("qrCodeDataUrl", url);
+        })
+        .catch(err => console.error("Fehler beim Generieren des QR Codes:", err));
+    }
   },
 
-  /**
-   * Methoden der Vue-App
-   */
   methods: {
+
     /**
      * QR-Code für den Invite-Link generieren
      */
     async generateQRCode() {
       try {
         this.qrCodeDataUrl = await QRCode.toDataURL(this.inviteLink);
+        localStorage.setItem("qrCodeDataUrl", qr);
+        window.location.href = "wg_qr_code.html"; // Öffne das QR-Code Modal
       } catch (err) {
         console.error("Fehler beim Generieren des QR Codes:", err);
       }
@@ -223,16 +226,12 @@ new Vue({
           console.warn("Response ist kein JSON:", e);
         }
 
-        if (!response.ok)
-          throw new Error(data?.message || `Fehler ${response.status}`);
+        if (!response.ok) throw new Error(data?.message || `Fehler ${response.status}`);
 
         // LocalStorage aktualisieren
         const key = `lists_${wgId}`;
         const saved = JSON.parse(localStorage.getItem(key)) || [];
-        const newItem = {
-          id: data?.id || `temp-${Date.now()}`,
-          name: this.newList.name.trim(),
-        };
+        const newItem = { id: data?.id || `temp-${Date.now()}`, name: this.newList.name.trim() };
         saved.push(newItem);
         localStorage.setItem(key, JSON.stringify(saved));
 
@@ -248,8 +247,7 @@ new Vue({
      * Kopiert den Invite-Link in die Zwischenablage
      */
     copyInviteLink() {
-      navigator.clipboard
-        .writeText(this.inviteLink)
+      navigator.clipboard.writeText(this.inviteLink)
         .then(() => {
           this.showCopyToast = true;
           setTimeout(() => (this.showCopyToast = false), 2000);
@@ -279,9 +277,7 @@ new Vue({
       }
 
       const subject = encodeURIComponent("Einladung zur WG-Gruppe");
-      const body = encodeURIComponent(
-        `Hallo,\n\nhier ist dein Einladungslink zur WG-Gruppe:\n${this.inviteLink}\n\nViele Grüße`,
-      );
+      const body = encodeURIComponent(`Hallo,\n\nhier ist dein Einladungslink zur WG-Gruppe:\n${this.inviteLink}\n\nViele Grüße`);
 
       try {
         window.location.href = `mailto:${this.emailToShare}?subject=${subject}&body=${body}`;
@@ -329,9 +325,7 @@ new Vue({
       }
 
       try {
-        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, {
-          credentials: "include",
-        });
+        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, { credentials: "include" });
 
         if (response.status === 403 || response.status === 404) {
           console.warn("Keine Listen für diese WG.");
@@ -342,10 +336,7 @@ new Vue({
         if (!response.ok) throw new Error("Fehler beim Laden der Listen");
 
         const data = await response.json();
-        this.lists = data.map((l) => ({
-          id: l.lid,
-          name: l.name || "neue Liste",
-        }));
+        this.lists = data.map((l) => ({ id: l.lid, name: l.name || "neue Liste" }));
       } catch (err) {
         console.error(err);
       }
@@ -369,10 +360,8 @@ new Vue({
         });
 
         const data = await response.json();
-        if (!response.ok)
-          throw new Error(data?.message || `Fehler ${response.status}`);
-        if (!data || !data.id)
-          throw new Error("Backend hat keine WG-ID zurückgegeben.");
+        if (!response.ok) throw new Error(data?.message || `Fehler ${response.status}`);
+        if (!data || !data.id) throw new Error("Backend hat keine WG-ID zurückgegeben.");
 
         const newGroup = { id: data.id, name: this.newGroupName.trim() };
         this.wgList.push(newGroup);
@@ -446,16 +435,6 @@ new Vue({
         console.error("Fehler beim Umbenennen der Liste:", err);
         alert("Fehler beim Umbenennen der Liste: " + err.message);
       }
-    },
-
-    /**
-     * Logout Funktion (nur Dev / localStorage bereinigen)
-     */
-    dev_logout() {
-      localStorage.removeItem("wgList");
-      localStorage.removeItem("selectedWG");
-      localStorage.removeItem("selectedWGName");
-      window.location.href = "../Login/login.html";
     },
 
     /**

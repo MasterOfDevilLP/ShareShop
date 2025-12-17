@@ -3,17 +3,20 @@ new Vue({
   el: "#setting",
   data: {
     wgList: JSON.parse(localStorage.getItem("wgList")) || [],
-    selectedWG: localStorage.getItem("selectedWGID") || null,
+    selectedWG: localStorage.getItem("selectedWG") || null,
     selectedWGName: localStorage.getItem("selectedWGName") || "WG auswählen",
     newGroupName: "",
     wgUsers: [],
-    inviteLink: "",
+    inviteLinkfromAPI: "",
+    showError: function (msg) {
+      console.error("Fehler:", msg);
+    }
   },
   mounted() {
     console.log("Mounted: selectedWG =", this.selectedWG);
 
     this.createInviteLink().then(() => {
-      console.log("InviteLink nach Erstellung:", this.inviteLink);
+      console.log("InviteLink nach Erstellung:", this.inviteLinkfromAPI);
     });
   },
 
@@ -45,10 +48,10 @@ new Vue({
 
         const data = await response.json();
 
-        this.inviteLink = `${window.location.origin}/invite/${data.id}`;
-        localStorage.setItem("inviteLink", this.inviteLink);
+        this.inviteLinkfromAPI = `${window.location.origin}/invite/${data.id}`;
+        localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
 
-        console.log("InviteLink nach Erstellung:", this.inviteLink);
+        console.log("InviteLink nach Erstellung:", this.inviteLinkfromAPI);
       } catch (err) {
         console.error("Invite Fehler:", err.message);
       }

@@ -56,9 +56,13 @@ new Vue({
     showCopyToast: false,        // Kurzes "Link kopiert"-Toast
     showEmailInput: false,       // Email Input anzeigen
     emailToShare: "",            // Email für Teilen
+    QRCode: null,
     qrCodeDataUrl: "",           // QR Code als Data URL
     wgDropdownOpen: false,      
-    inviteLink: localStorage.getItem("inviteLink"), // Einladungslink
+    inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI"), // Einladungslink vom Backend
+    token: "",                    // Token aus dem Einladungslink
+    frontendLink: "",             // Einladungslink, der an invite/invite.html weiterleitet
+    showQRChoiceModal: false,
   },
 
   computed: {
@@ -72,16 +76,20 @@ new Vue({
 
   mounted() {
     this.fetchUserWG(); // WGs des Users laden
-    this.inviteLink = localStorage.getItem("inviteLink") || "";
+    this.inviteLinkfromAPI = localStorage.getItem("inviteLinkfromAPI") || "";
 
-    if (this.inviteLink) {
-      QRCode.toDataURL(this.inviteLink)
+    if (this.inviteLinkfromAPI) {
+      this.token = this.inviteLinkfromAPI.split("/").pop();
+      this.frontendLink = `http://localhost:8080/invite/invite.html?token=${this.token}`;
+      QRCode.toDataURL(this.frontendLink)
         .then(url => {
           this.qrCodeDataUrl = url;
           localStorage.setItem("qrCodeDataUrl", url);
         })
         .catch(err => console.error("Fehler beim Generieren des QR Codes:", err));
     }
+
+    localStorage.setItem("frontendLink", this.frontendLink);
   },
 
   methods: {
@@ -90,20 +98,33 @@ new Vue({
      * QR-Code für den Invite-Link generieren
      */
     async generateQRCode() {
+      if (!this.frontendLink) {
+        try {
+          const resp = await fetch(`${API_BASE}/wg/${this.selectedWG}/invite`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ expires: null, targetUser: null }),
+          });
+
+          if (!resp.ok) throw new Error("Fehler beim Erstellen des Invite-Links");
+
+          const data = await resp.json();
+          this.frontendLink = `${window.location.origin}/invite/${data.id}`;
+          localStorage.setItem("inviteLinkfromAPI", this.frontendLink);
+        } catch (err) {
+          console.error(err);
+          alert("Invite-Link konnte nicht erstellt werden: " + err.message);
+          return;
+        }
+      }
       try {
-        this.qrCodeDataUrl = await QRCode.toDataURL(this.inviteLink);
-        localStorage.setItem("qrCodeDataUrl", qr);
-        window.location.href = "wg_qr_code.html"; // Öffne das QR-Code Modal
+        this.qrCodeDataUrl = await QRCode.toDataURL(this.frontendLink);
+        localStorage.setItem("qrCodeDataUrl", this.qrCodeDataUrl);
+        window.location.href = "wg_qr_code.html";
       } catch (err) {
         console.error("Fehler beim Generieren des QR Codes:", err);
       }
-    },
-
-    /**
-     * Platzhalter für spätere Funktionalität QR-Code scannen
-     */
-    scanOtherQR() {
-      alert("The feature to scan another QR code will be added later.");
     },
 
     /**
@@ -247,7 +268,7 @@ new Vue({
      * Kopiert den Invite-Link in die Zwischenablage
      */
     copyInviteLink() {
-      navigator.clipboard.writeText(this.inviteLink)
+      navigator.clipboard.writeText(this.frontendLink)
         .then(() => {
           this.showCopyToast = true;
           setTimeout(() => (this.showCopyToast = false), 2000);
@@ -277,7 +298,10 @@ new Vue({
       }
 
       const subject = encodeURIComponent("Einladung zur WG-Gruppe");
-      const body = encodeURIComponent(`Hallo,\n\nhier ist dein Einladungslink zur WG-Gruppe:\n${this.inviteLink}\n\nViele Grüße`);
+      const body =
+      encodeURIComponent("Hallo,\n\nHier ist dein Einladungslink:\n\n") +
+      this.frontendLink +
+      encodeURIComponent("\n\nViele Grüße");
 
       try {
         window.location.href = `mailto:${this.emailToShare}?subject=${subject}&body=${body}`;
@@ -304,6 +328,7 @@ new Vue({
 
       this.selectedWG = wg.wid;
       this.selectedWGName = wg.name;
+      console.log("Ausgewählte WG:", this.selectedWG, this.selectedWGName);
 
       localStorage.setItem("selectedWG", wg.wid);
       localStorage.setItem("selectedWGName", wg.name);
@@ -374,8 +399,6 @@ new Vue({
         this.lists = [];
         this.newGroupName = "";
         this.showCreateGroupModal = false;
-
-        alert("WG wurde erstellt!");
       } catch (err) {
         console.error("Fehler beim Erstellen der WG:", err);
         alert("Fehler beim Erstellen der WG: " + err.message);
@@ -446,5 +469,72 @@ new Vue({
       localStorage.setItem("selectedListName", list.name);
       window.location.href = "../Einkaufsliste/einkaufsliste.html";
     },
+
+    /**
+     * QR-Code Scan-Optionen anzeigen
+     */
+    scanOtherQR() {
+      this.showQRChoiceModal = true;
+    },
+
+    async startCameraScan() {
+      try {
+        const video = this.$refs.video;
+        video.style.display = "block";
+
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        const scan = () => {
+          if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const code = jsQR(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+            if (code) {
+              alert("Gefundener QR Code: " + code.data);
+              stream.getTracks().forEach(track => track.stop());
+              video.style.display = "none";
+              return;
+            }
+          }
+          requestAnimationFrame(scan);
+        };
+        scan();
+      } catch (err) {
+        alert("Kamera konnte nicht geöffnet werden: " + err.message);
+      }
+    },
+
+    /**
+     * Verarbeitet den Datei-Upload für QR-Code Bilder
+     */
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+          if (code) {
+            window.location.href = code.data;
+          } else {
+            alert("Kein QR Code gefunden!");
+          }
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
   },
 });

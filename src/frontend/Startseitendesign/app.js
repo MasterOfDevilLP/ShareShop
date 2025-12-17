@@ -395,6 +395,24 @@ async saveList() {
       this.showCreateGroupModal = true;
     },
 
+     async dev_logout() {
+    // 1. Serverseitiges Logout
+      try {
+        await fetch(`${API_BASE}/user/logout/`, {
+          method: 'POST',
+          credentials: 'include' // um Cookie zu senden
+        });
+      } catch (e) {
+        console.error("Logout API call failed, but proceeding with client logout.");
+        // Trotz Fehler im API-Call sollten wir den Client-Status löschen
+      }
+          localStorage.removeItem("wgList");
+          localStorage.removeItem("selectedWG");
+          localStorage.removeItem("selectedWGName");
+          history.replaceState(null, null, "/");
+          window.location.reload(); // Erzwingt das Neuladen der Login-Seite
+      },
+
     goToList(list) {
       localStorage.setItem("selectedWGID", this.selectedWG);
       localStorage.setItem("selectedListID", list.id);

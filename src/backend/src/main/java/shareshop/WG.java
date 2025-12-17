@@ -4,7 +4,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -132,21 +135,61 @@ public class WG {
 
     /**
      * get wgID
-     * @return
+     * @return UUID
      */
     public UUID getWgID() {return this.wgID;}
 
     /**
      * get wg name
-     * @return
+     * @return String
      */
     public String getWgName() {return this.wgName;}
 
     /**
      * get creation date
-     * @return
+     * @return Date
      */
     public Date getCreationDate() {return this.creationDate;}
+
+    /**
+     * Returns the UUID of the Owner of the WG or null if there is no Owner
+     * @return UUID
+     * @throws SQLException
+     */
+    public UUID getOwner() throws SQLException {
+        connectionHandler.makeSureItsOpen();
+        UUID ownerID = null;
+        String selectString = "SELECT userid FROM userallocation WHERE wgid = ? AND owner_flag = true";
+        PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
+        selectStmnt.setObject(1, this.wgID);
+        ResultSet rs = selectStmnt.executeQuery();
+        if (rs.next()) {
+            ownerID = (UUID)rs.getObject("userid");
+        }
+        selectStmnt.close();
+        return ownerID;
+    }
+
+    /**
+     * checks if the user is the Owner of the WG
+     * @param user
+     * @return boolean
+     * @throws SQLException
+     */
+    public boolean isOwner(User user) throws SQLException {
+        connectionHandler.makeSureItsOpen();
+        boolean owner_flag = false;
+        String selectString = "SELECT owner_flag FROM userallocation WHERE wgid = ? AND userid = ?";
+        PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
+        selectStmnt.setObject(1, this.wgID);
+        selectStmnt.setObject(2, user.getUserID());
+        ResultSet rs = selectStmnt.executeQuery();
+        if (rs.next()) {
+            owner_flag = rs.getBoolean("owner_flag");
+        }
+        selectStmnt.close();
+        return owner_flag;
+    }
 
     /**
      * check if the user is part of the wg
@@ -160,33 +203,52 @@ public class WG {
     }
 
     /**
-     * adds a user to the wg
+     * adds a user to the wg and sets owner flag (true if it is the first user to join)
      * @param user
      * @throws SQLException
      */
     public void addUser(User user) throws SQLException {
-        String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate) VALUES (?, ?, ?)");
+        String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate, owner_flag) VALUES (?, ?, ?, ?)");
+        String selectUsr = "SELECT userid FROM userallocation WHERE wgid = ?";
         connectionHandler.makeSureItsOpen();
         PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
+        PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectUsr);
         connectionHandler.conn.setAutoCommit(true);
+        selectStmnt.setObject(1, this.wgID);
+        ResultSet rs = selectStmnt.executeQuery();
+        boolean owner_flag = !rs.next();
         Date joinDate = Date.valueOf(LocalDate.now());
         statement.setObject(1, user.getUserID());
         statement.setObject(2, this.wgID);
         statement.setDate(3, joinDate);
+        statement.setBoolean(4, owner_flag);
         statement.execute();
         statement.close();
+        selectStmnt.close();
         //user.setWgID(connectionHandler, this.wgID);
     }
 
     /**
-     * removes a user from the wg
+     * removes a user from the wg.
+     * If it was the last user, the WG gets removed too
      * @param user
      * @throws SQLException
      */
     public void removeUser(User user) throws SQLException {
         String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
+        boolean lastUser = false;
         connectionHandler.makeSureItsOpen();
-        connectionHandler.conn.setAutoCommit(false);
+        if (isOwner(user)) {    // test if the user is the Owner, to transfer Ownership if true
+            String selectString = "SELECT userid FROM userallocation WHERE wgid = ? AND owner_flag = false";
+            PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
+            selectStmnt.setObject(1, this.wgID);
+            ResultSet rs = selectStmnt.executeQuery();
+            if (rs.next()) {
+                transferOwnership(user, new User(connectionHandler, (UUID)rs.getObject("userid")));
+            } else {
+                lastUser = true;    // no other users in WG
+            }
+        }
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
         connectionHandler.conn.setAutoCommit(true);
         deleteStatement.setObject(1, user.getUserID());
@@ -194,6 +256,44 @@ public class WG {
         deleteStatement.execute();
         deleteStatement.close();
         //user.setWgID(connectionHandler, null);
+
+        if (lastUser) { // if this was last user, delete the WG (because empty)
+            this.remove();
+        }
+    }
+
+    /**
+     * transfers the Ownership of the WG from "oldOwner" to "newOwner"
+     * @param oldOwner
+     * @param newOwner
+     * @throws SQLException
+     */
+    public void transferOwnership(User oldOwner, User newOwner) throws SQLException {
+        connectionHandler.makeSureItsOpen();
+        String transferString = "UPDATE userallocation SET owner_flag = ? WHERE userid = ? AND wgid = ?";
+        PreparedStatement removeOwnerStmnt = connectionHandler.conn.prepareStatement(transferString);
+        PreparedStatement addOwnerStmnt = connectionHandler.conn.prepareStatement(transferString);
+        try {
+            connectionHandler.conn.setAutoCommit(false);
+
+            removeOwnerStmnt.setBoolean(1, false);
+            removeOwnerStmnt.setObject(2, oldOwner.getUserID());
+            removeOwnerStmnt.setObject(3, this.wgID);
+            removeOwnerStmnt.execute();
+
+            addOwnerStmnt.setBoolean(1, true);
+            addOwnerStmnt.setObject(2, newOwner.getUserID());
+            addOwnerStmnt.setObject(3, this.wgID);
+            addOwnerStmnt.execute();
+
+            removeOwnerStmnt.close();
+            addOwnerStmnt.close();
+
+            connectionHandler.conn.commit();
+        } catch (SQLException e) {
+            connectionHandler.conn.rollback();
+            throw e;
+        }
     }
 
     /**
@@ -276,7 +376,7 @@ public class WG {
 
     /**
      * get a list of ShoppingList Objects from the wg
-     * @return
+     * @return ArrayList<ShoppingList>
      * @throws SQLException
      */
     public ArrayList<ShoppingList> lists(DBConnectionHandler connectionHandler) throws SQLException {
@@ -292,6 +392,63 @@ public class WG {
         selectStatement.close();
 
         return lists;
+    }
+
+    /**
+     * creates an Invite. Set user to null to make it valid for everyone. Sert expireDate to -1 to make it infinite
+     * @param user
+     * @param expireTime (in seconds)
+     * @return Invite
+     * @throws SQLException
+     */
+    public Invite createInvite(User user, long expireTime) throws SQLException {
+        Timestamp currrentTime = Timestamp.valueOf(LocalDateTime.now());
+        Timestamp expiringTime = expireTime != -1 ? ShareShopUtility.createTimestampInAmountOfTime(currrentTime, expireTime * 1000) : null;
+        return new Invite(connectionHandler, this.wgID, user != null ? user.getUserID() : null, currrentTime, expiringTime);
+    }
+
+    /**
+     * returns a list of all invites of this WG
+     * @return ArrayList<Invite>
+     * @throws SQLException
+     */
+    public ArrayList<Invite> getInvites() throws SQLException {
+        connectionHandler.makeSureItsOpen();
+        ArrayList<Invite> invites = new ArrayList<Invite>();
+        String selectString = "SELECT token FROM invites WHERE wgid = ?";
+        PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
+        selectStatement.setObject(1, this.wgID);
+        ResultSet rs = selectStatement.executeQuery();
+        while (rs.next()) {
+            invites.add(new Invite(connectionHandler, (UUID)rs.getObject("token")));
+        }
+
+        invites.trimToSize();
+        return invites;
+    }
+
+    /**
+     * tries to add the user to the wg via the invite. Returns true if invite was valid, returns false if invite was not valid and doesn't add User to wg
+     * @param invite
+     * @param user
+     * @return boolean
+     * @throws SQLException
+     */
+    public boolean joinViaInvite(Invite invite, User user) throws SQLException {
+        if (user.isUserInWG(this.wgID)) {
+            System.out.println("user is already in this wg");
+            return false;
+        }
+
+        boolean canJoin = invite.checkIfValidForUser(user); // only need to check this, since it also checks the validity of the invite itself
+        if (canJoin) {
+            this.addUser(user);
+            if (invite.getUserID() != null) {invite.remove();}  // deletes the invite on the DB when it was a specific invite for this user
+            return canJoin;
+        } else {
+            System.out.println("Invite was invalid either to having expired or not being for this user");
+            return canJoin;
+        }
     }
 
     /**

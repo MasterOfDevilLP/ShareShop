@@ -63,6 +63,7 @@ new Vue({
     token: "",                    // Token aus dem Einladungslink
     frontendLink: "",             // Einladungslink, der an invite/invite.html weiterleitet
     showQRChoiceModal: false,
+    baseUrl: window.location.origin, //baseURL von Invite Link
   },
 
   computed: {
@@ -80,7 +81,7 @@ new Vue({
 
     if (this.inviteLinkfromAPI) {
       this.token = this.inviteLinkfromAPI.split("/").pop();
-      this.frontendLink = `http://localhost:8080/invite/invite.html?token=${this.token}`;
+      this.frontendLink = `${this.baseUrl}/invite/invite.html?token=${this.token}`;
       QRCode.toDataURL(this.frontendLink)
         .then(url => {
           this.qrCodeDataUrl = url;

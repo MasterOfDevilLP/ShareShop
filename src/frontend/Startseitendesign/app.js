@@ -461,9 +461,14 @@ new Vue({
       }
     },
 
+
+    openWGCreateModal() {
+      this.showCreateGroupModal = true;
+    },
+
     /**
      * Öffnet die ausgewählte Liste
-     */
+    */
     goToList(list) {
       localStorage.setItem("selectedWGID", this.selectedWG);
       localStorage.setItem("selectedListID", list.id);

@@ -9,7 +9,12 @@ import shareshop.Invite;
 
 public class GetInviteAsMemberResponse {
 	// unfortunately, Gson doesn't have inclusion strategies, only exclusion strategies, so this is a bit less error-prone
+<<<<<<< HEAD
 	
+=======
+	@Expose
+	public UUID ivid;
+>>>>>>> origin/develop
 	@Expose
 	public UUID forUser;
 	@Expose
@@ -19,6 +24,10 @@ public class GetInviteAsMemberResponse {
 	
 	public GetInviteAsMemberResponse(Invite inv) {
 		this.forUser = inv.getUserID();
+<<<<<<< HEAD
+=======
+		this.ivid = inv.getToken();
+>>>>>>> origin/develop
 		Timestamp exp = inv.getExpiryDateTime();
 		expires = exp == null ? null : exp.getTime() / 1000l;
 		created = inv.getCreationDateTime().getTime() / 1000l;

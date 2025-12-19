@@ -1,0 +1,362 @@
+/* Grundlayout */
+body {
+  font-family: "Inter", sans-serif;
+  background: #ffffff;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
+/* Bottom Navigation Bar */
+.nav-item {
+  text-decoration: none;
+  color: #000;               /* Inaktive Tabs schwarz */
+  border-top: none;          /* Keine Linie */
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.nav-item.active {
+  color: #7DCFB6;
+  border-top: 2px solid #7DCFB6;
+  font-weight: 600;
+}
+/* Header */
+.app-header {
+  text-align: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fafafa;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Profilbereich */
+.profile-section {
+  padding: 25px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;    
+  justify-content: center; 
+  margin-bottom: 25px;
+}
+
+.profile-info p {
+  margin-top: 8px;       
+  font-size: 14px;
+  color: #666;
+  text-align: center;    
+}
+
+.profile-pic {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  background-color: #f4f4f4;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+.profile-info h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.profile-info p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Abschnittsüberschriften */
+.profile-option {
+  margin-top: 20px;
+}
+
+.profile-option img {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  margin-right: 8px;
+  opacity: 0.85;
+}
+
+.profile-option span {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Theme-Schalter */
+.toggle {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.toggle button {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 0;
+  background: #e2e2e2;
+  color: #000;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.toggle button.active {
+  background: #84d7c6;
+  color: #fff;
+}
+
+/* Sprachumschalter */
+.lang-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lang-buttons button {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 0;
+  background: #e2e2e2;
+  color: #000;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.lang-buttons button.active {
+  background: #84d7c6;
+  color: #fff;
+}
+
+/* Einstellungs-Links */
+.profile-links {
+  margin-top: 20px;
+}
+
+.profile-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+.profile-link img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.profile-link span {
+  font-size: 15px;
+  color: #222;
+}
+
+.profile-link .right {
+  font-weight: 500;
+  color: #555;
+}
+
+/* Logout */
+.logout-section {
+  text-align: center;
+  margin: 40px 0 100px;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #000;
+  transition: opacity 0.2s ease;
+}
+
+.logout-btn:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+.logout-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.logout-message {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* ========================================= */
+/* MODAL KOMPONENTE */
+/* ========================================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-container {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.modal-body {
+  padding: 24px;
+  text-align: center;
+}
+
+.modal-body p {
+  margin: 0;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px 24px;
+}
+
+.modal-actions button {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background: #e0e0e0;
+}
+
+.btn-cancel:active {
+  transform: scale(0.98);
+}
+
+.btn-confirm {
+  background: #ff4444;
+  color: #fff;
+}
+
+.btn-confirm:hover {
+  background: #ee3333;
+}
+
+.btn-confirm:active {
+  transform: scale(0.98);
+}
+
+.btn-confirm:disabled {
+  background: #ffaaaa;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/*Dark Mode
+.dark-mode {
+  background: #1f1f1f;
+  color: #f5f5f5;
+}
+.dark-mode .app-header {
+  background: #2a2a2a;
+  border-color: #444;
+}
+.dark-mode .toggle button,
+.dark-mode .lang-buttons button {
+  background: #444;
+  color: #eee;
+}
+.dark-mode .toggle button.active,
+.dark-mode .lang-buttons button.active {
+  background: #84d7c6;
+  color: #fff;
+}
+.dark-mode .profile-link span {
+  color: #ddd;
+}
+*/

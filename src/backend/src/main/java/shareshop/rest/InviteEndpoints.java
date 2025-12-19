@@ -1,6 +1,10 @@
 package shareshop.rest;
 
 import java.sql.SQLException;
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+>>>>>>> origin/develop
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -34,6 +38,10 @@ public class InviteEndpoints {
 		registerDelete(app);
 		registerGet(app);
 		registerGetWG(app);
+<<<<<<< HEAD
+=======
+		registerGetWGList(app);
+>>>>>>> origin/develop
 		registerPost(app);
 	}
 	
@@ -177,12 +185,61 @@ public class InviteEndpoints {
 		}
 	}
 	
+<<<<<<< HEAD
+=======
+	public static void epGetWGList(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		if(usr == null) {
+			// noone's logged in
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = RestUtils.getPathParamUUIDSafe(ctx, "wid");
+		if(wgid == null) {
+			return;
+		}
+		WG wg = RestUtils.getWGAsMember(ctx, wgid, usr, appCtx);
+		if(wg == null) {
+			// errors are already set
+			return;
+		}
+		
+		try {
+			ArrayList<Invite> invites = wg.getInvites();
+			
+			GetInviteAsMemberResponse[] resp = new GetInviteAsMemberResponse[invites.size()];
+			for(int i = 0; i < invites.size(); i++) {
+				resp[i] = new GetInviteAsMemberResponse(invites.get(i));
+			}
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
+		} catch(SQLException e) {
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+			return;
+		}
+	}
+	
+>>>>>>> origin/develop
 	private static void registerGetWG(Javalin app) {
 		app.get(wg_basepath + "/{ivid}", ctx -> {
 			epGetWG(ctx);
 		});
 	}
 
+<<<<<<< HEAD
+=======
+	private static void registerGetWGList(Javalin app) {
+		app.get(wg_basepath, ctx -> {
+			epGetWGList(ctx);
+		});
+	}
+	
+>>>>>>> origin/develop
 	public static void epGet(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		AppContext appCtx = (AppContext) ctx.appData(ctxKey);

@@ -53,11 +53,11 @@
           <video ref="video" class="qr-video" autoplay playsinline></video>
           <input type="file" ref="fileInput" accept="image/*" style="display:none;" @change="handleFileUpload">
 
-          <!-- QR Scan Modal -->
+          <!-- QR Code Option Modal -->
           <div v-if="showQRChoiceModal" class="modal-backdrop" @click.self="showQRChoiceModal=false">
             <div class="modal-content">
               <div class="modal-actions">
-                <button @click="startCameraScan">QR Scan</button>
+                <button @click="startCameraScan">QR-Code scannen</button>
                 <button @click="$refs.fileInput.click(); showQRChoiceModal=false">Bild hochladen</button>
               </div>
               <input type="file" ref="fileInput" accept="image/*" hidden @change="handleFileUpload" />

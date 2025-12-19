@@ -464,13 +464,6 @@ new Vue({
      * QR-Code
      * ========================= */
     /**
-     * QR-Code Scan-Optionen anzeigen
-     */
-    scanOtherQR() {
-      this.showQRChoiceModal = true;
-    },
-
-    /**
      * QR-Code für den Invite-Link generieren
      */
     async generateQRCode() {
@@ -503,6 +496,13 @@ new Vue({
       }
     },
 
+    /**
+     * QR-Code-Optionen anzeigen: scan oder generieren
+     */
+    scanOtherQR() {
+      this.showQRChoiceModal = true;
+    },
+    
     /**
      * Startet die Kamera für das Scannen von QR-Codes
      */

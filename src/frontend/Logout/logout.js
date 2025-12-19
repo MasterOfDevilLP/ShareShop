@@ -83,7 +83,7 @@ createApp({
 
       //Weiterleitung
       setTimeout(() => {
-        window.location.href = "../Login/index.html";
+        window.location.href = "../index.html";
       }, 2000);
     },
   },

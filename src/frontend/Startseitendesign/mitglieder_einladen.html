@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Einstellungen</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- Load Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+    <div id="app">
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <a
+            href="settings.html"
+            class="back-link"
+            title="Zurück zur WG Einstellungen"
+          >
+            <img src="icons/arrow_back.png" class="back-icon" alt="Zurück" />
+          </a>
+          <span class="site-titel">Mitglieder via Link einladen</span>
+        </header>
+
+        <!-- Inhalt -->
+        <main class="app-content settings-page">
+          <div class="info-text">
+            <p>
+              Jeder kann über diesen Link der Gruppe beitreten. Bitte teilen Sie
+              ihn nur mit Personen, denen Sie vertrauen.
+            </p>
+            <hr />
+
+            <!-- Link zur Einladung -->
+            <input
+              type="text"
+              class="invite-link"
+              :value="inviteLink"
+              readonly
+            />
+
+            <!-- Optionen -->
+            <!-- Copy link -->
+            <div class="settings-option-row" @click="copyInviteLink">
+              <img src="icons/Copy.svg" class="settings-icon" />
+              <span class="settings-option-text">Link kopieren</span>
+              <div v-if="showCopyToast" class="copy-toast">Link kopiert!</div>
+            </div>
+
+            <!-- Share link -->
+            <div class="settings-option-row" @click="toggleEmailInput">
+              <img src="icons/sharelink.png" class="settings-icon" />
+              <span class="settings-option-text">Link teilen</span>
+            </div>
+
+            <!-- Input email -->
+            <div v-if="showEmailInput" class="share-email-input">
+              <form ref="emailForm" @submit.prevent="sendLink">
+                <input
+                  type="email"
+                  v-model="emailToShare"
+                  placeholder="Email eingeben"
+                  required
+                />
+                <button type="submit">Senden</button>
+              </form>
+            </div>
+          </div>
+          <!-- schließt info-text -->
+        </main>
+        <!-- schließt main -->
+      </div>
+      <!-- schließt iphone-app -->
+    </div>
+    <!-- schließt #app -->
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

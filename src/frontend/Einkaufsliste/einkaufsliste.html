@@ -1,12 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Einkaufsliste</title>
-    <!-- <link rel="manifest" href="manifest.json" /> -->
+
+    <!-- Hauptstylesheet für eigene Styles -->
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS für vorgefertigte Styles -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
 
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
@@ -16,23 +24,27 @@
   </head>
 
   <body>
-    <!-- Load Vue.js -->
+    <!-- Vue.js Bibliothek laden -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-    <!-- <script src="./sw.js" defer></script> -->
 
+    <!-- Root-Element für Vue-App -->
     <div id="app">
       <div class="iphone-app">
         <!-- Header -->
         <header class="app-header">
+          <!-- Link zurück zur Startseite -->
           <a href="../Startseitendesign/startseite.html">
             <button class="icon-btn" id="list_btn" title="Zurück zu Startseite">
               <img src="icons/arrow_back.png" />
             </button>
           </a>
+          <!-- Dynamischer Titel der Einkaufsliste -->
           <span class="site-titel">{{ list_name }}</span>
+          <!-- Button für Einkaufsmodus -->
           <button class="icon-btn" id="einkaufmodus_btn" title="Einkaufmodus">
             <img src="icons/Wagen.png" />
           </button>
+          <!-- Link zu den Einstellungen der Einkaufsliste -->
           <a href="./settings_einkaufsliste.html">
             <button class="icon-btn" id="settings_btn" title="Settings">
               <img src="icons/settings.svg" />
@@ -40,98 +52,162 @@
           </a>
         </header>
 
-        <!-- Hauptseite: Liste anzeigen -->
+        <!-- HAUPTINHALT: Liste der Produkte -->
         <main class="app-content">
           <div class="product-list">
-            <div v-for="product in listItems" :key="product.iid" class="product-card">              
+            <!-- Vue-Loop über alle Produkte -->
+            <div
+              v-for="product in listItems"
+              :key="product.iid"
+              class="product-card"
+            >
+              <!-- Icon für Produktkategorie -->
               <div class="product-icon">
-                <img :src="getIcon(product.kategorie)" alt="icon" /> 
-                <!-- <img src="icons/default.png" alt="Icon" class="nav-icon" /> -->
+                <img :src="getIcon(product.kategorie)" alt="icon" />
               </div>
+              <!-- Produktinformationen -->
               <div class="product-info">
-                <!-- <div class="product-name" :style="{ textDecoration: product.ticked ? 'line-through' : 'none' }">{{ product.name }}</div>  -->
-                <div class="product-name" >{{ product.name }}</div> 
-
+                <div class="product-name">{{ product.name }}</div>
                 <div class="product-meta">
-                  <!-- <span v-if="product.ticked"> Gekauft: {{ product.datum }} </br></span>  -->
                   Menge: {{ product.amount }} {{ product.einheit }}
                 </div>
               </div>
               <div class="product-price">{{ product.preis || '—' }} €</div>
-              <button class="btn btn-outline-info  custom-button" title="Artikel anpassen" @click ="openChangeProduct(product)">...</button>
-             <!-- <button class="btn btn-outline-success custom-button":title="product.ticked ? 'Zurücksetzen' : 'Als gekauft markieren'" @click="toggleTick(product)">
-            {{ product.ticked ? '←' : '✓' }} -->
-             <button class="btn btn-outline-success custom-button" title="Als gekauft markieren" @click="toggleTick(product)">
-            {{ '✓' }}
-          </button>
-          <button class="delete-product-button" @click="removeFromList(product)">x</button>
+              <!-- Button: Produkt bearbeiten -->
+              <button
+                class="btn btn-outline-info custom-button"
+                title="Artikel anpassen"
+                @click="openChangeProduct(product)"
+              >
+                ...
+              </button>
+
+              <!-- Button: Als gekauft markieren -->
+              <button
+                class="btn btn-outline-success custom-button"
+                title="Als gekauft markieren"
+                @click="toggleTick(product)"
+              >
+                {{ '✓' }}
+              </button>
+              <!-- Button: Produkt löschen -->
+              <button
+                class="delete-product-button"
+                @click="removeFromList(product)"
+              >
+                x
+              </button>
             </div>
           </div>
         </main>
 
-    <!-- Button: neue Produkt hinzufugen -->
-          <button class="add-product" @click="add_product"><span>+</span> Produkte hinzufügen</button>
+        <!-- Button: neues Produkt hinzufügen -->
+        <button class="add-product" @click="add_product">
+          <span>+</span> Produkte hinzufügen
+        </button>
 
-    <!-- POPUP: neues Item hinzugen und Item anpassen  -->
-    <div class="bottom-sheet" :class="{ visible: showPopup }">
-        <div class="sheet-header"> 
-          <span v-if="isEditing">Produkt bearbeiten</span>
-          <span v-else>Produkte hinzufügen</span>     
-          <button class="close-btn" @click="closePopup">✕</button>
+        <!-- POPUP: neues Produkt hinzufügen oder bearbeiten -->
+        <div class="bottom-sheet" :class="{ visible: showPopup }">
+          <!-- Header des Popups -->
+          <div class="sheet-header">
+            <span v-if="isEditing">Produkt bearbeiten</span>
+            <span v-else>Produkte hinzufügen</span>
+            <button class="close-btn" @click="closePopup">✕</button>
+          </div>
+          <!-- Body des Popups: Formular -->
+          <div class="sheet-body">
+            <label>Name:</label>
+            <input
+              list="wg-products"
+              v-model="newProduct.name"
+              @input="onProductNameInput"
+            />
+            <datalist id="wg-products">
+              <option
+                v-for="p in products"
+                :key="p.id"
+                :value="p.name"
+              ></option>
+            </datalist>
+
+            <label>Kategorie:</label>
+            <select
+              v-model="newProduct.kategorie"
+              :disabled="newProduct.fromWG"
+            >
+              <option value="">--Wähle Kategorie--</option>
+              <option v-for="k in kategorien" :key="k" :value="k">
+                {{ k }}
+              </option>
+            </select>
+
+            <label>Menge:</label>
+            <input
+              type="number"
+              v-model="newProduct.menge"
+              placeholder="z.B. 500"
+              min="0"
+            />
+
+            <!-- <label>Einheit:</label>
+            <select v-model="newProduct.einheit">
+              <option disabled value="">Bitte wählen</option>
+              <option>Gramm</option>
+              <option>Kilogramm</option>
+              <option>Milliliter</option>
+              <option>Liter</option>
+              <option>Stück</option>
+            </select> -->
+
+            <label>Preis:</label>
+            <input type="number" v-model="newProduct.preis" step="0.01" />
+
+            <button id="saveList" @click="saveProduct">Speichern</button>
+          </div>
         </div>
-        <div class="sheet-body">
-          <label>Name:</label>
-        <input list="wg-products" v-model="newProduct.name" @input="onProductNameInput" />
-        <datalist id="wg-products">
-          <option v-for="p in products" :key="p.id" :value="p.name"></option>
-        </datalist>
-
-        <label>Kategorie:</label>
-        <select v-model="newProduct.kategorie" :disabled="newProduct.fromWG"> <!-- Disable if product selected from wg  -->
-          <option value="">--Wähle Kategorie--</option>
-          <option v-for="k in kategorien" :key="k" :value="k">{{ k }}</option>
-        </select>
-
-        <label>Menge:</label>
-        <input type="number" v-model="newProduct.menge" placeholder="z.B. 500" min="0"/>
-
-        <label>Einheit:</label>
-        <select v-model="newProduct.einheit">
-          <option disabled value="">Bitte wählen</option>
-          <option>Gramm</option>
-          <option>Kilogramm</option>
-          <option>Milliliter</option>
-          <option>Liter</option>
-          <option>Stück</option>
-        </select>
-
-        <label>Preis:</label>
-        <input type="number" v-model="newProduct.preis" step="0.01" />
-
-        <button id="saveList" @click="saveProduct">Speichern</button>
-        </div>
-    </div>
  
     <!-- Navigation -->
         <nav class="bottom-nav">
-          <button class="nav-item active"  @click="goToStartseite">
-            <img src="icons/Liste.png" alt="Start" class="nav-icon" /><br />Liste
+          <button class="nav-item active" @click="goToStartseite">
+            <img
+              src="icons/Liste.png"
+              alt="Start"
+              class="nav-icon"
+            /><br />Liste
           </button>
           <button class="nav-item">
-            <img src="icons/Rechnung.png" alt="Rechnungen" class="nav-icon" /><br />Rechnungen
+            <img
+              src="icons/Rechnung.png"
+              alt="Rechnungen"
+              class="nav-icon"
+            /><br />Rechnungen
           </button>
           <button class="nav-item">
-            <img src="icons/Kalender.png" alt="Kalender" class="nav-icon" /><br />Kalender
+            <img
+              src="icons/Kalender.png"
+              alt="Kalender"
+              class="nav-icon"
+            /><br />Kalender
           </button>
           <button class="nav-item">
-            <img src="icons/Rezepte.png" alt="Rezepte" class="nav-icon" /><br />Rezepte
+            <img
+              src="icons/Rezepte.png"
+              alt="Rezepte"
+              class="nav-icon"
+            /><br />Rezepte
           </button>
           <button class="nav-item">
-            <img src="icons/Profil.png" alt="Profil" class="nav-icon" /><br />Profil
+            <img
+              src="icons/Profil.png"
+              alt="Profil"
+              class="nav-icon"
+            /><br />Profil
           </button>
         </nav>
+      </div>
     </div>
-  </div>
 
-  <script type="module" src="./app.js"></script>  </body>
+    <!-- Eigenes JS Modul für App-Logik -->
+    <script type="module" src="./app.js"></script>
+  </body>
 </html>

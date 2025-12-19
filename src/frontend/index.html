@@ -15,11 +15,11 @@
     })
     .then(async res => {
       if (res.ok) {
-        // ✔ Logged in: send to start page
+        // Logged in: send to start page
         window.location.href = "./Startseitendesign/startseite.html";
       } 
       else {
-        // ❌ Not logged in: stay here (login page)
+        // Not logged in: stay here (login page)
       }
     })
     .catch(() => {

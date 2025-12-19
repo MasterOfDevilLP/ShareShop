@@ -91,16 +91,13 @@
             class="modal-backdrop"
             @click.self="showQRChoiceModal=false"
           >
-            <div class="modal-content">
-              <h3>QR-Code Option wählen</h3>
-              <div class="modal-actions">
-                <button @click="startCameraScan">QR-Code scannen</button>
-                <button
-                  @click="$refs.fileInput.click(); showQRChoiceModal=false"
-                >
-                  Bild hochladen
-                </button>
-              </div>
+            <div class="modal-actions">
+              <button @click="startCameraScan">QR-Code scannen</button>
+              <button
+                @click="$refs.fileInput.click(); showQRChoiceModal=false"
+              >
+                Bild hochladen
+              </button>
             </div>
           </div>
         </main>

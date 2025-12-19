@@ -430,19 +430,10 @@ new Vue({
       }
     },
 
-    /**
-     * Logout Funktion (nur Dev / localStorage bereinigen)
-     */
-    dev_logout() {
-      localStorage.removeItem("wgList");
-      localStorage.removeItem("selectedWG");
-      localStorage.removeItem("selectedWGName");
-      window.location.href = "../Login/login.html";
+    openWGCreateModal() {
+      this.showCreateGroupModal = true;
     },
 
-    /**
-     * Öffnet die ausgewählte Liste
-     */
     goToList(list) {
       localStorage.setItem("selectedWGID", this.selectedWG);
       localStorage.setItem("selectedListID", list.id);

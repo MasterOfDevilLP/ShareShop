@@ -1,6 +1,7 @@
 package shareshop.rest;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class InviteEndpoints {
 		registerDelete(app);
 		registerGet(app);
 		registerGetWG(app);
+		registerGetWGList(app);
 		registerPost(app);
 	}
 	
@@ -177,12 +179,55 @@ public class InviteEndpoints {
 		}
 	}
 	
+	public static void epGetWGList(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		if(usr == null) {
+			// noone's logged in
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = RestUtils.getPathParamUUIDSafe(ctx, "wid");
+		if(wgid == null) {
+			return;
+		}
+		WG wg = RestUtils.getWGAsMember(ctx, wgid, usr, appCtx);
+		if(wg == null) {
+			// errors are already set
+			return;
+		}
+		
+		try {
+			ArrayList<Invite> invites = wg.getInvites();
+			
+			GetInviteAsMemberResponse[] resp = new GetInviteAsMemberResponse[invites.size()];
+			for(int i = 0; i < invites.size(); i++) {
+				resp[i] = new GetInviteAsMemberResponse(invites.get(i));
+			}
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
+		} catch(SQLException e) {
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+			return;
+		}
+	}
+	
 	private static void registerGetWG(Javalin app) {
 		app.get(wg_basepath + "/{ivid}", ctx -> {
 			epGetWG(ctx);
 		});
 	}
 
+	private static void registerGetWGList(Javalin app) {
+		app.get(wg_basepath, ctx -> {
+			epGetWGList(ctx);
+		});
+	}
+	
 	public static void epGet(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		AppContext appCtx = (AppContext) ctx.appData(ctxKey);

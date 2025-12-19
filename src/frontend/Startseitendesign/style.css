@@ -621,3 +621,8 @@ body {
   display: flex;
   gap: 5px;
 }
+
+.wg-name {
+  text-align: center;
+  font-size: 2em;
+}

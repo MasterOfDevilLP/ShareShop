@@ -170,6 +170,7 @@ new Vue({
         if (this.wgList.length > 0) {
           this.selectedWG = this.wgList[0].wid;
           this.selectedWGName = this.wgList[0].name;
+          localStorage.setItem("selectedWGName", this.selectedWGName);
           await this.fetchLists();
         }
       } catch (err) {
@@ -501,7 +502,7 @@ new Vue({
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             const code = jsQR(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
             if (code) {
-              alert("Gefundener QR Code: " + code.data);
+              window.location.href = code.data;
               stream.getTracks().forEach(track => track.stop());
               video.style.display = "none";
               return;

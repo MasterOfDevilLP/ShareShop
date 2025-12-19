@@ -58,32 +58,6 @@ new Vue({
       }
     },
 
-    /**
-     * WG auswählen 
-     */
-    selectWG(id) {
-      document.getElementById("dropdown-toggle").checked = false;
-
-      if (id === "__create__") {
-        const name = prompt("Name der neuen WG:");
-        if (!name) return;
-
-        const newId = this.wgList.length + 1;
-        const newWG = { id: newId, name };
-        this.wgList.push(newWG);
-        this.setWG(newWG);
-        return;
-      }
-
-      const wg = this.wgList.find((w) => w.id === id);
-      if (wg) {
-        this.setWG(wg);
-      }
-    },
-    setWG(wg) {
-      this.selectedWG = wg.id;
-      this.selectedWGName = wg.name;
-    },
   },
     
   // Endpoint zum Abrufen der WG-Benutzer ist noch nicht implementiert

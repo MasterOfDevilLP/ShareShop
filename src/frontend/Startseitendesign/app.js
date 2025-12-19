@@ -4,7 +4,7 @@
  * Zweck:
  * Diese Seite ermöglicht dem Benutzer, seine mehrere Wohngemeinschaften (WGs) zu verwalten,
  * Listen anzulegen und bestehende Listen zu verwalten. Einladungen können über Link
- * oder QR-Code geteilt werden. 
+ * oder QR-Code geteilt werden.
  *
  * Haupt-Features:
  *  - WG-Verwaltung: Anzeigen, Auswählen, Erstellen
@@ -32,36 +32,37 @@ new Vue({
 
     // Liste der WGs aus localStorage oder leer initialisieren
     wgList: JSON.parse(localStorage.getItem("wgList")) || [],
+    wgDropdownOpen: false,
 
     // aktuell ausgewählte WG
     selectedWG: null,
     selectedWGName: "",
+    isWGOpen: false,
 
     // Name für neue WG (im Modal)
     newGroupName: "",
 
     // Daten für neue Liste
     touched: { name: false }, // für Validierung
-    newList: { name: "", wg: "" }, 
+    newList: { name: "", wg: "" },
 
     // UI-Zustände
-    showPopup: false,            // Bottom Sheet "Liste hinzufügen"
+    showPopup: false, // Bottom Sheet "Liste hinzufügen"
     showCreateGroupModal: false, // Modal "Neue WG erstellen"
-    showListOptions: false,      // Bottom Sheet "Listenoptionen": inklusive Umbenennen/Löschen/Teilen/Kopieren
-    selectedList: null,          // aktuell ausgewählte Liste
-    showRenameModal: false,      // Modal "Liste umbenennen"
-    renameListName: "",          
+    showListOptions: false, // Bottom Sheet "Listenoptionen": inklusive Umbenennen/Löschen/Teilen/Kopieren
+    selectedList: null, // aktuell ausgewählte Liste
+    showRenameModal: false, // Modal "Liste umbenennen"
+    renameListName: "",
 
-    isWGOpen: false,             
-    showCopyToast: false,        // Kurzes "Link kopiert"-Toast
-    showEmailInput: false,       // Email Input anzeigen
-    emailToShare: "",            // Email für Teilen
+    //Invite / QR
+    showCopyToast: false, // Kurzes "Link kopiert"-Toast
+    showEmailInput: false, // Email Input anzeigen
+    emailToShare: "", // Email für Teilen
     QRCode: null,
-    qrCodeDataUrl: "",           // QR Code als Data URL
-    wgDropdownOpen: false,      
+    qrCodeDataUrl: "", // QR Code als Data URL
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI"), // Einladungslink vom Backend
-    token: "",                    // Token aus dem Einladungslink
-    frontendLink: "",             // Einladungslink, der an invite/invite.html weiterleitet
+    token: "", // Token aus dem Einladungslink
+    frontendLink: "", // Einladungslink, der an invite/invite.html weiterleitet
     showQRChoiceModal: false,
     baseUrl: window.location.origin, //baseURL von Invite Link
   },
@@ -76,25 +77,33 @@ new Vue({
   },
 
   mounted() {
-    this.fetchUserWG(); // WGs des Users laden
+    /**
+     * Lade alle WGs des Users
+     */
+    this.fetchUserWG();
+
+    /**
+     * Initialisiere Invite-Link (falls vorhanden)
+     */
     this.inviteLinkfromAPI = localStorage.getItem("inviteLinkfromAPI") || "";
 
     if (this.inviteLinkfromAPI) {
       this.token = this.inviteLinkfromAPI.split("/").pop();
       this.frontendLink = `${this.baseUrl}/invite/invite.html?token=${this.token}`;
       QRCode.toDataURL(this.frontendLink)
-        .then(url => {
+        .then((url) => {
           this.qrCodeDataUrl = url;
           localStorage.setItem("qrCodeDataUrl", url);
         })
-        .catch(err => console.error("Fehler beim Generieren des QR Codes:", err));
+        .catch((err) =>
+          console.error("Fehler beim Generieren des QR Codes:", err),
+        );
     }
 
     localStorage.setItem("frontendLink", this.frontendLink);
   },
 
   methods: {
-
     /**
      * QR-Code für den Invite-Link generieren
      */
@@ -108,7 +117,8 @@ new Vue({
             body: JSON.stringify({ expires: null, targetUser: null }),
           });
 
-          if (!resp.ok) throw new Error("Fehler beim Erstellen des Invite-Links");
+          if (!resp.ok)
+            throw new Error("Fehler beim Erstellen des Invite-Links");
 
           const data = await resp.json();
           this.frontendLink = `${window.location.origin}/invite/${data.id}`;
@@ -249,12 +259,16 @@ new Vue({
           console.warn("Response ist kein JSON:", e);
         }
 
-        if (!response.ok) throw new Error(data?.message || `Fehler ${response.status}`);
+        if (!response.ok)
+          throw new Error(data?.message || `Fehler ${response.status}`);
 
         // LocalStorage aktualisieren
         const key = `lists_${wgId}`;
         const saved = JSON.parse(localStorage.getItem(key)) || [];
-        const newItem = { id: data?.id || `temp-${Date.now()}`, name: this.newList.name.trim() };
+        const newItem = {
+          id: data?.id || `temp-${Date.now()}`,
+          name: this.newList.name.trim(),
+        };
         saved.push(newItem);
         localStorage.setItem(key, JSON.stringify(saved));
 
@@ -270,7 +284,8 @@ new Vue({
      * Kopiert den Invite-Link in die Zwischenablage
      */
     copyInviteLink() {
-      navigator.clipboard.writeText(this.frontendLink)
+      navigator.clipboard
+        .writeText(this.frontendLink)
         .then(() => {
           this.showCopyToast = true;
           setTimeout(() => (this.showCopyToast = false), 2000);
@@ -301,9 +316,9 @@ new Vue({
 
       const subject = encodeURIComponent("Einladung zur WG-Gruppe");
       const body =
-      encodeURIComponent("Hallo,\n\nHier ist dein Einladungslink:\n\n") +
-      this.frontendLink +
-      encodeURIComponent("\n\nViele Grüße");
+        encodeURIComponent("Hallo,\n\nHier ist dein Einladungslink:\n\n") +
+        this.frontendLink +
+        encodeURIComponent("\n\nViele Grüße");
 
       try {
         window.location.href = `mailto:${this.emailToShare}?subject=${subject}&body=${body}`;
@@ -352,7 +367,9 @@ new Vue({
       }
 
       try {
-        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, { credentials: "include" });
+        const response = await fetch(`${API_BASE}/wg/${wgId}/list`, {
+          credentials: "include",
+        });
 
         if (response.status === 403 || response.status === 404) {
           console.warn("Keine Listen für diese WG.");
@@ -363,7 +380,10 @@ new Vue({
         if (!response.ok) throw new Error("Fehler beim Laden der Listen");
 
         const data = await response.json();
-        this.lists = data.map((l) => ({ id: l.lid, name: l.name || "neue Liste" }));
+        this.lists = data.map((l) => ({
+          id: l.lid,
+          name: l.name || "neue Liste",
+        }));
       } catch (err) {
         console.error(err);
       }
@@ -387,8 +407,10 @@ new Vue({
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data?.message || `Fehler ${response.status}`);
-        if (!data || !data.id) throw new Error("Backend hat keine WG-ID zurückgegeben.");
+        if (!response.ok)
+          throw new Error(data?.message || `Fehler ${response.status}`);
+        if (!data || !data.id)
+          throw new Error("Backend hat keine WG-ID zurückgegeben.");
 
         const newGroup = { id: data.id, name: this.newGroupName.trim() };
         this.wgList.push(newGroup);
@@ -462,14 +484,13 @@ new Vue({
       }
     },
 
-
     openWGCreateModal() {
       this.showCreateGroupModal = true;
     },
 
     /**
      * Öffnet die ausgewählte Liste
-    */
+     */
     goToList(list) {
       localStorage.setItem("selectedWGID", this.selectedWG);
       localStorage.setItem("selectedListID", list.id);
@@ -489,7 +510,9 @@ new Vue({
         const video = this.$refs.video;
         video.style.display = "block";
 
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" },
+        });
         video.srcObject = stream;
 
         const canvas = document.createElement("canvas");
@@ -500,10 +523,14 @@ new Vue({
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const code = jsQR(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+            const code = jsQR(
+              context.getImageData(0, 0, canvas.width, canvas.height).data,
+              canvas.width,
+              canvas.height,
+            );
             if (code) {
               window.location.href = code.data;
-              stream.getTracks().forEach(track => track.stop());
+              stream.getTracks().forEach((track) => track.stop());
               video.style.display = "none";
               return;
             }
@@ -532,7 +559,11 @@ new Vue({
           canvas.height = img.height;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0);
-          const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+          const code = jsQR(
+            ctx.getImageData(0, 0, canvas.width, canvas.height).data,
+            canvas.width,
+            canvas.height,
+          );
           if (code) {
             window.location.href = code.data;
           } else {
@@ -542,6 +573,6 @@ new Vue({
         img.src = e.target.result;
       };
       reader.readAsDataURL(file);
-    }
+    },
   },
 });

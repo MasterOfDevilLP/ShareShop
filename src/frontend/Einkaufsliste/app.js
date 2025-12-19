@@ -508,7 +508,3 @@ new Vue({
     },
   },
 });
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/develop

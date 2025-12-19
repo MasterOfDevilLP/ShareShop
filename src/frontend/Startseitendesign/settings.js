@@ -2,6 +2,7 @@ import { API_BASE } from "../config.js";
 new Vue({
   el: "#setting",
   data: {
+    baseUrl: window.location.origin, //baseURL von Invite Link
     wgList: JSON.parse(localStorage.getItem("wgList")) || [],
     selectedWG: localStorage.getItem("selectedWG") || null,
     selectedWGName: localStorage.getItem("selectedWGName") || "WG auswählen",

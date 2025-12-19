@@ -58,12 +58,9 @@ new Vue({
     showCopyToast: false,                                       // Kurzes "Link kopiert"-Toast
     showEmailInput: false,                                      // Email Input anzeigen
     emailToShare: "",                                           // Email für Teilen
-    QRCode: null, 
-    qrCodeDataUrl: "",                                          // QR Code als Data URL   
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI"), // Einladungslink vom Backend
     token: "",                                                    // Token aus dem Einladungslink
     frontendLink: "",                                             // Einladungslink, der an invite/invite.html weiterleitet
-    showQRChoiceModal: false,
     baseUrl: window.location.origin,                             //baseURL von Invite Link
   },
 
@@ -90,12 +87,6 @@ new Vue({
     if (this.inviteLinkfromAPI) {
       this.token = this.inviteLinkfromAPI.split("/").pop();
       this.frontendLink = `${this.baseUrl}/invite/invite.html?token=${this.token}`;
-      QRCode.toDataURL(this.frontendLink)
-        .then(url => {
-          this.qrCodeDataUrl = url;
-          localStorage.setItem("qrCodeDataUrl", url);
-        })
-        .catch(err => console.error("Fehler beim Generieren des QR Codes:", err));
     }
 
     localStorage.setItem("frontendLink", this.frontendLink);
@@ -409,6 +400,33 @@ new Vue({
     /* =========================
      * Invite Link
      * ========================= */
+    async createInviteLink() {
+      try {
+        const response = await fetch(`${API_BASE}/wg/${this.selectedWG}/invite`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            expires: null,
+            targetUser: null,
+          }),
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `Fehler ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        this.inviteLinkfromAPI = `${window.location.origin}/invite/${data.id}`;
+        localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
+
+        console.log("InviteLink nach Erstellung:", this.inviteLinkfromAPI);
+      } catch (err) {
+        console.error("Invite Fehler:", err.message);
+      }
+    },
     /**
      * Kopiert den Invite-Link in die Zwischenablage
      */
@@ -458,112 +476,5 @@ new Vue({
       this.emailToShare = "";
       this.showEmailInput = false;
     },
-
-
-    /* =========================
-     * QR-Code
-     * ========================= */
-    /**
-     * QR-Code für den Invite-Link generieren
-     */
-    async generateQRCode() {
-      if (!this.frontendLink) {
-        try {
-          const resp = await fetch(`${API_BASE}/wg/${this.selectedWG}/invite`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ expires: null, targetUser: null }),
-          });
-
-          if (!resp.ok) throw new Error("Fehler beim Erstellen des Invite-Links");
-
-          const data = await resp.json();
-          this.frontendLink = `${window.location.origin}/invite/${data.id}`;
-          localStorage.setItem("inviteLinkfromAPI", this.frontendLink);
-        } catch (err) {
-          console.error(err);
-          alert("Invite-Link konnte nicht erstellt werden: " + err.message);
-          return;
-        }
-      }
-      try {
-        this.qrCodeDataUrl = await QRCode.toDataURL(this.frontendLink);
-        localStorage.setItem("qrCodeDataUrl", this.qrCodeDataUrl);
-        window.location.href = "wg_qr_code.html";
-      } catch (err) {
-        console.error("Fehler beim Generieren des QR Codes:", err);
-      }
-    },
-
-    /**
-     * QR-Code-Optionen anzeigen: scan oder generieren
-     */
-    scanOtherQR() {
-      this.showQRChoiceModal = true;
-    },
-    
-    /**
-     * Startet die Kamera für das Scannen von QR-Codes
-     */
-    async startCameraScan() {
-      try {
-        const video = this.$refs.video;
-        video.style.display = "block";
-
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        video.srcObject = stream;
-
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-
-        const scan = () => {
-          if (video.readyState === video.HAVE_ENOUGH_DATA) {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const code = jsQR(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
-            if (code) {
-              window.location.href = code.data;
-              stream.getTracks().forEach(track => track.stop());
-              video.style.display = "none";
-              return;
-            }
-          }
-          requestAnimationFrame(scan);
-        };
-        scan();
-      } catch (err) {
-        alert("Kamera konnte nicht geöffnet werden: " + err.message);
-      }
-    },
-
-    /**
-     * Verarbeitet den Datei-Upload für QR-Code Bilder
-     */
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
-          if (code) {
-            window.location.href = code.data;
-          } else {
-            alert("Kein QR Code gefunden!");
-          }
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
   },
 });

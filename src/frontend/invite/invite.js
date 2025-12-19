@@ -69,7 +69,7 @@ new Vue({
 
         this.successMsg = "Du bist jetzt Mitglied der WG!";
         setTimeout(() => {
-          window.location.href = "../Startseitendesign/startseite.html";
+          window.location.href = "..index.html";
         }, 1500);
       } catch (err) {
         console.error(err);

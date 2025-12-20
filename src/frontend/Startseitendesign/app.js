@@ -18,7 +18,6 @@
  */
 
 import { API_BASE } from "../config.js";
-console.log("API_BASE=", API_BASE);
 
 new Vue({
   el: "#app",
@@ -164,7 +163,6 @@ new Vue({
 
       this.selectedWG = wg.wid;
       this.selectedWGName = wg.name;
-      console.log("Ausgewählte WG:", this.selectedWG, this.selectedWGName);
 
       localStorage.setItem("selectedWG", wg.wid);
       localStorage.setItem("selectedWGName", wg.name);
@@ -425,7 +423,6 @@ new Vue({
         this.inviteLinkfromAPI = `${window.location.origin}/invite/${data.id}`;
         localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
 
-        console.log("InviteLink nach Erstellung:", this.inviteLinkfromAPI);
       } catch (err) {
         console.error("Invite Fehler:", err.message);
       }

@@ -152,7 +152,7 @@ new Vue({
             description: item.description,
             price: item.price,
           }));
-          console.log("Produkte geladen:", this.products);
+          console.log("Produkte ist erfolgreich geladen");
         });
     },
 
@@ -192,7 +192,7 @@ new Vue({
             return;
           }
           this.listItems = this.parseListItems(data);
-          console.log("Einkaufsliste geladen:", this.listItems);
+          console.log("Einkaufsliste ist efolreich geladen");
         })
         .catch((err) =>
           console.error("Einkaufsliste konnte nicht geladen werden", err),

@@ -14,11 +14,7 @@ new Vue({
     }
   },
   mounted() {
-    console.log("Mounted: selectedWG =", this.selectedWG);
-
-    this.createInviteLink().then(() => {
-      console.log("InviteLink nach Erstellung:", this.inviteLinkfromAPI);
-    });
+    this.createInviteLink();
   },
 
   methods: {
@@ -51,28 +47,10 @@ new Vue({
 
         this.inviteLinkfromAPI = `${window.location.origin}/invite/${data.id}`;
         localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
-
-        console.log("InviteLink nach Erstellung:", this.inviteLinkfromAPI);
       } catch (err) {
         console.error("Invite Fehler:", err.message);
       }
     },
 
   },
-    
-  // Endpoint zum Abrufen der WG-Benutzer ist noch nicht implementiert
-    // async fetchWGUsers() {
-    // try {
-    //     const wid = this.selectedWG;
-    //     const response = await fetch(`${API_BASE}/wg/${wid}/user`);
-    //     if (!response.ok) throw new Error("Konnte Users nicht laden");
-
-    //     const users = await response.json();
-    //     console.log("Users:", users);
-    //     this.wgUsers = users;
-    // } catch (error) {
-    //     console.error(error);
-    // }
-    // console.log("WG",this.selectedWG);
-    // },
 });

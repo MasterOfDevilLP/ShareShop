@@ -1,5 +1,4 @@
 import { API_BASE } from "../config.js";
-console.log("API_BASE=", API_BASE);
 
 new Vue({
   el: "#app",
@@ -18,7 +17,6 @@ new Vue({
     // Token aus der URL abrufen
     const params = new URLSearchParams(window.location.search);
     this.ivid = params.get("token");
-    console.log("ivid=", this.ivid);
 
     if (!this.ivid) {
       this.errorMsg = "Ungültiger Invite-Link.";

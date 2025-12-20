@@ -64,6 +64,9 @@ new Vue({
     baseUrl: window.location.origin,                             //baseURL von Invite Link
   },
 
+  /**
+   * Berechnete Eigenschaften
+   */
   computed: {
     /**
      * Prüft, ob die neue Liste gültig ist (Name nicht leer)

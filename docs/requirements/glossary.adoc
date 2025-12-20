@@ -12,7 +12,7 @@
 include::../_includes/default-attributes.inc.adoc[]
 
 == Einführung
-In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet der Einkaufslisten-App „ShareShop“ definiert. Zur besseren Übersichtlichkeit sind Begriffe, Abkürzungen und Datendefinitionen gesondert aufgeführt.
+Dieses Glossar erklärt die wichtigsten Begriffe der Einkaufslisten-App „ShareShop“ aus Sicht der Nutzer..
 
 [#begriffe]
 == Begriffe
@@ -21,11 +21,27 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet der
 | Begriff | Definition und Erläuterung | Synonyme
 
 | Startseite
-| Zentrale Übersicht mit WG-Auswahl, Listen, Templates und Möglichkeit zum Erstellen neuer Listen.
+| Zentrale Übersicht mit folgenden Funktionen: Neue WG erstellen, WG auswählen, Einkaufslisten der ausgewählten WG anzeigen, Templates nutzen und neue Einkaufslisten erstellen..
 | Übersicht, WG-Liste
 
 | Einkaufsliste
 | Liste mit Produkten, die eine WG gemeinsam einkaufen möchte.
+|
+
+| Vorlage
+| Vorgefertigte Einkaufsliste, die wiederverwendet werden kann, um schnell neue Listen zu erstellen. Hilft Nutzern, häufig benötigte Items ohne manuelle Eingabe hinzuzufügen.
+| Template, Liste-Vorlage
+
+| Katergorie
+| Gruppierung von Items, z.B. Obst, Getränke, Putzmittel
+|
+
+| Invite-Link
+| Spezieller Link, der es neuen Mitgliedern ermöglicht, einer WG beizutreten
+| Einladung, Beitrittslink
+
+| QR-Code
+|Visuelle Darstellung des Invite-Links als QR-Code. Mitglieder können den Code scannen, um schnell der WG beizutreten.
 |
 
 | Einkaufsmodus
@@ -36,8 +52,20 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet der
 | Funktion zum Abgleichen von Ausgaben, etwa bei geteilten Einkäufen oder Rechnungen.
 |
 
-| Item
-| Ein Eintrag innerhalb einer Liste mit Name, Beschreibung und Preis.
+| Rechnungen
+| Seite, auf der Nutzer sehen, wie Ausgaben zwischen WG-Mitgliedern aufgeteilt wurden
+| Ausgabenübersicht, Kostenübersicht
+
+| Kalender
+| Zeigt wichtige Termine oder wiederkehrende Einkaufsaktionen an
+| Terminübersicht, Planungskalender
+
+| Rezepte
+| Sammlung von Kochanleitungen oder Rezeptideen, die in Einkaufslisten integriert werden können
+| Kochanleitungen, Kochideen
+
+| Produkt/Item
+| Ein Eintrag innerhalb einer Liste mit Name, Kategorie, Menge und Preis.
 | Artikel
 
 | User
@@ -58,74 +86,6 @@ In diesem Dokument werden die wesentlichen Begriffe aus dem Anwendungsgebiet der
 
 |===
 
-[#abkürzungenakronyme]
-== Abkürzungen und Akronyme
-[%header]
-|===
-| Abkürzung | Bedeutung | Erläuterung
-
-| DB | Datenbank | Grundlage der persistenten Speicherung im Backend.
-| ORM | Objektrelationaler Mapper | Übersetzt Java-Objekte in Datenbankeinträge.
-| UUID | Universally Unique Identifier | 128bit eindeutige Kennung für Objekte wie User oder WG.
-| CRUD | Create Read Update Delete | Grundlegende Operationen auf Ressourcen.
-| cwd | current working directory | Aktuelles Arbeitsverzeichnis des Prozesses.
-| PWA | progressive web app | App, welche aus Browser downloadbar ist.
-|===
-
-[#verzeichnisdatenstruktur]
-== Verzeichnis der Datenstrukturen
-[%header]
-|===
-| Bezeichnung | Definition | Format | Gültigkeitsregeln | Aliase
-
-| Anmeldedaten
-| Zusammensetzung von Benutzername und Passwort.
-| String
-| E-Mail-Adresse muss `@`-Zeichen enthalten, Passwort gehashed.
-| Login
-
-| User
-| Benutzer mit ID, Name, E-Mail und Passwort.
-| JSON-Objekt
-| Eindeutige UUID, Passwort gehashed, E-Mail eindeutig, .
-| Nutzer, Benutzer
-
-| WG
-| Gruppe mit eindeutiger ID, Name und Erstellungsdatum.
-| JSON-Objekt
-| UUID eindeutig, Name max. 16 Zeichen.
-| Wohngemeinschaft
-
-| Einkaufsliste
-| Liste von Items innerhalb einer WG.
-| JSON-Objekt
-| Muss WG zugeordnet sein, Creator-ID notwendig.
-| Liste
-
-| Item
-| Produkt mit Namen, Beschreibung, Preis.
-| JSON-Objekt
-| Preis ≥ 0, Beschreibung optional.
-| Artikel
-
-| Item-Zuordnung
-| Zuweisung eines Items zu einer Liste mit Menge.
-| JSON-Objekt
-| gültige Item- und Listen-ID.
-| Allocation
-
-| Änderung
-| Repräsentiert eine Aktion wie Hinzufügen, Entfernen oder Abhaken.
-| JSON-Objekt
-| Muss gültigen Item- oder Listenkontext haben.
-| Change-Log, Historie
-
-| ID
-| 128bit Identifikatoren für verschiedene Objekte.
-| UUID, Stringdarstellung als URN
-| Muss eine gültige UUID nach RFC4122 sein.
-| Identifier
-|===
 
 == Domänenmodell
-image::ShareShop_ERM.png[width=max, title="Entity-Relationship-Modell der Einkaufslistenanwendung"]
+image::Domaenenmodell.png[width=max, title="Entity-Relationship-Modell der Einkaufslistenanwendung"]

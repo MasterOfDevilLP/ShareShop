@@ -5,20 +5,7 @@ const LanguageStore = Vue.reactive({
 });
 
 // === API and Constants ===
-import { API_BASE_URL } from "../config-docker.js";
-
-const LOCAL_BACKEND = "http://127.0.0.1:8001";
-const isLocal =
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1";
-
-// trailing slash entfernen, damit `${API}/user/login` sauber ist
-const REMOTE_BASE = API_BASE_URL.endsWith("/")
-  ? API_BASE_URL.slice(0, -1)
-  : API_BASE_URL;
-
-const API = isLocal ? LOCAL_BACKEND : REMOTE_BASE;
-;
+import { API_BASE } from "../config.js";
 
 const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
 const { reactive, createApp } = Vue;
@@ -269,7 +256,7 @@ const LoginForm = {
 
             try {
                 // await delay(3000); 
-                const res = await fetch(`${API}/user/login`, {
+                const res = await fetch(`${API_BASE}/user/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: this.email, password: this.password }),
@@ -380,7 +367,7 @@ const RegisterForm = {
             this.isLoading = true; // activate loading state
 
             try {
-                const res = await fetch(`${API}/user/create`, {
+                const res = await fetch(`${API_BASE}/user/create`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: this.email, password: this.password }),

@@ -2,25 +2,25 @@ import { API_BASE } from "../config.js";
 new Vue({
   el: "#setting",
   data: {
+    baseUrl: window.location.origin, //baseURL von Invite Link
     wgList: JSON.parse(localStorage.getItem("wgList")) || [],
-    selectedWG: localStorage.getItem("selectedWGID") || null,
+    selectedWG: localStorage.getItem("selectedWG") || null,
     selectedWGName: localStorage.getItem("selectedWGName") || "WG auswählen",
     newGroupName: "",
     wgUsers: [],
-    inviteLink: "",
+    inviteLinkfromAPI: "",
+    showError: function (msg) {
+      console.error("Fehler:", msg);
+    }
   },
   mounted() {
-    console.log("Mounted: selectedWG =", this.selectedWG);
-
-    this.createInviteLink().then(() => {
-      console.log("InviteLink nach Erstellung:", this.inviteLink);
-    });
+    this.createInviteLink();
   },
 
   methods: {
-    // ─────────────────────────────
-    // Einladungslink erstellen & teilen
-    // ─────────────────────────────
+    /**
+     * Einladungslink erstellen & teilen
+     */
     async createInviteLink() {
       if (!this.selectedWG) {
         this.showError("Bitte zuerst eine WG auswählen.");
@@ -45,53 +45,12 @@ new Vue({
 
         const data = await response.json();
 
-        this.inviteLink = `${window.location.origin}/invite/${data.id}`;
-        localStorage.setItem("inviteLink", this.inviteLink);
-
-        console.log("InviteLink nach Erstellung:", this.inviteLink);
+        this.inviteLinkfromAPI = `${window.location.origin}/invite/${data.id}`;
+        localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
       } catch (err) {
         console.error("Invite Fehler:", err.message);
       }
     },
 
-    selectWG(id) {
-      document.getElementById("dropdown-toggle").checked = false;
-
-      if (id === "__create__") {
-        const name = prompt("Name der neuen WG:");
-        if (!name) return;
-
-        const newId = this.wgList.length + 1;
-        const newWG = { id: newId, name };
-        this.wgList.push(newWG);
-        this.setWG(newWG);
-        return;
-      }
-
-      const wg = this.wgList.find((w) => w.id === id);
-      if (wg) {
-        this.setWG(wg);
-      }
-    },
-    setWG(wg) {
-      this.selectedWG = wg.id;
-      this.selectedWGName = wg.name;
-    },
   },
-    
-  // Endpoint zum Abrufen der WG-Benutzer ist noch nicht implementiert
-    // async fetchWGUsers() {
-    // try {
-    //     const wid = this.selectedWG;
-    //     const response = await fetch(`${API_BASE}/wg/${wid}/user`);
-    //     if (!response.ok) throw new Error("Konnte Users nicht laden");
-
-    //     const users = await response.json();
-    //     console.log("Users:", users);
-    //     this.wgUsers = users;
-    // } catch (error) {
-    //     console.error(error);
-    // }
-    // console.log("WG",this.selectedWG);
-    // },
 });

@@ -25,6 +25,7 @@ createApp({
   },
 
   methods: {
+    // Hilfsmethode für Übersetzungen
     t,
 
     // Theme wechseln (unvollständig)
@@ -54,6 +55,8 @@ createApp({
       localStorage.removeItem("userToken");
       localStorage.removeItem("userName");
       localStorage.removeItem("userEmail");
+      localStorage.removeItem("inviteLinkfromAPI");
+      localStorage.removeItem("frontendLink");
 
       //Versuch, Backend zu informieren (optional)
       try {
@@ -83,7 +86,7 @@ createApp({
 
       //Weiterleitung
       setTimeout(() => {
-        window.location.href = "../Login/index.html";
+        window.location.href = "../index.html";
       }, 2000);
     },
   },

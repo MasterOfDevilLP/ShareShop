@@ -264,7 +264,13 @@ const LoginForm = {
                 if (res.ok) {
                     this.successMessage = t('SUCCESS_LOGIN');
                     setTimeout(() => {
+                        const redirectUrl = localStorage.getItem("redirectAfterLogin");
+                    if (redirectUrl) {
+                        localStorage.removeItem("redirectAfterLogin");
+                        window.location.href = redirectUrl; // go back to invite site
+                    } else {
                         window.location.href = '../Startseitendesign/startseite.html';
+                    }
                     }, 1500);
                 } else {
                     this.handleApiError(res, false);

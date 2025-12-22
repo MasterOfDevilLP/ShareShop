@@ -31,17 +31,23 @@
           <!-- WG-Bild & Beschreibung -->
           <div v-if="selectedWGDetails" class="wg-info-box">
             <img
-              v-if="selectedWGDetails.image"
-              :src="selectedWGDetails.image"
+              v-if="(selectedWGDetails && selectedWGDetails.image) || wgImageLocal"
+              :src="(selectedWGDetails && selectedWGDetails.image) || wgImageLocal"
               alt="WG Bild"
               class="wg-image"
             />
+
             <div class="wg-text">
               <h4 class="wg-name">{{ selectedWGDetails.name }}</h4>
-              <p v-if="selectedWGDetails.description" class="wg-description">
-                {{ selectedWGDetails.description }}
+
+              <p
+                v-if="(selectedWGDetails && selectedWGDetails.description) || wgDescLocal"
+                class="wg-description"
+              >
+                {{ (selectedWGDetails && selectedWGDetails.description) || wgDescLocal }}
               </p>
             </div>
+
           </div>
 
           <!-- Titelzeile + Dropdown -->

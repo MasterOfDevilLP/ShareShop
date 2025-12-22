@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Startseite</title>
+
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="wgForm.css" />
     <link
@@ -12,8 +13,9 @@
     />
     <meta name="theme-color" content="#ffffff" />
   </head>
+
   <body>
-    <!-- Load Vue.js -->
+    <!-- Vue 2 -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 
     <div id="app">
@@ -21,6 +23,7 @@
         <!-- Header -->
         <header class="app-header">
           <div class="header-row">
+            <!-- WG Dropdown -->
             <div class="wg-selector">
               <div class="dropdown">
                 <input
@@ -29,32 +32,34 @@
                   class="dropdown-checkbox"
                   v-model="wgDropdownOpen"
                 />
+
                 <label for="dropdown-toggle" class="dropdown-label">
-                  {{ selectedWGName || 'WG auswählen' }}
+                  {{ selectedWGName || "WG auswählen" }}
                 </label>
+
                 <ul class="dropdown-options" v-if="wgDropdownOpen">
                   <li
                     v-for="wg in wgList"
-                    :key="wg.wid"
-                    @click="selectWG(wg.wid)"
+                    :key="wgIdOf(wg)"
+                    @click="selectWG(wgIdOf(wg))"
                   >
                     {{ wg.name }}
                   </li>
+
                   <li class="divider">──────────</li>
+
                   <li @click="selectWG('__create__')">+ neue Gruppe</li>
                 </ul>
               </div>
             </div>
 
-            <div class="icon-group" >
+            <!-- Icons rechts -->
+            <div class="icon-group">
               <a href="wg_qr_code.html" class="qr-btn" title="QR">
-                <img src="icons/barcode.png" class="nav-icon" />
+                <img src="icons/barcode.png" class="nav-icon" alt="QR" />
               </a>
-              <a
-                href="settings.html"
-                class="settings-btn"
-                title="Einstellungen"
-              >
+
+              <a href="settings.html" class="settings-btn" title="Einstellungen">
                 <img
                   src="icons/settings.svg"
                   alt="Einstellungen"
@@ -65,7 +70,7 @@
           </div>
         </header>
 
-        <!-- Modal pop up neue WG erstellen -->
+        <!-- Modal: Neue WG erstellen -->
         <div v-if="showCreateGroupModal" class="modal-overlay">
           <div class="modal-content">
             <h3>Neue WG erstellen</h3>
@@ -83,13 +88,13 @@
               v-model.trim="newGroup.description"
               @input="validateGroupForm"
             ></textarea>
-            <span v-if="errors.description" class="error-text"
-              >{{ errors.description }}</span
-            >
+            <span v-if="errors.description" class="error-text">
+              {{ errors.description }}
+            </span>
 
             <label>Bild (optional)</label>
             <input type="file" accept="image/*" @change="handleImageUpload" />
-            <img v-if="newGroup.preview" :src="newGroup.preview" width="100" />
+            <img v-if="newGroup.preview" :src="newGroup.preview" width="100" alt="Vorschau" />
 
             <div class="btn-container">
               <button
@@ -97,8 +102,9 @@
                 :disabled="isSaving || !formValid"
                 @click="saveGroup"
               >
-                {{ isSaving ? 'Speichert...' : 'Erstellen' }}
+                {{ isSaving ? "Speichert..." : "Erstellen" }}
               </button>
+
               <button class="btn btn-pink" @click="closeModal">
                 Abbrechen
               </button>
@@ -109,7 +115,7 @@
           </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Content -->
         <main class="app-content">
           <div class="shopping-list">
             <div
@@ -119,7 +125,8 @@
               @click="goToList(list)"
             >
               <div class="list-left">
-                <img src="icons/Wagen.png" alt="Cart Icon" class="nav-icon" />
+                <img src="icons/Wagen.png" alt="Warenkorb" class="nav-icon" />
+
                 <div class="list-text">
                   <div class="list-title">{{ list.name }}</div>
                 </div>
@@ -131,30 +138,33 @@
             </div>
           </div>
         </main>
-        
-        <!-- Button: neue Liste hinzufugen -->
+
+        <!-- Button: neue Liste hinzufügen -->
         <button class="add-list" @click="add_list">
           <span>+</span> Liste hinzufügen
         </button>
 
-        <!-- Bottom sheet Liste hinzufügen  (erweitert)-->
+        <!-- Bottom Sheet: Liste hinzufügen -->
         <div class="bottom-sheet" :class="{ visible: showPopup }">
           <div class="sheet-header">
             Neue Liste erstellen
             <button class="close-btn" @click="closePopup">✕</button>
           </div>
+
           <div class="sheet-body">
             <div class="form-label-row">
               <label>Listenname *</label>
-              <span class="err-inline" v-if="touched.name && !newList.name"
-                >Pflichtfeld</span
-              >
+              <span class="err-inline" v-if="touched.name && !newList.name">
+                Pflichtfeld
+              </span>
             </div>
+
             <input
               type="text"
               v-model="newList.name"
               @blur="touched.name = true"
             />
+
             <p>WG: {{ selectedWGName }}</p>
 
             <button id="saveList" :disabled="!isListValid" @click="saveList">
@@ -163,25 +173,29 @@
           </div>
         </div>
 
-        <!-- Bottom Sheet für Listenoptionen -->
+        <!-- Bottom Sheet: Listenoptionen -->
         <div class="bottom-sheet full" :class="{ visible: showListOptions }">
           <div class="sheet-header">
             Liste verwalten
             <button class="close-btn" @click="closeListOptions">✕</button>
           </div>
+
           <div class="sheet-body list-actions">
             <button @click="openRenameModal">
               <img src="icons/pen.svg" alt="Bearbeiten" />
               <span>Umbenennen</span>
             </button>
+
             <button disabled>
               <img src="icons/external.svg" alt="Teilen" />
               <span>Teilen</span>
             </button>
+
             <button disabled>
               <img src="icons/copy.svg" alt="Kopieren" />
               <span>Kopieren</span>
             </button>
+
             <button
               class="danger"
               @click="selectedList && deleteList(selectedList.id)"
@@ -196,10 +210,9 @@
         <div v-if="showRenameModal" class="modal-overlay">
           <div class="modal-content">
             <h3>Liste umbenennen</h3>
-            <input
-              v-model="renameListName"
-              placeholder="Neuer Name der Liste"
-            />
+
+            <input v-model="renameListName" placeholder="Neuer Name der Liste" />
+
             <div class="modal-actions">
               <button @click="renameList">Speichern</button>
               <button @click="showRenameModal = false">Abbrechen</button>
@@ -209,51 +222,39 @@
 
         <!-- Navigation -->
         <nav class="bottom-nav">
-          <button class="nav-item active">
-            <img
-              src="icons/Liste.png"
-              alt="Start"
-              class="nav-icon"
-            /><br />Liste
+          <button class="nav-item active" type="button">
+            <img src="icons/Liste.png" alt="Liste" class="nav-icon" /><br />
+            Liste
           </button>
-          <button class="nav-item">
-            <img
-              src="icons/Rechnung.png"
-              alt="Start"
-              class="nav-icon"
-            /><br />Rechnungen
+
+          <button class="nav-item" type="button">
+            <img src="icons/Rechnung.png" alt="Rechnungen" class="nav-icon" /><br />
+            Rechnungen
           </button>
-          <button class="nav-item">
-            <img
-              src="icons/Kalender.png"
-              alt="Start"
-              class="nav-icon"
-            /><br />Kalender
+
+          <button class="nav-item" type="button">
+            <img src="icons/Kalender.png" alt="Kalender" class="nav-icon" /><br />
+            Kalender
           </button>
-          <button class="nav-item">
-            <img
-              src="icons/Rezepte.png"
-              alt="Start"
-              class="nav-icon"
-            /><br />Rezepte
+
+          <button class="nav-item" type="button">
+            <img src="icons/Rezepte.png" alt="Rezepte" class="nav-icon" /><br />
+            Rezepte
           </button>
-          <button class="nav-item">
-            <a href="../logout/logout.html" class="nav-item">
-              <img
-                src="icons/Profil.png"
-                alt="Profil"
-                class="nav-icon"
-              /><br />Profil
-            </a>
-          </button>
+
+          <!-- Profil als Link (kein <a> im <button>) -->
+          <a href="../logout/logout.html" class="nav-item">
+            <img src="icons/Profil.png" alt="Profil" class="nav-icon" /><br />
+            Profil
+          </a>
         </nav>
       </div>
     </div>
 
-    <!-- QRCode library -->
+    <!-- Optional: QRCode lib (nur nötig wenn du es hier wirklich nutzt) -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
-    <!-- type model damit die config datei damit vue richtig gerendert wird -->
+    <!-- App Script -->
     <script type="module" src="app.js"></script>
   </body>
 </html>

@@ -17,17 +17,7 @@ public class CreateInviteRequest implements RequestBody {
 	public boolean validate() {
 		if(expires == null) {
 			expires = -1l;
-<<<<<<< HEAD
-		}/* else {
-			long now = Instant.now().toEpochMilli();
-			if(expires <= now) {
-				// expires in the past
-				return false;
-			}
-		}*/
-=======
 		}
->>>>>>> origin/develop
 		return true;
 	}
 }

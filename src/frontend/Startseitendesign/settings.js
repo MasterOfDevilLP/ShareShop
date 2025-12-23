@@ -1,3 +1,24 @@
+/**
+ * Einstellungen (settings.js) – WG Verwaltung
+ *
+ * Zweck:
+ * Diese Seite dient zur Verwaltung der aktuell ausgewählten WG in den Einstellungen.
+ * Der Benutzer kann zwischen seinen WGs wechseln, einen Einladungslink erzeugen/teilen
+ * und die WG verlassen.
+ *
+ * Haupt-Features:
+ *  - WG laden & auswählen: User holen, WG-Details laden, Auswahl im Dropdown speichern
+ *  - Einladungen: Invite-Link per API erzeugen und im UI zum Kopieren/Teilen bereitstellen
+ *  - WG verlassen: User aus der ausgewählten WG entfernen (Backend) + lokale Daten bereinigen
+ *
+ * Hinweise:
+ *  - Vue.js übernimmt State + UI-Binding
+ *  - API-Aufrufe laufen über API_BASE mit Cookie-Session (credentials: "include")
+ *  - Persistenz über localStorage: wgList, selectedWG, selectedWGName, inviteLinkfromAPI
+ *  - WG Bild/Beschreibung werden optional lokal geladen (wg_image_<id>, wg_desc_<id>)
+ */
+
+
 console.log("settings.js loaded");
 import { API_BASE } from "../config.js";
 
@@ -150,7 +171,7 @@ new Vue({
   }
 
   try {
-    // user nochmal holen (Quelle der Wahrheit)
+    // user nochmal holen
     const meRes = await fetch(`${API_BASE}/user`, {
       method: "GET",
       credentials: "include",

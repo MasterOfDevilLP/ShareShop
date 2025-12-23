@@ -217,6 +217,7 @@ public class WG {
         while (rs.next()) {
             users.add(new User(connectionHandler, (UUID)rs.getObject("userid")));
         }
+        selectStmnt.close();
         users.trimToSize();
         return users;
     }

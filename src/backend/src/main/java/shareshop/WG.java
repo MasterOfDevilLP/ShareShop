@@ -203,6 +203,25 @@ public class WG {
     }
 
     /**
+     * Returns an ArrayList containing all users inside the WG. The List is empty if there are no users inside the WG (which shouldn't happen)
+     * @return ArrayList<User>
+     * @throws SQLException
+     */
+    public ArrayList<User> getUsers() throws SQLException {
+        connectionHandler.makeSureItsOpen();
+        ArrayList<User> users = new ArrayList<User>();
+        String selectString = "SELECT userid FROM userallocation WHERE wgid = ?";
+        PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
+        selectStmnt.setObject(1, this.wgID);
+        ResultSet rs = selectStmnt.executeQuery();
+        while (rs.next()) {
+            users.add(new User(connectionHandler, (UUID)rs.getObject("userid")));
+        }
+        users.trimToSize();
+        return users;
+    }
+
+    /**
      * adds a user to the wg and sets owner flag (true if it is the first user to join)
      * @param user
      * @throws SQLException

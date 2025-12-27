@@ -113,15 +113,16 @@
             <span class="settings-option-text">Produkte sortieren</span>
           </div>
 
-         <!-- WG verlassen-->
+        <!-- WG verlassen (nur Nicht-Besitzer klickbar) -->
         <div
           class="settings-option-row delete-row"
-          :class="{ disabled: !isOwner }"
-          @click="requireOwner(leaveWG)"
+          :class="{ disabled: isOwner }"
+          @click="leaveWG"
         >
           <img src="icons/group_exit.png" class="settings-icon" />
           <span class="settings-delete-text">WG verlassen</span>
         </div>
+
 
         <!-- WG löschen (nur Besitzer klickbar) -->
         <div

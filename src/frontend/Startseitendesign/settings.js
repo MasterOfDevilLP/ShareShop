@@ -16,18 +16,21 @@
  *  - API-Aufrufe laufen über API_BASE mit Cookie-Session (credentials: "include")
  *  - Persistenz über localStorage: wgList, selectedWG, selectedWGName, inviteLinkfromAPI
  *  - WG Bild/Beschreibung werden optional lokal geladen (wg_image_<id>, wg_desc_<id>)
- */
 
+ *  Ownerrechte sichtbar/nutzbar machen (Frontend-only)
+ * - Ownerstatus wird über "harmlosen" PATCH-Check ermittelt:
+ *   403 => kein Owner, ok => Owner
+ * - Ownerstatus wird in State gespeichert (isOwner) + optional gecached
+ * - UI reagiert auf WG-Wechsel (watch selectedWG)
+ * - Nicht-Owner bekommen Feedback via requireOwner()
+ */
 
 console.log("settings.js loaded");
 import { API_BASE } from "../config.js";
 
 function normalizeWG(wg) {
   if (!wg) return null;
-  return {
-    ...wg,
-    id: wg.id ?? wg.wid ?? wg._id,
-  };
+  return { ...wg, id: wg.id ?? wg.wid ?? wg._id };
 }
 
 new Vue({
@@ -41,10 +44,14 @@ new Vue({
     selectedWGName: localStorage.getItem("selectedWGName") || "WG auswählen",
 
     userId: null,
-    newGroupName: "",
     wgUsers: [],
 
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
+
+    // ✅ Subtask: Besitzerstatus im State speichern
+    isOwner: false,
+    ownerCheckInFlight: false,
+    ownerCache: JSON.parse(localStorage.getItem("ownerCache") || "{}"),
 
     showError(msg) {
       console.error("Fehler:", msg);
@@ -53,11 +60,21 @@ new Vue({
 
   async mounted() {
     await this.loadUserAndWGs();
+    // Ownerstatus nach initialem Load prüfen
+    await this.refreshOwnerStatus(true);
+
     if (this.selectedWG) await this.createInviteLink();
   },
 
+  // Subtask: UI aktualisieren bei Besitzerwechsel (WG-Wechsel)
+  watch: {
+    selectedWG(newVal, oldVal) {
+      if (!newVal || String(newVal) === String(oldVal)) return;
+      this.refreshOwnerStatus(true); // force refresh bei WG-Wechsel
+    },
+  },
+
   computed: {
-    
     wgImageLocal() {
       if (!this.selectedWG) return null;
       return localStorage.getItem(`wg_image_${this.selectedWG}`) || null;
@@ -77,14 +94,62 @@ new Vue({
   },
 
   methods: {
+    // Subtask: Rückmeldung, wenn Nicht-Besitzer verbotene Aktion versucht
+    requireOwner(fn) {
+      if (!this.isOwner) {
+        alert("Nur der Besitzer darf diese Aktion ausführen.");
+        return;
+      }
+      fn && fn();
+    },
+
+    // Subtask: Besitzerstatus für aktuellen Nutzer abrufen
+    async refreshOwnerStatus(force = false) {
+      if (!this.selectedWG || !this.selectedWGName) {
+        this.isOwner = false;
+        return;
+      }
+
+      const key = String(this.selectedWG);
+
+      // Cache zuerst (kein Flackern)
+      if (!force && this.ownerCache[key] !== undefined) {
+        this.isOwner = !!this.ownerCache[key];
+        return;
+      }
+
+      if (this.ownerCheckInFlight) return;
+      this.ownerCheckInFlight = true;
+
+      try {
+        // “harmloser” Check: PATCH mit gleichem Namen
+        const res = await fetch(`${API_BASE}/wg/${this.selectedWG}`, {
+          method: "PATCH",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: this.selectedWGName }),
+        });
+
+        const allowed = res.ok && res.status !== 403;
+        this.isOwner = allowed;
+
+        this.ownerCache[key] = allowed;
+        localStorage.setItem("ownerCache", JSON.stringify(this.ownerCache));
+      } catch (e) {
+        this.isOwner = false;
+      } finally {
+        this.ownerCheckInFlight = false;
+      }
+    },
+
     async loadUserAndWGs() {
-      // 1) user holen
       const meRes = await fetch(`${API_BASE}/user`, {
         credentials: "include",
       });
 
       if (!meRes.ok) {
         this.userId = null;
+        this.isOwner = false;
         this.wgList = [];
         this.selectedWG = null;
         this.selectedWGName = "WG auswählen";
@@ -96,7 +161,6 @@ new Vue({
       const me = await meRes.json().catch(() => ({}));
       this.userId = me?.uid ?? me?.id ?? null;
 
-      // 2) wid-liste
       let wids = me?.wid;
       if (typeof wids === "string") {
         wids = wids
@@ -106,7 +170,6 @@ new Vue({
       }
       if (!Array.isArray(wids)) wids = [];
 
-      // 3) wg-details laden
       const wgs = [];
       for (const wid of wids) {
         try {
@@ -126,7 +189,6 @@ new Vue({
       this.wgList = wgs;
       localStorage.setItem("wgList", JSON.stringify(this.wgList));
 
-      // 4) selectedWG validieren
       const savedWG = localStorage.getItem("selectedWG");
       const exists =
         savedWG && this.wgList.some((w) => String(w.id) === String(savedWG));
@@ -162,73 +224,142 @@ new Vue({
       localStorage.setItem("selectedWG", this.selectedWG);
       localStorage.setItem("selectedWGName", this.selectedWGName);
 
+      // Invite Link neu (Ownerstatus kommt über watch selectedWG)
       this.createInviteLink();
     },
+
     async leaveWG() {
-  if (!this.selectedWG) {
-    alert("Keine WG ausgewählt.");
-    return;
-  }
+      if (!this.selectedWG) {
+        alert("Keine WG ausgewählt.");
+        return;
+      }
+
+      // optional: Owner soll nicht “einfach so” verlassen
+      if (this.isOwner) {
+        alert(
+          "Du bist Besitzer dieser WG. Übertrage zuerst die Besitzerrolle oder lösche die WG."
+        );
+        return;
+      }
+
+      try {
+        const meRes = await fetch(`${API_BASE}/user`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!meRes.ok) {
+          alert("Nicht eingeloggt (GET /user fehlgeschlagen).");
+          this.userId = null;
+          return;
+        }
+
+        const me = await meRes.json().catch(() => ({}));
+        const uid = me?.uid ?? me?.id ?? null;
+
+        if (!uid) {
+          alert("User-ID fehlt in /user Response.");
+          return;
+        }
+
+        this.userId = uid;
+
+        const wg = this.wgList.find(
+          (w) => String(w.id) === String(this.selectedWG)
+        );
+        const wgName = wg?.name || "diese WG";
+
+        if (!confirm(`Möchtest du "${wgName}" wirklich verlassen?`)) return;
+
+        const res = await fetch(`${API_BASE}/wg/${this.selectedWG}/user/${uid}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          let msg = text || `HTTP ${res.status}`;
+          try {
+            const j = JSON.parse(text);
+            if (j?.message) msg = j.message;
+          } catch (_) {}
+          alert(`Fehler beim Verlassen der WG:\n\n${msg}`);
+          return;
+        }
+
+        // lokal updaten
+        const removedId = String(this.selectedWG);
+
+        this.wgList = this.wgList.filter(
+          (w) => String(w.id) !== removedId
+        );
+        localStorage.setItem("wgList", JSON.stringify(this.wgList));
+
+        // cache cleanup
+        if (this.ownerCache[removedId] !== undefined) {
+          delete this.ownerCache[removedId];
+          localStorage.setItem("ownerCache", JSON.stringify(this.ownerCache));
+        }
+
+        this.selectedWG = null;
+        this.selectedWGName = "WG auswählen";
+        this.isOwner = false;
+
+        localStorage.removeItem("selectedWG");
+        localStorage.removeItem("selectedWGName");
+
+        alert("Du hast die WG verlassen.");
+      } catch (err) {
+        console.error("leaveWG exception:", err);
+        alert("Fehler beim Verlassen der WG: " + err.message);
+      }
+    },
+
+    async deleteWG() {
+  if (!this.selectedWG) return;
+
+  if (!confirm(`WG "${this.selectedWGName}" wirklich löschen?`)) return;
 
   try {
-    // user nochmal holen
-    const meRes = await fetch(`${API_BASE}/user`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!meRes.ok) {
-      alert("Nicht eingeloggt (GET /user fehlgeschlagen).");
-      this.userId = null;
-      return;
-    }
-
-    const me = await meRes.json().catch(() => ({}));
-    const uid = me?.uid ?? me?.id ?? null;
-
-    if (!uid) {
-      alert("User-ID fehlt in /user Response.");
-      return;
-    }
-
-    this.userId = uid;
-
-    const wg = this.wgList.find((w) => String(w.id) === String(this.selectedWG));
-    const wgName = wg?.name || "diese WG";
-
-    if (!confirm(`Möchtest du "${wgName}" wirklich verlassen?`)) return;
-
-    const res = await fetch(`${API_BASE}/wg/${this.selectedWG}/user/${uid}`, {
+    const res = await fetch(`${API_BASE}/wg/${this.selectedWG}`, {
       method: "DELETE",
       credentials: "include",
     });
 
+    if (res.status === 403) {
+      alert("Nur der Besitzer darf die WG löschen.");
+      return;
+    }
     if (!res.ok) {
       const text = await res.text().catch(() => "");
-      let msg = text || `HTTP ${res.status}`;
-      try {
-        const j = JSON.parse(text);
-        if (j?.message) msg = j.message;
-      } catch (_) {}
-      alert(`Fehler beim Verlassen der WG:\n\n${msg}`);
+      alert(text || `Fehler beim Löschen (HTTP ${res.status})`);
       return;
     }
 
     // lokal updaten
-    this.wgList = this.wgList.filter(
-      (w) => String(w.id) !== String(this.selectedWG)
-    );
+    const deletedId = String(this.selectedWG);
+
+    this.wgList = this.wgList.filter((w) => String(w.id) !== deletedId);
     localStorage.setItem("wgList", JSON.stringify(this.wgList));
 
+    // selection reset
     this.selectedWG = null;
     this.selectedWGName = "WG auswählen";
+    this.isOwner = false;
+
     localStorage.removeItem("selectedWG");
     localStorage.removeItem("selectedWGName");
 
-    alert("Du hast die WG verlassen.");
+    // ownerCache cleanup (falls du ownerCache nutzt)
+    if (this.ownerCache && this.ownerCache[deletedId] !== undefined) {
+      delete this.ownerCache[deletedId];
+      localStorage.setItem("ownerCache", JSON.stringify(this.ownerCache));
+    }
+
+    alert("WG gelöscht.");
   } catch (err) {
-    console.error("leaveWG exception:", err);
-    alert("Fehler beim Verlassen der WG: " + err.message);
+    console.error("deleteWG exception:", err);
+    alert("Fehler beim Löschen der WG: " + err.message);
   }
 },
 
@@ -253,7 +384,6 @@ new Vue({
         }
 
         const data = await response.json().catch(() => ({}));
-
         this.inviteLinkfromAPI = `${window.location.origin}/invite/${data.id}`;
         localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
       } catch (err) {

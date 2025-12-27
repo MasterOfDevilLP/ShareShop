@@ -79,12 +79,15 @@
           </div>
 
           <!-- Optionen -->
-          <div class="settings-option-row">
-            <img src="icons/link.png" class="settings-icon" />
-            <a class="settings-option-text" href="mitglieder_einladen.html">
-              Mitglieder via Link einladen
-            </a>
-          </div>
+         <div
+          class="settings-option-row"
+          :class="{ disabled: !isOwner }"
+          @click="requireOwner(() => (window.location.href = 'mitglieder_einladen.html'))"
+        >
+          <img src="icons/link.png" class="settings-icon" />
+          <span class="settings-option-text">Mitglieder via Link einladen</span>
+        </div>
+
 
           <!-- Mitglieder Liste -->
           <div class="wg-users-list">
@@ -101,11 +104,6 @@
           </div>
 
           <div class="settings-option-row">
-            <img src="icons/group_exit.png" class="settings-icon" />
-            <span class="settings-option-text">Gruppe verlassen</span>
-          </div>
-
-          <div class="settings-option-row">
             <img src="icons/clock.png" class="settings-icon" />
             <span class="settings-option-text">Änderungshistorie</span>
           </div>
@@ -115,13 +113,27 @@
             <span class="settings-option-text">Produkte sortieren</span>
           </div>
 
-          <hr />
+         <!-- WG verlassen-->
+        <div
+          class="settings-option-row delete-row"
+          :class="{ disabled: !isOwner }"
+          @click="requireOwner(leaveWG)"
+        >
+          <img src="icons/group_exit.png" class="settings-icon" />
+          <span class="settings-delete-text">WG verlassen</span>
+        </div>
 
-          <!-- WG verlassen -->
-          <div class="settings-option-row delete-row" @click="leaveWG">
-            <img src="icons/Trashcan.png" class="settings-icon" />
-            <span class="settings-delete-text">WG Löschen</span>
-          </div>
+        <!-- WG löschen (nur Besitzer klickbar) -->
+        <div
+          class="settings-option-row delete-row"
+          :class="{ disabled: !isOwner }"
+          @click="requireOwner(deleteWG)"
+        >
+          <img src="icons/Trashcan.png" class="settings-icon" />
+          <span class="settings-delete-text">WG löschen</span>
+        </div>
+
+
         </main>
       </div>
     </div>

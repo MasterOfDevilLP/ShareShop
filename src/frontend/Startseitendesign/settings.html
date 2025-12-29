@@ -113,26 +113,83 @@
             <span class="settings-option-text">Produkte sortieren</span>
           </div>
 
-        <!-- WG verlassen (nur Nicht-Besitzer klickbar) -->
-        <div
-          class="settings-option-row delete-row"
-          :class="{ disabled: isOwner }"
-          @click="leaveWG"
-        >
-          <img src="icons/group_exit.png" class="settings-icon" />
-          <span class="settings-delete-text">WG verlassen</span>
-        </div>
+ <!-- WG verlassen (nur Nicht-Besitzer klickbar) -->
+<div
+  class="settings-option-row delete-row"
+  :class="{ disabled: isOwner }"
+  @click="!isOwner && openWgActionModal('leave')"
+>
+  <img src="icons/group_exit.png" class="settings-icon" alt="WG verlassen" />
+  <span class="settings-delete-text">WG verlassen</span>
+</div>
+
+<!-- WG löschen (nur Besitzer klickbar) -->
+<div
+  class="settings-option-row delete-row"
+  :class="{ disabled: !isOwner }"
+  @click="isOwner && openWgActionModal('delete')"
+>
+  <img src="icons/Trashcan.png" class="settings-icon" alt="WG löschen" />
+  <span class="settings-delete-text">WG löschen</span>
+</div>
+
+<!-- Modal: WG verlassen / löschen -->
+<div
+  v-if="showWgActionModal"
+  class="modal-overlay"
+  @click.self="closeWgActionModal"
+>
+  <div class="modal-card">
+    <h2 class="modal-title">
+      {{ wgActionMode === 'delete' ? 'WG löschen' : 'WG verlassen' }}
+    </h2>
+
+    <p class="modal-text">
+      {{ wgActionMode === 'delete'
+        ? 'Willst du diese WG wirklich löschen?'
+        : 'Willst du diese WG wirklich verlassen?'
+      }}
+    </p>
+
+    <div class="modal-actions">
+      <button
+        class="modal-btn"
+        :class="wgActionMode === 'delete' ? 'danger' : 'primary'"
+        :disabled="wgActionBusy"
+        @click="confirmWgAction"
+      >
+        {{ wgActionMode === 'delete' ? 'Löschen' : 'Verlassen' }}
+      </button>
+
+      <button
+        class="modal-btn cancel"
+        :disabled="wgActionBusy"
+        @click="closeWgActionModal"
+      >
+        Abbrechen
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Info/Error Modal (statt alert) -->
+<div v-if="showInfoModal" class="modal-overlay" @click.self="closeInfoModal">
+  <div class="modal-card">
+    <h2 class="modal-title">{{ infoTitle }}</h2>
+    <div class="modal-divider"></div>
+
+    <p class="modal-text" style="white-space: pre-line;">
+      {{ infoText }}
+    </p>
+
+    <div class="modal-actions">
+      <button class="modal-btn primary" @click="closeInfoModal">OK</button>
+    </div>
+  </div>
+</div>
 
 
-        <!-- WG löschen (nur Besitzer klickbar) -->
-        <div
-          class="settings-option-row delete-row"
-          :class="{ disabled: !isOwner }"
-          @click="requireOwner(deleteWG)"
-        >
-          <img src="icons/Trashcan.png" class="settings-icon" />
-          <span class="settings-delete-text">WG löschen</span>
-        </div>
+
 
 
         </main>

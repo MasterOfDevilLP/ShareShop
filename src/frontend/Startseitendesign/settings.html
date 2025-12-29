@@ -86,18 +86,61 @@
             </a>
           </div>
 
-          <!-- Mitglieder Liste -->
-          <div class="wg-users-list">
-            <div class="settings-option-row">
+          <!-- Mitglieder Liste - Enhanced Version -->
+          <div class="wg-members-section">
+            <div 
+              class="settings-option-row members-header clickable" 
+              @click="toggleMembersList"
+            >
               <img src="icons/User_alt.svg" class="settings-icon" />
-              <span class="settings-option-text">Mitglieder Liste</span>
+              <span class="settings-option-text">
+                Mitglieder Liste
+                <span class="member-count" v-if="memberCount > 0">({{ memberCount }})</span>
+              </span>
+              <span class="collapse-icon" :class="{ 'expanded': showMembersList }">▼</span>
             </div>
 
-            <ul>
-              <li v-for="user in wgUsers" :key="user.id">
-                {{ user.name }}
-              </li>
-            </ul>
+            <!-- Collapsible Content -->
+            <div v-show="showMembersList" class="members-content">
+              <!-- Loading State -->
+              <div v-if="loadingUsers" class="members-loading">
+                <div class="loading-spinner"></div>
+                <p>Lädt Mitglieder...</p>
+              </div>
+
+              <!-- Members List -->
+              <div v-else-if="wgUsers.length > 0" class="members-list">
+                <div 
+                  v-for="user in wgUsers" 
+                  :key="user.id"
+                  class="member-card"
+                  :class="{ 'current-user': isCurrentUser(user.id) }"
+                >
+                  <!-- Avatar Image or Initials -->
+                  <div class="member-avatar" v-if="getUserAvatar(user.id)">
+                    <img :src="getUserAvatar(user.id)" :alt="user.name" class="avatar-image" />
+                  </div>
+                  <div class="member-avatar" v-else>
+                    {{ getUserInitials(user.name) }}
+                  </div>
+
+                  <div class="member-info">
+                    <div class="member-name">
+                      {{ user.name }}
+                      <span v-if="isCurrentUser(user.id)" class="you-badge">Du</span>
+                    </div>
+                  </div>
+                  <div v-if="user.role === 'admin'" class="member-badge admin-badge">
+                    Admin
+                  </div>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div v-else class="members-empty">
+                <p>Keine Mitglieder gefunden</p>
+              </div>
+            </div>
           </div>
 
           <div class="settings-option-row">
@@ -123,6 +166,40 @@
             <span class="settings-delete-text">WG verlassen</span>
           </div>
         </main>
+
+        <!-- Custom Modal -->
+        <div v-if="modal.show" class="custom-modal-overlay" @click.self="closeModal">
+          <div class="custom-modal" :class="'modal-' + modal.type">
+            <div class="modal-icon">
+              <span v-if="modal.type === 'success'">✓</span>
+              <span v-else-if="modal.type === 'error'">✕</span>
+              <span v-else-if="modal.type === 'confirm'">?</span>
+              <span v-else>ℹ</span>
+            </div>
+            <h3 class="modal-title">{{ modal.title }}</h3>
+            <p class="modal-message">{{ modal.message }}</p>
+            <div class="modal-buttons">
+              <button 
+                v-if="modal.type === 'confirm'" 
+                @click="handleModalCancel"
+                class="modal-btn modal-btn-cancel"
+              >
+                Abbrechen
+              </button>
+              <button 
+                @click="modal.type === 'confirm' ? handleModalConfirm() : closeModal()"
+                class="modal-btn modal-btn-confirm"
+                :class="{
+                  'modal-btn-success': modal.type === 'success',
+                  'modal-btn-error': modal.type === 'error',
+                  'modal-btn-info': modal.type === 'info'
+                }"
+              >
+                {{ modal.type === 'confirm' ? 'Bestätigen' : 'OK' }}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

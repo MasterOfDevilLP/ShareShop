@@ -22,8 +22,20 @@ new Vue({
     userId: null,
     newGroupName: "",
     wgUsers: [],
+    loadingUsers: false,
+    showMembersList: false, // For collapsible members list
 
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
+
+    // Custom Modal System
+    modal: {
+      show: false,
+      type: 'info', // 'info', 'error', 'success', 'confirm'
+      title: '',
+      message: '',
+      confirmCallback: null,
+      cancelCallback: null,
+    },
 
     showError(msg) {
       console.error("Fehler:", msg);
@@ -32,7 +44,10 @@ new Vue({
 
   async mounted() {
     await this.loadUserAndWGs();
-    if (this.selectedWG) await this.createInviteLink();
+    if (this.selectedWG) {
+      await this.createInviteLink();
+      await this.loadWGMembers();
+    }
   },
 
   computed: {
@@ -53,9 +68,64 @@ new Vue({
         null
       );
     },
+
+    memberCount() {
+      return this.wgUsers.length;
+    },
   },
 
   methods: {
+    // Custom Modal Helpers
+    showAlert(message, title = 'Hinweis', type = 'info') {
+      this.modal = {
+        show: true,
+        type: type,
+        title: title,
+        message: message,
+        confirmCallback: null,
+        cancelCallback: null,
+      };
+    },
+
+    showConfirm(message, title = 'Bestätigung', onConfirm, onCancel = null) {
+      this.modal = {
+        show: true,
+        type: 'confirm',
+        title: title,
+        message: message,
+        confirmCallback: onConfirm,
+        cancelCallback: onCancel,
+      };
+    },
+
+    closeModal() {
+      this.modal.show = false;
+      setTimeout(() => {
+        this.modal = {
+          show: false,
+          type: 'info',
+          title: '',
+          message: '',
+          confirmCallback: null,
+          cancelCallback: null,
+        };
+      }, 300);
+    },
+
+    handleModalConfirm() {
+      if (this.modal.confirmCallback) {
+        this.modal.confirmCallback();
+      }
+      this.closeModal();
+    },
+
+    handleModalCancel() {
+      if (this.modal.cancelCallback) {
+        this.modal.cancelCallback();
+      }
+      this.closeModal();
+    },
+
     async loadUserAndWGs() {
       // 1) user holen
       const meRes = await fetch(`${API_BASE}/user`, {
@@ -131,7 +201,7 @@ new Vue({
       }
     },
 
-    selectWG(id) {
+    async selectWG(id) {
       const wg = this.wgList.find((w) => String(w.id) === String(id));
       if (!wg) return;
 
@@ -141,80 +211,178 @@ new Vue({
       localStorage.setItem("selectedWG", this.selectedWG);
       localStorage.setItem("selectedWGName", this.selectedWGName);
 
-      this.createInviteLink();
+      await this.createInviteLink();
+      await this.loadWGMembers();
     },
-    async leaveWG() {
-  if (!this.selectedWG) {
-    alert("Keine WG ausgewählt.");
-    return;
-  }
 
-  try {
-    // user nochmal holen (Quelle der Wahrheit)
-    const meRes = await fetch(`${API_BASE}/user`, {
-      method: "GET",
-      credentials: "include",
-    });
+    async loadWGMembers() {
+      if (!this.selectedWG) {
+        this.wgUsers = [];
+        return;
+      }
 
-    if (!meRes.ok) {
-      alert("Nicht eingeloggt (GET /user fehlgeschlagen).");
-      this.userId = null;
-      return;
-    }
+      this.loadingUsers = true;
 
-    const me = await meRes.json().catch(() => ({}));
-    const uid = me?.uid ?? me?.id ?? null;
-
-    if (!uid) {
-      alert("User-ID fehlt in /user Response.");
-      return;
-    }
-
-    this.userId = uid;
-
-    const wg = this.wgList.find((w) => String(w.id) === String(this.selectedWG));
-    const wgName = wg?.name || "diese WG";
-
-    if (!confirm(`Möchtest du "${wgName}" wirklich verlassen?`)) return;
-
-    const res = await fetch(`${API_BASE}/wg/${this.selectedWG}/user/${uid}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      let msg = text || `HTTP ${res.status}`;
       try {
-        const j = JSON.parse(text);
-        if (j?.message) msg = j.message;
-      } catch (_) {}
-      alert(`Fehler beim Verlassen der WG:\n\n${msg}`);
-      return;
-    }
+        // TODO: Replace with actual API endpoint when ready
+        // const response = await fetch(`${API_BASE}/wg/${this.selectedWG}/users`, {
+        //   method: "GET",
+        //   credentials: "include",
+        // });
 
-    // lokal updaten
-    this.wgList = this.wgList.filter(
-      (w) => String(w.id) !== String(this.selectedWG)
-    );
-    localStorage.setItem("wgList", JSON.stringify(this.wgList));
+        // if (!response.ok) {
+        //   throw new Error(`HTTP ${response.status}`);
+        // }
 
-    this.selectedWG = null;
-    this.selectedWGName = "WG auswählen";
-    localStorage.removeItem("selectedWG");
-    localStorage.removeItem("selectedWGName");
+        // const data = await response.json();
+        // this.wgUsers = data.users || data || [];
 
-    alert("Du hast die WG verlassen.");
-  } catch (err) {
-    console.error("leaveWG exception:", err);
-    alert("Fehler beim Verlassen der WG: " + err.message);
-  }
-},
+        // For now, use mock data for development
+        // This will show example users until the backend is ready
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
+        
+        this.wgUsers = this.getMockUsers();
+        
+        console.log("Loaded members:", this.wgUsers);
+      } catch (err) {
+        console.error("Error loading members:", err);
+        // Fallback to mock data on error
+        this.wgUsers = this.getMockUsers();
+      } finally {
+        this.loadingUsers = false;
+      }
+    },
 
+    getMockUsers() {
+      // Mock data for development - remove when API is ready
+      const mockUsers = [
+        { id: "1", name: "Max Mustermann", email: "max@example.com", role: "admin" },
+        { id: "2", name: "Anna Schmidt", email: "anna@example.com", role: "member" },
+        { id: "3", name: "Tom Weber", email: "tom@example.com", role: "member" },
+      ];
+      
+      // Add current user if available
+      if (this.userId) {
+        const currentUser = mockUsers.find(u => u.id === this.userId);
+        if (!currentUser) {
+          mockUsers.unshift({
+            id: this.userId,
+            name: "Du",
+            email: "your@example.com",
+            role: "admin"
+          });
+        }
+      }
+      
+      return mockUsers;
+    },
+
+    getUserInitials(name) {
+      if (!name) return "?";
+      const parts = name.trim().split(" ");
+      if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+      return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+    },
+
+    getUserAvatar(userId) {
+      // Check if user has a local avatar
+      if (!userId) return null;
+      return localStorage.getItem(`user_avatar_${userId}`) || null;
+    },
+
+    toggleMembersList() {
+      this.showMembersList = !this.showMembersList;
+    },
+
+    isCurrentUser(userId) {
+      return String(userId) === String(this.userId);
+    },
+
+    async leaveWG() {
+      if (!this.selectedWG) {
+        this.showAlert("Keine WG ausgewählt.", "Fehler", "error");
+        return;
+      }
+
+      try {
+        // user nochmal holen (Quelle der Wahrheit)
+        const meRes = await fetch(`${API_BASE}/user`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!meRes.ok) {
+          this.showAlert("Nicht eingeloggt (GET /user fehlgeschlagen).", "Fehler", "error");
+          this.userId = null;
+          return;
+        }
+
+        const me = await meRes.json().catch(() => ({}));
+        const uid = me?.uid ?? me?.id ?? null;
+
+        if (!uid) {
+          this.showAlert("User-ID fehlt in /user Response.", "Fehler", "error");
+          return;
+        }
+
+        this.userId = uid;
+
+        const wg = this.wgList.find((w) => String(w.id) === String(this.selectedWG));
+        const wgName = wg?.name || "diese WG";
+
+        this.showConfirm(
+          `Möchtest du "${wgName}" wirklich verlassen?`,
+          "WG verlassen",
+          async () => {
+            await this.performLeaveWG(uid);
+          }
+        );
+      } catch (err) {
+        console.error("leaveWG exception:", err);
+        this.showAlert("Fehler beim Verlassen der WG: " + err.message, "Fehler", "error");
+      }
+    },
+
+    async performLeaveWG(uid) {
+      try {
+        const res = await fetch(`${API_BASE}/wg/${this.selectedWG}/user/${uid}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          let msg = text || `HTTP ${res.status}`;
+          try {
+            const j = JSON.parse(text);
+            if (j?.message) msg = j.message;
+          } catch (_) {}
+          this.showAlert(`Fehler beim Verlassen der WG:\n\n${msg}`, "Fehler", "error");
+          return;
+        }
+
+        // lokal updaten
+        this.wgList = this.wgList.filter(
+          (w) => String(w.id) !== String(this.selectedWG)
+        );
+        localStorage.setItem("wgList", JSON.stringify(this.wgList));
+
+        this.selectedWG = null;
+        this.selectedWGName = "WG auswählen";
+        this.wgUsers = [];
+        localStorage.removeItem("selectedWG");
+        localStorage.removeItem("selectedWGName");
+
+        this.showAlert("Du hast die WG verlassen.", "Erfolg", "success");
+      } catch (err) {
+        console.error("performLeaveWG exception:", err);
+        this.showAlert("Fehler beim Verlassen der WG: " + err.message, "Fehler", "error");
+      }
+    },
 
     async createInviteLink() {
       if (!this.selectedWG) {
-        this.showError("Bitte zuerst eine WG auswählen.");
+        this.showAlert("Bitte zuerst eine WG auswählen.", "Hinweis", "info");
         return;
       }
 

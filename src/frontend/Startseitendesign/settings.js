@@ -48,7 +48,7 @@ new Vue({
 
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
 
-    // ✅ Subtask: Besitzerstatus im State speichern
+    // 
     isOwner: false,
     ownerCheckInFlight: false,
     ownerCache: JSON.parse(localStorage.getItem("ownerCache") || "{}"),

@@ -1,0 +1,35 @@
+= Projektreflexion: Einzelleistung
+Florian Süßmann <s86423@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Ausgangssituation / Aufgaben
+* Verwaltung der Datenbank
+** Anpassung auf benötigte Struktur -> link:../models/database/ShareShop_ERM.png[ERM]
+** Migrierung bisheriger Daten auf neue Struktur nach änderungen (bzw das bereitstellen von scripts zum migrieren)
+* Anbindung des Backends zur Datenbank -> link:https://github.com/users/MasterOfDevilLP/projects/3/views/4?pane=issue&itemId=139418180&issue=MasterOfDevilLP%7CShareShop%7C229[Ausbauen der DB Objekte]
+* link:https://github.com/users/MasterOfDevilLP/projects/3/views/4?pane=issue&itemId=138621410&issue=MasterOfDevilLP%7CShareShop%7C224[Testen der DB Verbindungsklassen (DB Objektklassen)]
+* Safety-Einstellungen im Repository (da es auf meinem GitHub Account erstellt wurde)
+
+Für die implementierung eines neuen Features habe ich (zusammen mit den anderen) die Anforderungen analysiert um benötigte Elemente in meinem Aufgabenbereich zu ermitteln (also änderungen an der DB und funktionalität der DB Klassen bzw neue DB Klassen).
+
+== Lösungsweg
+Zuerst habe ich mich mit den anderen Teammembern darüber unterhalten was man dafür brauch (meistens nebenbei in der Uni -> daher keine Belege, da dies alles Mündlich geplant wurde) -> (kinda Entwurf). Die Benötigten Sachen wurden dem PO mitgeteilt (meist in einem weekly oder so auf dc bei höher prio) -> (Projektmanagement). Wenn die Issues dann erstellt waren (Anforderungsmanagement) habe ich mich für meinen Zuständigkeitsbereich passende Issues assigned und habe für dieses Issue einen neuen Branch erstellt (featurebranch). In diesem habe ich dann das im Issue beschriebene Feature implementiert (unter beachtung der Anforderungen) und dieses danach manuell getestet bzw automatisierte Tests geschrieben (Implementierung und Test). +
+Nach Erfolgreichem testen und fixen aller bugs habe ich dann ein PR für den Branch erstellt, das Issue auf Review geschoben und im Discord einen Reviewping geöffnet. +
+
+Ich selber habe nicht all zu viele PR's reviewed (dennoch ein Paar). Dabei habe ich die commits durchgeguckt um offensichtliche Fehler ausschließen zu können und gegebenenfalls merge conflicts gelöst mit Kommunikation zu der PR-erstellenden Person.
+
+Die Bereitstellung auch innerhalb wird durch einen Dockercontainer realisiert (um unstimmigkeiten zwischen Betriebssystemen und Maschienen auszuschließen)
+
+.Code-Belege einiger Aktionen:
+* link:https://github.com/MasterOfDevilLP/ShareShop/blob/develop/src/backend/database/Permissions.sql[Anpassung der DB für permission system]
+* link:https://github.com/MasterOfDevilLP/ShareShop/blob/develop/src/backend/database/ShareShopDB.sql[Erstellung der DB]
+* link:https://github.com/MasterOfDevilLP/ShareShop/blob/develop/src/backend/src/main/java/shareshop/WG.java[DB Objektklassen (z.B. WG)]
+* link:https://github.com/MasterOfDevilLP/ShareShop/blob/develop/src/backend/src/test/java/shareshop/TCWG.java[Tests zu den Objektklassen]
+
+== Bewertung
+Die Herangehensweise hat für meine Aufgaben im Backend sehr gut funktioniert. Ich konnte die Aufgaben Zeitnah bearbeiten und durch die Tests bzw das manuelle testen (was ich im vorherigen Semester nicht gemacht habe) gab es auch nahezu keine Probleme nach abgabe der erledigten Aufgabe.
+
+Als kritik an mich selbst hätte ich vlt mehr code von anderen im Backend reviewen sollen, anstatt dies alles an Benni zu überlassen (da dieser workload teils für sehr lange wartezeiten bei den PR's geführt hat).
+
+Die Wahrscheinlich wichtigsten Sachen die ich in diesem Semester gelernt habe, sind die wichtigkeit wenigstens Manuell die gerade geschriebenen Sachen zu testen und aktive Kommunikation zwischen den Teammitgliedern (indirekt durch das Frontend).

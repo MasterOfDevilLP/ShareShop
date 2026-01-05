@@ -24,7 +24,6 @@
  * - UI reagiert auf WG-Wechsel (watch selectedWG)
  * - Nicht-Owner bekommen Feedback via requireOwner()
  */
-
 console.log("settings.js loaded");
 import { API_BASE } from "../config.js";
 
@@ -48,40 +47,19 @@ new Vue({
 
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
 
-    
-    isOwner: false,
-    ownerCheckInFlight: false,
-    ownerCache: JSON.parse(localStorage.getItem("ownerCache") || "{}"),
-
-    showError(msg) {
-      console.error("Fehler:", msg);
-    },
-    // WG verlassen/löschen Modal
+    // Modal (nur verlassen)
     showWgActionModal: false,
-    wgActionMode: null, // "leave" | "delete"
     wgActionBusy: false,
 
-    // Info/Error Modal (statt browser alert)
+    // Info Modal
     showInfoModal: false,
     infoTitle: "",
     infoText: "",
-
   },
 
   async mounted() {
     await this.loadUserAndWGs();
-    // Ownerstatus nach initialem Load prüfen
-    await this.refreshOwnerStatus(true);
-
     if (this.selectedWG) await this.createInviteLink();
-  },
-
-  // Subtask: UI aktualisieren bei Besitzerwechsel (WG-Wechsel)
-  watch: {
-    selectedWG(newVal, oldVal) {
-      if (!newVal || String(newVal) === String(oldVal)) return;
-      this.refreshOwnerStatus(true); // force refresh bei WG-Wechsel
-    },
   },
 
   computed: {
@@ -89,12 +67,10 @@ new Vue({
       if (!this.selectedWG) return null;
       return localStorage.getItem(`wg_image_${this.selectedWG}`) || null;
     },
-
     wgDescLocal() {
       if (!this.selectedWG) return null;
       return localStorage.getItem(`wg_desc_${this.selectedWG}`) || null;
     },
-
     selectedWGDetails() {
       return (
         this.wgList.find((wg) => String(wg.id) === String(this.selectedWG)) ||
@@ -104,62 +80,15 @@ new Vue({
   },
 
   methods: {
-    // Subtask: Rückmeldung, wenn Nicht-Besitzer verbotene Aktion versucht
-    requireOwner(fn) {
-      if (!this.isOwner) {
-        alert("Nur der Besitzer darf diese Aktion ausführen.");
-        return;
-      }
-      fn && fn();
-    },
-
-    // Subtask: Besitzerstatus für aktuellen Nutzer abrufen
-    async refreshOwnerStatus(force = false) {
-      if (!this.selectedWG || !this.selectedWGName) {
-        this.isOwner = false;
-        return;
-      }
-
-      const key = String(this.selectedWG);
-
-      // Cache zuerst (kein Flackern)
-      if (!force && this.ownerCache[key] !== undefined) {
-        this.isOwner = !!this.ownerCache[key];
-        return;
-      }
-
-      if (this.ownerCheckInFlight) return;
-      this.ownerCheckInFlight = true;
-
-      try {
-        // “harmloser” Check: PATCH mit gleichem Namen
-        const res = await fetch(`${API_BASE}/wg/${this.selectedWG}`, {
-          method: "PATCH",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: this.selectedWGName }),
-        });
-
-        const allowed = res.ok && res.status !== 403;
-        this.isOwner = allowed;
-
-        this.ownerCache[key] = allowed;
-        localStorage.setItem("ownerCache", JSON.stringify(this.ownerCache));
-      } catch (e) {
-        this.isOwner = false;
-      } finally {
-        this.ownerCheckInFlight = false;
-      }
+    showError(msg) {
+      console.error("Fehler:", msg);
     },
 
     async loadUserAndWGs() {
-      const meRes = await fetch(`${API_BASE}/user`, {
-        credentials: "include",
-      });
+      const meRes = await fetch(`${API_BASE}/user`, { credentials: "include" });
 
       if (!meRes.ok) {
         this.userId = null;
-        this.isOwner = false;
         this.wgList = [];
         this.selectedWG = null;
         this.selectedWGName = "WG auswählen";
@@ -173,19 +102,14 @@ new Vue({
 
       let wids = me?.wid;
       if (typeof wids === "string") {
-        wids = wids
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
+        wids = wids.split(",").map((s) => s.trim()).filter(Boolean);
       }
       if (!Array.isArray(wids)) wids = [];
 
       const wgs = [];
       for (const wid of wids) {
         try {
-          const r = await fetch(`${API_BASE}/wg/${wid}`, {
-            credentials: "include",
-          });
+          const r = await fetch(`${API_BASE}/wg/${wid}`, { credentials: "include" });
           if (!r.ok) continue;
 
           const wgData = await r.json();
@@ -200,8 +124,7 @@ new Vue({
       localStorage.setItem("wgList", JSON.stringify(this.wgList));
 
       const savedWG = localStorage.getItem("selectedWG");
-      const exists =
-        savedWG && this.wgList.some((w) => String(w.id) === String(savedWG));
+      const exists = savedWG && this.wgList.some((w) => String(w.id) === String(savedWG));
 
       if (exists) {
         const sel = this.wgList.find((w) => String(w.id) === String(savedWG));
@@ -234,148 +157,91 @@ new Vue({
       localStorage.setItem("selectedWG", this.selectedWG);
       localStorage.setItem("selectedWGName", this.selectedWGName);
 
-      // Invite Link neu (Ownerstatus kommt über watch selectedWG)
       this.createInviteLink();
     },
 
-    async leaveWG(confirmFromModal = false) {
-  if (!this.selectedWG) {
-    this.openInfoModal("Hinweis", "Keine WG ausgewählt.");
-    return;
-  }
+    openWgActionModal() {
+      this.showWgActionModal = true;
+    },
 
-  if (this.isOwner) {
-    this.openInfoModal(
-      "Nicht möglich",
-      "Du bist Besitzer dieser WG. Übertrage zuerst die Besitzerrolle oder lösche die WG."
-    );
-    return;
-  }
+    closeWgActionModal() {
+      this.showWgActionModal = false;
+      this.wgActionBusy = false;
+    },
 
-  if (!confirmFromModal) {
-    this.openWgActionModal("leave");
-    return;
-  }
+    async confirmWgAction() {
+      if (this.wgActionBusy) return;
+      this.wgActionBusy = true;
 
-  try {
-    const meRes = await fetch(`${API_BASE}/user`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!meRes.ok) {
-      this.openInfoModal("Nicht eingeloggt", "GET /user ist fehlgeschlagen.");
-      this.userId = null;
-      return;
-    }
-
-    const me = await meRes.json().catch(() => ({}));
-    const uid = me?.uid ?? me?.id ?? null;
-
-    if (!uid) {
-      this.openInfoModal("Fehler", "User-ID fehlt in /user Response.");
-      return;
-    }
-
-    this.userId = uid;
-
-    const res = await fetch(`${API_BASE}/wg/${this.selectedWG}/user/${uid}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      let msg = text || `HTTP ${res.status}`;
       try {
-        const j = JSON.parse(text);
-        if (j?.message) msg = j.message;
-      } catch (_) {}
+        await this.leaveWG(true);
+      } finally {
+        this.closeWgActionModal();
+      }
+    },
 
-      this.openInfoModal("Fehler", `Fehler beim Verlassen der WG:\n\n${msg}`);
-      return;
-    }
+    async leaveWG(confirmFromModal = false) {
+      if (!this.selectedWG) {
+        this.openInfoModal("Hinweis", "Keine WG ausgewählt.");
+        return;
+      }
 
-    const removedId = String(this.selectedWG);
+      if (!confirmFromModal) {
+        this.openWgActionModal();
+        return;
+      }
 
-    this.wgList = this.wgList.filter((w) => String(w.id) !== removedId);
-    localStorage.setItem("wgList", JSON.stringify(this.wgList));
+      try {
+        const meRes = await fetch(`${API_BASE}/user`, { method: "GET", credentials: "include" });
+        if (!meRes.ok) {
+          this.openInfoModal("Nicht eingeloggt", "GET /user ist fehlgeschlagen.");
+          this.userId = null;
+          return;
+        }
 
-    if (this.ownerCache[removedId] !== undefined) {
-      delete this.ownerCache[removedId];
-      localStorage.setItem("ownerCache", JSON.stringify(this.ownerCache));
-    }
+        const me = await meRes.json().catch(() => ({}));
+        const uid = me?.uid ?? me?.id ?? null;
 
-    this.selectedWG = null;
-    this.selectedWGName = "WG auswählen";
-    this.isOwner = false;
+        if (!uid) {
+          this.openInfoModal("Fehler", "User-ID fehlt in /user Response.");
+          return;
+        }
 
-    localStorage.removeItem("selectedWG");
-    localStorage.removeItem("selectedWGName");
+        this.userId = uid;
 
-    // optional: Erfolg anzeigen (oder weglassen)
-    this.openInfoModal("Erledigt", "Du hast die WG verlassen.");
-  } catch (err) {
-    console.error("leaveWG exception:", err);
-    this.openInfoModal("Fehler", "Fehler beim Verlassen der WG: " + err.message);
-  }
-},
+        const res = await fetch(`${API_BASE}/wg/${this.selectedWG}/user/${uid}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
 
-async deleteWG(confirmFromModal = false) {
-  if (!this.selectedWG) return;
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          let msg = text || `HTTP ${res.status}`;
+          try {
+            const j = JSON.parse(text);
+            if (j?.message) msg = j.message;
+          } catch (_) {}
+          this.openInfoModal("Fehler", `Fehler beim Verlassen der WG:\n\n${msg}`);
+          return;
+        }
 
-  if (!confirmFromModal) {
-    this.requireOwner(() => this.openWgActionModal("delete"));
-    return;
-  }
+        const removedId = String(this.selectedWG);
 
-  try {
-    const res = await fetch(`${API_BASE}/wg/${this.selectedWG}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+        this.wgList = this.wgList.filter((w) => String(w.id) !== removedId);
+        localStorage.setItem("wgList", JSON.stringify(this.wgList));
 
-    if (res.status === 403) {
-      this.openInfoModal("Nicht erlaubt", "Nur der Besitzer darf die WG löschen.");
-      return;
-    }
+        this.selectedWG = null;
+        this.selectedWGName = "WG auswählen";
 
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      this.openInfoModal(
-        "Fehler",
-        text || `Fehler beim Löschen (HTTP ${res.status})`
-      );
-      return;
-    }
+        localStorage.removeItem("selectedWG");
+        localStorage.removeItem("selectedWGName");
 
-    const deletedId = String(this.selectedWG);
-
-    this.wgList = this.wgList.filter((w) => String(w.id) !== deletedId);
-    localStorage.setItem("wgList", JSON.stringify(this.wgList));
-
-    this.selectedWG = null;
-    this.selectedWGName = "WG auswählen";
-    this.isOwner = false;
-
-    localStorage.removeItem("selectedWG");
-    localStorage.removeItem("selectedWGName");
-
-    if (this.ownerCache && this.ownerCache[deletedId] !== undefined) {
-      delete this.ownerCache[deletedId];
-      localStorage.setItem("ownerCache", JSON.stringify(this.ownerCache));
-    }
-
-    // optional: Erfolg anzeigen (oder weglassen)
-    this.openInfoModal("Erledigt", "WG gelöscht.");
-  } catch (err) {
-    console.error("deleteWG exception:", err);
-    this.openInfoModal("Fehler", "Fehler beim Löschen der WG: " + err.message);
-  }
-},
-
-
-
+        this.openInfoModal("Erledigt", "Du hast die WG verlassen.");
+      } catch (err) {
+        console.error("leaveWG exception:", err);
+        this.openInfoModal("Fehler", "Fehler beim Verlassen der WG: " + err.message);
+      }
+    },
 
     async createInviteLink() {
       if (!this.selectedWG) {
@@ -404,45 +270,16 @@ async deleteWG(confirmFromModal = false) {
       }
     },
 
-    // Modal WG löschen/verlassen
-      openWgActionModal(mode) {
-      this.wgActionMode = mode;          // "leave" oder "delete"
-      this.showWgActionModal = true;
-    },
-
-    closeWgActionModal() {
-      this.showWgActionModal = false;
-      this.wgActionMode = null;
-      this.wgActionBusy = false;
-    },
-
-    async confirmWgAction() {
-      if (this.wgActionBusy) return;
-      this.wgActionBusy = true;
-
-      try {
-        if (this.wgActionMode === "delete") {
-          await this.deleteWG(true); // true = "confirmed"
-        } else {
-          await this.leaveWG(true);  // true = "confirmed"
-        }
-      } finally {
-        this.closeWgActionModal();
-      }
-    },
-
     openInfoModal(title, text) {
-    this.infoTitle = title || "Hinweis";
-    this.infoText = text || "";
-    this.showInfoModal = true;
-  },
+      this.infoTitle = title || "Hinweis";
+      this.infoText = text || "";
+      this.showInfoModal = true;
+    },
 
-  closeInfoModal() {
-    this.showInfoModal = false;
-    this.infoTitle = "";
-    this.infoText = "";
-  },
-
-
+    closeInfoModal() {
+      this.showInfoModal = false;
+      this.infoTitle = "";
+      this.infoText = "";
+    },
   },
 });

@@ -244,11 +244,38 @@ public class WGEndpoints {
 	// WG User endpoints
 	
 	public static void epGetUsers(Context ctx) {
-		String wid = ctx.pathParam("wid");
-		System.out.printf("Get WG %s users\n", wid);
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		if(usr == null) {
+			// noone's logged in
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		UUID wgid = RestUtils.getPathParamUUIDSafe(ctx, "wid");
+		if(wgid == null) {
+			return;
+		}
+		WG wg = RestUtils.getWGAsMember(ctx, wgid, usr, appCtx);
+		if(wg == null) {
+			// errors are already set
+			return;
+		}
 		
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		try {
+			var users = wg.getUsers();
+			ArrayList<UUID> resp = new ArrayList<UUID>();
+			for(var user : users) {
+				resp.add(user.getUserID());
+			}
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
+			return;
+		} catch(SQLException e) {
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerGetUsers(Javalin app) {

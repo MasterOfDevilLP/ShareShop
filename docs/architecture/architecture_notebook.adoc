@@ -50,6 +50,14 @@ TODO:
 . Entscheidung für Vue.js statt plain js, damit Code übersichtlicher bleibt
 . Entscheidung für Java als Programmiersprache, da mehr Erfahrung vorhanden als bei Python+Flask
 
+=== Einkaufslistenbearbeitung über Diffs
+Einkaufslisten werden bearbeitet, indem nicht der neue Zustand geschickt wird, sondern was wie verändert wurde. Dies hat mehrere Gründe:
+
+- für die meisten Änderungen ist der genaue Zustand der Liste wenig relevant. Wenn etwas benötigt wird, wird es mit auf die Liste geschrieben (sofern nicht schon vorhanden, dies müsste der Nutzer jedoch in jedem Fall prüfen), und wenn etwas gekauft wurde, kann die entsprechende Menge abgehakt werden. Dafür ist es jeweils nicht nötig, den genauen neuen Zustand direkt zu schreiben, da der Nutzer jeweils nur die Änderungen sicher kennt, die er vornehmen möchte.
+- abgesehen von potentiell negativen Anzahlen ist so keine Synchronisierung der Clients nötig, ohne welche es sonst zum Lost Update kommen könnte (eine alternative, deutlich sinnvollere Lösung wäre hier, dass die Clients immer einen Zeitstempel des letzten ihnen bekannten Zustands mit schicken, woraus die Differenzen berechnet werden können, was jedoch unnötig kompliziert ist).  
+- für den Offlinemodus können so einfach alle Änderungen aufgezeichnet und später abgeschickt werden  
+- für den Audit Log einer Liste müssen Diffs ebenfalls nicht extra berechnen werden, was den Code vereinfacht
+- Diff-Berechnung auf den Client ist simpler, da dieser nur einen möglichen Zustand zum Vergleichen hat
 
 == Schichten oder Architektur-Framework
 //[Describe the architectural pattern that you will use or how the architecture will be consistent and uniform. This could be a simple reference to an existing or well-known architectural pattern, such as the Layer framework, a reference to a high-level model of the framework, or a description of how the major system components should be put together.]

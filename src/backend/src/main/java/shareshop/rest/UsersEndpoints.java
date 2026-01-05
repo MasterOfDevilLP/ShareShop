@@ -21,10 +21,17 @@ import shareshop.rest.requests.CreateUserResponse;
 import shareshop.rest.requests.LoginRequest;
 import shareshop.rest.requests.UserInformationResponse;
 
+/**
+ * Implementation of the user account endpoints (under /user) 
+ */
 public class UsersEndpoints {
 	
 	private final static String basepath = "/user";
 	
+	/**
+	 * Register all endpoints to the Javalin instance
+	 * @param app The Javalin instance
+	 */
 	public static void register(Javalin app) {
 		// TODO Auto-generated method stub
 		registerCreate(app);
@@ -34,6 +41,10 @@ public class UsersEndpoints {
 		registerModify(app);
 	}
 	
+	/**
+	 * Implementation of POST /user/create
+	 * @param ctx The Javalin request context
+	 */
 	public static void epCreate(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		try {
@@ -74,6 +85,10 @@ public class UsersEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of POST /user/login
+	 * @param ctx The Javalin request context
+	 */
 	public static void epLogin(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		Logger logger = LoggerFactory.getLogger(UsersEndpoints.class);
@@ -120,6 +135,10 @@ public class UsersEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of POST /user/logout
+	 * @param ctx The Javalin request context
+	 */
 	public static void epLogout(Context ctx) {
 		try {
 			HttpSession session = ctx.req().getSession(false); 
@@ -140,6 +159,10 @@ public class UsersEndpoints {
 		});
 	}
 			
+	/**
+	 * Implementation of GET /user
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGet(Context ctx) {
 		User usr = RestUtils.getAuthorizedUser(ctx);
 		try {
@@ -166,6 +189,10 @@ public class UsersEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of PATCH /user (stubbed)
+	 * @param ctx The Javalin request context
+	 */
 	public static void epModify(Context ctx) {
 		User usr = RestUtils.getAuthorizedUser(ctx);
 		if(usr != null) {

@@ -4,17 +4,27 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
+/**
+ * Implementation of the Category endpoints (under /wg/{wid}/category)
+ */
 public class CategoryEndpoints {
 	
 	private final static String basepath = "/wg/{wid}/category";
 	
+	/**
+	 * Registers all endpoints defined in this class (all stubbed, please ignore)
+	 * @param app the javalin instance ot register them to
+	 */
 	public static void register(Javalin app) {
 		registerPost(app);
 		registerDelete(app);
 		registerPatch(app);
 	}
 	
-	
+	/**
+	 * Stubbed endpoint for now, ignore
+	 * @param ctx Javalin request context
+	 */
 	public static void epDelete(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		String cid = ctx.pathParam("cid");
@@ -31,6 +41,10 @@ public class CategoryEndpoints {
 		});
 	}
 	
+	/**
+	 * Stubbed endpoint for now, ignore
+	 * @param ctx Javalin request context
+	 */
 	public static void epPatch(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		String cid = ctx.pathParam("cid");
@@ -48,6 +62,10 @@ public class CategoryEndpoints {
 		});
 	}
 	
+	/**
+	 * Stubbed endpoint for now, ignore
+	 * @param ctx Javalin request context
+	 */
 	public static void epPost(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		System.out.printf("WG %s add category\n", wid);

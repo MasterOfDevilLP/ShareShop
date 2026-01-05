@@ -1,10 +1,7 @@
 package shareshop.rest;
 
 import java.sql.SQLException;
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
->>>>>>> origin/develop
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -38,10 +35,7 @@ public class InviteEndpoints {
 		registerDelete(app);
 		registerGet(app);
 		registerGetWG(app);
-<<<<<<< HEAD
-=======
 		registerGetWGList(app);
->>>>>>> origin/develop
 		registerPost(app);
 	}
 	
@@ -185,8 +179,6 @@ public class InviteEndpoints {
 		}
 	}
 	
-<<<<<<< HEAD
-=======
 	public static void epGetWGList(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
@@ -224,22 +216,18 @@ public class InviteEndpoints {
 		}
 	}
 	
->>>>>>> origin/develop
 	private static void registerGetWG(Javalin app) {
 		app.get(wg_basepath + "/{ivid}", ctx -> {
 			epGetWG(ctx);
 		});
 	}
 
-<<<<<<< HEAD
-=======
 	private static void registerGetWGList(Javalin app) {
 		app.get(wg_basepath, ctx -> {
 			epGetWGList(ctx);
 		});
 	}
 	
->>>>>>> origin/develop
 	public static void epGet(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		AppContext appCtx = (AppContext) ctx.appData(ctxKey);

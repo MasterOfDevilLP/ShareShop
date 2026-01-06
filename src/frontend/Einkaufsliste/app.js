@@ -137,6 +137,15 @@ new Vue({
     },
   },
 
+  watch: {
+  localTicks: {
+    handler(val) {
+      localStorage.setItem("localTicks", JSON.stringify(val));
+    },
+    deep: true,
+  }
+},
+
   mounted() {
     /**
      * Lädt initial die WG-Produkte und die Einkaufsliste, falls IDs vorhanden.

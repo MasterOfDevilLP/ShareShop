@@ -102,9 +102,10 @@ new Vue({
     /** @type {boolean} Flag: gerade ein Produkt bearbeiten */
     isEditing: false,
 
-    /** @type {boolean} Preis-Modal sichtbar */
+    /** @type {boolean} Preis-Modal fur Einkaufsmodus sichtbar */
     showPriceModal: false,
     modalProduct: null,
+    modalTickOnSave: false, //Flag, ob beim Speichern getickt werden soll
 
     /** @type {boolean} Modal für Meldungen für erfolfreiche abgehackte/geloschte Items */
     showMiniModal: false,
@@ -117,13 +118,21 @@ new Vue({
   },
 
   watch: {
-  localTicks: {
-    handler(val) {
-      localStorage.setItem("localTicks", JSON.stringify(val));
-    },
-    deep: true,
-  }
-},
+    localTicks: {
+      handler(val) {
+        localStorage.setItem("localTicks", JSON.stringify(val));
+      },
+      deep: true,
+    }
+  },
+
+  computed: {
+    /** @type {number} Gesamtsumme der getickten Produkte */
+    totalTickedPrice() {
+      const tickedItems = this.listItems.filter(item => this.isTicked(item));
+      return tickedItems.reduce((sum, item) => sum + (parseFloat(item.preis) || 0), 0);
+    }
+  },
 
   mounted() {
     /**
@@ -430,26 +439,38 @@ new Vue({
     },
 
     /********** Item als gekauft markieren **********/
-    /** Modal zum Preis ändern */
+    /** Öffnen für Einzelitem (nur Preis ändern) */
     openPriceModal(product) {
       this.modalProduct = { ...product };
-      this.showPriceModal = true;   
+      this.modalTickOnSave = false; // nur Preis, kein Tick
+      this.showPriceModal = true;
     },
 
     closePriceModal() {
       this.modalProduct = null;
       this.showPriceModal = false;
+      this.modalTickOnSave = false;
     },
 
-    /** Speichert Preis und markiert als gekauft */
-    savePriceAndTick() {
+    /** Speichert Preis ohne Markierung als gekauft */
+    savePriceBeforeTick() {
       if (!this.modalProduct) return;
       const item = this.listItems.find(i => i.iid === this.modalProduct.iid);
       if (item) {
         item.preis = parseFloat(this.modalProduct.preis) || 0;
       }
-      this.toggleTick(item);
       this.closePriceModal();
+    },
+
+    /** Öffnen für "Einkaufen fertig" (Preis + Tick)*/
+    openPriceModalForFertig() {
+      this.modalProduct = {
+        preis: this.listItems
+          .filter(item => this.isTicked(item))
+          .reduce((sum, item) => sum + (parseFloat(item.preis) || 0), 0)
+      };
+      this.modalTickOnSave = true; // Tick wird gesetzt
+      this.showPriceModal = true;
     },
 
     showMiniModalMsg(msg, duration = 500) {
@@ -478,6 +499,35 @@ new Vue({
     /** Prüft, ob Item lokal getickt wurde oder bereits auf Backend */
     isTicked(item) {
       return this.localTicks[item.iid] ?? item.ticked;
+    },
+
+    savePrice() {
+      if (!this.modalProduct) return;
+
+      if (this.modalTickOnSave) {
+        this.savePriceAndTick(); // Preis speichern + Items ticken
+      } else {
+        this.savePriceBeforeTick(); // nur Preis speichern
+      }
+
+      this.closePriceModal();
+    },
+
+    /** Speichert Preis und markiert alle lokal getickten Items als gekauft */
+    savePriceAndTick() {
+      if (!this.modalProduct) return;
+
+      // Preis setzen für alle lokal getickten Items
+      const tickedItems = this.listItems.filter(item => this.isTicked(item));
+
+      tickedItems.forEach(item => {
+        item.preis = parseFloat(this.modalProduct.preis) || item.preis;
+      });
+
+      // alle getickten Items im Backend markieren
+      this.finalizeTicks();
+
+      this.showMiniModalMsg("Alle Produkte als gekauft markiert", 500);
     },
 
     /** Alle lokal getickten Items wirklich auf Backend setzen */

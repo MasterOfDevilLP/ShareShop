@@ -41,6 +41,13 @@
           <!-- Dynamischer Titel der Einkaufsliste -->
           <span class="site-titel">{{ list_name }}</span>
 
+          <!-- Einkaufsmodus wechseln -->
+          <a href="einkaufmodus.html">
+            <button class="icon-btn" title="Einkaufsmodus">
+              <img src="icons/einkaufen.png" />
+            </button>
+          </a>
+
           <!-- Link zu den Einstellungen der Einkaufsliste -->
           <a href="./settings_einkaufsliste.html">
             <button class="icon-btn" id="settings_btn" title="Settings">
@@ -92,21 +99,10 @@
           </div>
         </main>
 
-        
-        <div class="bottom-action-bar" >
-          <!-- Einkaufsmodus wechseln -->
-          <a href="einkaufmodus.html">
-            <button class="icon-btn" title="Einkaufsmodus">
-              <img src="icons/Wagen.png" />
-            </button>
-          </a>
-
-          <!-- Button: neues Produkt hinzufügen -->
-          <button class="add-product" @click="add_product">
-            <span>+</span> Artikel hinzufügen
-          </button>
-        </div>
-
+        <!-- Button: neues Produkt hinzufügen -->
+        <button class="add-product" @click="add_product">
+          <span>+</span> Artikel hinzufügen
+        </button>
 
         <!-- POPUP: neues Produkt hinzufügen oder bearbeiten -->
         <div class="bottom-sheet" :class="{ visible: showPopup }">

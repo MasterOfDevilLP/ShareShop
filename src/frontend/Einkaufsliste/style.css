@@ -324,3 +324,101 @@ body {
   cursor: pointer;
   color: #999;
 }
+
+.sheet-body input {
+  width: 100%;          
+  box-sizing: border-box; 
+  padding: 0.5rem; 
+}
+
+.product-price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.edit-price-icon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.iphone-app .modal-backdrop {
+  position: absolute; /* thay vì fixed */
+  top: 0; 
+  left: 0; 
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.iphone-app .modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;         
+  max-width: 320px;    
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.iphone-app .modal-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.iphone-app .modal-actions button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #7dcfb6;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.iphone-app .modal-actions button:hover {
+  background-color: #5aa88a;
+}
+
+.iphone-app .modal-actions button:nth-child(2) {
+  background-color: #d56559; 
+  color: white;
+}
+
+.iphone-app .modal-actions button:nth-child(2):hover {
+  background-color: #c0392b; 
+}
+
+.mini-modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(50, 50, 50, 0.9);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  z-index: 999999;
+  opacity: 1;
+  transition: opacity 0.5s ease-out, transform 0.3s ease-out;
+}
+.mini-modal.fade-out {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+
+
+
+
+
+
+

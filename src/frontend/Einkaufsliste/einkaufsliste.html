@@ -129,18 +129,25 @@
           <!-- Body des Popups: Formular -->
           <div class="sheet-body">
             <label>Name:</label>
-            <input
-              list="wg-products"
-              v-model="newProduct.name"
-              @input="onProductNameInput"
-            />
-            <datalist id="wg-products">
-              <option
-                v-for="p in products"
-                :key="p.id"
-                :value="p.name"
-              ></option>
-            </datalist>
+            <div class="autocomplete-wrapper">
+              <input
+                type="text"
+                v-model="newProduct.name"
+                @input="onProductNameInput"
+                @focus="showDropdownForProductFromWG = true"
+                @blur="hideDropdown"
+              />
+
+              <ul v-if="showDropdownForProductFromWG && filteredProducts.length" class="autocomplete-list">
+                <li
+                  v-for="p in filteredProducts"
+                  :key="p.id"
+                  @mousedown.prevent="selectProduct(p)"
+                >
+                  {{ p.name }}
+                </li>
+              </ul>
+            </div>
 
             <label>Kategorie:</label>
             <select

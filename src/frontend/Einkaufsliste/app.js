@@ -102,9 +102,6 @@ new Vue({
     /** @type {boolean} Flag: gerade ein Produkt bearbeiten */
     isEditing: false,
 
-    /** @type {boolean} Flag: Einkaufsliste im Einkaufsmodus */
-    isShoppingMode: false,
-
     /** @type {boolean} Preis-Modal sichtbar */
     showPriceModal: false,
     modalProduct: null,
@@ -115,7 +112,18 @@ new Vue({
 
     showDropdownForProductFromWG: false,
     filteredProducts: [],
+
+    localTicks: {},
   },
+
+  watch: {
+  localTicks: {
+    handler(val) {
+      localStorage.setItem("localTicks", JSON.stringify(val));
+    },
+    deep: true,
+  }
+},
 
   mounted() {
     /**
@@ -128,6 +136,15 @@ new Vue({
         "WG oder Liste nicht ausgewählt. Bitte zuerst auf der Startseite auswählen.",
       );
     }
+
+    /** Vorhandene lokale Ticks laden */
+    const savedTicks = localStorage.getItem("localTicks");
+    if (savedTicks) this.localTicks = JSON.parse(savedTicks);
+
+    /** Seite verlassen → localTicks zurücksetzen */
+    window.addEventListener("beforeunload", () => {
+      this.resetLocalTicks();
+    });
   },
 
   methods: {
@@ -451,6 +468,43 @@ new Vue({
       }, duration + 100);
     },
 
+    /** Toggle nur lokal, nicht direkt Backend */
+    toggleLocalTick(item) {
+      if (!item || !item.iid) return;
+      // switchen des local tick status
+      this.$set(this.localTicks, item.iid, !this.localTicks[item.iid]);
+    },
+
+    /** Prüft, ob Item lokal getickt wurde oder bereits auf Backend */
+    isTicked(item) {
+      return this.localTicks[item.iid] ?? item.ticked;
+    },
+
+    /** Alle lokal getickten Items wirklich auf Backend setzen */
+    async finalizeTicks() {
+      const tickedItems = Object.entries(this.localTicks)
+        .filter(([iid, ticked]) => ticked)
+        .map(([iid]) => iid);
+
+      for (const iid of tickedItems) {
+        const item = this.listItems.find(i => i.iid === iid);
+        if (item) {
+          await this.toggleTick(item); // ruft dein Backend auf
+        }
+      }
+
+      // localStorage leeren
+      this.localTicks = {};
+      localStorage.removeItem("localTicks");
+    },
+
+    /** Seite verlassen ohne Speichern → localStorage löschen */
+    resetLocalTicks() {
+      this.localTicks = {};
+      localStorage.removeItem("localTicks");
+    },
+
+    /** Markiert ein Item als gekauft (Tick) im Backend */
     toggleTick(item) {
       const payload = {
         iid: item.iid,

@@ -40,10 +40,13 @@
           </a>
           <!-- Dynamischer Titel der Einkaufsliste -->
           <span class="site-titel">{{ list_name }}</span>
+    
           <!-- Button für Einkaufsmodus -->
-          <button class="icon-btn" id="einkaufmodus_btn" title="Einkaufmodus">
+          <button class="icon-btn" id="einkaufmodus_btn" title="Einkaufmodus"
+                  @click="isShoppingMode = !isShoppingMode">
             <img src="icons/Wagen.png" />
           </button>
+
           <!-- Link zu den Einstellungen der Einkaufsliste -->
           <a href="./settings_einkaufsliste.html">
             <button class="icon-btn" id="settings_btn" title="Settings">
@@ -72,9 +75,17 @@
                   Menge: {{ product.amount }} {{ product.einheit }}
                 </div>
               </div>
-              <div class="product-price">{{ product.preis || '—' }} €</div>
+              <div class="product-price-wrapper">
+                <img v-if="isShoppingMode"
+                  src="icons/stift.png"
+                  class="edit-price-icon"
+                  title="Preis bearbeiten"
+                  @click="openPriceModal(product)"
+                />
+                <span class="product-price">{{ product.preis || '—' }} €</span>
+              </div>
               <!-- Button: Produkt bearbeiten -->
-              <button
+              <button v-if="!isShoppingMode"
                 class="btn btn-outline-info custom-button"
                 title="Artikel anpassen"
                 @click="openChangeProduct(product)"
@@ -83,7 +94,7 @@
               </button>
 
               <!-- Button: Als gekauft markieren -->
-              <button
+              <button v-if="isShoppingMode" 
                 class="btn btn-outline-success custom-button"
                 title="Als gekauft markieren"
                 @click="toggleTick(product)"
@@ -91,19 +102,20 @@
                 {{ '✓' }}
               </button>
               <!-- Button: Produkt löschen -->
-              <button
-                class="delete-product-button"
+              <button v-if="!isShoppingMode"
+                class="btn btn-outline-danger custom-button"
+                title="Artikel löschen"
                 @click="removeFromList(product)"
               >
-                x
+                X
               </button>
             </div>
           </div>
         </main>
 
         <!-- Button: neues Produkt hinzufügen -->
-        <button class="add-product" @click="add_product">
-          <span>+</span> Produkte hinzufügen
+        <button v-if="!isShoppingMode" class="add-product" @click="add_product">
+          <span>+</span> Artikel hinzufügen
         </button>
 
         <!-- POPUP: neues Produkt hinzufügen oder bearbeiten -->
@@ -111,7 +123,7 @@
           <!-- Header des Popups -->
           <div class="sheet-header">
             <span v-if="isEditing">Produkt bearbeiten</span>
-            <span v-else>Produkte hinzufügen</span>
+            <span v-else>Artikel hinzufügen</span>
             <button class="close-btn" @click="closePopup">✕</button>
           </div>
           <!-- Body des Popups: Formular -->
@@ -159,12 +171,31 @@
               <option>Stück</option>
             </select> -->
 
-            <label>Preis:</label>
-            <input type="number" v-model="newProduct.preis" step="0.01" />
+            <!-- Preis nur anzeigen, wenn es kein Bearbeiten ist -->
+            <div v-if="!isEditing">
+              <label>Preis: </label><br>
+              <input type="number" v-model="newProduct.preis" step="0.01" />
+            </div>
 
             <button id="saveList" @click="saveProduct">Speichern</button>
           </div>
         </div>
+
+        <!-- MODAL: Preis in Einkaufmodus ändern -->
+        <div class="modal-backdrop" v-if="showPriceModal">
+          <div class="modal-content">
+            <h3>Preis ändern</h3>
+            <div>
+              <label>Preis (€):</label>
+              <input type="number" v-model="modalProduct.preis" step="0.01" />
+            </div>
+            <div class="modal-actions">
+              <button @click="savePriceAndTick">Save & Tick ✓</button>
+              <button @click="closePriceModal">Abbrechen ✕</button>
+            </div>
+          </div>
+        </div>
+        
  
     <!-- Navigation -->
         <nav class="bottom-nav">
@@ -204,10 +235,15 @@
             /><br />Profil
           </button>
         </nav>
+        <!-- Mini modal -->
+        <div v-if="showMiniModal" class="mini-modal">
+          {{ miniModalMessage }}
+        </div>
       </div>
     </div>
 
     <!-- Eigenes JS Modul für App-Logik -->
     <script type="module" src="./app.js"></script>
+
   </body>
 </html>

@@ -51,15 +51,32 @@
         <h3>Preis ändern</h3>
         <input type="number" v-model="modalProduct.preis" step="0.01" />
         <div class="modal-actions">
-          <button @click="savePriceAndTick">Save & Tick ✓</button>
-          <button @click="closePriceModal">Abbrechen ✕</button>
+          <button @click="savePriceBeforeTick">Speichern</button>
+          <button @click="closePriceModal">Abbrechen</button>
         </div>
       </div>
     </div>
 
-    <button class="button" @click="finalizeTicks">
+    <button class="button" @click="openPriceModalForFertig">
         Einkaufen fertig
     </button>
+
+   <!-- Ein Modal für Preis ändern -->
+    <div class="modal-backdrop" v-if="showPriceModal">
+        <div class="modal-content">
+            <h3>{{ modalTickOnSave ? 'Gesamtpreis ändern (€):' : 'Preis ändern (€):' }}</h3>
+            <br>
+            <div>
+            <label>{{ modalTickOnSave ? 'Gesamtpreis (€):' : 'Preis (€):' }}</label>
+            <input type="number" v-model="modalProduct.preis" step="0.01" />
+            </div>
+            <div class="modal-actions">
+            <!-- Dynamisch die richtige Methode aufrufen -->
+            <button @click="savePrice">{{ modalTickOnSave ? 'Speichern & Tick' : 'Speichern' }}</button>
+            <button @click="closePriceModal">Abbrechen</button>
+            </div>
+        </div>
+    </div>
   </div>
 </div>
 

@@ -22,7 +22,7 @@ createApp({
       },
       
       // Available avatars
-    avatars : [
+      avatars: [
         { id: 'avatar1', emoji: '👑', color: '#7DCFB6', name: t('Einkaufsboss', 'Shopping Boss') },
         { id: 'avatar2', emoji: '🥔', color: '#FFB84D', name: t('Kartoffel', 'Potato') },
         { id: 'avatar3', emoji: '🤓', color: '#FF6B9D', name: t('Listen-Mensch', 'List Person') },
@@ -32,7 +32,7 @@ createApp({
         { id: 'avatar7', emoji: '🤡', color: '#598eb6ff', name: t('Hat Gegessen', 'Already Ate') },
         { id: 'avatar8', emoji: '🏃', color: '#F39C12', name: t('Last Minute', 'Last Minute') },
         { id: 'avatar9', emoji: '💅', color: '#3498DB', name: t('Putzpolizei', 'Clean Police') }
-    ],
+      ],
       
       // Edit User Data (for modal)
       editUser: {
@@ -71,7 +71,7 @@ createApp({
         show: false,
         title: "",
         message: "",
-        type: "info", // 'info', 'success', 'warning', 'error'
+        type: "info",
         buttons: [],
       },
     };
@@ -158,8 +158,8 @@ createApp({
             localStorage.setItem("userEmail", this.user.email);
             
             // Use firstName/lastName if available, otherwise email username
-            if (userData.firstName || userData.lastName) {
-              this.user.name = [userData.firstName, userData.lastName]
+            if (userData.firstname || userData.lastname) {
+              this.user.name = [userData.firstname, userData.lastname]
                 .filter(Boolean)
                 .join(" ")
                 .trim() || userData.email.split("@")[0];
@@ -169,7 +169,6 @@ createApp({
             
             localStorage.setItem("userName", this.user.name);
           }
-          // If no email, just keep the cached name or default
           
         } else if (response.status === 401) {
           // Not logged in, redirect to login
@@ -204,13 +203,24 @@ createApp({
       this.user.avatar = avatarId;
       localStorage.setItem("userAvatar", avatarId);
       this.showAvatarPicker = false;
+      
+      // Info: Lokal gespeichert
+      this.showModal(
+        this.t('Avatar geändert', 'Avatar changed'),
+        this.t(
+          '✅ Avatar wurde lokal gespeichert.\n\nℹ️ Hinweis: Das Backend unterstützt keine Profiländerungen. Deine Änderung ist nur auf diesem Gerät sichtbar.',
+          '✅ Avatar has been saved locally.\n\nℹ️ Note: The backend doesn\'t support profile changes. Your change is only visible on this device.'
+        ),
+        'success'
+      );
     },
     
     // === Profile Editing ===
     openEditProfile() {
       // Populate edit form with current data
-      this.editUser.name = this.user.name;
-      this.editUser.email = this.user.email;
+      const nameParts = this.user.name.split(" ");
+      this.editUser.firstName = nameParts[0] || "";
+      this.editUser.lastName = nameParts.slice(1).join(" ") || "";
       this.editUser.password = "";
       this.showEditProfile = true;
     },
@@ -229,81 +239,48 @@ createApp({
           }
         }
         
-        // NOTE: The API currently doesn't have a full implementation for updating user profile
-        // The endpoint exists (POST /user) but returns "Not yet implemented"
-        
-        this.showModal(
-          this.t('Hinweis', 'Note'),
-          this.t(
-            "Die API unterstützt derzeit keine Profiländerungen. Der Endpoint muss noch implementiert werden.\n\nLokal gespeicherte Daten wurden aktualisiert.",
-            "The API currently doesn't support profile updates. The endpoint needs to be implemented.\n\nLocally stored data has been updated."
-          ),
-          'info'
-        );
-        
         // Update local display and storage
         const fullName = [this.editUser.firstName, this.editUser.lastName]
           .filter(Boolean)
           .join(" ")
           .trim();
         
-        if (fullName) {
-          this.user.name = fullName;
-          localStorage.setItem("userName", fullName);
+        if (!fullName) {
+          this.showModal(
+            this.t('Fehler', 'Error'),
+            this.t('Bitte gib mindestens einen Vor- oder Nachnamen ein.', 'Please enter at least a first or last name.'),
+            'error'
+          );
+          return;
         }
+        
+        // Speichere lokal
+        this.user.name = fullName;
+        localStorage.setItem("userName", fullName);
+        
+        // Speichere firstName und lastName separat (für Backend später)
+        localStorage.setItem("firstName", this.editUser.firstName);
+        localStorage.setItem("lastName", this.editUser.lastName);
         
         this.showEditProfile = false;
         
-        /* 
-        // Uncomment when the backend endpoint is fully implemented:
-        const updateData = {
-          firstName: this.editUser.firstName || null,
-          lastName: this.editUser.lastName || null,
-          email: this.editUser.email,
-        };
+        // Zeige Erfolg mit Info
+        this.showModal(
+          this.t('Profil aktualisiert', 'Profile updated'),
+          this.t(
+            '✅ Dein Name wurde lokal gespeichert.\n\nℹ️ Hinweis: Das Backend unterstützt keine Profiländerungen. Deine Änderung ist nur auf diesem Gerät sichtbar und wird nicht mit anderen geteilt.',
+            '✅ Your name has been saved locally.\n\nℹ️ Note: The backend doesn\'t support profile changes. Your change is only visible on this device and not shared with others.'
+          ),
+          'success'
+        );
         
-        if (this.editUser.password.trim()) {
-          updateData.password = this.editUser.password;
-        }
-        
-        const response = await fetch(`${API_BASE}/user`, {
-          method: "POST", // or PATCH when implemented
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(updateData),
-        });
-        
-        if (response.ok) {
-          // Update local data
-          const fullName = [this.editUser.firstName, this.editUser.lastName]
-            .filter(Boolean)
-            .join(" ")
-            .trim() || this.editUser.email.split("@")[0];
-          
-          this.user.name = fullName;
-          this.user.email = this.editUser.email;
-          localStorage.setItem("userName", fullName);
-          localStorage.setItem("userEmail", this.editUser.email);
-          
-          alert(this.t("Profil erfolgreich aktualisiert!", "Profile updated successfully!"));
-          this.showEditProfile = false;
-        } else {
-          const errorData = await response.json();
-          alert(this.t(
-            `Fehler beim Aktualisieren: ${errorData.message || "Unbekannter Fehler"}`,
-            `Update failed: ${errorData.message || "Unknown error"}`
-          ));
-        }
-        */
       } catch (error) {
         console.error("Error updating profile:", error);
         this.showModal(
           this.t('Fehler', 'Error'),
           this.t(
-            "Fehler beim Aktualisieren des Profils. Bitte versuche es später erneut.",
-            "Error updating profile. Please try again later."
+            "Fehler beim Speichern. Bitte versuche es erneut.",
+            "Error saving. Please try again."
           ),
           'error'
         );
@@ -323,6 +300,9 @@ createApp({
       localStorage.removeItem("userToken");
       localStorage.removeItem("userName");
       localStorage.removeItem("userEmail");
+      localStorage.removeItem("userAvatar");
+      localStorage.removeItem("firstName");
+      localStorage.removeItem("lastName");
       localStorage.removeItem("inviteLinkfromAPI");
       localStorage.removeItem("frontendLink");
       
@@ -369,91 +349,21 @@ createApp({
         return;
       }
       
-      // Show additional confirmation
-      this.showConfirm(
-        this.t('⚠️ Konto löschen', '⚠️ Delete Account'),
+      // Show info that backend doesn't support deletion
+      this.showModal(
+        this.t('Account-Löschung nicht verfügbar', 'Account Deletion Unavailable'),
         this.t(
-          "WARNUNG: Dies wird dein Konto und alle deine Daten DAUERHAFT löschen!\n\nBist du absolut sicher?",
-          "WARNING: This will PERMANENTLY delete your account and all your data!\n\nAre you absolutely sure?"
+          '⚠️ Das Backend unterstützt derzeit keine Account-Löschung.\n\nBitte kontaktiere einen Administrator, wenn du deinen Account löschen möchtest.',
+          '⚠️ The backend currently doesn\'t support account deletion.\n\nPlease contact an administrator if you want to delete your account.'
         ),
-        async () => {
-          // User confirmed, proceed with deletion
-          try {
-            // NOTE: The API currently doesn't have an endpoint for deleting user accounts
-            // Expected endpoint: DELETE /user with password verification
-            
-            this.showModal(
-              this.t('Hinweis', 'Note'),
-              this.t(
-                "Die API unterstützt derzeit keine Kontolöschung. Ein neuer Endpoint muss implementiert werden.\n\nBitte kontaktiere einen Administrator.",
-                "The API currently doesn't support account deletion. A new endpoint needs to be implemented.\n\nPlease contact an administrator."
-              ),
-              'info'
-            );
-            
-            this.showDeleteAccount = false;
-            this.deletePassword = "";
-            
-            /*
-            // Uncomment this when the backend endpoint is ready:
-            const response = await fetch(`${API_BASE}/user`, {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              credentials: "include",
-              body: JSON.stringify({
-                password: this.deletePassword,
-              }),
-            });
-            
-            if (response.ok) {
-              // Clear all local data
-              localStorage.clear();
-              
-              this.showModal(
-                this.t('Erfolgreich', 'Success'),
-                this.t(
-                  "Dein Konto wurde erfolgreich gelöscht.",
-                  "Your account has been successfully deleted."
-                ),
-                'success',
-                [{
-                  text: 'OK',
-                  action: () => {
-                    window.location.href = "../index.html";
-                  },
-                  class: 'btn-save'
-                }]
-              );
-            } else {
-              const errorData = await response.json();
-              this.showModal(
-                this.t('Fehler', 'Error'),
-                this.t(
-                  `Fehler beim Löschen: ${errorData.message || "Falsches Passwort"}`,
-                  `Deletion failed: ${errorData.message || "Incorrect password"}`
-                ),
-                'error'
-              );
-            }
-            */
-          } catch (error) {
-            console.error("Error deleting account:", error);
-            this.showModal(
-              this.t('Fehler', 'Error'),
-              this.t(
-                "Fehler beim Löschen des Kontos. Bitte versuche es später erneut.",
-                "Error deleting account. Please try again later."
-              ),
-              'error'
-            );
-          }
-        }
+        'warning'
       );
+      
+      this.showDeleteAccount = false;
+      this.deletePassword = "";
     },
     
-    // === Notification Settings (placeholder) ===
+    // === Notification Settings ===
     openNotificationSettings() {
       this.showNotificationSettings = true;
     },
@@ -469,8 +379,8 @@ createApp({
       this.showModal(
         this.t('Gespeichert', 'Saved'),
         this.t(
-          "Benachrichtigungseinstellungen gespeichert!",
-          "Notification settings saved!"
+          "✅ Benachrichtigungseinstellungen lokal gespeichert!\n\nℹ️ Diese Einstellungen sind nur auf diesem Gerät aktiv.",
+          "✅ Notification settings saved locally!\n\nℹ️ These settings are only active on this device."
         ),
         'success'
       );

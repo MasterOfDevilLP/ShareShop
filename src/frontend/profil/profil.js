@@ -2,26 +2,44 @@ import { API_BASE } from '../config.js';
 
 const { createApp, reactive } = Vue;
 
-// === Language Store ===
+/**
+ * Reactive global language store.
+ * Persists the selected language in localStorage.
+ *
+ * @typedef {Object} LanguageStore
+ * @property {string} language - Current UI language ("de" | "en")
+ */
 const LanguageStore = reactive({
   language: localStorage.getItem("language") || "de",
 });
 
-// === Translation Helper ===
+/**
+ * Translation helper function.
+ *
+ * @param {string} de - German translation
+ * @param {string} en - English translation
+ * @returns {string} Translated string based on current language
+ */
 const t = (de, en) => (LanguageStore.language === "de" ? de : en);
 
-// === Main App ===
+/**
+ * Main Vue application instance.
+ */
 createApp({
   data() {
     return {
-      // User Data
+      /**
+       * Logged-in user data (stored locally).
+       */
       user: {
         name: localStorage.getItem("userName") || "User Name",
-        email: localStorage.getItem("userEmail") || "abc@gmail.com",
         avatar: localStorage.getItem("userAvatar") || "avatar1",
       },
       
-      // Available avatars
+      /**
+       * Available avatar definitions.
+       * @type {Array<{id:string, emoji:string, color:string, name:string}>}
+       */
       avatars: [
         { id: 'avatar1', emoji: '👑', color: '#7DCFB6', name: t('Einkaufsboss', 'Shopping Boss') },
         { id: 'avatar2', emoji: '🥔', color: '#FFB84D', name: t('Kartoffel', 'Potato') },
@@ -34,20 +52,31 @@ createApp({
         { id: 'avatar9', emoji: '💅', color: '#3498DB', name: t('Putzpolizei', 'Clean Police') }
       ],
       
-      // Edit User Data (for modal)
+      /**
+       * Temporary edit form state for profile modal.
+       */
       editUser: {
+        /** @type {string} */
         firstName: "",
+        /** @type {string} */
         lastName: "",
+        /** @type {string} */
         password: "",
       },
-      
-      // Settings
+
+      /** @type {"light" | "dark"} */
       theme: localStorage.getItem("theme") || "light",
+
+      /** @type {string} */
       language: LanguageStore.language,
-      
-      // UI State
+
+      /** @type {string} */
       message: "",
+
+      /** @type {boolean} */
       isLoggingOut: false,
+
+      // Modal visibility flags
       showLogoutModal: false,
       showEditProfile: false,
       showAvatarPicker: false,
@@ -55,10 +84,12 @@ createApp({
       showCurrencySettings: false,
       showDeleteAccount: false,
       
-      // Delete Account
+      /** @type {string} */
       deletePassword: "",
-      
-      // Notification Settings
+
+      /**
+       * Notification preferences stored locally.
+       */
       notifications: {
         listUpdates: localStorage.getItem("notif_listUpdates") !== "false",
         newItems: localStorage.getItem("notif_newItems") !== "false",
@@ -78,11 +109,17 @@ createApp({
   },
   
   methods: {
-    // === Translation Method ===
     t,
     
-    // === Custom Modal System ===
-    showModal(title, message, type = 'info', buttons = null) {
+    /**
+     * Opens a generic modal dialog.
+     *
+     * @param {string} title
+     * @param {string} message
+     * @param {"info"|"success"|"warning"|"error"} [type="info"]
+     * @param {Array<Object>|null} [buttons=null]
+     */
+      showModal(title, message, type = 'info', buttons = null) {
       this.customModal = {
         show: true,
         title,
@@ -98,6 +135,14 @@ createApp({
       };
     },
     
+    /**
+     * Shows a confirmation dialog with confirm/cancel actions.
+     *
+     * @param {string} title
+     * @param {string} message
+     * @param {Function} onConfirm
+     * @param {Function|null} [onCancel=null]
+     */
     showConfirm(title, message, onConfirm, onCancel = null) {
       this.customModal = {
         show: true,
@@ -129,7 +174,13 @@ createApp({
       this.customModal.show = false;
     },
     
-    // === Fetch User Data from Backend ===
+    /**
+     * Fetches user data from the backend API.
+     * Uses cookies for authentication.
+     *
+     * @async
+     * @returns {Promise<void>}
+     */    
     async fetchUserData() {
       try {
         const response = await fetch(`${API_BASE}/user`, {
@@ -180,25 +231,42 @@ createApp({
       }
     },
     
-    // === Theme Management ===
+    /**
+     * Sets the UI theme.
+     *
+     * @param {"light"|"dark"} mode
+     */
     setTheme(mode) {
       this.theme = mode;
       localStorage.setItem("theme", mode);
       document.body.classList.toggle("dark-mode", mode === "dark");
     },
     
-    // === Language Management ===
-    setLanguage(lang) {
+    /**
+     * Sets the application language.
+     *
+     * @param {"de"|"en"} lang
+     */
+      setLanguage(lang) {
       this.language = lang;
       LanguageStore.language = lang;
       localStorage.setItem("language", lang);
     },
     
-    // === Avatar Management ===
-    getAvatarData(avatarId) {
+    /**
+     * Returns avatar metadata for a given avatar ID.
+     *
+     * @param {string} avatarId
+     * @returns {{id:string, emoji:string, color:string, name:string}}
+     */    getAvatarData(avatarId) {
       return this.avatars.find(a => a.id === avatarId) || this.avatars[0];
     },
     
+    /**
+     * Selects and stores the user's avatar locally.
+     *
+     * @param {string} avatarId
+     */
     selectAvatar(avatarId) {
       this.user.avatar = avatarId;
       localStorage.setItem("userAvatar", avatarId);
@@ -215,7 +283,15 @@ createApp({
       );
     },
     
-    // === Profile Editing ===
+    /**
+     * Opens the profile edit modal and pre-fills the form
+     * with the currently stored user name.
+     *
+     * Splits the full name into first and last name parts
+     * and resets the password field.
+     *
+     * @returns {void}
+     */
     openEditProfile() {
       // Populate edit form with current data
       const nameParts = this.user.name.split(" ");
@@ -225,9 +301,20 @@ createApp({
       this.showEditProfile = true;
     },
     
+    /**
+     * Saves profile changes locally.
+     *
+     * - Validates password length if provided
+     * - Ensures at least a first or last name is set
+     * - Persists data in localStorage
+     *
+     * Note: Backend does NOT support profile updates.
+     *
+     * @async
+     * @returns {Promise<void>}
+     */
     async saveProfile() {
       try {
-        // Validate password if changed
         if (this.editUser.password.trim()) {
           if (this.editUser.password.length < 6) {
             this.showModal(
@@ -239,7 +326,6 @@ createApp({
           }
         }
         
-        // Update local display and storage
         const fullName = [this.editUser.firstName, this.editUser.lastName]
           .filter(Boolean)
           .join(" ")
@@ -254,11 +340,8 @@ createApp({
           return;
         }
         
-        // Speichere lokal
         this.user.name = fullName;
         localStorage.setItem("userName", fullName);
-        
-        // Speichere firstName und lastName separat (für Backend später)
         localStorage.setItem("firstName", this.editUser.firstName);
         localStorage.setItem("lastName", this.editUser.lastName);
         
@@ -287,7 +370,16 @@ createApp({
       }
     },
     
-    // === Logout Logic ===
+    /**
+     * Logs the user out locally and attempts
+     * to notify the backend session.
+     *
+     * Always clears local storage and redirects
+     * to the login page.
+     *
+     * @async
+     * @returns {Promise<void>}
+     */
     async confirmLogout() {
       this.showLogoutModal = false;
       this.isLoggingOut = true;
@@ -338,7 +430,16 @@ createApp({
       }, 2000);
     },
     
-    // === Account Deletion ===
+    /**
+     * Handles account deletion attempt.
+     *
+     * Currently only validates password input
+     * and shows an informational warning because
+     * backend deletion is not supported.
+     *
+     * @async
+     * @returns {Promise<void>}
+     */
     async confirmDeleteAccount() {
       if (!this.deletePassword) {
         this.showModal(
@@ -363,30 +464,51 @@ createApp({
       this.deletePassword = "";
     },
     
-    // === Notification Settings ===
+    /**
+     * Opens the notification settings modal.
+     *
+     * @returns {void}
+     */
     openNotificationSettings() {
       this.showNotificationSettings = true;
     },
     
+    /**
+     * Toggles a single notification setting
+     * and persists it in localStorage.
+     *
+     * @param {string} key - Notification setting key
+     * @returns {void}
+     */
     toggleNotification(key) {
       this.notifications[key] = !this.notifications[key];
       localStorage.setItem(`notif_${key}`, this.notifications[key]);
     },
     
+    /**
+     * Closes the notification settings modal
+     * and confirms local persistence.
+     *
+     * @returns {void}
+     */
     saveNotificationSettings() {
-      // Settings are already saved in localStorage via toggleNotification
       this.showNotificationSettings = false;
       this.showModal(
         this.t('Gespeichert', 'Saved'),
         this.t(
-          "✅ Benachrichtigungseinstellungen lokal gespeichert!\n\nℹ️ Diese Einstellungen sind nur auf diesem Gerät aktiv.",
-          "✅ Notification settings saved locally!\n\nℹ️ These settings are only active on this device."
+          "✅ Benachrichtigungseinstellungen lokal gespeichert!",
+          "✅ Notification settings saved locally!"
         ),
         'success'
       );
     },
-    
-    // === Currency Settings (placeholder) ===
+
+    /**
+     * Displays placeholder information for
+     * future currency settings.
+     *
+     * @returns {void}
+     */
     openCurrencySettings() {
       this.showCurrencySettings = true;
       this.showModal(
@@ -401,24 +523,28 @@ createApp({
     },
   },
   
+  /**
+   * Lifecycle hook executed after component mount.
+   *
+   * @async
+   * @returns {Promise<void>}
+   */
   async mounted() {
-    // Apply saved theme on load
     document.body.classList.toggle("dark-mode", this.theme === "dark");
+        await this.fetchUserData();
     
-    // Fetch user data from backend
-    await this.fetchUserData();
-    
-    // Initialize edit user data
     const nameParts = this.user.name.split(" ");
     this.editUser.firstName = nameParts[0] || "";
     this.editUser.lastName = nameParts.slice(1).join(" ") || "";
   },
   
   watch: {
-    // Watch for edit profile modal opening
-    showEditProfile(newVal) {
+    /**
+     * Resets edit form when profile modal opens.
+     *
+     * @param {boolean} newVal
+     */    showEditProfile(newVal) {
       if (newVal) {
-        // Reset edit form when modal opens
         const nameParts = this.user.name.split(" ");
         this.editUser.firstName = nameParts[0] || "";
         this.editUser.lastName = nameParts.slice(1).join(" ") || "";
@@ -426,7 +552,11 @@ createApp({
       }
     },
     
-    // Watch for delete account modal opening
+    /**
+     * Clears password field when delete-account modal opens.
+     *
+     * @param {boolean} newVal
+     */
     showDeleteAccount(newVal) {
       if (newVal) {
         // Reset password field

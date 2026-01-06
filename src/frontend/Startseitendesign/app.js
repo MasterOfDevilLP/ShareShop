@@ -553,18 +553,6 @@ new Vue({
     },
 
     copyInviteLink() {
-      if (!this.frontendLink) {
-        alert("Kein Invite-Link vorhanden. Bitte erst erstellen.");
-        return;
-      }
-
-      navigator.clipboard
-        .writeText(this.frontendLink)
-        .then(() => {
-          this.showCopyToast = true;
-          setTimeout(() => (this.showCopyToast = false), 2000);
-        })
-        .catch((err) => console.error("Fehler beim Kopieren:", err));
       if (navigator.clipboard) {
         navigator.clipboard.writeText(this.frontendLink)
           .then(() => {

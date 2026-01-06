@@ -565,6 +565,33 @@ new Vue({
           setTimeout(() => (this.showCopyToast = false), 2000);
         })
         .catch((err) => console.error("Fehler beim Kopieren:", err));
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(this.frontendLink)
+          .then(() => {
+            this.showCopyToast = true;
+            setTimeout(() => this.showCopyToast = false, 2000);
+          })
+          .catch(() => {
+            this.fallbackCopy(this.frontendLink);
+          });
+      } else {
+        this.fallbackCopy(this.frontendLink);
+      }
+    },
+
+    fallbackCopy(text) {
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      try {
+        document.execCommand('copy');
+        this.showCopyToast = true;
+        setTimeout(() => this.showCopyToast = false, 2000);
+      } catch (err) {
+        console.warn('Bitte kopieren Sie manuell');
+      }
+      document.body.removeChild(el);
     },
 
     toggleEmailInput() {

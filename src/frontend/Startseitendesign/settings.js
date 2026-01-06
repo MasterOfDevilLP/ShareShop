@@ -243,6 +243,86 @@ new Vue({
       }
     },
 
+    async deleteWG(confirmFromModal = false) {
+  if (!this.selectedWG) {
+    this.openInfoModal("Hinweis", "Keine WG ausgewählt.");
+    return;
+  }
+
+  // Erst Modal öffnen (Bestätigung)
+  if (!confirmFromModal) {
+    this.openWgActionModal("delete");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/wg/${this.selectedWG}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    // Backend entscheidet: falls verboten
+    if (res.status === 403) {
+      const text = await res.text().catch(() => "");
+      this.openInfoModal("Nicht erlaubt", text || "Du darfst diese WG nicht löschen.");
+      return;
+    }
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      this.openInfoModal(
+        "Fehler",
+        text || `Fehler beim Löschen (HTTP ${res.status})`
+      );
+      return;
+    }
+
+    const deletedId = String(this.selectedWG);
+
+    // WG aus Liste entfernen
+    this.wgList = this.wgList.filter((w) => String(w.id) !== deletedId);
+    localStorage.setItem("wgList", JSON.stringify(this.wgList));
+
+    // Auswahl zurücksetzen
+    this.selectedWG = null;
+    this.selectedWGName = "WG auswählen";
+    localStorage.removeItem("selectedWG");
+    localStorage.removeItem("selectedWGName");
+
+    // Optional: Invite-Link löschen
+    this.inviteLinkfromAPI = "";
+    localStorage.removeItem("inviteLinkfromAPI");
+
+    this.openInfoModal("Erledigt", "WG gelöscht.");
+  } catch (err) {
+    console.error("deleteWG exception:", err);
+    this.openInfoModal("Fehler", "Fehler beim Löschen der WG: " + err.message);
+  }
+},
+
+
+    openWgActionModal(mode) {
+      this.wgActionMode = mode; // "leave" | "delete"
+      this.showWgActionModal = true;
+    },
+
+    async confirmWgAction() {
+      if (this.wgActionBusy) return;
+      this.wgActionBusy = true;
+
+      try {
+        if (this.wgActionMode === "delete") {
+          await this.deleteWG(true);
+        } else {
+          await this.leaveWG(true);
+        }
+      } finally {
+        this.closeWgActionModal();
+      }
+    },
+
+
+
     async createInviteLink() {
       if (!this.selectedWG) {
         this.showError("Bitte zuerst eine WG auswählen.");

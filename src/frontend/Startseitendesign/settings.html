@@ -80,12 +80,12 @@
 
           <!-- Optionen -->
          <div
-  class="settings-option-row"
-  @click="window.location.href = 'mitglieder_einladen.html'"
->
-  <img src="icons/link.png" class="settings-icon" />
-  <span class="settings-option-text">Mitglieder via Link einladen</span>
-</div>
+          class="settings-option-row"
+          @click="window.location.href = 'mitglieder_einladen.html'"
+        >
+          <img src="icons/link.png" class="settings-icon" />
+          <span class="settings-option-text">Mitglieder via Link einladen</span>
+        </div>
 
 
 
@@ -113,29 +113,49 @@
             <span class="settings-option-text">Produkte sortieren</span>
           </div>
 
-   <!-- WG verlassen -->
-<div class="settings-option-row delete-row" @click="openWgActionModal()">
-  <img src="icons/group_exit.png" class="settings-icon" alt="WG verlassen" />
-  <span class="settings-delete-text">WG verlassen</span>
-</div>
+      <!-- WG löschen -->
+      <div class="settings-option-row delete-row" @click="openWgActionModal('delete')">
+        <img src="icons/Trashcan.png" class="settings-icon" alt="WG löschen" />
+        <span class="settings-delete-text">WG löschen</span>
+      </div>
 
-<!-- Modal: WG verlassen -->
-<div v-if="showWgActionModal" class="modal-overlay" @click.self="closeWgActionModal">
-  <div class="modal-card">
-    <h2 class="modal-title">WG verlassen</h2>
-    <p class="modal-text">Willst du diese WG wirklich verlassen?</p>
+      <!-- WG verlassen -->
+        <div class="settings-option-row delete-row" @click="openWgActionModal()">
+          <img src="icons/group_exit.png" class="settings-icon" alt="WG verlassen" />
+          <span class="settings-delete-text">WG verlassen</span>
+        </div>
 
-    <div class="modal-actions">
-      <button class="modal-btn primary" :disabled="wgActionBusy" @click="confirmWgAction">
-        Verlassen
-      </button>
+        <!-- Modal: WG verlassen -->
+        <div v-if="showWgActionModal" class="modal-overlay" @click.self="closeWgActionModal">
+        <div class="modal-card">
+          <h2 class="modal-title">
+            {{ wgActionMode === 'delete' ? 'WG löschen' : 'WG verlassen' }}
+          </h2>
 
-      <button class="modal-btn cancel" :disabled="wgActionBusy" @click="closeWgActionModal">
-        Abbrechen
-      </button>
-    </div>
-  </div>
-</div>
+          <p class="modal-text">
+            {{ wgActionMode === 'delete'
+              ? 'Willst du diese WG wirklich löschen?'
+              : 'Willst du diese WG wirklich verlassen?'
+            }}
+          </p>
+
+          <div class="modal-actions">
+            <button
+              class="modal-btn"
+              :class="wgActionMode === 'delete' ? 'danger' : 'primary'"
+              :disabled="wgActionBusy"
+              @click="confirmWgAction"
+            >
+              {{ wgActionMode === 'delete' ? 'Löschen' : 'Verlassen' }}
+            </button>
+
+            <button class="modal-btn cancel" :disabled="wgActionBusy" @click="closeWgActionModal">
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      </div>
+
 
 
     <!-- Info/Error Modal (statt alert) -->

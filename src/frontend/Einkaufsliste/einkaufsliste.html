@@ -40,12 +40,6 @@
           </a>
           <!-- Dynamischer Titel der Einkaufsliste -->
           <span class="site-titel">{{ list_name }}</span>
-    
-          <!-- Button für Einkaufsmodus -->
-          <button class="icon-btn" id="einkaufmodus_btn" title="Einkaufmodus"
-                  @click="isShoppingMode = !isShoppingMode">
-            <img src="icons/Wagen.png" />
-          </button>
 
           <!-- Link zu den Einstellungen der Einkaufsliste -->
           <a href="./settings_einkaufsliste.html">
@@ -75,34 +69,19 @@
                   Menge: {{ product.amount }} {{ product.einheit }}
                 </div>
               </div>
-              <div class="product-price-wrapper">
-                <img v-if="isShoppingMode"
-                  src="icons/stift.png"
-                  class="edit-price-icon"
-                  title="Preis bearbeiten"
-                  @click="openPriceModal(product)"
-                />
-                <span class="product-price">{{ product.preis || '—' }} €</span>
-              </div>
+              <div class="product-price">{{ product.preis || '—' }} €</div>
               <!-- Button: Produkt bearbeiten -->
-              <button v-if="!isShoppingMode"
+              <button
                 class="btn btn-outline-info custom-button"
                 title="Artikel anpassen"
                 @click="openChangeProduct(product)"
               >
                 ...
               </button>
-
-              <!-- Button: Als gekauft markieren -->
-              <button v-if="isShoppingMode" 
-                class="btn btn-outline-success custom-button"
-                title="Als gekauft markieren"
-                @click="toggleTick(product)"
-              >
-                {{ '✓' }}
+              
               </button>
               <!-- Button: Produkt löschen -->
-              <button v-if="!isShoppingMode"
+              <button
                 class="btn btn-outline-danger custom-button"
                 title="Artikel löschen"
                 @click="removeFromList(product)"
@@ -113,10 +92,21 @@
           </div>
         </main>
 
-        <!-- Button: neues Produkt hinzufügen -->
-        <button v-if="!isShoppingMode" class="add-product" @click="add_product">
-          <span>+</span> Artikel hinzufügen
-        </button>
+        
+        <div class="bottom-action-bar" >
+          <!-- Einkaufsmodus wechseln -->
+          <a href="einkaufmodus.html">
+            <button class="icon-btn" title="Einkaufsmodus">
+              <img src="icons/Wagen.png" />
+            </button>
+          </a>
+
+          <!-- Button: neues Produkt hinzufügen -->
+          <button class="add-product" @click="add_product">
+            <span>+</span> Artikel hinzufügen
+          </button>
+        </div>
+
 
         <!-- POPUP: neues Produkt hinzufügen oder bearbeiten -->
         <div class="bottom-sheet" :class="{ visible: showPopup }">
@@ -167,16 +157,6 @@
               placeholder="z.B. 500"
               min="0"
             />
-
-            <!-- <label>Einheit:</label>
-            <select v-model="newProduct.einheit">
-              <option disabled value="">Bitte wählen</option>
-              <option>Gramm</option>
-              <option>Kilogramm</option>
-              <option>Milliliter</option>
-              <option>Liter</option>
-              <option>Stück</option>
-            </select> -->
 
             <!-- Preis nur anzeigen, wenn es kein Bearbeiten ist -->
             <div v-if="!isEditing">

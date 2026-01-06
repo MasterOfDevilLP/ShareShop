@@ -86,9 +86,17 @@
                   Menge: {{ product.amount }} {{ product.einheit }}
                 </div>
               </div>
-              <div class="product-price">{{ product.preis || '—' }} €</div>
+              <div class="product-price-wrapper">
+                <img v-if="isShoppingMode"
+                  src="icons/stift.png"
+                  class="edit-price-icon"
+                  title="Preis bearbeiten"
+                  @click="openPriceModal(product)"
+                />
+                <span class="product-price">{{ product.preis || '—' }} €</span>
+              </div>
               <!-- Button: Produkt bearbeiten -->
-              <button
+              <button v-if="!isShoppingMode"
                 class="btn btn-outline-info custom-button"
                 title="Artikel anpassen"
                 @click="openChangeProduct(product)"
@@ -240,5 +248,6 @@
 
     <!-- Eigenes JS Modul für App-Logik -->
     <script type="module" src="./app.js"></script>
+
   </body>
 </html>

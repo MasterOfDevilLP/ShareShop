@@ -109,8 +109,12 @@ new Vue({
     showPriceModal: false,
     modalProduct: null,
 
+    /** @type {boolean} Modal für Meldungen für erfolfreiche abgehackte/geloschte Items */
     showMiniModal: false,
     miniModalMessage: "",
+
+    showDropdownForProductFromWG: false,
+    filteredProducts: [],
   },
 
   mounted() {
@@ -244,20 +248,28 @@ new Vue({
 
     /** Füllt Produktfelder automatisch, wenn Name in WG existiert */
     onProductNameInput() {
-      const matched = this.products.find(
-        (p) => p.name === this.newProduct.name,
-      );
-      if (matched) {
-        this.newProduct.id = matched.id;
-        this.newProduct.kategorie = matched.description;
-        this.newProduct.preis = matched.price;
-        this.newProduct.fromWG = true;
-      } else {
-        this.newProduct.id = "";
-        this.newProduct.kategorie = "";
-        this.newProduct.preis = "";
-        this.newProduct.fromWG = false;
+      if (!this.newProduct.name) {
+        this.filteredProducts = [];
+        return;
       }
+      this.filteredProducts = this.products.filter((p) =>
+        p.name.toLowerCase().includes(this.newProduct.name.toLowerCase())
+      );
+    },
+
+    selectProduct(product) {
+      this.newProduct.name = product.name;
+      this.newProduct.id = product.id;
+      this.newProduct.kategorie = product.description;
+      this.newProduct.preis = product.price;
+      this.newProduct.fromWG = true;
+      this.showDropdownForProductFromWG = false;
+    },
+
+    hideDropdown() {
+      setTimeout(() => {
+        this.showDropdownForProductFromWG = false;
+      }, 100);
     },
 
     /** Popup schließen und neue Produktdaten zurücksetzen */

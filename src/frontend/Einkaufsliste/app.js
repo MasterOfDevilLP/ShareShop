@@ -101,6 +101,16 @@ new Vue({
 
     /** @type {boolean} Flag: gerade ein Produkt bearbeiten */
     isEditing: false,
+
+    /** @type {boolean} Flag: Einkaufsliste im Einkaufsmodus */
+    isShoppingMode: false,
+
+    /** @type {boolean} Preis-Modal sichtbar */
+    showPriceModal: false,
+    modalProduct: null,
+
+    showMiniModal: false,
+    miniModalMessage: "",
   },
 
   mounted() {
@@ -391,6 +401,44 @@ new Vue({
     },
 
     /********** Item als gekauft markieren **********/
+    /** Modal zum Preis ändern */
+    openPriceModal(product) {
+      this.modalProduct = { ...product };
+      this.showPriceModal = true;   
+    },
+
+    closePriceModal() {
+      this.modalProduct = null;
+      this.showPriceModal = false;
+    },
+
+    /** Speichert Preis und markiert als gekauft */
+    savePriceAndTick() {
+      if (!this.modalProduct) return;
+      const item = this.listItems.find(i => i.iid === this.modalProduct.iid);
+      if (item) {
+        item.preis = parseFloat(this.modalProduct.preis) || 0;
+      }
+      this.toggleTick(item);
+      this.closePriceModal();
+    },
+
+    showMiniModalMsg(msg, duration = 500) {
+      this.miniModalMessage = msg;
+      this.showMiniModal = true;
+      console.log("Showing mini modal:", msg);
+
+      setTimeout(() => {
+        const el = document.querySelector(".mini-modal");
+        if (el) el.classList.add("fade-out");
+      }, 100);
+
+      setTimeout(() => {
+        this.showMiniModal = false;
+        this.miniModalMessage = "";
+      }, duration + 100);
+    },
+
     toggleTick(item) {
       const payload = {
         iid: item.iid,
@@ -409,6 +457,7 @@ new Vue({
           this.listItems = this.parseListItems(updatedList);
           this.loadList();
           this.loadWGItems();
+          this.showMiniModalMsg("Artikel als gekauft markiert",300);
         })
         .catch((err) =>
           console.error("Item konnte nicht abgehakt werden", err),
@@ -429,6 +478,7 @@ new Vue({
           this.listItems = this.parseListItems(updatedList);
           this.loadList();
           this.loadWGItems();
+          this.showMiniModalMsg("Item gelöscht", 300);
         })
         .catch((err) =>
           console.error("Item konnte nicht gelöscht werden", err),

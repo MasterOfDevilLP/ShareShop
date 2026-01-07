@@ -55,7 +55,7 @@ Das System wird von typischen WG-Mitgliedern genutzt, die sowohl digital affin a
 
 Die vollständige Wireframe-Dokumentation befindet sich unter:
 
-link:../models/frontend/wireframe.pdf[Wireframe PDF anzeigen, window=_blank]
+link:https://www.figma.com/design/tPMhkiZtvIjjC1mEde0giE/huyenbaohan.nguyen-s-team-library?node-id=0-1&t=Tk6UnmLOeUMQu4GO-1[Wireframe anzeigen, window=_blank]
 
 Sie umfasst u.a.:
 

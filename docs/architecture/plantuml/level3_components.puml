@@ -1,0 +1,51 @@
+@startuml c4_level3_component_backend
+!include <c4/C4_Component.puml>
+
+LAYOUT_WITH_LEGEND()
+
+title C4-3 Component: Backend API (Java/Javalin)
+
+Container_Boundary(api, "Backend API (Javalin)") {
+
+    Component(router, "HTTP Routing / Controllers", "Javalin Routes","Definiert REST Endpoints (z.B. /login, /wgs, /lists, /items)")
+
+    Component(auth, "Auth & Session Middleware", "Token/Session Handling","Validiert Requests, baut User-Kontext auf")
+
+    Component(userSvc, "User Service", "Business Logic","User anlegen, laden, berechtigen")
+
+    Component(wgSvc, "WG Service", "Business Logic","WG anlegen, Mitglieder verwalten, Zugriff prüfen")
+
+    Component(listSvc, "ShoppingList Service", "Business Logic","Listen erstellen/ändern/anzeigen, Ownership & WG-Zuordnung")
+
+    Component(itemSvc, "Item Service", "Business Logic","Items CRUD, Suchen/Filtern innerhalb einer WG/Liste")
+
+    Component(userRepo, "User Repository", "JDBC","Persistenzzugriff für User")
+
+    Component(wgRepo, "WG Repository", "JDBC","Persistenzzugriff für WGs / Memberships")
+
+    Component(listRepo, "ShoppingList Repository", "JDBC","Persistenzzugriff für Listen")
+
+    Component(itemRepo, "Item Repository", "JDBC","Persistenzzugriff für Items")
+}
+
+ContainerDb(db, "Database", "Relationale DB")
+
+' Flow: Request -> Controller -> Auth -> Services -> Repos -> DB
+Rel(router, auth, "Wendet an", "Request Pre-Processing")
+Rel(auth, userSvc, "Lädt User-Kontext / Rechte", "")
+Rel(router, userSvc, "Ruft auf", "")
+Rel(router, wgSvc, "Ruft auf", "")
+Rel(router, listSvc, "Ruft auf", "")
+Rel(router, itemSvc, "Ruft auf", "")
+
+Rel(userSvc, userRepo, "Verwendet", "")
+Rel(wgSvc, wgRepo, "Verwendet", "")
+Rel(listSvc, listRepo, "Verwendet", "")
+Rel(itemSvc, itemRepo, "Verwendet", "")
+
+Rel(userRepo, db, "Liest/schreibt", "JDBC")
+Rel(wgRepo, db, "Liest/schreibt", "JDBC")
+Rel(listRepo, db, "Liest/schreibt", "JDBC")
+Rel(itemRepo, db, "Liest/schreibt", "JDBC")
+
+@enduml

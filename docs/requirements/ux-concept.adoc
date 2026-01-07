@@ -1,4 +1,5 @@
-= UX-Konzept: ShareShop
+= UX-Konzept - ShareShop
+
 * Benjamin Banse Benjamin.Banse@stud.htw-dresden.de
 * Kevin Bürger Kevin.Buerger@stud.htw-dresden.de
 * Anni Nguyen Anni.Nguyen@stud.htw-dresden.de
@@ -42,7 +43,94 @@ In diesem Dokument werden die Benutzeroberflächen des Systems ShareShop beschri
 
 == Nutzungskontext
 
-Das System wird von typischen WG-Mitgliedern genutzt, die sowohl digital affin als auch pragmatisch handeln. Die wichtigsten Rahmenbedingungen:
+Das System wird von typischen WG-Mitgliedern genutzt, die digital affin sind, jedoch im Alltag pragmatisch handeln. Die Nutzung erfolgt in unterschiedlichen Situationen, die jeweils eigene Anforderungen an die Benutzeroberfläche mit sich bringen.
+
+=== Planungssituation (zu Hause / gemeinsam)
+
+*Kontext:*  
+WG-Mitglieder planen Einkäufe gemeinsam, meistens zuhause (z. B. Küche oder Wohnzimmer).
+
+*Ziele:*
+- Überblick über aktuelle Einkaufslisten
+- Ergänzen fehlender Produkte
+- Abstimmen von Mengen und Zuordnung
+- Vermeidung von Doppelteinkäufen
+
+*Besonderheiten:*
+- Nutzung häufig auf Tablet oder Laptop
+- Mehr Zeit und größere Bildschirme
+- Teilweise gemeinsame Nutzung mit mehreren Personen
+- Fokus auf Übersichtlichkeit und Struktur
+
+*UX-Implikationen:*
+- Klare visuelle Strukturierung nach WG und Listen
+- Einfache Bearbeitung von Mengen, Notizen und optionalen Zusatzinformationen
+
+---
+
+=== Einkaufssituation/modus (unterwegs / im Supermarkt)
+
+*Kontext:*  
+Ein einzelnes WG-Mitglied befindet sich im Supermarkt oder auf dem Weg dorthin.
+
+*Ziele:*
+- Schnelles Abhaken von Artikeln
+- Minimale Interaktion pro Item
+- Verlässlicher Zugriff auch ohne Netzverbindung
+
+*Besonderheiten:*
+- Nutzung primär auf dem Smartphone
+- Eine Hand frei, wenig Zeit
+- Ablenkende Umgebung (Geräusche, Bewegung)
+- Instabile oder fehlende Netzverbindung möglich
+
+*UX-Implikationen:*
+- Große Touch-Flächen und klar erkennbare Interaktionselemente
+- Offline-Modus mit lokaler Speicherung und späterer Synchronisation
+- Reduzierte Informationsdichte im Einkaufsmodus
+- Übersichtlichkeit
+---
+
+=== Spontane Nutzung
+
+*Kontext:*  
+Kurzfristiges Hinzufügen von Artikeln, z. B. beim Feststellen leerer Produkte zu Hause oder unterwegs.
+
+*Ziele:*
+- Schnelles Hinzufügen eines Items
+- Möglichst wenige Interaktionsschritte
+
+*Besonderheiten:*
+- Nutzung dauert nur wenige Sekunden
+- Häufige Nutzung auf dem Smartphone
+
+*UX-Implikationen:*
+- Schnell und jederzeit erreicher
+- Voreinstellungen für häufige Werte (z. B. Standardmenge)
+- Klare und einfache Eingabemasken
+
+---
+
+=== 4. Organisations- und Verwaltungssituation (selten, bewusst)
+
+*Kontext:*  
+Verwaltung von WGs, Mitgliedern oder grundlegenden Systemeinstellungen.
+
+*Ziele:*
+- WG erstellen oder verlassen
+- Mitglieder hinzufügen oder entfernen
+
+*Besonderheiten:*
+- Nutzung erfolgt selten und gezielt
+- Fehlbedienungen haben potenziell größere Auswirkungen
+
+*UX-Implikationen:*
+- Klare Trennung zwischen Alltagsfunktionen und Verwaltungsfunktionen
+- Bestätigungsdialoge bei kritischen Aktionen
+- Verständliche und nicht-technische Sprache
+
+---
+=== Technische Rahmenbedingungen
 
 - **Geräte:** Mobile Devices (Smartphone, Tablet) sowie Desktop (Laptop/PC)
 - **Betriebsumfeld:** App wird zu Hause (Planung) und unterwegs (Einkauf) genutzt. Der Einkaufsmodus funktioniert auch ohne Netzverbindung.
@@ -68,28 +156,30 @@ Sie umfasst u.a.:
 - **responsive Bottom-Navigation:** vier Tabs: mittig „Liste“, separat „Kalender“, Profil nach oben verlegt.
 
 
-=== Beispielhafte User Storys
+=== User Storys (aus Miro)
 
 [cols="1,3"]
 |===
 | User Story 1
-| Als Person in einem Haushalt möchte ich dieselbe Einkaufsliste mit meinem Partner teilen, damit wir keine Doppeltkäufe machen.
+| Als Person benötige ich beim Anlegen eines Templates die Information der am meist bzw. zu letzt genutzten Artikel, um leichter meinen Gewohnheiten nachzugehen/schneller zu sein.
 
 | User Story 2
-| Als Nutzer:in möchte ich Artikel speichern, bearbeiten und löschen können, damit ich flexibel bleibe.
+| Als Nutzer:in möchte ich schnell und unkompliziert mit meiner Einkaufsliste einkaufen gehen, ohne dabei gestört zu werden, damit ich einen reibungslosen und entspannten Einkauf machen kann.
 
 | User Story 3
-| Als Nutzer:in möchte ich sehen, wer wann etwas geändert hat, damit ich nachverfolgen kann, was passiert ist.
+| Als WG-Mitglied mit geringem Konsum möchte ich die Ausgaben so splitten, dass mein geringerer Verbrauch berücksichtigt wird damit ich nicht mehr bezahle als nötig.
 
 | User Story 4
-| Als Nutzer:in möchte ich auf Basis vorheriger Listen Vorschläge erhalten, damit ich schneller neue Listen erstellen kann.
+| Als WG-Mitglied, das nur Gemeinschaftsartikel mit anderen teilt möchte ich in der App klar zwischen privaten und gemeinsamen Produkten unterscheiden können damit ich keine Konflikte über private Einkäufe habe und nur das verrechne, was wirklich geteilt wird.
 
 | User Story 5
-| Als Nutzer:in möchte ich eine klare Kategorisierung der Artikel, damit ich im Supermarkt schneller finde, was ich brauche.
+| Als Nutzer:in möchte ich eine neue Einkaufsgemeinschaft erstellen, damit ich mit anderen gemeinsam ein Produkt bestellen kann.
 
 | User Story 6
-| Als Nutzer:in möchte ich die App auch mobil optimal bedienen können (Bottom-Navigation, kompaktes Layout etc.).
+| Als Nutzer:in möchte ich in einem Reiter sehen, welche Produkte gerade "zuhause" sind bzw. zuletzt eingekauft wurden, damit ich nicht doppelt Waren einkaufe.
 |===
+
+weitere Userstories sind in github oder miro zu finden.
 
 === Clickflows & UX-Wünsche
 
@@ -127,7 +217,6 @@ a|
 - **WG-Beitrittscode** ergänzt, um bestehenden Gruppen beizutreten
 - **Einkaufsliste** ermöglicht schnelles Inline-Editing und unterstützt Community-Artikel mit automatischer Kostenverteilung
 - **Favoriten und Vorlagen** sind direkt in der Liste verfügbar, Rezepte als Teilmenü integriert
-- **Navigation** logisch über 4 Tabs verteilt, mit Fokus auf Übersichtlichkeit auf mobilen Geräten
+- **Navigation** Fokus auf Übersichtlichkeit auf mobilen Geräten und Auslegung der Software auf Handy-Format
 - **Offline-Modus**: Artikel abhaken, Preise und Einkaufsort auch ohne Netz erfassbar
-- **Rechnungsfunktionen**: Belegerfassung per Scan skizziert; Verrechnen/Bezahlt klar umgesetzt
-- **Klick-Dummy** zeigt funktionierende Nutzerflüsse (Login bis Einkauf)
+- **Rechnungsfunktionen**: Belegerfassung per Scan skizziert;

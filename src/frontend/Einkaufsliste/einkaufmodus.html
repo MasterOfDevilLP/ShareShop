@@ -45,18 +45,6 @@
       </div>
     </main>
 
-    <!-- Modal für Preis ändern -->
-    <div class="modal-backdrop" v-if="showPriceModal">
-      <div class="modal-content">
-        <h3>Preis ändern</h3>
-        <input type="number" v-model="modalProduct.preis" step="0.01" />
-        <div class="modal-actions">
-          <button @click="savePriceBeforeTick">Speichern</button>
-          <button @click="closePriceModal">Abbrechen</button>
-        </div>
-      </div>
-    </div>
-
     <button class="button" @click="openPriceModalForFertig">
         Einkaufen beenden
     </button>

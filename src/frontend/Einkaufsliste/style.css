@@ -522,6 +522,25 @@ body {
   display: block;
 }
 
+.empty-list-message {
+  text-align: center;
+  padding: 50px 20px;
+  color: #555;
+}
+
+.empty-list-message .empty-list-img {
+  width: 300px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.empty-list-message p {
+  font-size: 12px;
+  line-height: 1.5;
+  
+}
+
+
 
 
 

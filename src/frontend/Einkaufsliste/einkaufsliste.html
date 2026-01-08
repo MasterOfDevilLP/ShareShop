@@ -58,7 +58,14 @@
 
         <!-- HAUPTINHALT: Liste der Produkte -->
         <main class="app-content">
-          <div class="product-list">
+          <div v-if="listItems.length === 0" class="empty-list-message">
+            <img src="icons/empty_list.png" alt="Leere Liste" class="empty-list-img" />
+            <p>
+              <h5>Starte jetzt deine Einkaufsliste!</h5>
+              Drücke unten rechts auf "Artikel hinzufügen", um loszugehen.
+            </p>
+          </div>
+          <div v-else class="product-list">
             <!-- Vue-Loop über alle Produkte -->
             <div
               v-for="product in listItems"

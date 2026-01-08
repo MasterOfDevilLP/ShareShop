@@ -600,9 +600,34 @@ new Vue({
           console.error("Item konnte nicht gelöscht werden", err),
         );
     },
-
-    /********** Liste löschen (noch nicht implementiert) **********/
-    deleteList(wid, lid) {},
+    
+    /********** Liste löschen **********/
+    deleteList() {
+      fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+        .then((res) => {
+          if (res.status === 401) {
+            this.showMiniModalMsg(
+              "Du hast keine Berechtigung, diese Liste zu löschen",
+              2000
+            );
+            throw new Error("401");
+          }
+          if (!res.ok) {
+            throw new Error(res.status);
+          }
+          return;
+        })
+        .then(() => {
+          console.log("Liste gelöscht");
+          this.goToStartseite();
+        })
+        .catch((err) =>
+          console.error("Fehler beim Löschen der Liste:", err),
+        );
+    },
 
     /** Popup Löschen bestätigen */
     confirmDeleteList() {

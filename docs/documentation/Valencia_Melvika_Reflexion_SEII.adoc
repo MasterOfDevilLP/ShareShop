@@ -1,0 +1,45 @@
+= Projektreflexion: Einzelleistung
+Valencia Melvika <s86971@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Ausgangssituation / Aufgaben
+
+Im Projekt habe ich überwiegend Aufgaben aus den Bereichen *Entwurf*, *Implementierung*, *Test* sowie *Qualitätssicherung* übernommen und mich damit entlang mehrerer Phasen des Software-Engineering-Prozesses bewegt.
+
+Zu meinen konkreten Beiträgen gehörten:
+
+* Anpassung und Weiterentwicklung von Wireframes im Rahmen der Entwurfsphase
+* Umsetzung ausgewählter Wireframes in Frontend-Code
+* Implementierung sowie Nutzung von Backend-Endpunkten im Frontend
+* Review von Pull Requests anderer Teammitglieder
+
+Meine Tätigkeiten waren dabei eng mit vorgelagerten Aktivitäten wie der Anforderungs- und Entwurfsphase (Wireframes) sowie mit nachgelagerten Aktivitäten wie Integration und Test verbunden.
+
+== Lösungsweg 
+
+Die Projektarbeit erfolgte in einer iterativen Vorgehensweise nach *Scrum-ähnlichen Prinzipien*, mit Tickets, Pull Requests und regelmäßiger Abstimmung im Team. Meine Aufgaben habe ich anhand der vorhandenen Tickets ausgewählt und schrittweise umgesetzt.
+
+Bei der Implementierung der Backend-Endpunkte habe ich diese mithilfe von *Insomnia* getestet. Die bereitgestellte API-Spezifikation (`api.yaml`) diente dabei als zentrale Referenz und unterstützte mich bei der korrekten Nutzung der Schnittstellen. Dieses Vorgehen entspricht grundlegenden Testpraktiken auf API-Ebene und half mir, Fehler frühzeitig zu erkennen.
+
+Die Pull-Request-Reviews habe ich primär mit dem Fokus durchgeführt, ob die umgesetzte Funktionalität fachlich korrekt ist und lauffähig erscheint. Eine detaillierte Bewertung der Codequalität im Sinne von *Clean-Code-Prinzipien* war nur eingeschränkt möglich, da es keine einheitlichen Regeln zur Code-Struktur oder zu Conventions gab.
+
+In diesen Situationen habe ich versucht, mich durch vorhandene Kommentare und den bestehenden Code einzuarbeiten, um die Änderungen nachvollziehen zu können. In den meisten Fällen war dies möglich, erforderte jedoch zusätzlichen Aufwand. Insgesamt habe ich mich an impliziten Regeln orientiert und durch vorsichtiges Refactoring oder ergänzende Kommentare zur Verständlichkeit des Codes beigetragen.
+
+== Bewertung (Lessons Learned)
+
+Aus technischer Sicht haben meine Lösungen größtenteils funktioniert. Die von mir getesteten Endpunkte sowie die umgesetzten Frontend-Komponenten ließen sich grundsätzlich integrieren. Dennoch konnten nicht alle meine Beiträge im finalen Projekt berücksichtigt werden.
+
+Rückblickend wurde mir deutlich, wie wichtig klare Absprachen im Projektmanagement sind. Aspekte wie:
+
+* eine gemeinsam definierte *Definition of Done*,
+* verbindliche *Coding-Conventions* und
+* klar geschnittene Tickets
+
+hätten die Zusammenarbeit deutlich erleichtert. Ohne diese Grundlagen war es schwieriger, fremden Code zu erweitern oder Pull Requests effizient zu bewerten.
+
+Auch die Aufgabenverteilung im Scrum-Kontext stellte sich als herausfordernd heraus. Die freiwillige Auswahl von Tickets führte nicht immer zu einer ausgewogenen Arbeitslast. Nachdem ich zunächst eine vergleichsweise kleine Aufgabe übernommen hatte (Login-Seite), habe ich versucht, zusätzliche Tickets zu bearbeiten, unter anderem die Umsetzung einer Rechnungsseite. Diese konnte jedoch aufgrund des Projektfortschritts und fehlender Zeit für neue Funktionalitäten nicht mehr integriert werden.
+
+Ein weiteres Learning war die Bedeutung einer frühen und kontinuierlichen Abstimmung zwischen Frontend- und Backend-Entwicklung. Teilweise existierten Tickets nur für einen Bereich oder waren nicht ausreichend präzise formuliert, was die Integration erschwerte. Diese Probleme habe ich erst relativ spät erkannt, was ich selbstkritisch reflektiere.
+
+Als wichtigste Erkenntnis nehme ich mit, dass *Kommunikation*, *klare Prozesse* und *gemeinsame Qualitätsstandards* entscheidend für den Erfolg eines Softwareprojekts sind. Neben der eigentlichen Implementierung hätten strukturiertere Scrum-Artefakte, klarere Tickets und verbindliche Regeln zur Code-Organisation maßgeblich zur Effizienz und Qualität beigetragen. Diese Erfahrung wird mein Vorgehen in zukünftigen Projekten deutlich beeinflussen.

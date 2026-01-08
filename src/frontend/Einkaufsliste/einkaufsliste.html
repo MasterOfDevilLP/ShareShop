@@ -59,11 +59,14 @@
         <!-- HAUPTINHALT: Liste der Produkte -->
         <main class="app-content">
           <div v-if="listItems.length === 0" class="empty-list-message">
-            <img src="icons/empty_list.png" alt="Leere Liste" class="empty-list-img" />
-            <p>
-              <h5>Starte jetzt deine Einkaufsliste!</h5>
-              Drücke unten rechts auf "Artikel hinzufügen", um loszugehen.
-            </p>
+            <img
+              src="icons/empty_list.png"
+              alt="Leere Liste"
+              class="empty-list-img"
+            />
+
+            <h5>Starte jetzt deine Einkaufsliste!</h5>
+            <p>Drücke unten rechts auf "Artikel hinzufügen", um loszugehen.</p>
           </div>
           <div v-else class="product-list">
             <!-- Vue-Loop über alle Produkte -->
@@ -92,8 +95,7 @@
               >
                 ...
               </button>
-              
-              </button>
+
               <!-- Button: Produkt löschen -->
               <button
                 class="btn btn-outline-danger custom-button"
@@ -131,7 +133,10 @@
                 @blur="hideDropdown"
               />
 
-              <ul v-if="showDropdownForProductFromWG && filteredProducts.length" class="autocomplete-list">
+              <ul
+                v-if="showDropdownForProductFromWG && filteredProducts.length"
+                class="autocomplete-list"
+              >
                 <li
                   v-for="p in filteredProducts"
                   :key="p.id"
@@ -163,7 +168,7 @@
 
             <!-- Preis nur anzeigen, wenn es kein Bearbeiten ist -->
             <div v-if="!isEditing">
-              <label>Preis: </label><br>
+              <label>Preis: </label><br />
               <input type="number" v-model="newProduct.preis" step="0.01" />
             </div>
 
@@ -185,9 +190,8 @@
             </div>
           </div>
         </div>
-        
- 
-    <!-- Navigation -->
+
+        <!-- Navigation -->
         <nav class="bottom-nav">
           <button class="nav-item active" @click="goToStartseite">
             <img
@@ -219,11 +223,11 @@
           </button>
           <button class="nav-item">
             <a href="../Logout/logout.html" class="nav-item">
-            <img
-              src="icons/Profil.png"
-              alt="Profil"
-              class="nav-icon"
-            /><br />Profil
+              <img
+                src="icons/Profil.png"
+                alt="Profil"
+                class="nav-icon"
+              /><br />Profil
             </a>
           </button>
         </nav>
@@ -236,6 +240,5 @@
 
     <!-- Eigenes JS Modul für App-Logik -->
     <script type="module" src="./app.js"></script>
-
   </body>
 </html>

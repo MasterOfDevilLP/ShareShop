@@ -294,8 +294,8 @@ createApp({
       this.showModal(
         this.t('Avatar geändert', 'Avatar changed'),
         this.t(
-          '✅ Avatar wurde lokal gespeichert.\n\nℹ️ Hinweis: Das Backend unterstützt keine Profiländerungen. Deine Änderung ist nur auf diesem Gerät sichtbar.',
-          '✅ Avatar has been saved locally.\n\nℹ️ Note: The backend doesn\'t support profile changes. Your change is only visible on this device.'
+          '✅ Avatar wurde lokal gespeichert.\n\nℹ️ Hinweis: Deine Änderung ist nur auf diesem Gerät sichtbar.',
+          '✅ Avatar has been saved locally.\n\nℹ️ Note: Your change is only visible on this device.'
         ),
         'success'
       );
@@ -375,8 +375,8 @@ createApp({
         this.showModal(
           this.t('Profil aktualisiert', 'Profile updated'),
           this.t(
-            '✅ Dein Name wurde lokal gespeichert.\n\nℹ️ Hinweis: Das Backend unterstützt keine Profiländerungen. Deine Änderung ist nur auf diesem Gerät sichtbar und wird nicht mit anderen geteilt.',
-            '✅ Your name has been saved locally.\n\nℹ️ Note: The backend doesn\'t support profile changes. Your change is only visible on this device and not shared with others.'
+            '✅ Dein Name wurde lokal gespeichert.\n\nℹ️ Hinweis: Deine Änderung ist nur auf diesem Gerät sichtbar und wird nicht mit anderen geteilt.',
+            '✅ Your name has been saved locally.\n\nℹ️ Note: Your change is only visible on this device and not shared with others.'
           ),
           'success'
         );
@@ -478,8 +478,8 @@ createApp({
       this.showModal(
         this.t('Account-Löschung nicht verfügbar', 'Account Deletion Unavailable'),
         this.t(
-          '⚠️ Das Backend unterstützt derzeit keine Account-Löschung.\n\nBitte kontaktiere einen Administrator, wenn du deinen Account löschen möchtest.',
-          '⚠️ The backend currently doesn\'t support account deletion.\n\nPlease contact an administrator if you want to delete your account.'
+          '⚠️ Aktuell ist keine Account-Löschung möglich .\n\nBitte kontaktiere einen Administrator, wenn du deinen Account löschen möchtest.',
+          '⚠️ Account deletion is currently not supported.\n\nPlease contact an administrator if you want to delete your account.'
         ),
         'warning'
       );

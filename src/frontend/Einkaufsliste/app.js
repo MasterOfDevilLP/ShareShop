@@ -604,7 +604,6 @@ new Vue({
           console.error("Item konnte nicht gelöscht werden", err),
         );
     },
-
     /********** Liste löschen **********/
     deleteList() {
       fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {

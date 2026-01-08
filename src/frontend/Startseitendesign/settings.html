@@ -11,6 +11,13 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
+    
+    <style>
+      /* v-cloak to prevent flash of unstyled content */
+      [v-cloak] {
+        display: none !important;
+      }
+    </style>
   </head>
 
   <body>
@@ -101,7 +108,7 @@
             </div>
 
             <!-- Collapsible Content -->
-            <div v-show="showMembersList" class="members-content">
+            <div v-show="showMembersList" v-cloak class="members-content">
               <!-- Loading State -->
               <div v-if="loadingUsers" class="members-loading">
                 <div class="loading-spinner"></div>
@@ -116,12 +123,12 @@
                   class="member-card"
                   :class="{ 'current-user': isCurrentUser(user.id) }"
                 >
-                  <!-- Avatar Image or Initials -->
-                  <div class="member-avatar" v-if="getUserAvatar(user.id)">
-                    <img :src="getUserAvatar(user.id)" :alt="user.name" class="avatar-image" />
-                  </div>
-                  <div class="member-avatar" v-else>
-                    {{ getUserInitials(user.name) }}
+                  <!-- Avatar with Emoji -->
+                  <div 
+                    class="member-avatar avatar-display" 
+                    :style="{ backgroundColor: getUserAvatarColor(user) }"
+                  >
+                    <span class="avatar-emoji">{{ getUserAvatarEmoji(user) }}</span>
                   </div>
 
                   <div class="member-info">
@@ -130,9 +137,16 @@
                       <span v-if="isCurrentUser(user.id)" class="you-badge">Du</span>
                     </div>
                   </div>
-                  <div v-if="user.role === 'admin'" class="member-badge admin-badge">
-                    Admin
-                  </div>
+                  
+                  <!-- Delete Button (only for other users) -->
+                  <button 
+                    v-if="!isCurrentUser(user.id)" 
+                    @click="removeUserFromWG(user)"
+                    class="member-delete-btn"
+                    title="Mitglied entfernen"
+                  >
+                    <img src="icons/Trashcan.png" alt="Entfernen" />
+                  </button>
                 </div>
               </div>
 
@@ -168,7 +182,7 @@
         </main>
 
         <!-- Custom Modal -->
-        <div v-if="modal.show" class="custom-modal-overlay" @click.self="closeModal">
+        <div v-if="modal.show" v-cloak class="custom-modal-overlay" @click.self="closeModal">
           <div class="custom-modal" :class="'modal-' + modal.type">
             <div class="modal-icon">
               <span v-if="modal.type === 'success'">✓</span>

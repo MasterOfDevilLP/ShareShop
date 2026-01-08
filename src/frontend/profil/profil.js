@@ -193,7 +193,12 @@ createApp({
           
           // Store user ID
           if (userData.uid || userData.id) {
-            localStorage.setItem("userID", userData.uid || userData.id);
+            const userId = userData.uid || userData.id;
+            localStorage.setItem("userID", userId);
+            
+            // Store user-specific data for members list (only current user)
+            localStorage.setItem(`user_name_${userId}`, this.user.name);
+            localStorage.setItem(`user_avatar_${userId}`, this.user.avatar);
           }
           
           // Store WG list
@@ -219,6 +224,12 @@ createApp({
             }
             
             localStorage.setItem("userName", this.user.name);
+            
+            // Update user-specific data with new name
+            const userId = userData.uid || userData.id;
+            if (userId) {
+              localStorage.setItem(`user_name_${userId}`, this.user.name);
+            }
           }
           
         } else if (response.status === 401) {
@@ -270,6 +281,13 @@ createApp({
     selectAvatar(avatarId) {
       this.user.avatar = avatarId;
       localStorage.setItem("userAvatar", avatarId);
+      
+      // Also update user-specific avatar for members list
+      const userId = localStorage.getItem("userID");
+      if (userId) {
+        localStorage.setItem(`user_avatar_${userId}`, avatarId);
+      }
+      
       this.showAvatarPicker = false;
       
       // Info: Lokal gespeichert
@@ -344,6 +362,12 @@ createApp({
         localStorage.setItem("userName", fullName);
         localStorage.setItem("firstName", this.editUser.firstName);
         localStorage.setItem("lastName", this.editUser.lastName);
+        
+        // Also update user-specific name for members list
+        const userId = localStorage.getItem("userID");
+        if (userId) {
+          localStorage.setItem(`user_name_${userId}`, fullName);
+        }
         
         this.showEditProfile = false;
         

@@ -47,6 +47,19 @@ new Vue({
     /** @type {string} Invite link from API */
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
 
+    /** @type {Array<Object>} Available avatar definitions */
+    avatars: [
+      { id: 'avatar1', emoji: '👑', color: '#7DCFB6', name: 'Einkaufsboss' },
+      { id: 'avatar2', emoji: '🥔', color: '#FFB84D', name: 'Kartoffel' },
+      { id: 'avatar3', emoji: '🤓', color: '#FF6B9D', name: 'Listen-Mensch' },
+      { id: 'avatar4', emoji: '🦝', color: '#4A90E2', name: 'Snack-Dieb' },
+      { id: 'avatar5', emoji: '👮‍♂️', color: '#F5D142', name: 'Schaut Nur' },
+      { id: 'avatar6', emoji: '💀', color: '#E74C3C', name: 'Pleite-Geier' },
+      { id: 'avatar7', emoji: '🤡', color: '#598eb6ff', name: 'Hat Gegessen' },
+      { id: 'avatar8', emoji: '🏃', color: '#F39C12', name: 'Last Minute' },
+      { id: 'avatar9', emoji: '💅', color: '#3498DB', name: 'Putzpolizei' }
+    ],
+
     /** @type {Object} Custom modal configuration */
     modal: {
       show: false,
@@ -155,6 +168,7 @@ new Vue({
      */
     closeModal() {
       this.modal.show = false;
+      // Clear modal data after animation completes
       setTimeout(() => {
         this.modal = {
           show: false,
@@ -171,10 +185,24 @@ new Vue({
      * Handles modal confirm button click
      */
     handleModalConfirm() {
-      if (this.modal.confirmCallback) {
-        this.modal.confirmCallback();
-      }
-      this.closeModal();
+      const callback = this.modal.confirmCallback;
+      this.modal.show = false;
+      
+      // Wait for modal to close before executing callback
+      setTimeout(() => {
+        this.modal = {
+          show: false,
+          type: 'info',
+          title: '',
+          message: '',
+          confirmCallback: null,
+          cancelCallback: null,
+        };
+        
+        if (callback) {
+          callback();
+        }
+      }, 350);
     },
 
     /**
@@ -316,13 +344,32 @@ new Vue({
           return;
         }
         
-        // Map UUIDs to user objects
-        this.wgUsers = userIds.map(uid => ({
-          id: uid,
-          name: this.formatUserName(uid),
-          fullId: uid,
-          role: null
-        }));
+        // Map UUIDs to user objects with avatar and name data
+        this.wgUsers = userIds.map(uid => {
+          // Check if this is the current user
+          const isCurrentUser = String(uid) === String(this.userId);
+          
+          let userName;
+          let userAvatar;
+          
+          if (isCurrentUser) {
+            // For current user, use data from profile page
+            userName = localStorage.getItem("userName") || this.formatUserName(uid);
+            userAvatar = localStorage.getItem("userAvatar") || 'avatar1';
+          } else {
+            // For other users, use stored data or fallback to UUID
+            userName = localStorage.getItem(`user_name_${uid}`) || this.formatUserName(uid);
+            userAvatar = localStorage.getItem(`user_avatar_${uid}`) || 'avatar1';
+          }
+          
+          return {
+            id: uid,
+            name: userName,
+            avatar: userAvatar,
+            fullId: uid,
+            role: null
+          };
+        });
         
       } catch (err) {
         console.error("Error loading members:", err.message);
@@ -343,7 +390,36 @@ new Vue({
     },
 
     /**
-     * Generates initials from user name for avatar
+     * Gets avatar data for a given avatar ID
+     * @param {string} avatarId - Avatar ID
+     * @returns {Object} Avatar data object
+     */
+    getAvatarData(avatarId) {
+      return this.avatars.find(a => a.id === avatarId) || this.avatars[0];
+    },
+
+    /**
+     * Gets avatar emoji for user
+     * @param {Object} user - User object
+     * @returns {string} Avatar emoji
+     */
+    getUserAvatarEmoji(user) {
+      const avatarData = this.getAvatarData(user.avatar);
+      return avatarData.emoji;
+    },
+
+    /**
+     * Gets avatar color for user
+     * @param {Object} user - User object
+     * @returns {string} Avatar color hex code
+     */
+    getUserAvatarColor(user) {
+      const avatarData = this.getAvatarData(user.avatar);
+      return avatarData.color;
+    },
+
+    /**
+     * Generates initials from user name for fallback
      * @param {string} name - User name
      * @returns {string} Two-character initials
      */
@@ -354,16 +430,6 @@ new Vue({
         return parts[0].substring(0, 1).toUpperCase() + parts[1].substring(0, 1).toUpperCase();
       }
       return name.substring(0, 2).toUpperCase();
-    },
-
-    /**
-     * Gets avatar URL for user (placeholder for future implementation)
-     * @param {string} userId - User ID
-     * @returns {string|null} Avatar URL or null
-     */
-    getUserAvatar(userId) {
-      // Placeholder for future avatar implementation
-      return null;
     },
 
     /**
@@ -385,6 +451,73 @@ new Vue({
      */
     isCurrentUser(userId) {
       return String(userId) === String(this.userId);
+    },
+
+    /**
+     * Initiates user removal from WG with confirmation
+     * @async
+     * @param {Object} user - User object to remove
+     */
+    async removeUserFromWG(user) {
+      if (!this.selectedWG) {
+        this.showAlert("Keine WG ausgewählt.", "Fehler", "error");
+        return;
+      }
+
+      // Prevent removing self this way (use "WG verlassen" instead)
+      if (this.isCurrentUser(user.id)) {
+        this.showAlert(
+          'Um die WG zu verlassen, nutze bitte die Option "WG verlassen" unten auf der Seite.',
+          "Hinweis",
+          "info"
+        );
+        return;
+      }
+
+      const wg = this.wgList.find((w) => String(w.id) === String(this.selectedWG));
+      const wgName = wg?.name || "diese WG";
+
+      this.showConfirm(
+        `Möchtest du ${user.name} wirklich aus "${wgName}" entfernen?`,
+        "Mitglied entfernen",
+        async () => {
+          await this.performRemoveUser(user.id);
+        }
+      );
+    },
+
+    /**
+     * Performs the actual user removal operation
+     * @async
+     * @param {string} userId - User ID to remove
+     */
+    async performRemoveUser(userId) {
+      try {
+        const res = await fetch(`${API_BASE}/wg/${this.selectedWG}/user/${userId}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          const text = await res.text().catch(() => "");
+          let msg = text || `HTTP ${res.status}`;
+          try {
+            const j = JSON.parse(text);
+            if (j?.message) msg = j.message;
+          } catch (_) {}
+          
+          this.showAlert(`Fehler beim Entfernen des Mitglieds:\n\n${msg}`, "Fehler", "error");
+          return;
+        }
+
+        // Remove user from local list
+        this.wgUsers = this.wgUsers.filter(u => String(u.id) !== String(userId));
+
+        this.showAlert("Mitglied wurde erfolgreich entfernt.", "Erfolg", "success");
+      } catch (err) {
+        console.error("performRemoveUser exception:", err);
+        this.showAlert("Fehler beim Entfernen des Mitglieds: " + err.message, "Fehler", "error");
+      }
     },
 
     /**
@@ -455,6 +588,7 @@ new Vue({
             const j = JSON.parse(text);
             if (j?.message) msg = j.message;
           } catch (_) {}
+          
           this.showAlert(`Fehler beim Verlassen der WG:\n\n${msg}`, "Fehler", "error");
           return;
         }

@@ -11,6 +11,13 @@
 
     <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    
+    <style>
+      /* v-cloak to prevent flash of unstyled content */
+      [v-cloak] {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
@@ -164,7 +171,7 @@
         </nav>
 
         <!-- Logout Modal -->
-        <div v-if="showLogoutModal" class="modal-overlay" @click="showLogoutModal = false">
+        <div v-if="showLogoutModal" v-cloak class="modal-overlay" @click="showLogoutModal = false">
           <div class="modal-container" @click.stop>
             <div class="modal-header">
               <h3>{{ t('Abmelden', 'Log Out') }}</h3>
@@ -185,7 +192,7 @@
         </div>
 
         <!-- Avatar Picker Modal -->
-        <div v-if="showAvatarPicker" class="modal-overlay" @click="showAvatarPicker = false">
+        <div v-if="showAvatarPicker" v-cloak class="modal-overlay" @click="showAvatarPicker = false">
           <div class="modal-container avatar-picker-modal" @click.stop>
             <div class="modal-header">
               <h3>{{ t('Avatar auswählen', 'Choose Avatar') }}</h3>
@@ -214,7 +221,7 @@
         </div>
 
         <!-- Edit Profile Modal -->
-        <div v-if="showEditProfile" class="modal-overlay" @click="showEditProfile = false">
+        <div v-if="showEditProfile" v-cloak class="modal-overlay" @click="showEditProfile = false">
           <div class="modal-container" @click.stop>
             <div class="modal-header">
               <h3>{{ t('Konto Einstellung', 'Account Settings') }}</h3>
@@ -261,7 +268,7 @@
         </div>
 
         <!-- Account Deletion Modal -->
-        <div v-if="showDeleteAccount" class="modal-overlay" @click="showDeleteAccount = false">
+        <div v-if="showDeleteAccount" v-cloak class="modal-overlay" @click="showDeleteAccount = false">
           <div class="modal-container" @click.stop>
             <div class="modal-header">
               <h3>{{ t('Konto löschen', 'Delete Account') }}</h3>
@@ -298,7 +305,7 @@
         </div>
 
         <!-- Notification Settings Modal -->
-        <div v-if="showNotificationSettings" class="modal-overlay" @click="showNotificationSettings = false">
+        <div v-if="showNotificationSettings" v-cloak class="modal-overlay" @click="showNotificationSettings = false">
           <div class="modal-container" @click.stop>
             <div class="modal-header">
               <h3>{{ t('Benachrichtigungseinstellungen', 'Notification Settings') }}</h3>
@@ -385,7 +392,7 @@
         </div>
 
         <!-- Custom Alert/Confirm Modal -->
-        <div v-if="customModal.show" class="modal-overlay" @click="closeModal">
+        <div v-if="customModal.show" v-cloak class="modal-overlay" @click="closeModal">
           <div class="modal-container custom-alert-modal" @click.stop>
             <div class="modal-header" :class="'alert-' + customModal.type">
               <div class="alert-icon">

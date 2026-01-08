@@ -1088,3 +1088,65 @@ body {
 .modal-buttons .modal-btn:only-child {
   max-width: 200px;
 }
+/* ========================================
+   AVATAR DISPLAY & DELETE BUTTON ADDITIONS
+   ======================================== */
+
+/* Enhanced Avatar Display with Emoji */
+.member-avatar.avatar-display {
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* Delete Button for Members */
+.member-delete-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  border-radius: 8px;
+}
+
+.member-delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.member-delete-btn:active {
+  transform: scale(0.95);
+  background-color: rgba(244, 67, 54, 0.2);
+}
+
+.member-delete-btn img {
+  width: 20px;
+  height: 20px;
+  filter: invert(23%) sepia(89%) saturate(2604%) hue-rotate(347deg) brightness(88%) contrast(84%);
+}
+
+.member-card.current-user .member-delete-btn {
+  display: none;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 390px) {
+  .avatar-emoji {
+    font-size: 24px;
+  }
+
+  .member-delete-btn img {
+    width: 18px;
+    height: 18px;
+  }
+}

@@ -53,15 +53,17 @@
           </div>
         </main>
 
-    <button class="button" @click="openPriceModalForFertig">
-        Einkaufen beenden
-    </button>
+        <button class="button" @click="openPriceModalForFertig">
+          Einkaufen beenden
+        </button>
 
-   <!-- Ein Modal für Preis ändern -->
-    <div class="modal-backdrop" v-if="showPriceModal">
-        <div class="modal-content">
-            <h3>{{ modalTickOnSave ? 'Gesamtpreis ändern (€):' : 'Preis ändern (€):' }}</h3>
-            <br>
+        <!-- Ein Modal für Preis ändern -->
+        <div class="modal-backdrop" v-if="showPriceModal">
+          <div class="modal-content">
+            <h3>
+              {{ modalTickOnSave ? 'Gesamtpreis ändern (€):' : 'Preis ändern(€):' }}
+            </h3>
+            <br />
             <div>
               <label>
                 {{ modalTickOnSave ? 'Gesamtpreis (€):' : 'Preis (€):' }}</label>

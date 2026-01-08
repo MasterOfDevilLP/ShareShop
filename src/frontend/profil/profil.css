@@ -340,24 +340,25 @@ hr {
 /* ========================================= */
 
 .custom-alert-modal {
-  max-width: 400px;
+  max-width: 340px;
+  max-height: 70vh;
 }
 
 .custom-alert-modal .modal-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 24px;
+  gap: 10px;
+  padding: 18px 20px;
 }
 
 .alert-icon {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   flex-shrink: 0;
 }
@@ -385,13 +386,15 @@ hr {
 .custom-alert-modal .modal-header h3 {
   flex: 1;
   text-align: left;
+  font-size: 16px;
 }
 
 .alert-message {
   white-space: pre-line;
-  line-height: 1.6;
+  line-height: 1.5;
   color: #333;
   text-align: left;
+  font-size: 14px;
 }
 
 /* ========================================= */
@@ -400,13 +403,15 @@ hr {
 
 .notification-settings {
   text-align: left;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .notification-option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  padding: 14px 0;
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -417,28 +422,28 @@ hr {
 .notification-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex: 1;
 }
 
 .notification-icon {
-  font-size: 24px;
+  font-size: 22px;
   line-height: 1;
 }
 
 .notification-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .notification-text strong {
-  font-size: 15px;
+  font-size: 14px;
   color: #333;
 }
 
 .notification-text small {
-  font-size: 13px;
+  font-size: 12px;
   color: #666;
   line-height: 1.3;
 }
@@ -447,8 +452,8 @@ hr {
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 28px;
+  width: 46px;
+  height: 26px;
   flex-shrink: 0;
 }
 
@@ -467,14 +472,14 @@ hr {
   bottom: 0;
   background-color: #ccc;
   transition: 0.3s;
-  border-radius: 28px;
+  border-radius: 26px;
 }
 
 .toggle-slider:before {
   position: absolute;
   content: "";
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   left: 4px;
   bottom: 4px;
   background-color: white;
@@ -487,7 +492,7 @@ hr {
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
-  transform: translateX(22px);
+  transform: translateX(20px);
 }
 
 .toggle-slider:hover {
@@ -499,19 +504,26 @@ hr {
 /* ========================================= */
 
 .avatar-picker-modal {
-  max-width: 480px;
+  max-width: 360px;
+  max-height: 75vh;
+}
+
+.avatar-picker-modal .modal-body {
+  padding: 16px;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .avatar-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  padding: 8px;
+  gap: 10px;
+  padding: 4px;
 }
 
 .avatar-option {
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -520,6 +532,7 @@ hr {
   transition: all 0.2s ease;
   border: 3px solid transparent;
   position: relative;
+  padding: 8px;
 }
 
 .avatar-option:hover {
@@ -536,31 +549,32 @@ hr {
 .avatar-option.selected::after {
   content: '✓';
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  right: 6px;
   background: #fff;
   color: #7DCFB6;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .avatar-emoji-large {
-  font-size: 48px;
+  font-size: 40px;
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .avatar-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: #fff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 /* ========================================= */
@@ -592,12 +606,15 @@ hr {
 
 .modal-container {
   background: #ffffff;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 420px;
+  border-radius: 14px;
+  width: 88%;
+  max-width: 340px;
+  max-height: 75vh;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   animation: slideUp 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes slideUp {
@@ -612,26 +629,29 @@ hr {
 }
 
 .modal-header {
-  padding: 20px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid #e0e0e0;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .modal-header h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   color: #000;
 }
 
 .modal-body {
-  padding: 24px;
+  padding: 20px;
   text-align: center;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .modal-body p {
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   color: #555;
   line-height: 1.5;
 }
@@ -642,7 +662,7 @@ hr {
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .form-group:last-child {
@@ -651,18 +671,18 @@ hr {
 
 .form-group label {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: #333;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px;
+  padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   font-family: "Inter", sans-serif;
   transition: all 0.2s ease;
   box-sizing: border-box;
@@ -676,37 +696,38 @@ hr {
 
 .form-hint {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   color: #999;
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 /* Warning Text */
 .warning-text {
   color: #d32f2f !important;
   font-weight: 500;
-  font-size: 15px;
-  margin-bottom: 12px !important;
+  font-size: 14px;
+  margin-bottom: 10px !important;
 }
 
 .warning-subtext {
   color: #666 !important;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 /* Modal Actions */
 .modal-actions {
   display: flex;
-  gap: 12px;
-  padding: 16px 24px 24px;
+  gap: 10px;
+  padding: 14px 20px 18px;
+  flex-shrink: 0;
 }
 
 .modal-actions button {
   flex: 1;
   border: none;
-  border-radius: 12px;
-  padding: 12px 20px;
-  font-size: 15px;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -911,7 +932,8 @@ hr {
   }
 
   .modal-container {
-    width: 95%;
+    width: 92%;
+    max-width: 320px;
   }
 
   .modal-actions {
@@ -920,5 +942,17 @@ hr {
 
   .modal-actions button {
     width: 100%;
+  }
+  
+  .avatar-grid {
+    gap: 8px;
+  }
+  
+  .avatar-emoji-large {
+    font-size: 36px;
+  }
+  
+  .avatar-name {
+    font-size: 10px;
   }
 }

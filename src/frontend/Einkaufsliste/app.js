@@ -72,14 +72,14 @@ new Vue({
       "Sonstiges",
     ],
 
-    /** @type {Object} Daten des aktuell neuen/zu bearbeitenden Produkts 
+    /** @type {Object} Daten des aktuell neuen/zu bearbeitenden Produkts
      * @property {string} id - Produkt-ID, falls bereits in der WG vorhanden
      * @property {string} name - Name des Produkts
      * @property {string} kategorie - Kategorie des Produkts
      * @property {number|string} menge - Menge des Produkts in der Liste
      * @property {number|string} preis - Preis des Produkts
      * @property {boolean} fromWG - Flag, ob das Produkt bereits in der WG existiert
-    */
+     */
     newProduct: {
       id: "",
       name: "",
@@ -123,15 +123,18 @@ new Vue({
         localStorage.setItem("localTicks", JSON.stringify(val));
       },
       deep: true,
-    }
+    },
   },
 
   computed: {
     /** @type {number} Gesamtsumme der getickten Produkte */
     totalTickedPrice() {
-      const tickedItems = this.listItems.filter(item => this.isTicked(item));
-      return tickedItems.reduce((sum, item) => sum + (parseFloat(item.preis) || 0), 0);
-    }
+      const tickedItems = this.listItems.filter((item) => this.isTicked(item));
+      return tickedItems.reduce(
+        (sum, item) => sum + (parseFloat(item.preis) || 0),
+        0,
+      );
+    },
   },
 
   mounted() {
@@ -279,7 +282,7 @@ new Vue({
         return;
       }
       this.filteredProducts = this.products.filter((p) =>
-        p.name.toLowerCase().includes(this.newProduct.name.toLowerCase())
+        p.name.toLowerCase().includes(this.newProduct.name.toLowerCase()),
       );
     },
 
@@ -320,15 +323,17 @@ new Vue({
       this.closePopup();
     },
 
-    /** 
-     * Bearbeitet ein bestehendes Produkt in der Liste 
-    */
+    /**
+     * Bearbeitet ein bestehendes Produkt in der Liste
+     */
     async updateListItem() {
-      const existingItem = this.products.find(p => p.name === this.newProduct.name);
+      const existingItem = this.products.find(
+        (p) => p.name === this.newProduct.name,
+      );
       if (!existingItem) return;
 
       const iid = existingItem.id;
-      const currentItem = this.listItems.find(i => i.iid === iid);
+      const currentItem = this.listItems.find((i) => i.iid === iid);
       const currentAmount = currentItem?.amount || 0;
 
       const newAmount = parseFloat(this.newProduct.menge) || 1;
@@ -351,7 +356,6 @@ new Vue({
       this.isEditing = false;
     },
 
-
     /** Prüft, ob Produkt existiert; sonst neu erstellen und zur Liste hinzufügen */
     addOrCreateProduct() {
       const existingItem = this.products.find(
@@ -360,7 +364,6 @@ new Vue({
 
       //wenn Produkt neuer Preis im Vergleich mit dem in WG gespeichert hat, dann aktualisieren
       const price = parseFloat(this.newProduct.preis) || 0;
-
 
       if (existingItem) {
         this.addToList(existingItem.id);
@@ -402,14 +405,15 @@ new Vue({
 
     /** Fügt ein Produkt zur Einkaufsliste hinzu */
     addToList(iid, amount = null, deltaPrice = 0) {
-      const amt = amount !== null ? amount : parseFloat(this.newProduct.menge) || 1;
+      const amt =
+        amount !== null ? amount : parseFloat(this.newProduct.menge) || 1;
       const price = parseFloat(this.newProduct.preis) || 0;
 
       const payload = {
         iid,
         type: "add",
         amount: amt,
-        price: price, 
+        price: price,
       };
 
       return fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
@@ -422,7 +426,7 @@ new Vue({
         .then((updatedList) => {
           this.listItems = this.parseListItems(updatedList).map((item) => ({
             ...item,
-            preis: item.iid === iid ? price : item.preis, 
+            preis: item.iid === iid ? price : item.preis,
           }));
           this.loadList();
           this.loadWGItems();
@@ -455,7 +459,7 @@ new Vue({
     /** Speichert Preis ohne Markierung als gekauft */
     savePriceBeforeTick() {
       if (!this.modalProduct) return;
-      const item = this.listItems.find(i => i.iid === this.modalProduct.iid);
+      const item = this.listItems.find((i) => i.iid === this.modalProduct.iid);
       if (item) {
         item.preis = parseFloat(this.modalProduct.preis) || 0;
       }
@@ -466,8 +470,8 @@ new Vue({
     openPriceModalForFertig() {
       this.modalProduct = {
         preis: this.listItems
-          .filter(item => this.isTicked(item))
-          .reduce((sum, item) => sum + (parseFloat(item.preis) || 0), 0)
+          .filter((item) => this.isTicked(item))
+          .reduce((sum, item) => sum + (parseFloat(item.preis) || 0), 0),
       };
       this.modalTickOnSave = true; // Tick wird gesetzt
       this.showPriceModal = true;
@@ -518,9 +522,9 @@ new Vue({
       if (!this.modalProduct) return;
 
       // Preis setzen für alle lokal getickten Items
-      const tickedItems = this.listItems.filter(item => this.isTicked(item));
+      const tickedItems = this.listItems.filter((item) => this.isTicked(item));
 
-      tickedItems.forEach(item => {
+      tickedItems.forEach((item) => {
         item.preis = parseFloat(this.modalProduct.preis) || item.preis;
       });
 
@@ -537,7 +541,7 @@ new Vue({
         .map(([iid]) => iid);
 
       for (const iid of tickedItems) {
-        const item = this.listItems.find(i => i.iid === iid);
+        const item = this.listItems.find((i) => i.iid === iid);
         if (item) {
           await this.toggleTick(item); // ruft dein Backend auf
         }
@@ -573,7 +577,7 @@ new Vue({
           this.listItems = this.parseListItems(updatedList);
           this.loadList();
           this.loadWGItems();
-          this.showMiniModalMsg("Artikel als gekauft markiert",300);
+          this.showMiniModalMsg("Artikel als gekauft markiert", 300);
         })
         .catch((err) =>
           console.error("Item konnte nicht abgehakt werden", err),
@@ -600,7 +604,7 @@ new Vue({
           console.error("Item konnte nicht gelöscht werden", err),
         );
     },
-    
+
     /********** Liste löschen **********/
     deleteList() {
       fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
@@ -611,7 +615,7 @@ new Vue({
           if (res.status === 401) {
             this.showMiniModalMsg(
               "Du hast keine Berechtigung, diese Liste zu löschen",
-              2000
+              2000,
             );
             throw new Error("401");
           }
@@ -624,9 +628,7 @@ new Vue({
           console.log("Liste gelöscht");
           this.goToStartseite();
         })
-        .catch((err) =>
-          console.error("Fehler beim Löschen der Liste:", err),
-        );
+        .catch((err) => console.error("Fehler beim Löschen der Liste:", err));
     },
 
     /** Popup Löschen bestätigen */

@@ -101,6 +101,8 @@ body {
   border-top: 2px solid transparent;
   background: none;
   border: none;
+  text-decoration: none; 
+  color: inherit;       
 }
 
 .nav-icon {

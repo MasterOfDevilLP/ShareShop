@@ -735,67 +735,67 @@ hr {
 }
 
 .btn-cancel {
-  background: #f0f0f0;
-  color: #333;
+  background: #f0f0f0 !important;
+  color: #333 !important;
 }
 
 .btn-cancel:hover {
-  background: #e0e0e0;
+  background: #e0e0e0 !important;
 }
 
 .btn-cancel:active {
-  transform: scale(0.98);
+  transform: scale(0.98) !important;
 }
 
 .btn-confirm {
-  background: #ff4444;
-  color: #fff;
+  background: #ff4444 !important;
+  color: #fff !important;
 }
 
 .btn-confirm:hover {
-  background: #ee3333;
+  background: #ee3333 !important;
 }
 
 .btn-confirm:active {
-  transform: scale(0.98);
+  transform: scale(0.98) !important;
 }
 
 .btn-confirm:disabled {
-  background: #ffaaaa;
-  cursor: not-allowed;
-  opacity: 0.7;
+  background: #ffaaaa !important;
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
 }
 
 .btn-save {
-  background: #7DCFB6;
-  color: #fff;
+  background: #7DCFB6 !important;
+  color: #fff !important;
 }
 
 .btn-save:hover {
-  background: #6bbea5;
+  background: #6bbea5 !important;
 }
 
 .btn-save:active {
-  transform: scale(0.98);
+  transform: scale(0.98) !important;
 }
 
-.btn-delete {
-  background: #d32f2f;
-  color: #fff;
+.btn-delete { 
+  background: #d32f2f !important;
+  color: #fff !important;
 }
 
 .btn-delete:hover {
-  background: #b71c1c;
+  background: #b71c1c !important;
 }
 
 .btn-delete:active {
-  transform: scale(0.98);
+  transform: scale(0.98) !important;
 }
 
 .btn-delete:disabled {
-  background: #ffaaaa;
-  cursor: not-allowed;
-  opacity: 0.6;
+  background: #ffaaaa !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
 }
 
 /* Bottom Navigation */

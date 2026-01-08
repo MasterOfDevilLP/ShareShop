@@ -183,7 +183,7 @@
               <button @click="showLogoutModal = false" class="btn-cancel">
                 {{ t('Abbrechen', 'Cancel') }}
               </button>
-              <button @click="confirmLogout" class="btn-confirm" :disabled="isLoggingOut">
+              <button @click="confirmLogout" class="btn-delete" :disabled="isLoggingOut">
                 <span v-if="!isLoggingOut">{{ t('Ausloggen', 'Log Out') }}</span>
                 <span v-else>{{ t('Wird ausgeloggt...', 'Logging out...') }}</span>
               </button>

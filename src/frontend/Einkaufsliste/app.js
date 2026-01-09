@@ -206,16 +206,16 @@ new Vue({
      */
     getIcon(kategorie) {
       const icons = {
-        Obst: "Icons/obst.png",
-        Gemüse: "Icons/gemuese.png",
-        Getränke: "Icons/getraenke.png",
-        Fleisch: "Icons/fleisch.png",
-        Backwaren: "Icons/backwaren.png",
-        Haushalt: "Icons/haushalt.png",
-        Snacks: "Icons/snacks.png",
-        Sonstiges: "Icons/default.png",
+        Obst: "icons/obst.png",
+        Gemüse: "icons/gemuese.png",
+        Getränke: "icons/getraenke.png",
+        Fleisch: "icons/fleisch.png",
+        Backwaren: "icons/backwaren.png",
+        Haushalt: "icons/haushalt.png",
+        Snacks: "icons/snacks.png",
+        Sonstiges: "icons/default.png",
       };
-      return icons[kategorie] || "Icons/default.png";
+      return icons[kategorie] || "icons/default.png";
     },
 
     /********** Item/Listeeintrag hinzufügen/bearbeiten **********/

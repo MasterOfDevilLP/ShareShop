@@ -470,7 +470,7 @@ new Vue({
       reader.readAsDataURL(file);
     },
 
-    closeModal() {
+    closeCreateGroupModal() {
       this.showCreateGroupModal = false;
       this.newGroup = { name: "", description: "", preview: null, imageFile: null };
       this.errors = { name: null, description: null };
@@ -483,6 +483,21 @@ new Vue({
     // -----------------------------
     // Neue WG erstellen (Backend ohne Bild) + Bild lokal speichern
     // -----------------------------
+    handleSaveGroup() {
+      const name = this.newGroup.name.trim();
+
+      if (name.length > 15) {
+        this.showAlert(
+          "Der Name der WG darf maximal 15 Zeichen lang sein.",
+          "Zu langer Name",
+          "error"
+        );
+        return;
+      }
+
+      this.saveGroup();
+    },
+
     async saveGroup() {
       this.validateGroupForm();
       if (!this.formValid) return;
@@ -528,7 +543,7 @@ new Vue({
         await this.fetchLists(this.selectedWG);
 
         this.saveSuccess = true;
-        setTimeout(() => this.closeModal(), 500);
+        setTimeout(() => this.closeCreateGroupModal(), 500);
       } catch (e) {
         console.error(e);
         this.saveError = "Fehler beim Erstellen der WG: " + e.message;

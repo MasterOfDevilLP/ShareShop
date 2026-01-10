@@ -100,12 +100,12 @@
               <button
                 class="btn btn-green"
                 :disabled="isSaving || !formValid"
-                @click="saveGroup"
+                @click="handleSaveGroup"
               >
                 {{ isSaving ? "Speichert..." : "Erstellen" }}
               </button>
 
-              <button class="btn btn-pink" @click="closeModal">
+              <button class="btn btn-pink" @click="closeCreateGroupModal">
                 Abbrechen
               </button>
             </div>

@@ -1,21 +1,38 @@
 /**
- * Startseite der WG-Listen-App
+ * Startseite (app.js) – WG- & Listen-Übersicht
  *
  * Zweck:
- * Diese Seite ermöglicht dem Benutzer, seine mehrere Wohngemeinschaften (WGs) zu verwalten,
- * Listen anzulegen und bestehende Listen zu verwalten. Einladungen können über Link
- * oder QR-Code geteilt werden. 
+ * Diese Seite ist die zentrale Startansicht der App: User lädt seine WGs, wählt eine WG aus,
+ * sieht dazugehörige Einkaufslisten, kann Listen anlegen/umbenennen/löschen, neue WGs erstellen
+ * und Einladungen per Link teilen.
  *
  * Haupt-Features:
- *  - WG-Verwaltung: Anzeigen, Auswählen, Erstellen
- *  - Liste verwalten: Hinzufügen, Umbenennen, Öffnen
- *  - Einladungen: Kopieren des Invite-Links, QR-Code, Email
+ *  - User/WG laden: eingeloggten User holen, WG-Details nachladen, Auswahl merken
+ *  - WG wechseln: Dropdown-Auswahl + Listen automatisch neu laden
+ *  - Listen verwalten: Listen anzeigen, erstellen, umbenennen, löschen, öffnen
+ *  - WG erstellen: Name/Beschreibung + Bild (nur lokal) speichern, WG im Backend anlegen
+ *  - Einladungen teilen: Invite-Link per API erstellen, Frontend-Link bauen, kopieren & per Mail teilen
+ *
+ * Methoden (kurz):
+ *  - loadUserAndWGs(): Holt User + seine WGs, setzt selectedWG, speichert Auswahl + wgList lokal
+ *  - selectWG(id): Wechselt WG (oder öffnet WG-erstellen), lädt danach Listen der WG
+ *  - fetchLists(wgId): Lädt Listen der WG aus dem Backend und speichert sie lokal
+ *  - saveList(): Erstellt neue Liste in der WG (POST) und hängt sie an die UI-Liste an
+ *  - renameList(): Benennt eine Liste um (PATCH) und aktualisiert UI + localStorage
+ *  - deleteList(listId): Löscht eine Liste (DELETE) und entfernt sie aus UI + localStorage
+ *  - goToList(list): Speichert selectedWG/list Infos und navigiert zur einkaufsliste.html
+ *  - saveGroup(): Erstellt neue WG (POST), speichert Bild/Desc lokal, lädt WGs neu, setzt Auswahl
+ *  - createInviteLink(): Erstellt Invite-Token (POST), speichert inviteLink, baut Frontend-Link
+ *  - copyInviteLink(): Kopiert Frontend-Invite-Link in die Zwischenablage (Toast)
+ *  - sendLink(): Öffnet Mailprogramm mit Invite-Link via mailto:
  *
  * Hinweise:
- *  - Vue.js wird für die Datenbindung zwischen UI und Daten genutzt
- *  - API-Aufrufe erfolgen über die Basis-URL API_BASE
- *  - Einige Daten werden lokal im localStorage gespeichert
+ *  - API-Aufrufe laufen über API_BASE mit Cookie-Session (credentials: "include")
+ *  - localStorage wird genutzt für WG-/Listen-Auswahl, Listen-Caches und Invite-Link/Token
+ *  - WG-Bild wird NICHT ans Backend gesendet, sondern nur lokal gespeichert 
  */
+console.log("app.js loaded", location.href);
+
 console.log("app.js loaded", location.href);
 
 import { API_BASE } from "../config.js";
@@ -474,7 +491,7 @@ new Vue({
         const newId = data?.id ?? data?.wid ?? data?._id;
         if (!newId) throw new Error("Backend hat keine WG-ID zurückgegeben.");
 
-        // ✅ Bild/Desc lokal speichern (weil Backend kein Bild erwartet)
+        // Bild/Desc lokal speichern (weil Backend kein Bild erwartet)
         if (this.newGroup.preview) {
           localStorage.setItem(`wg_image_${newId}`, this.newGroup.preview);
         }

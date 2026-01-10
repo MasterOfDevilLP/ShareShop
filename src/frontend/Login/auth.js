@@ -5,9 +5,11 @@ const LanguageStore = Vue.reactive({
 });
 
 // === API and Constants ===
-import { API_BASE } from '../config.js';
+import { API_BASE } from "../config.js";
+
 const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
 const { reactive, createApp } = Vue;
+
 
 // 2. Translation Dictionary (Key-based i18n)
 const translations = {
@@ -255,11 +257,12 @@ const LoginForm = {
             try {
                 // await delay(3000); 
                 const res = await fetch(`${API_BASE}/user/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: this.email, password: this.password }),
-                    credentials: 'include'
-                });
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: this.email, password: this.password }),
+                credentials: "include",
+              });
+
 
                 if (res.ok) {
                     this.successMessage = t('SUCCESS_LOGIN');
@@ -371,12 +374,11 @@ const RegisterForm = {
 
             try {
                 const res = await fetch(`${API_BASE}/user/create`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: this.email, password: this.password }),
-                    credentials: 'include'
-                });
-
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: this.email, password: this.password }),
+                credentials: "include",
+              });
                 if (res.ok) {
                     this.successMessage = t('SUCCESS_REGISTER');
                     setTimeout(() => {

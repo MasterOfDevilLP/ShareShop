@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Einstellungen</title>
+
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="wgForm.css" />
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -14,7 +16,7 @@
   <body>
     <!-- Load Vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-    <!--Header-->
+
     <div id="setting">
       <div class="iphone-app">
         <!-- Header -->
@@ -25,46 +27,157 @@
           <span class="site-titel">Einstellungen</span>
         </header>
 
-        <!-- Inhalt -->
         <main class="app-content settings-page">
-          <!-- Titelzeile -->
-          <div class="wg-name">
-            <label class="wg-label"><strong>WG:</strong></label>
-              <label
-                class="wg-label"><strong>{{ selectedWGName ? selectedWGName : 'WG auswählen' }}</strong>
+          <!-- WG-Bild & Beschreibung -->
+          <div v-if="selectedWGDetails" class="wg-info-box">
+            <img
+              v-if="(selectedWGDetails && selectedWGDetails.image) || wgImageLocal"
+              :src="(selectedWGDetails && selectedWGDetails.image) || wgImageLocal"
+              alt="WG Bild"
+              class="wg-image"
+            />
+
+            <div class="wg-text">
+              <h4 class="wg-name">{{ selectedWGDetails.name }}</h4>
+
+              <p
+                v-if="(selectedWGDetails && selectedWGDetails.description) || wgDescLocal"
+                class="wg-description"
+              >
+                {{ (selectedWGDetails && selectedWGDetails.description) || wgDescLocal }}
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Titelzeile + Dropdown -->
+          <div class="wg-auswahl-container">
+            <label class="wg-label"><strong>WG auswählen:</strong></label>
+
+            <div class="dropdown">
+              <input
+                type="checkbox"
+                id="dropdown-toggle"
+                class="dropdown-checkbox"
+              />
+
+              <!-- Klick auf Label toggelt Checkbox -->
+              <label for="dropdown-toggle" class="dropdown-label">
+                <strong>{{ selectedWGName || "WG auswählen" }}</strong>
               </label>
+
+              <ul class="dropdown-options">
+                <li
+                  v-for="wg in wgList"
+                  :key="wg.id"
+                  @click="selectWG(wg.id)"
+                >
+                  {{ wg.name }}
+                </li>
+              </ul>
+            </div>
           </div>
 
           <!-- Optionen -->
-          <!-- Mitglieder einladen-->
-          <div class="settings-option-row">
-            <img src="icons/link.png" class="settings-icon" />
-            <a class="settings-option-text" href="mitglieder_einladen.html">
-              Mitglieder via Link einladen
-            </a>
-          </div>
+         <div
+          class="settings-option-row"
+          @click="window.location.href = 'mitglieder_einladen.html'"
+        >
+          <img src="icons/link.png" class="settings-icon" />
+          <span class="settings-option-text">Mitglieder via Link einladen</span>
+        </div>
 
+
+
+          <!-- Mitglieder Liste -->
           <div class="wg-users-list">
-           <img src="icons/User_alt.svg" class="settings-icon" />
-            <span class="settings-option-text">Mitglieder Liste</span>
+            <div class="settings-option-row">
+              <img src="icons/User_alt.svg" class="settings-icon" />
+              <span class="settings-option-text">Mitglieder Liste</span>
+            </div>
+
+            <ul>
               <li v-for="user in wgUsers" :key="user.id">
                 {{ user.name }}
               </li>
             </ul>
           </div>
 
-          <!-- Gruppe verlassen-->
           <div class="settings-option-row">
-            <img src="icons/group_exit.png" class="settings-icon" />
-            <span class="settings-option-text">Gruppe verlassen</span>
+            <img src="icons/clock.png" class="settings-icon" />
+            <span class="settings-option-text">Änderungshistorie</span>
           </div>
 
-          <!-- Löschen -->
-           <hr />
-          <div class="settings-option-row delete-row" >
-            <img src="icons/Trashcan.png" class="settings-icon" />
-            <span class="settings-delete-text">WG löschen</span>
+          <div class="settings-option-row">
+            <img src="icons/Listen.png" class="settings-icon" />
+            <span class="settings-option-text">Produkte sortieren</span>
           </div>
+
+      <!-- WG löschen -->
+      <div class="settings-option-row delete-row" @click="openWgActionModal('delete')">
+        <img src="icons/Trashcan.png" class="settings-icon" alt="WG löschen" />
+        <span class="settings-delete-text">WG löschen</span>
+      </div>
+
+      <!-- WG verlassen -->
+        <div class="settings-option-row delete-row" @click="openWgActionModal()">
+          <img src="icons/group_exit.png" class="settings-icon" alt="WG verlassen" />
+          <span class="settings-delete-text">WG verlassen</span>
+        </div>
+
+        <!-- Modal: WG verlassen -->
+        <div v-if="showWgActionModal" class="modal-overlay" @click.self="closeWgActionModal">
+        <div class="modal-card">
+          <h2 class="modal-title">
+            {{ wgActionMode === 'delete' ? 'WG löschen' : 'WG verlassen' }}
+          </h2>
+
+          <p class="modal-text">
+            {{ wgActionMode === 'delete'
+              ? 'Willst du diese WG wirklich löschen?'
+              : 'Willst du diese WG wirklich verlassen?'
+            }}
+          </p>
+
+          <div class="modal-actions">
+            <button
+              class="modal-btn"
+              :class="wgActionMode === 'delete' ? 'danger' : 'primary'"
+              :disabled="wgActionBusy"
+              @click="confirmWgAction"
+            >
+              {{ wgActionMode === 'delete' ? 'Löschen' : 'Verlassen' }}
+            </button>
+
+            <button class="modal-btn cancel" :disabled="wgActionBusy" @click="closeWgActionModal">
+              Abbrechen
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+    <!-- Info/Error Modal (statt alert) -->
+    <div v-if="showInfoModal" class="modal-overlay" @click.self="closeInfoModal">
+      <div class="modal-card">
+        <h2 class="modal-title">{{ infoTitle }}</h2>
+        <div class="modal-divider"></div>
+
+        <p class="modal-text" style="white-space: pre-line;">
+          {{ infoText }}
+        </p>
+
+        <div class="modal-actions">
+          <button class="modal-btn primary" @click="closeInfoModal">OK</button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
         </main>
       </div>
     </div>

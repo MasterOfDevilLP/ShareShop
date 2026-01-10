@@ -427,6 +427,8 @@ new Vue({
 
             this.showListOptions = false;
             this.selectedList = null;
+
+            this.closeModal();
           } catch (e) {
             console.error(e);
             alert("Fehler beim Löschen: " + e.message);
@@ -680,6 +682,17 @@ new Vue({
           cancelCallback: null,
         };
       }, 300);
+    },
+
+    handleModalConfirm() {
+      if (this.modal.confirmCallback) {
+        this.modal.confirmCallback(); // gọi callback khi nhấn Bestätigen
+      }
+      this.closeModal(); // đóng modal sau khi xác nhận
+    },
+
+    handleModalCancel() {
+      this.closeModal(); // nếu nhấn Abbrechen
     },
 
     handleModalCancel() {

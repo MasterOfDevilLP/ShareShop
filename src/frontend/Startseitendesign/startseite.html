@@ -83,7 +83,7 @@
             />
             <span v-if="errors.name" class="error-text">{{ errors.name }}</span>
 
-            <label>Beschreibung (optional)</label>
+            <label>Beschreibung *</label>
             <textarea
               v-model.trim="newGroup.description"
               @input="validateGroupForm"
@@ -243,7 +243,7 @@
           </button>
 
           <!-- Profil als Link (kein <a> im <button>) -->
-          <a href="../Logout/logout.html" class="nav-item">
+          <a href="../profil/profil.html" class="nav-item">
             <img src="icons/Profil.png" alt="Profil" class="nav-icon" /><br />
             Profil
           </a>

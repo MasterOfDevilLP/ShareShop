@@ -11,6 +11,13 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
+    
+    <style>
+      /* v-cloak to prevent flash of unstyled content */
+      [v-cloak] {
+        display: none !important;
+      }
+    </style>
   </head>
 
   <body>
@@ -79,28 +86,75 @@
           </div>
 
           <!-- Optionen -->
-         <div
-          class="settings-option-row"
-          @click="window.location.href = 'mitglieder_einladen.html'"
-        >
-          <img src="icons/link.png" class="settings-icon" />
-          <span class="settings-option-text">Mitglieder via Link einladen</span>
-        </div>
+          <div class="settings-option-row">
+            <img src="icons/link.png" class="settings-icon" />
+            <a class="settings-option-text" href="mitglieder_einladen.html">
+              Mitglieder via Link einladen
+            </a>
+          </div>
 
-
-
-          <!-- Mitglieder Liste -->
-          <div class="wg-users-list">
-            <div class="settings-option-row">
+          <!-- Mitglieder Liste - Enhanced Version -->
+          <div class="wg-members-section">
+            <div 
+              class="settings-option-row members-header clickable" 
+              @click="toggleMembersList"
+            >
               <img src="icons/User_alt.svg" class="settings-icon" />
-              <span class="settings-option-text">Mitglieder Liste</span>
+              <span class="settings-option-text">
+                Mitglieder Liste
+                <span class="member-count" v-if="memberCount > 0">({{ memberCount }})</span>
+              </span>
+              <span class="collapse-icon" :class="{ 'expanded': showMembersList }">▼</span>
             </div>
 
-            <ul>
-              <li v-for="user in wgUsers" :key="user.id">
-                {{ user.name }}
-              </li>
-            </ul>
+            <!-- Collapsible Content -->
+            <div v-show="showMembersList" v-cloak class="members-content">
+              <!-- Loading State -->
+              <div v-if="loadingUsers" class="members-loading">
+                <div class="loading-spinner"></div>
+                <p>Lädt Mitglieder...</p>
+              </div>
+
+              <!-- Members List -->
+              <div v-else-if="wgUsers.length > 0" class="members-list">
+                <div 
+                  v-for="user in wgUsers" 
+                  :key="user.id"
+                  class="member-card"
+                  :class="{ 'current-user': isCurrentUser(user.id) }"
+                >
+                  <!-- Avatar with Emoji -->
+                  <div 
+                    class="member-avatar avatar-display" 
+                    :style="{ backgroundColor: getUserAvatarColor(user) }"
+                  >
+                    <span class="avatar-emoji">{{ getUserAvatarEmoji(user) }}</span>
+                  </div>
+
+                  <div class="member-info">
+                    <div class="member-name">
+                      {{ user.name }}
+                      <span v-if="isCurrentUser(user.id)" class="you-badge">Du</span>
+                    </div>
+                  </div>
+                  
+                  <!-- Delete Button (only for other users) -->
+                  <button 
+                    v-if="!isCurrentUser(user.id)" 
+                    @click="removeUserFromWG(user)"
+                    class="member-delete-btn"
+                    title="Mitglied entfernen"
+                  >
+                    <img src="icons/remove-user.png" alt="Entfernen" />
+                  </button>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div v-else class="members-empty">
+                <p>Keine Mitglieder gefunden</p>
+              </div>
+            </div>
           </div>
 
           <div class="settings-option-row">
@@ -113,72 +167,56 @@
             <span class="settings-option-text">Produkte sortieren</span>
           </div>
 
-      <!-- WG löschen -->
-      <div class="settings-option-row delete-row" @click="openWgActionModal('delete')">
-        <img src="icons/Trashcan.png" class="settings-icon" alt="WG löschen" />
-        <span class="settings-delete-text">WG löschen</span>
-      </div>
+          <hr />
 
-      <!-- WG verlassen -->
-        <div class="settings-option-row delete-row" @click="openWgActionModal()">
-          <img src="icons/group_exit.png" class="settings-icon" alt="WG verlassen" />
-          <span class="settings-delete-text">WG verlassen</span>
-        </div>
-
-        <!-- Modal: WG verlassen -->
-        <div v-if="showWgActionModal" class="modal-overlay" @click.self="closeWgActionModal">
-        <div class="modal-card">
-          <h2 class="modal-title">
-            {{ wgActionMode === 'delete' ? 'WG löschen' : 'WG verlassen' }}
-          </h2>
-
-          <p class="modal-text">
-            {{ wgActionMode === 'delete'
-              ? 'Willst du diese WG wirklich löschen?'
-              : 'Willst du diese WG wirklich verlassen?'
-            }}
-          </p>
-
-          <div class="modal-actions">
-            <button
-              class="modal-btn"
-              :class="wgActionMode === 'delete' ? 'danger' : 'primary'"
-              :disabled="wgActionBusy"
-              @click="confirmWgAction"
-            >
-              {{ wgActionMode === 'delete' ? 'Löschen' : 'Verlassen' }}
-            </button>
-
-            <button class="modal-btn cancel" :disabled="wgActionBusy" @click="closeWgActionModal">
-              Abbrechen
-            </button>
+          <!-- WG löschen -->
+          <div class="settings-option-row delete-row" @click="openWgActionModal('delete')">
+            <img src="icons/Trashcan.png" class="settings-icon" alt="WG löschen" />
+            <span class="settings-delete-text">WG löschen</span>
           </div>
-        </div>
-      </div>
 
-
-
-    <!-- Info/Error Modal (statt alert) -->
-    <div v-if="showInfoModal" class="modal-overlay" @click.self="closeInfoModal">
-      <div class="modal-card">
-        <h2 class="modal-title">{{ infoTitle }}</h2>
-        <div class="modal-divider"></div>
-
-        <p class="modal-text" style="white-space: pre-line;">
-          {{ infoText }}
-        </p>
-
-        <div class="modal-actions">
-          <button class="modal-btn primary" @click="closeInfoModal">OK</button>
-        </div>
-      </div>
-    </div>
-
-
-
-
+          <!-- WG verlassen -->
+          <div class="settings-option-row delete-row" @click="openWgActionModal('leave')">
+            <img src="icons/group_exit.png" class="settings-icon" alt="WG verlassen" />
+            <span class="settings-delete-text">WG verlassen</span>
+          </div>
 
         </main>
+
+        <!-- Custom Modal -->
+        <div v-if="modal.show" v-cloak class="custom-modal-overlay" @click.self="closeModal">
+          <div class="custom-modal" :class="'modal-' + modal.type">
+            <div class="modal-icon">
+              <span v-if="modal.type === 'success'">✓</span>
+              <span v-else-if="modal.type === 'error'">✕</span>
+              <span v-else-if="modal.type === 'confirm'">?</span>
+              <span v-else>ℹ</span>
+            </div>
+            <h3 class="modal-title">{{ modal.title }}</h3>
+            <p class="modal-message">{{ modal.message }}</p>
+            <div class="modal-buttons">
+              <button 
+                v-if="modal.type === 'confirm'" 
+                @click="handleModalCancel"
+                class="modal-btn modal-btn-cancel"
+              >
+                Abbrechen
+              </button>
+              <button 
+                @click="modal.type === 'confirm' ? handleModalConfirm() : closeModal()"
+                class="modal-btn modal-btn-confirm"
+                :class="{
+                  'modal-btn-success': modal.type === 'success',
+                  'modal-btn-error': modal.type === 'error',
+                  'modal-btn-info': modal.type === 'info'
+                }"
+              >
+                {{ modal.type === 'confirm' ? 'Bestätigen' : 'OK' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 

@@ -31,6 +31,7 @@
  *  - localStorage wird genutzt für WG-/Listen-Auswahl, Listen-Caches und Invite-Link/Token
  *  - WG-Bild wird NICHT ans Backend gesendet, sondern nur lokal gespeichert 
  */
+console.log("app.js loaded", location.href);
 
 console.log("app.js loaded", location.href);
 

@@ -95,6 +95,15 @@ new Vue({
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
     token: "",
     frontendLink: "",
+
+    modal: {
+      show: false,
+      type: 'info',
+      title: '',
+      message: '',
+      confirmCallback: null,
+      cancelCallback: null,
+    },
   },
 
   computed: {
@@ -281,12 +290,13 @@ new Vue({
     // -----------------------------
     add_list() {
       if (!this.selectedWG) {
-        alert("Bitte zuerst eine WG erstellen und auswählen.");
+        this.showAlert("Bitte zuerst eine WG erstellen und auswählen.", "Hinweis", "info");
         return;
       }
       this.showPopup = true;
       this.showListOptions = false;
     },
+    
 
     closePopup() {
       this.showPopup = false;
@@ -389,33 +399,40 @@ new Vue({
       const wgId = this.selectedWG;
       if (!wgId || !listId) return;
 
-      if (!confirm("Liste wirklich löschen?")) return;
+      const list = this.lists.find(l => l.id === listId);
 
-      try {
-        const res = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
-          method: "DELETE",
-          credentials: "include",
-        });
-
-        if (!res.ok) {
-          const text = await res.text().catch(() => "");
-          let msg = text || `HTTP ${res.status}`;
+      this.showConfirm(
+        `Möchtest du die Liste "${list?.name}" wirklich löschen?`,
+        "Liste löschen",
+        async () => {
           try {
-            const j = JSON.parse(text);
-            if (j?.message) msg = j.message;
-          } catch (_) {}
-          throw new Error(msg);
-        }
+            const res = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
+              method: "DELETE",
+              credentials: "include",
+            });
 
-        this.lists = this.lists.filter((l) => String(l.id) !== String(listId));
-        localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
+            if (!res.ok) {
+              const text = await res.text().catch(() => "");
+              let msg = text || `HTTP ${res.status}`;
+              try {
+                const j = JSON.parse(text);
+                if (j?.message) msg = j.message;
+              } catch (_) {}
+              throw new Error(msg);
+            }
 
-        this.showListOptions = false;
-        this.selectedList = null;
-      } catch (e) {
-        console.error(e);
-        alert("Fehler beim Löschen: " + e.message);
-      }
+            // Liste aus UI & localStorage entfernen
+            this.lists = this.lists.filter((l) => String(l.id) !== String(listId));
+            localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
+
+            this.showListOptions = false;
+            this.selectedList = null;
+          } catch (e) {
+            console.error(e);
+            alert("Fehler beim Löschen: " + e.message);
+          }
+        } 
+      ); 
     },
 
     // -----------------------------
@@ -612,6 +629,49 @@ new Vue({
 
       this.emailToShare = "";
       this.showEmailInput = false;
+    },
+
+    showConfirm(message, title = 'Bestätigung', onConfirm, onCancel = null) {
+      this.modal = {
+        show: true,
+        type: 'confirm',
+        title: title,
+        message: message,
+        confirmCallback: onConfirm,
+        cancelCallback: onCancel,
+      };
+    },
+
+    showAlert(message, title = 'Hinweis', type = 'info') {
+      this.modal = {
+        show: true,
+        type: type,
+        title: title,
+        message: message,
+        confirmCallback: null,
+        cancelCallback: null,
+      };
+    },
+
+    closeModal() {
+      this.modal.show = false;
+      setTimeout(() => {
+        this.modal = {
+          show: false,
+          type: 'info',
+          title: '',
+          message: '',
+          confirmCallback: null,
+          cancelCallback: null,
+        };
+      }, 300);
+    },
+
+    handleModalCancel() {
+      if (this.modal.cancelCallback) {
+        this.modal.cancelCallback();
+      }
+      this.closeModal();
     },
   },
 });

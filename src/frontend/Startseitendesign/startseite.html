@@ -220,6 +220,40 @@
           </div>
         </div>
 
+        <!-- Custom Modal -->
+        <div v-if="modal.show" v-cloak class="custom-modal-overlay" @click.self="closeModal">
+          <div class="custom-modal" :class="'modal-' + modal.type">
+            <div class="modal-icon">
+              <span v-if="modal.type === 'success'">✓</span>
+              <span v-else-if="modal.type === 'error'">✕</span>
+              <span v-else-if="modal.type === 'confirm'">?</span>
+              <span v-else>ℹ</span>
+            </div>
+            <h3 class="modal-title">{{ modal.title }}</h3>
+            <p class="modal-message">{{ modal.message }}</p>
+            <div class="modal-buttons">
+              <button 
+                v-if="modal.type === 'confirm'" 
+                @click="handleModalCancel"
+                class="modal-btn modal-btn-cancel"
+              >
+                Abbrechen
+              </button>
+              <button 
+                @click="modal.type === 'confirm' ? handleModalConfirm() : closeModal()"
+                class="modal-btn modal-btn-confirm"
+                :class="{
+                  'modal-btn-success': modal.type === 'success',
+                  'modal-btn-error': modal.type === 'error',
+                  'modal-btn-info': modal.type === 'info'
+                }"
+              >
+                {{ modal.type === 'confirm' ? 'Bestätigen' : 'OK' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Navigation -->
         <nav class="bottom-nav">
           <button class="nav-item active" type="button">

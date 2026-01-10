@@ -579,7 +579,7 @@ body {
 
 .list-actions button.danger {
   background: transparent;
-  color: #f39291;
+  color: #d80400;
 }
 
 .list-actions button:disabled {

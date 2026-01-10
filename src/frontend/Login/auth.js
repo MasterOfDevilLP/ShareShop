@@ -1,60 +1,42 @@
 /**
- * @file auth.js
- * @description
- * Enthält die komplette Authentifizierungslogik (Login & Registrierung)
- * für die ShareShop Web-App.
- *
- * Die Benutzeroberfläche wird komponentenbasiert mit Vue 3 umgesetzt.
- * UI-Templates sind direkt in den JavaScript-Komponenten definiert
- * und werden dynamisch in den HTML-Mount-Point (#app) gerendert.
- *
- * @author ShareShop Team
- * @version 1.0
+ * @fileoverview Authentication system with Vue.js 3
+ * Provides login and registration forms with internationalization (i18n) support.
+ * Supports German (de) and English (en) languages with reactive language switching.
+ * 
+ * @requires Vue
+ * @requires ../config.js
  */
 
+// === 1. Shared Language Store ===
 /**
- * Reaktiver globaler Store zur Verwaltung der aktuell
- * ausgewählten Sprache (Internationalisierung).
- *
- * Standard-Sprache: Deutsch ('de')
- *
- * @type {{ language: 'de' | 'en' }}
+ * Reactive store for managing the current language setting
+ * @type {Object}
+ * @property {string} language - Current language code ('de' or 'en')
  */
 const LanguageStore = Vue.reactive({
   language: 'de'
 });
 
-/**
- * Basis-URL der Backend-API.
- * Wird aus der zentralen Konfigurationsdatei importiert.
- */
-import { API_BASE_URL as API_BASE } from '../config.js';
+// === API and Constants ===
+import { API_BASE } from "../config.js";
 
 /**
- * Minimale Passwortlänge für die Registrierung.
- * @constant {number}
+ * Minimum required password length for registration
+ * @const {number}
  */
-const MIN_PASSWORD_LENGTH = 6; 
+const MIN_PASSWORD_LENGTH = 6; // Standard minimum password length
 
-/**
- * Destrukturierte Vue-Funktionen für bessere Lesbarkeit.
- */
 const { reactive, createApp } = Vue;
 
+
+// 2. Translation Dictionary (Key-based i18n)
 /**
- * Zentrales Übersetzungsobjekt für UI-Texte.
- * Die Texte werden schlüsselbasiert abgerufen.
- *
- * Unterstützte Sprachen:
- * - de (Deutsch)
- * - en (Englisch)
- *
- * Teilweise werden Funktionen verwendet,
- * um dynamische Texte (z. B. Passwortlänge) zu erzeugen.
- *
- * @type {Object.<string, {de: string|Function, en: string|Function}>}
+ * Translation dictionary containing all UI text in supported languages
+ * Supports both static strings and dynamic function-based translations
+ * @const {Object.<string, Object.<string, string|function>>}
  */
 const translations = {
+  // General UI Texts
     'LOGIN_TITLE': { de: 'Login', en: 'Sign In' },
     'REGISTER_TITLE': { de: 'Registrieren', en: 'Register' },
 
@@ -72,8 +54,10 @@ const translations = {
     'ALREADY_REGISTERED_PRE': { de: 'Bereits registriert? ', en: 'Already registered? ' },
     'ALREADY_REGISTERED_LINK': { de: 'Zum Login', en: 'Login here' },
 
+    // Messages/Errors
     'ERR_FILL_FIELDS': { de: 'Bitte alle Felder ausfüllen.', en: 'Please fill in all fields.' },
     'ERR_INVALID_EMAIL': { de: 'Ungültiges E-Mail-Format.', en: 'Invalid email format.' },
+    // Function for dynamic messages
     'ERR_PASSWORD_LENGTH': { de: (len) => `Das Passwort muss mindestens ${len} Zeichen lang sein.`, en: (len) => `Password must be at least ${len} characters long.` },
     'ERR_PASSWORD_MISMATCH': { de: 'Passwörter stimmen nicht überein.', en: 'Passwords do not match.' },
     'ERR_LOGIN_FAILED': { de: 'Falsche E-Mail oder Passwort.', en: 'Incorrect email or password.' },
@@ -85,83 +69,95 @@ const translations = {
     'ERR_EMAIL_TAKEN': { de: 'Ungültige Eingabe oder E-Mail bereits registriert.', en: 'Invalid input or email already registered.' },
 };
 
+// === 3. Translation Helper === 
 /**
- * Gibt den übersetzten Text für einen Schlüssel
- * in der aktuell ausgewählten Sprache zurück.
- *
- * Unterstützt auch dynamische Texte (Funktionen).
- *
- * @param {string} key - Übersetzungsschlüssel
- * @param {*} [arg1] - Optionales Argument für dynamische Texte
- * @returns {string} Übersetzter Text
+ * Translation helper function that retrieves the appropriate text based on the current language
+ * Supports both static strings and dynamic function-based translations
+ * 
+ * @param {string} key - Translation key to look up
+ * @param {*} [arg1] - Optional argument for function-based translations (e.g., password length)
+ * @returns {string} Translated text in the current language, or the key itself if not found
  */
 const t = (key, arg1) => {
     const currentLang = LanguageStore.language;
     let text = translations[key]?.[currentLang] || key;
     
+    // Handle function-based dynamic messages (like password length)
     if (typeof text === 'function') {
         return text(arg1);
     }
     return text;
 };
 
+
+// === 4. Input Validation Helpers ===
 /**
- * Prüft, ob eine E-Mail-Adresse ein gültiges Format besitzt.
- *
- * @param {string} email - Zu prüfende E-Mail-Adresse
- * @returns {boolean} true bei gültigem Format, sonst false
+ * Validates email format using regex pattern
+ * @param {string} email - Email address to validate
+ * @returns {boolean} True if email format is valid, false otherwise
  */
 const isValidEmail = (email) => {
+  // Simple regex for basic email format validation
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
-/* HILFSFUNKTION: Simuliert eine Verzögerung für das Testen des Spinners
-* const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); 
-*/
+// HILFSFUNKTION: Simuliert eine Verzögerung für das Testen des Spinners
+// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// === 5. Shared Vue Mixin ===
 /**
- * Gemeinsames Vue-Mixin für Login- und Registrierungsformulare.
- *
- * Enthält:
- * - Statusmeldungen (Fehler / Erfolg)
- * - Ladezustand (Spinner)
- * - Zentrale Fehlerbehandlung für API-Aufrufe
+ * Shared Vue mixin for authentication forms
+ * Centralizes message state management and error handling logic
+ * Used by both LoginForm and RegisterForm components
+ * 
+ * @mixin
+ * @property {Object} data - Component data
+ * @property {string} data.errorMessage - Current error message to display
+ * @property {string} data.successMessage - Current success message to display
+ * @property {boolean} data.isLoading - Loading state for async operations
  */
 const AuthMixin = {
   data() {
     return {
       errorMessage: '',
       successMessage: '',
-      isLoading: false,   
+      isLoading: false,   // loading state
     };
   },
    methods: {
-        t, 
+        t, // Include the global translation function
         /**
-        * Setzt alle Statusmeldungen zurück.
-        */
+         * Clears all error and success messages
+         */
         clearMessages() {
             this.errorMessage = '';
             this.successMessage = '';
         },
-        
         /**
-         * Behandelt API-Fehler abhängig vom HTTP-Statuscode.
-         *
-         * @param {Response} res - Fetch-Response-Objekt
-         * @param {boolean} isRegister - true bei Registrierung
+         * Centralized API error handling logic
+         * Sets appropriate error message based on HTTP status code
+         * 
+         * @param {Response} res - Fetch API response object
+         * @param {boolean} [isRegister=false] - Whether this is a registration request
          */
         handleApiError(res, isRegister = false) {
             this.clearMessages();
             if (res.status === 401) {
                 this.errorMessage = t('ERR_LOGIN_FAILED');
             } else if (res.status === 400) {
+                // Use different message for register vs login 400
                 this.errorMessage = t(isRegister ? 'ERR_EMAIL_TAKEN' : 'ERR_INPUT_INVALID');
             } else {
                 this.errorMessage = t('ERR_GENERIC');
             }
         },
+        /**
+         * Handles network errors during API calls
+         * Logs error to console and sets user-friendly error message
+         * 
+         * @param {Error} error - Error object from failed fetch request
+         */
         handleNetworkError(error) {
             console.error('Fetch error:', error);
             this.clearMessages();
@@ -170,30 +166,30 @@ const AuthMixin = {
     }
 };
 
+// === 6. Shared Components ===
 /**
- * Vue-Komponente zur Umschaltung der Anwendungssprache.
- *
- * Die Komponente greift auf den globalen LanguageStore zu
- * und ändert die aktuell aktive Sprache (Deutsch / Englisch).
- *
- * Die Auswahl wirkt sich sofort auf alle übersetzten UI-Texte aus.
+ * Language Switcher Component
+ * Provides UI buttons to switch between German (DE) and English (EN)
+ * Updates the global LanguageStore when language is changed
+ * 
+ * @component
  */
 const LanguageSwitcher = {
     template: `
         <div class="lang-buttons">
             <button :class="{ active: language === 'de' }" @click="language = 'de'">
-                <img src="icons/flag-de.png" alt="German Flag" class="flag-icon" /> DE
+                <img src="Login/icons/flag-de.png" alt="German Flag" class="flag-icon" /> DE
             </button>
             <button :class="{ active: language === 'en' }" @click="language = 'en'">
-                <img src="icons/flag-en.png" alt="English Flag" class="flag-icon" /> EN
+                <img src="Login/icons/flag-en.png" alt="English Flag" class="flag-icon" /> EN
             </button>
         </div>
     `,
     computed: {
         /**
-        * Getter/Setter für die aktuell ausgewählte Sprache.
-        * Nutzt den reaktiven globalen LanguageStore.
-        */
+         * Computed property for two-way binding with LanguageStore
+         * @returns {string} Current language code
+         */
         language: {
             get() {
                 return LanguageStore.language;
@@ -206,31 +202,25 @@ const LanguageSwitcher = {
 };
 
 /**
- * Wiederverwendbare Eingabekomponente für Authentifizierungsformulare.
- *
- * Unterstützt:
- * - Text- und E-Mail-Felder
- * - Passwortfelder mit Sichtbarkeitsumschaltung
- * - Icons
- * - v-model Anbindung
- *
- * Wird sowohl im Login- als auch im Registrierungsformular verwendet.
+ * AuthInput Component
+ * Reusable input field component with icon support and password visibility toggle
+ * Handles v-model binding for parent components
+ * 
+ * @component
+ * @property {string} modelValue - Current input value (v-model)
+ * @property {string} placeholderKey - Translation key for placeholder text
+ * @property {string} icon - Path to icon image file
+ * @property {boolean} [isPassword=false] - Whether this is a password field
+ * @property {string} [inputType='text'] - HTML input type (text/email)
+ * @emits update:modelValue - Emitted when input value changes
  */
 const AuthInput = {
     props: {
-        /** Aktueller Wert des Eingabefeldes (v-model) */
-        modelValue: String, 
-
-        /** Übersetzungsschlüssel für das Platzhalter-Text */
+        modelValue: String, // v-model binding
         placeholderKey: { type: String, required: true },
-
-        /** Icon-Pfad für das Eingabefeld */
         icon: { type: String, required: true },
-
-        /** Gibt an, ob es sich um ein Passwortfeld handelt */
         isPassword: { type: Boolean, default: false },
-
-        /** Typ des Eingabefeldes (z.B. text, email) */
+        // Use an explicit type prop for email/text input
         inputType: { type: String, default: 'text' }
     },
     mixins: [AuthMixin],
@@ -253,7 +243,7 @@ const AuthInput = {
             
             <img
                 v-if="isPassword"
-                :src="showPassword ? 'icons/eye-off.png' : 'icons/eye.png'"
+                :src="showPassword ? 'Login/icons/eye-off.png' : 'Login/icons/eye.png'"
                 class="eye-icon"
                 @click="togglePassword"
                 alt="Toggle Password Visibility"
@@ -266,12 +256,21 @@ const AuthInput = {
         };
     },
     computed: {
+        /**
+         * Resolves the actual input type based on password visibility state
+         * @returns {string} 'password', 'text', or the custom inputType
+         */
         resolvedType() {
+            // Logic to handle password visibility toggle
             if (!this.isPassword) return this.inputType;
             return this.showPassword ? 'text' : 'password';
+
         }
     },
     methods: {
+        /**
+         * Toggles password visibility between hidden and visible
+         */
         togglePassword() {
             this.showPassword = !this.showPassword;
         }
@@ -279,25 +278,25 @@ const AuthInput = {
 };
 
 
+// === 7. Login Form (Uses Mixin and AuthInput) ===
 /**
- * Vue-Komponente für das Login-Formular.
- *
- * Verantwortlichkeiten:
- * - Erfassung von E-Mail & Passwort
- * - Client-seitige Validierung
- * - Login-Request an das Backend
- * - Anzeige von Fehler- und Erfolgsmeldungen
+ * Login Form Component
+ * Handles user authentication with email and password
+ * Includes client-side validation and API integration
+ * 
+ * @component
+ * @emits switchMode - Emitted when user clicks to switch to registration form
  */
 const LoginForm = {
     components: { LanguageSwitcher, AuthInput },
     mixins: [AuthMixin],
     template: `
-        <div class="auth-form">
+        <div class="auth-form" @keydown.enter="login">
             <h2>{{ t('LOGIN_TITLE') }}</h2>
             <LanguageSwitcher />
 
             <AuthInput
-                icon="icons/email.png"
+                icon="Login/icons/email.png"
                 placeholderKey="EMAIL_PLACEHOLDER"
                 inputType="email"
                 :modelValue="email"
@@ -305,7 +304,7 @@ const LoginForm = {
             />
             
             <AuthInput
-                icon="icons/lock.png"
+                icon="Login/icons/lock.png"
                 placeholderKey="PASSWORD_PLACEHOLDER"
                 :isPassword="true"
                 :modelValue="password"
@@ -336,9 +335,17 @@ const LoginForm = {
         };
     },
     methods: {
+        /**
+         * Handles login form submission
+         * Performs client-side validation, sends credentials to API,
+         * and redirects user on successful authentication
+         * 
+         * @async
+         */
         async login() {
             this.clearMessages();
 
+            // --- Client-Side Validation ---
             if (!this.email || !this.password) {
                 this.errorMessage = t('ERR_FILL_FIELDS');
                 return;
@@ -348,20 +355,28 @@ const LoginForm = {
                 return;
             }
 
-            this.isLoading = true;
+            this.isLoading = true; // activate loading state
 
             try {
+                // await delay(3000); 
                 const res = await fetch(`${API_BASE}/user/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: this.email, password: this.password }),
-                    credentials: 'include'
-                });
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: this.email, password: this.password }),
+                credentials: "include",
+              });
+
 
                 if (res.ok) {
                     this.successMessage = t('SUCCESS_LOGIN');
                     setTimeout(() => {
-                        window.location.href = '/Startseitendesign/startseite.html';
+                        const redirectUrl = localStorage.getItem("redirectAfterLogin");
+                    if (redirectUrl) {
+                        localStorage.removeItem("redirectAfterLogin");
+                        window.location.href = redirectUrl; // go back to invite site
+                    } else {
+                        window.location.href = '../Startseitendesign/startseite.html';
+                    }
                     }, 1500);
                 } else {
                     this.handleApiError(res, false);
@@ -370,31 +385,31 @@ const LoginForm = {
             } catch (error) {
                 this.handleNetworkError(error);
             } finally {
-                this.isLoading = false; 
+                this.isLoading = false; // deactivate loading state
             } 
         } 
     }
 };
 
+// === 8. Register Form (Uses Mixin and AuthInput) ===
 /**
- * Vue-Komponente für das Registrierungsformular.
- *
- * Verantwortlichkeiten:
- * - Erfassen der Registrierungsdaten
- * - Client-seitige Validierung (E-Mail, Passwort, Wiederholung)
- * - Kommunikation mit der Backend-API
- * - Anzeige von Ladezustand, Fehlern und Erfolgsmeldungen
+ * Registration Form Component
+ * Handles new user registration with email and password
+ * Includes password confirmation and comprehensive validation
+ * 
+ * @component
+ * @emits switchMode - Emitted when user clicks to switch to login form or after successful registration
  */
 const RegisterForm = {
     components: { LanguageSwitcher, AuthInput },
     mixins: [AuthMixin],
     template: `
-        <div class="auth-form">
+        <div class="auth-form" @keydown.enter="register">
             <h2>{{ t('REGISTER_TITLE') }}</h2>
             <LanguageSwitcher />
 
             <AuthInput
-                icon="icons/email.png"
+                icon="Login/icons/email.png"
                 placeholderKey="EMAIL_PLACEHOLDER"
                 inputType="email"
                 :modelValue="email"
@@ -402,7 +417,7 @@ const RegisterForm = {
             />
 
             <AuthInput
-                icon="icons/lock.png"
+                icon="Login/icons/lock.png"
                 placeholderKey="PASSWORD_PLACEHOLDER"
                 :isPassword="true"
                 :modelValue="password"
@@ -410,7 +425,7 @@ const RegisterForm = {
             />
             
             <AuthInput
-                icon="icons/lock.png"
+                icon="Login/icons/lock.png"
                 placeholderKey="REPEAT_PASSWORD_PLACEHOLDER"
                 :isPassword="true"
                 :modelValue="repeatPassword"
@@ -446,14 +461,16 @@ const RegisterForm = {
     },
     methods: {
         /**
-        * Führt die Benutzerregistrierung durch.
-        * Validiert Eingaben clientseitig und sendet
-        * anschließend einen POST-Request an das Backend.
-        */
+         * Handles registration form submission
+         * Performs comprehensive client-side validation including password matching,
+         * sends registration data to API, and switches to login form on success
+         * 
+         * @async
+         */
         async register() {
             this.clearMessages();
 
-            /* --- Client-Side Validation --- */
+            // --- Client-Side Validation ---
             if (!this.email || !this.password || !this.repeatPassword) {
                 this.errorMessage = t('ERR_FILL_FIELDS');
                 return;
@@ -471,16 +488,15 @@ const RegisterForm = {
                 return;
             }
 
-            this.isLoading = true; 
+            this.isLoading = true; // activate loading state
 
             try {
                 const res = await fetch(`${API_BASE}/user/create`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: this.email, password: this.password }),
-                    credentials: 'include'
-                });
-
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: this.email, password: this.password }),
+                credentials: "include",
+              });
                 if (res.ok) {
                     this.successMessage = t('SUCCESS_REGISTER');
                     setTimeout(() => {
@@ -494,19 +510,18 @@ const RegisterForm = {
                 this.handleNetworkError(err);
             }
             finally {
-                this.isLoading = false; 
+                this.isLoading = false; // deactivate loading state
             }
         }
     }
 };
 
+// === 9. Auth Wrapper ===
 /**
- * Wrapper-Komponente für die Authentifizierungsansicht.
- *
- * Steuert, ob das Login- oder das Registrierungsformular
- * angezeigt wird.
- *
- * Die Umschaltung erfolgt über ein internes State-Flag.
+ * Auth Wrapper Component
+ * Container component that manages switching between login and registration forms
+ * 
+ * @component
  */
 const AuthWrapper = {
     components: { LoginForm, RegisterForm },
@@ -523,18 +538,18 @@ const AuthWrapper = {
     },
     methods: {
         /**
-        * Wechselt zwischen Login- und Registrierungsansicht.
-        */
+         * Toggles between login and registration forms
+         */
         toggleForm() {
             this.isLogin = !this.isLogin;
         }
     }
 };
 
+// === 10. Mount App ===
 /**
- * Einstiegspunkt der Authentifizierungs-App.
- * Erstellt die Vue-App und mountet sie
- * in das HTML-Element mit der ID 'app'.
+ * Creates and mounts the main Vue application
+ * Registers global components and mounts to #app element
  */
 const app = createApp(AuthWrapper);
 app.component('LanguageSwitcher', LanguageSwitcher);

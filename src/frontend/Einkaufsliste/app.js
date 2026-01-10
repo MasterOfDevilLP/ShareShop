@@ -137,6 +137,35 @@ new Vue({
     },
   },
 
+  watch: {
+    localTicks: {
+      handler(val) {
+        localStorage.setItem("localTicks", JSON.stringify(val));
+      },
+      deep: true,
+    },
+  },
+
+  computed: {
+    /** @type {number} Gesamtsumme der getickten Produkte */
+    totalTickedPrice() {
+      const tickedItems = this.listItems.filter((item) => this.isTicked(item));
+      return tickedItems.reduce(
+        (sum, item) => sum + (parseFloat(item.preis) || 0),
+        0,
+      );
+    },
+  },
+
+  watch: {
+  localTicks: {
+    handler(val) {
+      localStorage.setItem("localTicks", JSON.stringify(val));
+    },
+    deep: true,
+  }
+},
+
   mounted() {
     /**
      * Lädt initial die WG-Produkte und die Einkaufsliste, falls IDs vorhanden.

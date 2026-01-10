@@ -1,164 +1,89 @@
-@startuml c4_level4_code_backend
-title C4-4 Code (Beispiel): Backend Klassenstruktur
+@startuml c4_level4_code
+title C4-4 Code-Level
 
 skinparam classAttributeIconSize 0
 
-package "http" {
-  class AuthMiddleware {
-    +handle(request): UserContext
+package "backend.managers" {
+
+  class UserManager {
+    +create(email: String, pwd: String): User
+    +login(email: String, pwd: String): User
   }
 
-  class UserController {
-    +register()
-    +getMe()
+  class SessionManager {
+    logik in Session-Klasse enthalten
   }
 
-  class WGController {
-    +createWG()
-    +getMyWGs()
-    +addMember()
+  class WGManager {
+    +create(owner: User, name: String): WG
+    +getWG(wgId: UUID): WG
   }
 
-  class ShoppingListController {
-    +createList()
-    +getLists()
-    +renameList()
-    +deleteList()
-  }
-
-  class ItemController {
-    +addItem()
-    +toggleBought()
-    +searchItems()
-    +removeItem()
+  class ItemManager {
+    +createItem(wg: WG, user: User, name: String, description: String, price: BigDecimal): Item
+    +getItem(itemId: UUID): Item
+    +search(wg: WG, query: String): Item[]
   }
 }
 
-package "service" {
-  class UserService {
-    +createUser(email, password)
-    +findById(userId)
-  }
+package "backend.model" {
 
-  class SessionService {
-    +login(email, password): Session
-    +validate(token): UserContext
-    +logout(token)
-  }
-
-  class WGService {
-    +createWG(ownerId, name): WG
-    +getWGsForUser(userId)
-    +checkMembership(userId, wgId)
-    +addMember(wgId, userId)
-  }
-
-  class ShoppingListService {
-    +createList(wgId, name): ShoppingList
-    +getLists(wgId)
-    +renameList(listId, name)
-    +deleteList(listId)
-  }
-
-  class ItemService {
-    +addItem(listId, name, qty): Item
-    +toggleBought(itemId)
-    +search(wgId, query)
-    +removeItem(itemId)
-  }
-}
-
-package "domain" {
   class User {
-    +id: UUID
-    +email: String
-    +passwordHash: String
-  }
-
-  class Session {
-    +token: String
-    +userId: UUID
-    +expiresAt: Instant
+    +setEmail(email: String)
+    +setPassword(password: String)
+    +getUserID(): UUID
+    +getWgIDList(): ArrayList<UUID>
+    +isUserInWG(wgId: UUID): boolean
+    +remove()
   }
 
   class WG {
-    +id: UUID
-    +name: String
+    +addUser(user: User)
+    +hasUser(user: User): boolean
+    +isOwner(user: User): boolean
+    +createList(user: User, name: String): ShoppingList
+    +getList(listId: UUID): ShoppingList
+    +lists(conn): ArrayList<ShoppingList>
+    +remove()
   }
 
   class ShoppingList {
-    +id: UUID
-    +wgId: UUID
-    +name: String
+    +addChange(user: User, item: Item, change: Change, args...)
+    +getItemsOnList(): ArrayList<Pair<Item,Integer>>
+    +getChangeLog(start: int, end: int): ArrayList<ListChange>
+    +getShoppingListId(): UUID
+    +getName(): String
   }
 
   class Item {
-    +id: UUID
-    +listId: UUID
-    +name: String
-    +quantity: int
-    +bought: boolean
+    +setItemName(name: String)
+    +remove()
+    +getItemID(): UUID
+    +weitere
+  }
+
+  class Session {
+    +boop()
+    +close()
   }
 }
 
-package "persistence" {
-  interface UserRepository {
-    +save(user)
-    +findById(id)
-    +findByEmail(email)
-  }
-
-  interface SessionRepository {
-    +save(session)
-    +findByToken(token)
-    +deleteByToken(token)
-  }
-
-  interface WGRepository {
-    +save(wg)
-    +findById(id)
-    +findForUser(userId)
-    +addMember(wgId, userId)
-    +isMember(wgId, userId): boolean
-  }
-
-  interface ShoppingListRepository {
-    +save(list)
-    +findByWG(wgId)
-    +findById(id)
-    +delete(id)
-  }
-
-  interface ItemRepository {
-    +save(item)
-    +findByList(listId)
-    +findById(id)
-    +searchInWG(wgId, query)
-    +delete(id)
-  }
+class Database {
+  PostgreSQL
 }
 
-' HTTP -> Service
-AuthMiddleware --> SessionService
-UserController --> UserService
-UserController --> SessionService
-WGController --> WGService
-ShoppingListController --> ShoppingListService
-ItemController --> ItemService
+UserManager --> Database : JDBC
+WGManager --> Database : JDBC
+ItemManager --> Database : JDBC
 
-' Services -> Repos
-UserService --> UserRepository
-SessionService --> SessionRepository
-WGService --> WGRepository
-ShoppingListService --> ShoppingListRepository
-ItemService --> ItemRepository
-ItemService --> WGRepository : "search scope"
-ShoppingListService --> WGRepository : "membership check"
+User --> Database : JDBC
+WG --> Database : JDBC
+ShoppingList --> Database : JDBC
 
-' Domain relations
 WG "1" o-- "0..*" ShoppingList
 ShoppingList "1" o-- "0..*" Item
 
-Session "*" --> "1" User : userId
+
+Session --> User
 
 @enduml

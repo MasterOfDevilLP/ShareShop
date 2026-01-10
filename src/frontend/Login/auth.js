@@ -242,7 +242,7 @@ const AuthInput = {
             />
             
             <img
-                v-if="isPassword"
+                v-if="isPassword && modelValue && modelValue.length > 0"
                 :src="showPassword ? 'Login/icons/eye-off.png' : 'Login/icons/eye.png'"
                 class="eye-icon"
                 @click="togglePassword"

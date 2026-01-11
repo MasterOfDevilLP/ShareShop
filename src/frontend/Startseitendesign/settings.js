@@ -579,7 +579,7 @@ new Vue({
         if (stillExists) {
           
           this.showConfirm(
-            "Die WG konnte nicht gelöscht werden (sie existiert serverseitig noch).\n\n" +
+            "Die WG konnte nicht gelöscht werden\n\n" +
               "Vermutlich sind noch Listen/Inhalte vorhanden.\n" +
               "Soll ich zuerst alle Listen löschen und es danach nochmal versuchen?",
             "WG konnte nicht gelöscht werden",

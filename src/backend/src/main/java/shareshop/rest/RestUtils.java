@@ -19,8 +19,15 @@ import shareshop.User;
 import shareshop.WG;
 import shareshop.rest.requests.ErrorResponse;
 
-// a collection of functions frequently needed for REST endpoints
+/**
+ * A collection of static methods implementing functionality commonly needed within the implementation of the REST API
+ */
 public class RestUtils {
+	/**
+	 * Get the user associated with the current session
+	 * @param ctx Javalin request context
+	 * @return Currently logged in user,  or null if no user is logged in
+	 */
 	public static User getAuthorizedUser(Context ctx) {
 		
 		Logger logger = LoggerFactory.getLogger(RestUtils.class);
@@ -44,6 +51,12 @@ public class RestUtils {
 		return appCtx.userManager.getUser(uid);
 	}
 	
+	/**
+	 * Sets up the request context to return an error message in a common format 
+	 * @param ctx Javalin request context
+	 * @param status The HTTP status code to return
+	 * @param message A message to return to the client, may describe the error further
+	 */
 	public static void setResponseError(Context ctx, HttpStatus status, String message) {
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 		ctx.contentType(ContentType.JSON);

@@ -22,17 +22,48 @@ import shareshop.WG;
 import shareshop.Manager.UserManager;
 import shareshop.Manager.WGManager;
 
+/**
+ * Helper class to provide an environment for unit tests for the REST API.
+ */
 public class RESTTestEnvironment {
 
+	/**
+	 * mocked Javalin request context, only returns AppContext
+	 */
 	public final Context ctx = mock(Context.class);
+	/**
+	 * mocked AppContext
+	 */
 	public final AppContext appctx = mock(AppContext.class);
+	/**
+	 * mocked test user
+	 */
 	public final User testusr = mock(User.class);
+	/**
+	 * mocked UserManager, only accepts testuser:pw
+	 */
 	public final UserManager usermgr = mock(UserManager.class);
+	/**
+	 * mocked WGManager
+	 */
 	public final WGManager wgmgr = mock(WGManager.class);
+	/**
+	 * mocked test WG, random wid
+	 */
 	public final WG testwg = mock(WG.class);
+	/**
+	 * mocked HTTPServletRequest, used for all requests, has a session attached
+	 */
 	public final HttpServletRequest req = mock(HttpServletRequest.class);
+	/**
+	 * mocked HttpSession, attached to mocked request
+	 */
 	public final HttpSession session = mock(HttpSession.class);
 	
+	/**
+	 * setup mocked test environment
+	 * @throws SQLException
+	 */
 	void setup() throws SQLException {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		when(ctx.appData(ctxKey)).thenReturn(appctx);
@@ -64,6 +95,10 @@ public class RESTTestEnvironment {
 		
 	}
 	
+	/**
+	 * sets the AuthorizedUID of the mocked session
+	 * @param loggedIn whether the user is logged in or not
+	 */
 	void setUserLoggedIn(boolean loggedIn) {
 		if(loggedIn) {
 			UUID uid = testusr.getUserID();

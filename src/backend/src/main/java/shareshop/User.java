@@ -204,7 +204,7 @@ public class User {
 
     /**
      * returns an ArrayList containing the UUID's of the WG's the user is part of
-     * @return ArrayList<UUID>
+     * @return ArrayList&lt;UUID&gt;
      * @throws SQLException
      */
     public ArrayList<UUID> getWgIDList() throws SQLException {

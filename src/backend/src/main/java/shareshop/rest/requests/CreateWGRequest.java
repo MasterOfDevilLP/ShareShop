@@ -2,7 +2,13 @@ package shareshop.rest.requests;
 
 import com.google.gson.annotations.*;
 
+/**
+ *	The request object for the endpoint POST /wg/create
+ */
 public class CreateWGRequest implements RequestBody {
+	/**
+	 * Name of the new WG
+	 */
 	@Expose
 	public String name;
 	

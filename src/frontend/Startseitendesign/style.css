@@ -3,6 +3,11 @@
   margin: 0;
   padding: 0;
 }
+
+[v-cloak] {
+  display: none;
+}
+
 body {
   font-family: "Inter", sans-serif;
   background-color: #f9f9f9;
@@ -95,12 +100,16 @@ body {
 
 .nav-item {
   flex: 1;
+  color: inherit;         
+  text-decoration: none;   
   padding: 10px 0;
   text-align: center;
   font-size: 14px;
   border-top: 2px solid transparent;
   background: none;
   border: none;
+  text-decoration: none; 
+  color: inherit;       
 }
 
 .nav-icon {
@@ -570,7 +579,7 @@ body {
 
 .list-actions button.danger {
   background: transparent;
-  color: #f39291;
+  color: #d80400;
 }
 
 .list-actions button:disabled {
@@ -625,4 +634,528 @@ body {
 .wg-name {
   text-align: center;
   font-size: 2em;
+}
+
+/* ========================================
+   MEMBERS LIST STYLES - Enhanced Version
+   ======================================== */
+
+.wg-members-section {
+  margin: 24px 0;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+}
+
+.members-header {
+  margin-bottom: 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.members-header.clickable:hover {
+  background-color: rgba(125, 207, 182, 0.1);
+  border-radius: 8px;
+  margin: -8px;
+  padding: 20px 8px;
+}
+
+.members-header.clickable:active {
+  background-color: rgba(125, 207, 182, 0.2);
+}
+
+.collapse-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #666;
+  transition: transform 0.3s ease;
+}
+
+.collapse-icon.expanded {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.members-content {
+  margin-top: 16px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.member-count {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #666;
+}
+
+/* Loading State */
+.members-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 12px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #7dcfb6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.members-loading p {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Members List */
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Member Card */
+.member-card {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #e5e5e5;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.member-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.member-card.current-user {
+  background: linear-gradient(135deg, #f0fdf9 0%, #f9f9f9 100%);
+  border-color: #7dcfb6;
+}
+
+/* Avatar */
+.member-avatar {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7dcfb6 0%, #5eb89e 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+  margin-right: 14px;
+  box-shadow: 0 2px 6px rgba(125, 207, 182, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.member-avatar .avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.member-card.current-user .member-avatar {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+}
+
+/* Member Info */
+.member-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.member-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Badges */
+.you-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.member-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-badge {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
+}
+
+/* Empty State */
+.members-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.members-empty p {
+  color: #999;
+  font-size: 15px;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 390px) {
+  .member-card {
+    padding: 12px;
+  }
+
+  .member-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    font-size: 16px;
+    margin-right: 12px;
+  }
+
+  .member-name {
+    font-size: 15px;
+  }
+}
+
+/* ========================================
+   CUSTOM MODAL SYSTEM
+   ======================================== */
+
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.custom-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 32px 24px 24px;
+  max-width: 340px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  text-align: center;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.modal-success .modal-icon {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  animation: successPulse 0.6s ease;
+}
+
+.modal-error .modal-icon {
+  background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+  color: white;
+  animation: errorShake 0.5s ease;
+}
+
+.modal-confirm .modal-icon {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  animation: confirmBounce 0.5s ease;
+}
+
+.modal-info .modal-icon {
+  background: linear-gradient(135deg, #7dcfb6 0%, #5eb89e 100%);
+  color: white;
+  animation: infoPulse 0.5s ease;
+}
+
+@keyframes successPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes confirmBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes infoPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.modal-message {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  white-space: pre-line;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.modal-btn:active {
+  transform: scale(0.97);
+}
+
+.modal-btn-cancel {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.modal-btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.modal-btn-confirm {
+  background: linear-gradient(135deg, #7dcfb6 0%, #5eb89e 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(125, 207, 182, 0.3);
+}
+
+.modal-btn-confirm:hover {
+  box-shadow: 0 6px 16px rgba(125, 207, 182, 0.4);
+  transform: translateY(-1px);
+}
+
+.modal-btn-success {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.modal-btn-success:hover {
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.modal-btn-error {
+  background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.modal-btn-error:hover {
+  box-shadow: 0 6px 16px rgba(244, 67, 54, 0.4);
+}
+
+.modal-btn-info {
+  background: linear-gradient(135deg, #7dcfb6 0%, #5eb89e 100%);
+  box-shadow: 0 4px 12px rgba(125, 207, 182, 0.3);
+}
+
+.modal-btn-info:hover {
+  box-shadow: 0 6px 16px rgba(125, 207, 182, 0.4);
+}
+
+/* Single button centering */
+.modal-buttons:has(.modal-btn:only-child) {
+  justify-content: center;
+}
+
+.modal-buttons .modal-btn:only-child {
+  max-width: 200px;
+}
+/* ========================================
+   AVATAR DISPLAY & DELETE BUTTON ADDITIONS
+   ======================================== */
+
+/* Enhanced Avatar Display with Emoji */
+.member-avatar.avatar-display {
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* Delete Button for Members */
+.member-delete-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  border-radius: 8px;
+}
+
+.member-delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.member-delete-btn:active {
+  transform: scale(0.95);
+  background-color: rgba(244, 67, 54, 0.2);
+}
+
+.member-delete-btn img {
+  width: 20px;
+  height: 20px;
+  filter: invert(23%) sepia(89%) saturate(2604%) hue-rotate(347deg) brightness(88%) contrast(84%);
+}
+
+.member-card.current-user .member-delete-btn {
+  display: none;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 390px) {
+  .avatar-emoji {
+    font-size: 24px;
+  }
+
+  .member-delete-btn img {
+    width: 18px;
+    height: 18px;
+  }
 }

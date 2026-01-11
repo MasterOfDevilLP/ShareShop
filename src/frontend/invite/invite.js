@@ -4,11 +4,11 @@ new Vue({
   el: "#app",
 
   data: {
-    ivid: null,                                      // Token aus dem Invite-Link
+    ivid: null, // Token aus dem Invite-Link
     selectedWG: localStorage.getItem("selectedWGID") || null,
     wgName: localStorage.getItem("selectedWGName") || "WG auswählen",
-    joining: false,                                  // Join-Status
-    loaded: false,                                   // Lade-Status der Einladung
+    joining: false, // Join-Status
+    loaded: false, // Lade-Status der Einladung
     errorMsg: "",
     successMsg: "",
   },
@@ -63,7 +63,9 @@ new Vue({
      */
     async fetchInvite() {
       try {
-        const res = await fetch(`${API_BASE}/invite/${this.ivid}`, { credentials: "include" });
+        const res = await fetch(`${API_BASE}/invite/${this.ivid}`, {
+          credentials: "include",
+        });
 
         if (!res.ok) {
           this.errorMsg = "Einladung nicht gefunden oder abgelaufen.";
@@ -96,7 +98,8 @@ new Vue({
 
         if (!res.ok) {
           const errText = await res.text();
-          this.errorMsg = "Teilnahme fehlgeschlagen: Du bist schon Mitglied der WG";
+          this.errorMsg =
+            "Teilnahme fehlgeschlagen: Du bist schon Mitglied der WG";
           console.error("Fehler beim Beitreten:", errText);
           this.joining = false;
           return;
@@ -111,6 +114,6 @@ new Vue({
         this.errorMsg = "Fehler beim Beitreten.";
         this.joining = false;
       }
-    }
-  }
+    },
+  },
 });

@@ -72,14 +72,14 @@ new Vue({
       "Sonstiges",
     ],
 
-    /** @type {Object} Daten des aktuell neuen/zu bearbeitenden Produkts 
+    /** @type {Object} Daten des aktuell neuen/zu bearbeitenden Produkts
      * @property {string} id - Produkt-ID, falls bereits in der WG vorhanden
      * @property {string} name - Name des Produkts
      * @property {string} kategorie - Kategorie des Produkts
      * @property {number|string} menge - Menge des Produkts in der Liste
      * @property {number|string} preis - Preis des Produkts
      * @property {boolean} fromWG - Flag, ob das Produkt bereits in der WG existiert
-    */
+     */
     newProduct: {
       id: "",
       name: "",
@@ -101,6 +101,40 @@ new Vue({
 
     /** @type {boolean} Flag: gerade ein Produkt bearbeiten */
     isEditing: false,
+
+    /** @type {boolean} Preis-Modal fur Einkaufsmodus sichtbar */
+    showPriceModal: false,
+    modalProduct: null,
+    modalTickOnSave: false, //Flag, ob beim Speichern getickt werden soll
+
+    /** @type {boolean} Modal für Meldungen für erfolfreiche abgehackte/geloschte Items */
+    showMiniModal: false,
+    miniModalMessage: "",
+
+    showDropdownForProductFromWG: false,
+    filteredProducts: [],
+
+    localTicks: {},
+  },
+
+  watch: {
+    localTicks: {
+      handler(val) {
+        localStorage.setItem("localTicks", JSON.stringify(val));
+      },
+      deep: true,
+    },
+  },
+
+  computed: {
+    /** @type {number} Gesamtsumme der getickten Produkte */
+    totalTickedPrice() {
+      const tickedItems = this.listItems.filter((item) => this.isTicked(item));
+      return tickedItems.reduce(
+        (sum, item) => sum + (parseFloat(item.preis) || 0),
+        0,
+      );
+    },
   },
 
   mounted() {
@@ -114,6 +148,15 @@ new Vue({
         "WG oder Liste nicht ausgewählt. Bitte zuerst auf der Startseite auswählen.",
       );
     }
+
+    /** Vorhandene lokale Ticks laden */
+    const savedTicks = localStorage.getItem("localTicks");
+    if (savedTicks) this.localTicks = JSON.parse(savedTicks);
+
+    /** Seite verlassen → localTicks zurücksetzen */
+    window.addEventListener("beforeunload", () => {
+      this.resetLocalTicks();
+    });
   },
 
   methods: {
@@ -234,20 +277,28 @@ new Vue({
 
     /** Füllt Produktfelder automatisch, wenn Name in WG existiert */
     onProductNameInput() {
-      const matched = this.products.find(
-        (p) => p.name === this.newProduct.name,
-      );
-      if (matched) {
-        this.newProduct.id = matched.id;
-        this.newProduct.kategorie = matched.description;
-        this.newProduct.preis = matched.price;
-        this.newProduct.fromWG = true;
-      } else {
-        this.newProduct.id = "";
-        this.newProduct.kategorie = "";
-        this.newProduct.preis = "";
-        this.newProduct.fromWG = false;
+      if (!this.newProduct.name) {
+        this.filteredProducts = [];
+        return;
       }
+      this.filteredProducts = this.products.filter((p) =>
+        p.name.toLowerCase().includes(this.newProduct.name.toLowerCase()),
+      );
+    },
+
+    selectProduct(product) {
+      this.newProduct.name = product.name;
+      this.newProduct.id = product.id;
+      this.newProduct.kategorie = product.description;
+      this.newProduct.preis = product.price;
+      this.newProduct.fromWG = true;
+      this.showDropdownForProductFromWG = false;
+    },
+
+    hideDropdown() {
+      setTimeout(() => {
+        this.showDropdownForProductFromWG = false;
+      }, 100);
     },
 
     /** Popup schließen und neue Produktdaten zurücksetzen */
@@ -272,15 +323,17 @@ new Vue({
       this.closePopup();
     },
 
-    /** 
-     * Bearbeitet ein bestehendes Produkt in der Liste 
-    */
+    /**
+     * Bearbeitet ein bestehendes Produkt in der Liste
+     */
     async updateListItem() {
-      const existingItem = this.products.find(p => p.name === this.newProduct.name);
+      const existingItem = this.products.find(
+        (p) => p.name === this.newProduct.name,
+      );
       if (!existingItem) return;
 
       const iid = existingItem.id;
-      const currentItem = this.listItems.find(i => i.iid === iid);
+      const currentItem = this.listItems.find((i) => i.iid === iid);
       const currentAmount = currentItem?.amount || 0;
 
       const newAmount = parseFloat(this.newProduct.menge) || 1;
@@ -303,7 +356,6 @@ new Vue({
       this.isEditing = false;
     },
 
-
     /** Prüft, ob Produkt existiert; sonst neu erstellen und zur Liste hinzufügen */
     addOrCreateProduct() {
       const existingItem = this.products.find(
@@ -312,7 +364,6 @@ new Vue({
 
       //wenn Produkt neuer Preis im Vergleich mit dem in WG gespeichert hat, dann aktualisieren
       const price = parseFloat(this.newProduct.preis) || 0;
-
 
       if (existingItem) {
         this.addToList(existingItem.id);
@@ -354,14 +405,15 @@ new Vue({
 
     /** Fügt ein Produkt zur Einkaufsliste hinzu */
     addToList(iid, amount = null, deltaPrice = 0) {
-      const amt = amount !== null ? amount : parseFloat(this.newProduct.menge) || 1;
+      const amt =
+        amount !== null ? amount : parseFloat(this.newProduct.menge) || 1;
       const price = parseFloat(this.newProduct.preis) || 0;
 
       const payload = {
         iid,
         type: "add",
         amount: amt,
-        price: price, 
+        price: price,
       };
 
       return fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
@@ -374,7 +426,7 @@ new Vue({
         .then((updatedList) => {
           this.listItems = this.parseListItems(updatedList).map((item) => ({
             ...item,
-            preis: item.iid === iid ? price : item.preis, 
+            preis: item.iid === iid ? price : item.preis,
           }));
           this.loadList();
           this.loadWGItems();
@@ -391,6 +443,122 @@ new Vue({
     },
 
     /********** Item als gekauft markieren **********/
+    /** Öffnen für Einzelitem (nur Preis ändern) */
+    openPriceModal(product) {
+      this.modalProduct = { ...product };
+      this.modalTickOnSave = false; // nur Preis, kein Tick
+      this.showPriceModal = true;
+    },
+
+    closePriceModal() {
+      this.modalProduct = null;
+      this.showPriceModal = false;
+      this.modalTickOnSave = false;
+    },
+
+    /** Speichert Preis ohne Markierung als gekauft */
+    savePriceBeforeTick() {
+      if (!this.modalProduct) return;
+      const item = this.listItems.find((i) => i.iid === this.modalProduct.iid);
+      if (item) {
+        item.preis = parseFloat(this.modalProduct.preis) || 0;
+      }
+      this.closePriceModal();
+    },
+
+    /** Öffnen für "Einkaufen fertig" (Preis + Tick)*/
+    openPriceModalForFertig() {
+      this.modalProduct = {
+        preis: this.listItems
+          .filter((item) => this.isTicked(item))
+          .reduce((sum, item) => sum + (parseFloat(item.preis) || 0), 0),
+      };
+      this.modalTickOnSave = true; // Tick wird gesetzt
+      this.showPriceModal = true;
+    },
+
+    showMiniModalMsg(msg, duration = 500) {
+      this.miniModalMessage = msg;
+      this.showMiniModal = true;
+      console.log("Showing mini modal:", msg);
+
+      setTimeout(() => {
+        const el = document.querySelector(".mini-modal");
+        if (el) el.classList.add("fade-out");
+      }, 100);
+
+      setTimeout(() => {
+        this.showMiniModal = false;
+        this.miniModalMessage = "";
+      }, duration + 100);
+    },
+
+    /** Toggle nur lokal, nicht direkt Backend */
+    toggleLocalTick(item) {
+      if (!item || !item.iid) return;
+      // switchen des local tick status
+      this.$set(this.localTicks, item.iid, !this.localTicks[item.iid]);
+    },
+
+    /** Prüft, ob Item lokal getickt wurde oder bereits auf Backend */
+    isTicked(item) {
+      return this.localTicks[item.iid] ?? item.ticked;
+    },
+
+    savePrice() {
+      if (!this.modalProduct) return;
+
+      if (this.modalTickOnSave) {
+        this.savePriceAndTick(); // Preis speichern + Items ticken
+      } else {
+        this.savePriceBeforeTick(); // nur Preis speichern
+      }
+
+      this.closePriceModal();
+    },
+
+    /** Speichert Preis und markiert alle lokal getickten Items als gekauft */
+    savePriceAndTick() {
+      if (!this.modalProduct) return;
+
+      // Preis setzen für alle lokal getickten Items
+      const tickedItems = this.listItems.filter((item) => this.isTicked(item));
+
+      tickedItems.forEach((item) => {
+        item.preis = parseFloat(this.modalProduct.preis) || item.preis;
+      });
+
+      // alle getickten Items im Backend markieren
+      this.finalizeTicks();
+
+      this.showMiniModalMsg("Alle Produkte als gekauft markiert", 500);
+    },
+
+    /** Alle lokal getickten Items wirklich auf Backend setzen */
+    async finalizeTicks() {
+      const tickedItems = Object.entries(this.localTicks)
+        .filter(([iid, ticked]) => ticked)
+        .map(([iid]) => iid);
+
+      for (const iid of tickedItems) {
+        const item = this.listItems.find((i) => i.iid === iid);
+        if (item) {
+          await this.toggleTick(item); // ruft dein Backend auf
+        }
+      }
+
+      // localStorage leeren
+      this.localTicks = {};
+      localStorage.removeItem("localTicks");
+    },
+
+    /** Seite verlassen ohne Speichern → localStorage löschen */
+    resetLocalTicks() {
+      this.localTicks = {};
+      localStorage.removeItem("localTicks");
+    },
+
+    /** Markiert ein Item als gekauft (Tick) im Backend */
     toggleTick(item) {
       const payload = {
         iid: item.iid,
@@ -409,6 +577,7 @@ new Vue({
           this.listItems = this.parseListItems(updatedList);
           this.loadList();
           this.loadWGItems();
+          this.showMiniModalMsg("Artikel als gekauft markiert", 300);
         })
         .catch((err) =>
           console.error("Item konnte nicht abgehakt werden", err),
@@ -429,14 +598,38 @@ new Vue({
           this.listItems = this.parseListItems(updatedList);
           this.loadList();
           this.loadWGItems();
+          this.showMiniModalMsg("Item gelöscht", 300);
         })
         .catch((err) =>
           console.error("Item konnte nicht gelöscht werden", err),
         );
     },
 
-    /********** Liste löschen (noch nicht implementiert) **********/
-    deleteList(wid, lid) {},
+    /********** Liste löschen **********/
+    deleteList() {
+      fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+        .then((res) => {
+          if (res.status === 401) {
+            this.showMiniModalMsg(
+              "Du hast keine Berechtigung, diese Liste zu löschen",
+              2000,
+            );
+            throw new Error("401");
+          }
+          if (!res.ok) {
+            throw new Error(res.status);
+          }
+          return;
+        })
+        .then(() => {
+          console.log("Liste gelöscht");
+          this.goToStartseite();
+        })
+        .catch((err) => console.error("Fehler beim Löschen der Liste:", err));
+    },
 
     /** Popup Löschen bestätigen */
     confirmDeleteList() {

@@ -95,6 +95,15 @@ new Vue({
     inviteLinkfromAPI: localStorage.getItem("inviteLinkfromAPI") || "",
     token: "",
     frontendLink: "",
+
+    modal: {
+      show: false,
+      type: 'info',
+      title: '',
+      message: '',
+      confirmCallback: null,
+      cancelCallback: null,
+    },
   },
 
   computed: {
@@ -281,12 +290,13 @@ new Vue({
     // -----------------------------
     add_list() {
       if (!this.selectedWG) {
-        alert("Bitte zuerst eine WG erstellen und auswählen.");
+        this.showAlert("Bitte zuerst eine WG erstellen und auswählen.", "Hinweis", "info");
         return;
       }
       this.showPopup = true;
       this.showListOptions = false;
     },
+    
 
     closePopup() {
       this.showPopup = false;
@@ -389,33 +399,42 @@ new Vue({
       const wgId = this.selectedWG;
       if (!wgId || !listId) return;
 
-      if (!confirm("Liste wirklich löschen?")) return;
+      const list = this.lists.find(l => l.id === listId);
 
-      try {
-        const res = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
-          method: "DELETE",
-          credentials: "include",
-        });
-
-        if (!res.ok) {
-          const text = await res.text().catch(() => "");
-          let msg = text || `HTTP ${res.status}`;
+      this.showConfirm(
+        `Möchtest du die Liste "${list?.name}" wirklich löschen?`,
+        "Liste löschen",
+        async () => {
           try {
-            const j = JSON.parse(text);
-            if (j?.message) msg = j.message;
-          } catch (_) {}
-          throw new Error(msg);
-        }
+            const res = await fetch(`${API_BASE}/wg/${wgId}/list/${listId}`, {
+              method: "DELETE",
+              credentials: "include",
+            });
 
-        this.lists = this.lists.filter((l) => String(l.id) !== String(listId));
-        localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
+            if (!res.ok) {
+              const text = await res.text().catch(() => "");
+              let msg = text || `HTTP ${res.status}`;
+              try {
+                const j = JSON.parse(text);
+                if (j?.message) msg = j.message;
+              } catch (_) {}
+              throw new Error(msg);
+            }
 
-        this.showListOptions = false;
-        this.selectedList = null;
-      } catch (e) {
-        console.error(e);
-        alert("Fehler beim Löschen: " + e.message);
-      }
+            // Liste aus UI & localStorage entfernen
+            this.lists = this.lists.filter((l) => String(l.id) !== String(listId));
+            localStorage.setItem(`lists_${wgId}`, JSON.stringify(this.lists));
+
+            this.showListOptions = false;
+            this.selectedList = null;
+
+            this.closeModal();
+          } catch (e) {
+            console.error(e);
+            alert("Fehler beim Löschen: " + e.message);
+          }
+        } 
+      ); 
     },
 
     // -----------------------------
@@ -453,7 +472,7 @@ new Vue({
       reader.readAsDataURL(file);
     },
 
-    closeModal() {
+    closeCreateGroupModal() {
       this.showCreateGroupModal = false;
       this.newGroup = { name: "", description: "", preview: null, imageFile: null };
       this.errors = { name: null, description: null };
@@ -466,6 +485,21 @@ new Vue({
     // -----------------------------
     // Neue WG erstellen (Backend ohne Bild) + Bild lokal speichern
     // -----------------------------
+    handleSaveGroup() {
+      const name = this.newGroup.name.trim();
+
+      if (name.length > 15) {
+        this.showAlert(
+          "Der Name der WG darf maximal 15 Zeichen lang sein.",
+          "Zu langer Name",
+          "error"
+        );
+        return;
+      }
+
+      this.saveGroup();
+    },
+
     async saveGroup() {
       this.validateGroupForm();
       if (!this.formValid) return;
@@ -511,7 +545,7 @@ new Vue({
         await this.fetchLists(this.selectedWG);
 
         this.saveSuccess = true;
-        setTimeout(() => this.closeModal(), 500);
+        setTimeout(() => this.closeCreateGroupModal(), 500);
       } catch (e) {
         console.error(e);
         this.saveError = "Fehler beim Erstellen der WG: " + e.message;
@@ -553,18 +587,33 @@ new Vue({
     },
 
     copyInviteLink() {
-      if (!this.frontendLink) {
-        alert("Kein Invite-Link vorhanden. Bitte erst erstellen.");
-        return;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(this.frontendLink)
+          .then(() => {
+            this.showCopyToast = true;
+            setTimeout(() => this.showCopyToast = false, 2000);
+          })
+          .catch(() => {
+            this.fallbackCopy(this.frontendLink);
+          });
+      } else {
+        this.fallbackCopy(this.frontendLink);
       }
+    },
 
-      navigator.clipboard
-        .writeText(this.frontendLink)
-        .then(() => {
-          this.showCopyToast = true;
-          setTimeout(() => (this.showCopyToast = false), 2000);
-        })
-        .catch((err) => console.error("Fehler beim Kopieren:", err));
+    fallbackCopy(text) {
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      try {
+        document.execCommand('copy');
+        this.showCopyToast = true;
+        setTimeout(() => this.showCopyToast = false, 2000);
+      } catch (err) {
+        console.warn('Bitte kopieren Sie manuell');
+      }
+      document.body.removeChild(el);
     },
 
     toggleEmailInput() {
@@ -597,6 +646,60 @@ new Vue({
 
       this.emailToShare = "";
       this.showEmailInput = false;
+    },
+
+    showConfirm(message, title = 'Bestätigung', onConfirm, onCancel = null) {
+      this.modal = {
+        show: true,
+        type: 'confirm',
+        title: title,
+        message: message,
+        confirmCallback: onConfirm,
+        cancelCallback: onCancel,
+      };
+    },
+
+    showAlert(message, title = 'Hinweis', type = 'info') {
+      this.modal = {
+        show: true,
+        type: type,
+        title: title,
+        message: message,
+        confirmCallback: null,
+        cancelCallback: null,
+      };
+    },
+
+    closeModal() {
+      this.modal.show = false;
+      setTimeout(() => {
+        this.modal = {
+          show: false,
+          type: 'info',
+          title: '',
+          message: '',
+          confirmCallback: null,
+          cancelCallback: null,
+        };
+      }, 300);
+    },
+
+    handleModalConfirm() {
+      if (this.modal.confirmCallback) {
+        this.modal.confirmCallback(); // gọi callback khi nhấn Bestätigen
+      }
+      this.closeModal(); // đóng modal sau khi xác nhận
+    },
+
+    handleModalCancel() {
+      this.closeModal(); // nếu nhấn Abbrechen
+    },
+
+    handleModalCancel() {
+      if (this.modal.cancelCallback) {
+        this.modal.cancelCallback();
+      }
+      this.closeModal();
     },
   },
 });

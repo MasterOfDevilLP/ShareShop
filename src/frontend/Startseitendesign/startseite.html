@@ -18,7 +18,7 @@
     <!-- Vue 2 -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 
-    <div id="app">
+    <div id="app" v-cloak>
       <div class="iphone-app">
         <!-- Header -->
         <header class="app-header">
@@ -100,12 +100,12 @@
               <button
                 class="btn btn-green"
                 :disabled="isSaving || !formValid"
-                @click="saveGroup"
+                @click="handleSaveGroup"
               >
                 {{ isSaving ? "Speichert..." : "Erstellen" }}
               </button>
 
-              <button class="btn btn-pink" @click="closeModal">
+              <button class="btn btn-pink" @click="closeCreateGroupModal">
                 Abbrechen
               </button>
             </div>
@@ -187,12 +187,12 @@
             </button>
 
             <button disabled>
-              <img src="icons/external.svg" alt="Teilen" />
+              <img src="icons/External.svg" alt="Teilen" />
               <span>Teilen</span>
             </button>
 
             <button disabled>
-              <img src="icons/copy.svg" alt="Kopieren" />
+              <img src="icons/Copy.svg" alt="Kopieren" />
               <span>Kopieren</span>
             </button>
 
@@ -200,7 +200,7 @@
               class="danger"
               @click="selectedList && deleteList(selectedList.id)"
             >
-              <img src="icons/Trash.svg" alt="Löschen" />
+              <img src="icons/trash.svg" alt="Löschen" />
               <span>Löschen</span>
             </button>
           </div>
@@ -216,6 +216,40 @@
             <div class="modal-actions">
               <button @click="renameList">Speichern</button>
               <button @click="showRenameModal = false">Abbrechen</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Modal -->
+        <div v-if="modal.show" v-cloak class="custom-modal-overlay" @click.self="closeModal">
+          <div class="custom-modal" :class="'modal-' + modal.type">
+            <div class="modal-icon">
+              <span v-if="modal.type === 'success'">✓</span>
+              <span v-else-if="modal.type === 'error'">✕</span>
+              <span v-else-if="modal.type === 'confirm'">?</span>
+              <span v-else>ℹ</span>
+            </div>
+            <h3 class="modal-title">{{ modal.title }}</h3>
+            <p class="modal-message">{{ modal.message }}</p>
+            <div class="modal-buttons">
+              <button 
+                v-if="modal.type === 'confirm'" 
+                @click="handleModalCancel"
+                class="modal-btn modal-btn-cancel"
+              >
+                Abbrechen
+              </button>
+              <button 
+                @click="modal.type === 'confirm' ? handleModalConfirm() : closeModal()"
+                class="modal-btn modal-btn-confirm"
+                :class="{
+                  'modal-btn-success': modal.type === 'success',
+                  'modal-btn-error': modal.type === 'error',
+                  'modal-btn-info': modal.type === 'info'
+                }"
+              >
+                {{ modal.type === 'confirm' ? 'Bestätigen' : 'OK' }}
+              </button>
             </div>
           </div>
         </div>

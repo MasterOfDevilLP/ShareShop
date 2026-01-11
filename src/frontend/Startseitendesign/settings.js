@@ -470,37 +470,131 @@ new Vue({
         this.showAlert("Fehler beim Verlassen der WG: " + err.message, "Fehler", "error");
       }
     },
+    async performDeleteWG(force = false) {
+      if (!this.selectedWG) {
+        this.showAlert("Keine WG ausgewählt.", "Fehler", "error");
+        return;
+      }
 
-    async performDeleteWG() {
+      const wid = String(this.selectedWG);
+
+      const readBodyMessage = async (res) => {
+        const raw = await res.text().catch(() => "");
+        if (!raw) return "";
+        try {
+          const j = JSON.parse(raw);
+          return j?.message || j?.error || raw;
+        } catch (_) {
+          return raw;
+        }
+      };
+
       try {
-        const res = await fetch(`${API_BASE}/wg/${this.selectedWG}`, {
+        
+        if (force) {
+          const listRes = await fetch(`${API_BASE}/wg/${wid}/list`, {
+            method: "GET",
+            credentials: "include",
+          });
+
+          if (!listRes.ok) {
+            const msg = await readBodyMessage(listRes);
+            this.showAlert(
+              msg || `Listen konnten nicht geladen werden (HTTP ${listRes.status})`,
+              "Fehler",
+              "error"
+            );
+            return;
+          }
+
+          const listRaw = await listRes.json().catch(() => []);
+          console.log("GET /wg/:wid/list raw:", listRaw);
+
+          
+          const listIds = (Array.isArray(listRaw) ? listRaw : [])
+            .map((x) => {
+              if (typeof x === "string") return x;
+              return x?.id ?? x?.lid ?? x?._id ?? x?.uuid ?? null;
+            })
+            .filter(Boolean);
+
+          console.log("Extracted listIds:", listIds);
+
+          for (const lid of listIds) {
+            const delListRes = await fetch(
+              `${API_BASE}/wg/${wid}/list/${encodeURIComponent(lid)}`,
+              {
+                method: "DELETE",
+                credentials: "include",
+              }
+            );
+
+            if (!delListRes.ok) {
+              const msg = await readBodyMessage(delListRes);
+              this.showAlert(
+                msg || `Liste ${lid} konnte nicht gelöscht werden (HTTP ${delListRes.status})`,
+                "Fehler",
+                "error"
+              );
+              return;
+            }
+          }
+        }
+
+        
+        const res = await fetch(`${API_BASE}/wg/${wid}`, {
           method: "DELETE",
           credentials: "include",
         });
 
+        const msg = await readBodyMessage(res);
+
         if (res.status === 403) {
-          const text = await res.text().catch(() => "");
-          this.showAlert(text || "Du darfst diese WG nicht löschen.", "Nicht erlaubt", "error");
+          this.showAlert(msg || "Du darfst diese WG nicht löschen.", "Nicht erlaubt", "error");
           return;
         }
 
         if (!res.ok) {
-          const text = await res.text().catch(() => "");
-          this.showAlert(
-            text || `Fehler beim Löschen (HTTP ${res.status})`,
-            "Fehler",
-            "error"
+          
+          if (!force) {
+            this.showConfirm(
+              (msg || `WG konnte nicht gelöscht werden (HTTP ${res.status}).`) +
+                "\n\nSoll ich zuerst ALLE Listen in der WG löschen und es erneut versuchen?",
+              "WG löschen",
+              async () => {
+                await this.performDeleteWG(true);
+              }
+            );
+            return;
+          }
+
+          this.showAlert(msg || `Fehler beim Löschen (HTTP ${res.status})`, "Fehler", "error");
+          return;
+        }
+
+      
+        await this.loadUserAndWGs();
+        const stillExists = this.wgList.some((w) => String(w.id) === wid);
+
+        if (stillExists) {
+          
+          this.showConfirm(
+            "Die WG konnte nicht gelöscht werden\n\n" +
+              "Vermutlich sind noch Listen/Inhalte vorhanden.\n" +
+              "Soll ich zuerst alle Listen löschen und es danach nochmal versuchen?",
+            "WG konnte nicht gelöscht werden",
+            async () => {
+              await this.performDeleteWG(true);
+            }
           );
           return;
         }
 
-        const deletedId = String(this.selectedWG);
-
-        this.wgList = this.wgList.filter((w) => String(w.id) !== deletedId);
-        localStorage.setItem("wgList", JSON.stringify(this.wgList));
-
+      
         this.selectedWG = null;
         this.selectedWGName = "WG auswählen";
+        this.wgUsers = [];
+
         localStorage.removeItem("selectedWG");
         localStorage.removeItem("selectedWGName");
 
@@ -513,6 +607,8 @@ new Vue({
         this.showAlert("Fehler beim Löschen der WG: " + err.message, "Fehler", "error");
       }
     },
+
+
 
     async createInviteLink() {
       if (!this.selectedWG) {

@@ -46,10 +46,10 @@
                     {{ wg.name }}
                   </li>
 
-                  <li class="divider">──────────</li>
-
-                  <li @click="selectWG('__create__')">+ neue Gruppe</li>
-                </ul>
+                  <li class="create-action" @click="selectWG('__create__')">
+                      <span>+</span> neue Gruppe
+                  </li>                
+                  </ul>
               </div>
             </div>
 

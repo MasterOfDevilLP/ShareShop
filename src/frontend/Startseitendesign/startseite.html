@@ -37,21 +37,23 @@
                   {{ selectedWGName || "WG auswählen" }}
                 </label>
 
-                <ul class="dropdown-options" v-if="wgDropdownOpen">
-                  <li
-                    v-for="wg in wgList"
-                    :key="wgIdOf(wg)"
-                    @click="selectWG(wgIdOf(wg))"
-                  >
-                    {{ wg.name }}
-                  </li>
+                <transition name="roll"> </transition>
+                  <ul class="dropdown-options" v-if="wgDropdownOpen">
+                    <li
+                      v-for="wg in wgList"
+                      :key="wgIdOf(wg)"
+                      @click="selectWG(wgIdOf(wg))"
+                    >
+                      {{ wg.name }}
+                    </li>
 
-                  <li class="divider">──────────</li>
-
-                  <li @click="selectWG('__create__')">+ neue Gruppe</li>
-                </ul>
+                    <li class="create-action" @click="selectWG('__create__')">
+                        <span>+</span> neue Gruppe
+                    </li>                
+                    </ul>
+                </div>
               </div>
-            </div>
+            </transition>
 
             <!-- Icons rechts -->
             <div class="icon-group">
@@ -83,7 +85,7 @@
             />
             <span v-if="errors.name" class="error-text">{{ errors.name }}</span>
 
-            <label>Beschreibung *</label>
+            <label>Beschreibung (Optional) </label>
             <textarea
               v-model.trim="newGroup.description"
               @input="validateGroupForm"
@@ -92,21 +94,21 @@
               {{ errors.description }}
             </span>
 
-            <label>Bild (optional)</label>
+            <label>Bild (Optional) </label>
             <input type="file" accept="image/*" @change="handleImageUpload" />
             <img v-if="newGroup.preview" :src="newGroup.preview" width="100" alt="Vorschau" />
 
             <div class="btn-container">
+              <button class="btn btn-cancel" @click="closeCreateGroupModal">
+                Abbrechen
+              </button>
+
               <button
                 class="btn btn-green"
                 :disabled="isSaving || !formValid"
                 @click="handleSaveGroup"
               >
                 {{ isSaving ? "Speichert..." : "Erstellen" }}
-              </button>
-
-              <button class="btn btn-pink" @click="closeCreateGroupModal">
-                Abbrechen
               </button>
             </div>
 

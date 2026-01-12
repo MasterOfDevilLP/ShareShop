@@ -20,7 +20,7 @@ public class CreateUserRequest implements RequestBody {
 
 	@Override
 	public boolean validate() {
-		if(email != null && password != null) {
+		if(email != null && password != null && email.length() <= 50) {
 			return true;
 		}
 		return false;

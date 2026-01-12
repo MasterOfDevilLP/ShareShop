@@ -15,7 +15,7 @@ public class PatchListRequest implements RequestBody {
 	
 	@Override
 	public boolean validate() {
-		if(name != null && name.length() == 0) {
+		if(name != null && name.length() == 0 && name.length() <= 25) {
 			return false;
 		}
 		return true;

@@ -15,7 +15,7 @@ public class CreateWGRequest implements RequestBody {
 	@Override
 	public boolean validate() {
 		// TODO: properly validate (and potentially sanitise) the name 
-		if(name != null && name.length() > 0) {
+		if(name != null && name.length() > 0 && name.length() <= 16) {
 			return true;
 		}
 		return false;

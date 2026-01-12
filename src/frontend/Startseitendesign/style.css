@@ -101,21 +101,30 @@ body {
   background-color: #f5f5f5;
 }
 
+.roll-enter-active, .roll-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 400px; /* Muss groß genug für deine Liste sein */
+  overflow: hidden;
+}
+
+/* Der Zustand, wenn das Dropdown komplett versteckt ist (Start/Ende) */
+.roll-enter, .roll-leave-to {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px); /* Schiebt es leicht nach oben während des Rollens */
+}
+
 .dropdown-options {
+  display: block;
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;
   width: 100%;
   background-color: #ffffff;
   border: 1.5px solid #d0d0d0;
   border-radius: 10px;
   max-height: 0;
-  overflow: hidden;
   transition: max-height 0.3s ease, box-shadow 0.3s ease;
   z-index: 100;
-  list-style: none;
-  padding: 0;
-  margin: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
 }
 

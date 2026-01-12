@@ -230,22 +230,25 @@ new Vue({
     // WG auswählen
     // -----------------------------
     async selectWG(id) {
-      if (id === "__create__") {
-        this.showCreateGroupModal = true;
-        return;
-      }
-
-      const wg = this.wgList.find((w) => String(w.id) === String(id));
-      if (!wg) return;
-
-      this.selectedWG = wg.id;
-      this.selectedWGName = wg.name || "WG auswählen";
       this.wgDropdownOpen = false;
 
-      localStorage.setItem("selectedWG", this.selectedWG);
-      localStorage.setItem("selectedWGName", this.selectedWGName);
+      setTimeout(async () => {  
+        if (id === "__create__") {
+          this.showCreateGroupModal = true;
+          return;
+        }
 
-      await this.fetchLists(this.selectedWG);
+        const wg = this.wgList.find((w) => String(w.id) === String(id));
+        if (!wg) return;
+
+        this.selectedWG = wg.id;
+        this.selectedWGName = wg.name || "WG auswählen";
+
+        localStorage.setItem("selectedWG", this.selectedWG);
+        localStorage.setItem("selectedWGName", this.selectedWGName);
+
+        await this.fetchLists(this.selectedWG);
+      }, 300); 
     },
 
     // -----------------------------

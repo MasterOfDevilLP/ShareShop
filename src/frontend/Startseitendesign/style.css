@@ -232,7 +232,6 @@ body {
   gap: 16px;
   margin-bottom: 40px;
 }
-/* graue Einkaufslisten box */
 .list-card {
   display: flex;
   align-items: center;
@@ -241,11 +240,9 @@ body {
   padding: 35px;
   border-radius: 16px;
 }
-/* icon Abstand zum Wocheneinkauf */
 .list-card img {
   margin-right: 20px;
 }
-/* content in der box */
 .list-left {
   display: flex;
   align-items: center;
@@ -285,10 +282,9 @@ body {
   background: none;
 }
 .list-card {
-  position: relative; /* damit neue Listen auch Einstellung haben*/
+  position: relative;
 }
 
-/* bottom sheet */
 .bottom-sheet {
   position: absolute;
   bottom: 0;
@@ -390,7 +386,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 15px;
-  border: 1px solid #ccc; /* optional, für sichtbaren Rahmen */
+  border: 1px solid #ccc; 
 }
 
 .dropdown-options {
@@ -596,7 +592,6 @@ body {
   transform: scale(0.97);
 }
 
-/* Abbrechen button (left) - gray style */
 .btn-cancel {
   background: #f0f0f0 !important;
   color: #555 !important;
@@ -606,7 +601,6 @@ body {
   background: #e0e0e0 !important;
 }
 
-/* Erstellen button (right) - green style */
 .btn-green {
   background: #7dcfb6 !important;
   color: #ffffff !important;
@@ -834,7 +828,7 @@ body {
 }
 
 /* ========================================
-   MEMBERS LIST STYLES - Enhanced Version
+   MEMBERS LIST STYLES 
    ======================================== */
 
 .wg-members-section {

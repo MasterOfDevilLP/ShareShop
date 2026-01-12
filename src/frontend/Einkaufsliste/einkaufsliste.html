@@ -108,9 +108,11 @@
         </main>
 
         <!-- Button: neues Produkt hinzufügen -->
-        <button class="add-product" @click="add_product">
-          <span>+</span> Artikel hinzufügen
-        </button>
+        <div class="add-product-wrapper">
+          <button class="add-product" @click="add_product">
+            <span>+</span> Artikel hinzufügen
+          </button>
+        </div>
 
         <!-- POPUP: neues Produkt hinzufügen oder bearbeiten -->
         <div class="bottom-sheet" :class="{ visible: showPopup }">

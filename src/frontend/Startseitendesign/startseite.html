@@ -140,9 +140,11 @@
         </main>
 
         <!-- Button: neue Liste hinzufügen -->
-        <button class="add-list" @click="add_list">
-          <span>+</span> Liste hinzufügen
-        </button>
+        <div class="add-list-wrapper">
+          <button class="add-list" @click="add_list">
+            <span>+</span> Liste hinzufügen
+          </button>
+        </div>
 
         <!-- Bottom Sheet: Liste hinzufügen -->
         <div class="bottom-sheet" :class="{ visible: showPopup }">

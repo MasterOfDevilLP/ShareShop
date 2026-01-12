@@ -550,6 +550,7 @@ new Vue({
       // localStorage leeren
       this.localTicks = {};
       localStorage.removeItem("localTicks");
+      window.location.href = "einkaufsliste.html";
     },
 
     /** Seite verlassen ohne Speichern → localStorage löschen */

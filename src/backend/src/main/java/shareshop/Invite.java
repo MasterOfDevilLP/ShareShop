@@ -79,18 +79,19 @@ public class Invite {
         String insertString = "INSERT INTO invites (token, wgid, userid, creationdatetime, expirydatetime) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement insertStatement = connectionHandler.conn.prepareStatement(insertString);
 
-        this.token = UUID.randomUUID();
-        this.wgid = wgid;
-        this.userid = userid;
-        this.creationdatetime = creationdatetime;
-        this.expirydatetime = expirydatetime;
-
         insertStatement.setObject(1, this.token);
         insertStatement.setObject(2, wgid);
         insertStatement.setObject(3, userid);
         insertStatement.setTimestamp(4, creationdatetime);
         insertStatement.setTimestamp(5, expirydatetime);
         insertStatement.execute();
+
+        this.token = UUID.randomUUID();
+        this.wgid = wgid;
+        this.userid = userid;
+        this.creationdatetime = creationdatetime;
+        this.expirydatetime = expirydatetime;
+        
         insertStatement.close();
     }
 

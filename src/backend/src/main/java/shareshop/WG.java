@@ -76,10 +76,10 @@ public class WG {
     		statement.setDate(3, creationDate);
     		statement.execute();
     		connectionHandler.conn.commit();
-    		statement.close();
     		this.wgID = wid;
     		this.wgName = name;
     		this.creationDate = creationDate;
+    		statement.close();
     	} catch(SQLException e) {
     		connectionHandler.conn.rollback();
     		throw e;
@@ -273,17 +273,19 @@ public class WG {
             } else {
                 lastUser = true;    // no other users in WG
             }
+            selectStmnt.close();
         }
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
         deleteStatement.setObject(1, user.getUserID());
         deleteStatement.setObject(2, this.wgID);
         deleteStatement.execute();
-        deleteStatement.close();
         //user.setWgID(connectionHandler, null);
-
+        
         if (lastUser) { // if this was last user, delete the WG (because empty)
             this.remove();
         }
+        deleteStatement.close();
     }
 
     /**
@@ -385,9 +387,10 @@ public class WG {
             insertStatement.execute();
             listChangeStatement.execute();	// TODO: fix enum stuff
             connectionHandler.conn.commit();
+            ShoppingList newList = new ShoppingList(connectionHandler, uuid, this.wgID, 1, currentDate, name, user.getUserID());
             insertStatement.close();
             listChangeStatement.close();
-            return new ShoppingList(connectionHandler, uuid, this.wgID, 1, currentDate, name, user.getUserID());
+            return newList;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {
@@ -449,6 +452,7 @@ public class WG {
             invites.add(new Invite(connectionHandler, (UUID)rs.getObject("token")));
         }
 
+        selectStatement.close();
         invites.trimToSize();
         return invites;
     }

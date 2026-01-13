@@ -56,10 +56,10 @@ public class User {
     	statement.setString(2, email);
     	statement.setString(3, pwdhash);
     	statement.execute();
-    	statement.close();
     	this.userID = uuid;
     	this.email = email;
     	this.pwd = pwdhash;
+    	statement.close();
     }
 
     /**

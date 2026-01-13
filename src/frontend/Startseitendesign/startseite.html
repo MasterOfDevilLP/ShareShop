@@ -37,7 +37,6 @@
                   {{ selectedWGName || "WG auswählen" }}
                 </label>
 
-                <transition name="roll"> </transition>
                   <ul class="dropdown-options" v-if="wgDropdownOpen">
                     <li
                       v-for="wg in wgList"
@@ -53,7 +52,6 @@
                     </ul>
                 </div>
               </div>
-            </transition>
 
             <!-- Icons rechts -->
             <div class="icon-group">

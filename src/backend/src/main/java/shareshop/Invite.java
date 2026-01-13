@@ -43,6 +43,7 @@ public class Invite {
     public Invite(DBConnectionHandler connectionHandler, UUID token) throws SQLException {
         this.connectionHandler = connectionHandler;
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
 
         String selectString = "SELECT * FROM invites WHERE token = ?";
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
@@ -73,6 +74,7 @@ public class Invite {
     public Invite(DBConnectionHandler connectionHandler, UUID wgid, UUID userid, Timestamp creationdatetime, Timestamp expirydatetime) throws SQLException {
         this.connectionHandler = connectionHandler;
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
 
         String insertString = "INSERT INTO invites (token, wgid, userid, creationdatetime, expirydatetime) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement insertStatement = connectionHandler.conn.prepareStatement(insertString);
@@ -148,6 +150,7 @@ public class Invite {
      */
     public void remove() throws SQLException {
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
 
         String deleteString = "DELETE FROM invites WHERE token = ?";
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(deleteString);

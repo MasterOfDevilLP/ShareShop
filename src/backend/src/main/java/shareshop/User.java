@@ -49,9 +49,8 @@ public class User {
         this.connectionHandler = conn;
     	conn.makeSureItsOpen();
     	String statementStr = "INSERT INTO users (userid, email, pwd) VALUES (?, ?, ?)";
-        conn.makeSureItsOpen();
-    	PreparedStatement statement = conn.conn.prepareStatement(statementStr);
     	conn.conn.setAutoCommit(true);
+    	PreparedStatement statement = conn.conn.prepareStatement(statementStr);
     	UUID uuid = UUID.randomUUID();
     	statement.setObject(1, uuid);
     	statement.setString(2, email);
@@ -73,6 +72,7 @@ public class User {
         this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT * FROM users WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, userID);
         ResultSet rs = select.executeQuery();
@@ -211,6 +211,7 @@ public class User {
         ArrayList<UUID> wgidlist = new ArrayList<UUID>();
         String selectString = new String ("SELECT wgid FROM userallocation WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, userID);
         ResultSet rs = select.executeQuery();

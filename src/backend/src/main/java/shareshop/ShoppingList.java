@@ -59,6 +59,7 @@ public class ShoppingList {
         private int newChangeID() throws SQLException {
             String lastChangesString = new String("SELECT MAX(listchangeid) FROM listchanges WHERE shoppinglistid = ?");
             connectionHandler.makeSureItsOpen();
+            connectionHandler.conn.setAutoCommit(true);
             PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
             lastChanges.setObject(1, this.shoppingListID);
             ResultSet rs = lastChanges.executeQuery();
@@ -172,6 +173,7 @@ public class ShoppingList {
         this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT * FROM shoppinglists WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, shoppingListID);
         ResultSet rs = select.executeQuery();
@@ -209,6 +211,7 @@ public class ShoppingList {
     private int newChangeID() throws SQLException {
         String lastChangesString = new String("SELECT MAX(listchangeid) FROM listchanges WHERE shoppinglistid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
         lastChanges.setObject(1, this.shoppingListID);
         ResultSet rs = lastChanges.executeQuery();
@@ -296,6 +299,7 @@ public class ShoppingList {
         if (start >= end) {throw new IllegalArgumentException("end has to be bigger then start");}
         String selectString = new String("SELECT * FROM listchanges WHERE shoppinglistid = ? ORDER BY listchangeid ASC");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         selectStatement.setObject(1, this.shoppingListID);
 

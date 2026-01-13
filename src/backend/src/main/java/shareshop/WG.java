@@ -41,6 +41,7 @@ public class WG {
         this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT * FROM wg WHERE wgid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, wgID);
         ResultSet rs = select.executeQuery();
@@ -65,11 +66,11 @@ public class WG {
         this.connectionHandler = connectionHandler;
     	String statementStr = "INSERT INTO wg (wgid, wgname, creationdate) VALUES (?, ?, ?)";
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(false);
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
     	UUID wid = UUID.randomUUID();
     	try {
     		Date creationDate = Date.valueOf(LocalDate.now());
-    		connectionHandler.conn.setAutoCommit(false);
     		statement.setObject(1, wid);
     		statement.setString(2, name);
     		statement.setDate(3, creationDate);
@@ -158,6 +159,7 @@ public class WG {
      */
     public UUID getOwner() throws SQLException {
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         UUID ownerID = null;
         String selectString = "SELECT userid FROM userallocation WHERE wgid = ? AND owner_flag = true";
         PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
@@ -178,6 +180,7 @@ public class WG {
      */
     public boolean isOwner(User user) throws SQLException {
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         boolean owner_flag = false;
         String selectString = "SELECT owner_flag FROM userallocation WHERE wgid = ? AND userid = ?";
         PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
@@ -209,6 +212,7 @@ public class WG {
      */
     public ArrayList<User> getUsers() throws SQLException {
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         ArrayList<User> users = new ArrayList<User>();
         String selectString = "SELECT userid FROM userallocation WHERE wgid = ?";
         PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
@@ -231,12 +235,13 @@ public class WG {
         String statementStr = new String("INSERT INTO userallocation (userid, wgid, joindate, owner_flag) VALUES (?, ?, ?, ?)");
         String selectUsr = "SELECT userid FROM userallocation WHERE wgid = ?";
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
         PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectUsr);
-        connectionHandler.conn.setAutoCommit(true);
         selectStmnt.setObject(1, this.wgID);
         ResultSet rs = selectStmnt.executeQuery();
         boolean owner_flag = !rs.next();
+        selectStmnt.close();
         Date joinDate = Date.valueOf(LocalDate.now());
         statement.setObject(1, user.getUserID());
         statement.setObject(2, this.wgID);
@@ -244,7 +249,6 @@ public class WG {
         statement.setBoolean(4, owner_flag);
         statement.execute();
         statement.close();
-        selectStmnt.close();
         //user.setWgID(connectionHandler, this.wgID);
     }
 
@@ -258,6 +262,7 @@ public class WG {
         String statementStr = new String("DELETE FROM userallocation WHERE userid = ? AND wgid = ?");
         boolean lastUser = false;
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         if (isOwner(user)) {    // test if the user is the Owner, to transfer Ownership if true
             String selectString = "SELECT userid FROM userallocation WHERE wgid = ? AND owner_flag = false";
             PreparedStatement selectStmnt = connectionHandler.conn.prepareStatement(selectString);
@@ -270,7 +275,6 @@ public class WG {
             }
         }
         PreparedStatement deleteStatement = connectionHandler.conn.prepareStatement(statementStr);
-        connectionHandler.conn.setAutoCommit(true);
         deleteStatement.setObject(1, user.getUserID());
         deleteStatement.setObject(2, this.wgID);
         deleteStatement.execute();
@@ -402,6 +406,7 @@ public class WG {
     public ArrayList<ShoppingList> lists(DBConnectionHandler connectionHandler) throws SQLException {
         String selectString = new String("SELECT shoppinglistid FROM shoppinglists WHERE wgid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);
         selectStatement.setObject(1, this.wgID);
         ResultSet rs = selectStatement.executeQuery();
@@ -434,6 +439,7 @@ public class WG {
      */
     public ArrayList<Invite> getInvites() throws SQLException {
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         ArrayList<Invite> invites = new ArrayList<Invite>();
         String selectString = "SELECT token FROM invites WHERE wgid = ?";
         PreparedStatement selectStatement = connectionHandler.conn.prepareStatement(selectString);

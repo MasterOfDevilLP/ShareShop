@@ -58,6 +58,7 @@ public class Item {
         this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT wgid, lastcachedchangeid, itemname, itemdescription, CAST(price AS NUMERIC) AS price FROM items WHERE itemid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, itemID);
         ResultSet rs = select.executeQuery();
@@ -81,10 +82,10 @@ public class Item {
         this.connectionHandler = connectionHandler;
     	String statementStr = "INSERT INTO items (itemid, wgid, itemname, itemdescription, price) VALUES (?, ?, ?, ?, ?)";
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
     	UUID iid = UUID.randomUUID();
     	try {
-    		connectionHandler.conn.setAutoCommit(true);
     		statement.setObject(1, iid);
     		statement.setObject(2, wg.getWgID());
     		statement.setString(3, name);
@@ -112,6 +113,7 @@ public class Item {
     private int newChangeID() throws SQLException {
         String lastChangesString = new String("SELECT MAX(itemchangeid) FROM itemchanges WHERE itemid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement lastChanges = connectionHandler.conn.prepareStatement(lastChangesString);
         lastChanges.setObject(1, this.itemID);
         ResultSet rs = lastChanges.executeQuery();

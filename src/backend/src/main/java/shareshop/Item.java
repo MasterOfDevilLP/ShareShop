@@ -82,7 +82,7 @@ public class Item {
         this.connectionHandler = connectionHandler;
     	String statementStr = "INSERT INTO items (itemid, wgid, itemname, itemdescription, price) VALUES (?, ?, ?, ?, ?)";
         connectionHandler.makeSureItsOpen();
-        connectionHandler.conn.setAutoCommit(true);
+        connectionHandler.conn.setAutoCommit(false);
     	PreparedStatement statement = connectionHandler.conn.prepareStatement(statementStr);
     	UUID iid = UUID.randomUUID();
     	try {
@@ -92,12 +92,13 @@ public class Item {
     		statement.setString(4, description);
     		statement.setBigDecimal(5, price);
     		statement.execute();
-    		statement.close();
+            connectionHandler.conn.commit();
     		this.itemID = iid;
     		this.wgID = wg.getWgID();
     		this.itemName = name;
     		this.itemDescription = description;
     		this.price = price;
+    		statement.close();
     	} catch(SQLException e) {
     		connectionHandler.conn.rollback();
     		throw e;
@@ -134,6 +135,7 @@ public class Item {
     public void setItemName(String itemName) throws SQLException {
         String updateString = new String("UPDATE items SET itemname = ? WHERE itemid = ?");
         String itemChangeString = new String("INSERT INTO itemchanges(itemid, itemchangeid, change, changedate, columnchange, itemname) VALUES(?, ?, ?, ?, ?, ?)");
+        int changeID = newChangeID();
         connectionHandler.makeSureItsOpen();
         try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                 PreparedStatement itemChange = connectionHandler.conn.prepareStatement(itemChangeString)) {
@@ -144,7 +146,7 @@ public class Item {
             update.executeUpdate();
 
             itemChange.setObject(1, this.itemID);
-            itemChange.setInt(2, newChangeID());
+            itemChange.setInt(2, changeID);
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMNAME");
@@ -152,9 +154,9 @@ public class Item {
             itemChange.execute();
 
             connectionHandler.conn.commit();
+            this.itemName = itemName;
             update.close();
             itemChange.close();
-            this.itemName = itemName;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {
@@ -172,6 +174,7 @@ public class Item {
     public void setItemDescription(String itemDescription) throws SQLException {
         String updateString = new String("UPDATE items SET itemdescription = ? WHERE itemid = ?");
         String itemChangeString = new String("INSERT INTO itemchanges(itemid, itemchangeid, change, changedate, columnchange, itemdescription) VALUES(?, ?, ?, ?, ?, ?)");
+        int changeID = newChangeID();
         connectionHandler.makeSureItsOpen();
         try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                 PreparedStatement itemChange = connectionHandler.conn.prepareStatement(itemChangeString)) {
@@ -182,7 +185,7 @@ public class Item {
             update.executeUpdate();
 
             itemChange.setObject(1, this.itemID);
-            itemChange.setInt(2, newChangeID());
+            itemChange.setInt(2, changeID);
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMDESCR");
@@ -190,9 +193,9 @@ public class Item {
             itemChange.execute();
 
             connectionHandler.conn.commit();
+            this.itemDescription = itemDescription;
             update.close();
             itemChange.close();
-            this.itemDescription = itemDescription;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {
@@ -210,6 +213,7 @@ public class Item {
     public void setPrice(BigDecimal price) throws SQLException {
         String updateString = new String("UPDATE items SET price = ? WHERE itemid = ?");
         String itemChangeString = new String("INSERT INTO itemchanges(itemid, itemchangeid, change, changedate, columnchange, price) VALUES(?, ?, ?, ?, ?, ?)");
+        int changeID = newChangeID();
         connectionHandler.makeSureItsOpen();
         try (   PreparedStatement update = connectionHandler.conn.prepareStatement(updateString);
                 PreparedStatement itemChange = connectionHandler.conn.prepareStatement(itemChangeString)) {
@@ -220,7 +224,7 @@ public class Item {
             update.executeUpdate();
 
             itemChange.setObject(1, this.itemID);
-            itemChange.setInt(2, newChangeID());
+            itemChange.setInt(2, changeID);
             itemChange.setString(3, "EDITED");
             itemChange.setDate(4, Date.valueOf(LocalDate.now()));
             itemChange.setString(5, "ITEMPRICE");
@@ -228,9 +232,9 @@ public class Item {
             itemChange.execute();
 
             connectionHandler.conn.commit();
+            this.price = price;
             update.close();
             itemChange.close();
-            this.price = price;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             if (connectionHandler.conn != null) {

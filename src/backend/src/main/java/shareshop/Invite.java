@@ -91,6 +91,7 @@ public class Invite {
         insertStatement.setTimestamp(4, creationdatetime);
         insertStatement.setTimestamp(5, expirydatetime);
         insertStatement.execute();
+        
         insertStatement.close();
     }
 

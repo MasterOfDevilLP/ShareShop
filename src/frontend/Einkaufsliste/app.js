@@ -305,6 +305,7 @@ new Vue({
     closePopup() {
       this.showPopup = false;
       this.resetNewProduct();
+      this.isEditing = false;
     },
 
     /** Hauptfunktion: Produkt speichern (hinzufügen oder bearbeiten) */

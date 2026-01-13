@@ -28,7 +28,7 @@ public class CreateItemRequest implements RequestBody {
 
 	@Override
 	public boolean validate() {
-		if(name != null && description != null && name.length() > 0) {
+		if(name != null && description != null && name.length() > 0 && name.length() <= 25 && description.length() <= 100) {
 			return true;
 		}
 		return false;

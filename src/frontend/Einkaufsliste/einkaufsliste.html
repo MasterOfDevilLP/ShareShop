@@ -132,6 +132,7 @@
                 @input="onProductNameInput"
                 @focus="showDropdownForProductFromWG = true"
                 @blur="hideDropdown"
+                :readonly="isEditing"
               />
 
               <ul
@@ -148,16 +149,18 @@
               </ul>
             </div>
 
-            <label>Kategorie:</label>
-            <select
-              v-model="newProduct.kategorie"
-              :disabled="newProduct.fromWG"
-            >
-              <option value="">--Wähle Kategorie--</option>
-              <option v-for="k in kategorien" :key="k" :value="k">
-                {{ k }}
-              </option>
-            </select>
+            <div v-if="!isEditing">
+              <label>Kategorie:</label>
+              <select
+                v-model="newProduct.kategorie"
+                :disabled="newProduct.fromWG"
+              >
+                <option value="">--Wähle Kategorie--</option>
+                <option v-for="k in kategorien" :key="k" :value="k">
+                  {{ k }}
+                </option>
+              </select>
+            </div>
 
             <label>Menge:</label>
             <input

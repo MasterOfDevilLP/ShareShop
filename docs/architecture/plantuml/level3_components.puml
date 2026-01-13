@@ -9,32 +9,28 @@ Container_Boundary(backend, "Backend (Java / Javalin)") {
 
     Component(api, "REST-API", "JSON", "öffentliche Endpunkte für User, WG, Shoppinglists, Items")
 
-    Component(sessionMgr, "Session-Manager","Authentifizierung & Sessionmanagement","Verwaltung Login & Session")
-
     Component(userMgr, "UserManager","User-Logik","Verwaltung von Benutzern und Benutzerzugriffen")
 
-    Component(wgMgr, "WGManager","WG-Logik","Verwaltung von WGs und WG-Mitgliedschaften")
-
-    Component(listMgr, "ShoppingList Manager","Listen-Logik","Verwaltung von Einkaufslisten")
+    Component(wgMgr, "WGManager","WG-Logik","Verwaltung von WGs")
 
     Component(itemMgr, "ItemManager","Item-Logik","Verwaltung von Items")
+
+    Component(db_obj, "DB-Objekte","DB Mapping", "Bilden die Datenbank auf Java-Klassen ab")
 }
 
 ContainerDb(db, "Database", "PostgreSQL")
 
-Rel(api, sessionMgr, "validiert")
 Rel(api, userMgr, "ruft auf")
 Rel(api, wgMgr, "ruft auf")
-Rel(api, listMgr, "ruft auf")
 Rel(api, itemMgr, "ruft auf")
 
-Rel(sessionMgr, userMgr, "löst User anhand Session auf")
-Rel(listMgr, wgMgr, "gehört zu WG")
-Rel(itemMgr, listMgr, "gehört zu Liste")
+Rel(userMgr, db_obj, "nutzt")
+Rel(wgMgr, db_obj, "nutzt")
+Rel(itemMgr, db_obj, "nutzt")
+Rel(api, db_obj, "nutzt")
 
-Rel(userMgr, db, "liest/schreibt")
-Rel(wgMgr, db, "liest/schreibt")
-Rel(listMgr, db, "liest/schreibt")
-Rel(itemMgr, db, "liest/schreibt")
+Rel(db_obj, db, "persistiert")
+Rel(itemMgr, db, "liest")
+Rel(userMgr, db, "liest")
 
 @enduml

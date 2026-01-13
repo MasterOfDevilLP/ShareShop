@@ -519,7 +519,7 @@ new Vue({
     },
 
     /** Speichert Preis und markiert alle lokal getickten Items als gekauft */
-    savePriceAndTick() {
+    async savePriceAndTick() {
       if (!this.modalProduct) return;
 
       // Preis setzen für alle lokal getickten Items
@@ -530,28 +530,21 @@ new Vue({
       });
 
       // alle getickten Items im Backend markieren
-      this.finalizeTicks();
+      await this.finalizeTicks();
 
-      this.showMiniModalMsg("Alle Produkte als gekauft markiert", 500);
+      window.location.href = "einkaufsliste.html";
     },
 
     /** Alle lokal getickten Items wirklich auf Backend setzen */
     async finalizeTicks() {
-      const tickedItems = Object.entries(this.localTicks)
-        .filter(([iid, ticked]) => ticked)
-        .map(([iid]) => iid);
+      const tickedItems = this.listItems.filter(item => this.isTicked(item));
 
-      for (const iid of tickedItems) {
-        const item = this.listItems.find((i) => i.iid === iid);
-        if (item) {
-          await this.toggleTick(item); // ruft dein Backend auf
-        }
+      for (const item of tickedItems) {
+        await this.toggleTick(item);
       }
 
-      // localStorage leeren
       this.localTicks = {};
       localStorage.removeItem("localTicks");
-      window.location.href = "einkaufsliste.html";
     },
 
     /** Seite verlassen ohne Speichern → localStorage löschen */
@@ -568,7 +561,7 @@ new Vue({
         amount: item.amount,
         price: item.price || 0,
       };
-      fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
+      return fetch(`${this.baseUrl}/wg/${this.wgID}/list/${this.listID}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

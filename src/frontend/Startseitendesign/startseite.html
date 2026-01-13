@@ -212,12 +212,10 @@
         <div v-if="showRenameModal" class="modal-overlay">
           <div class="modal-content">
             <h3>Liste umbenennen</h3>
-
-            <input v-model="renameListName" placeholder="Neuer Name der Liste" />
-
-            <div class="modal-actions">
-              <button @click="renameList">Speichern</button>
-              <button @click="showRenameModal = false">Abbrechen</button>
+            <input type="text" v-model="renameListName" placeholder="Neuer Name der Liste" />
+            <div class="btn-container">
+              <button class="btn btn-cancel" @click="showRenameModal = false">Abbrechen</button>
+              <button class="btn btn-green" @click="renameList">Speichern</button>
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@ public class ShareShopUtility {
      */
     public static String genNewUUID(DBConnectionHandler connectionHandler) throws SQLException {
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         Statement stmt = connectionHandler.conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT gen_random_uuid()");
         String uuid = null;

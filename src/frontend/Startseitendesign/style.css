@@ -54,6 +54,7 @@ body {
 }
 
 .wg-selector {
+  padding-top: 15px;
   flex: 1;
   min-width: 150px;
   margin-right: 10px;

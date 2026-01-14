@@ -28,5 +28,16 @@ Liste der Bilder, die im Frontend verwendet werden, und deren Quellen:
 | Stift.png                   | https://www.flaticon.com/free-icon/pencil_1166723                               |
 | Trashcan.png                   | https://www.flaticon.com/free-icon/trash-can_3515498?term=bin                      |
 | Wagen.png                   | https://de.vecteezy.com/vektorkunst/27381351-einkaufen-wagen-symbol-vektor-einkaufen-wagen-symbol-einkaufen-wagen-logo-container-zum-waren-und-produkte-wirtschaft-symbol-design-elemente-korb-symbol-silhouette-verkauf-design-elemente                 |
+| bell.svg | https://www.svgrepo.com/svg/384060/notification-alarm-bell |
+| remove_user.svg             | https://www.svgrepo.com/svg/246468/remove-user |
+| flag-de.svg            | https://upload.wikimedia.org/wikipedia/commons/3/3d/Flag_of_germany_800_480.png |
+| flag-en.svg                 | https://upload.wikimedia.org/wikipedia/commons/4/42/Flag_of_the_United_Kingdom.png |
+| eye-off.png                 | https://icon-icons.com/icon/eye-off/111124 |
+| eye.svg    | https://www.vecteezy.com/vector-art/21889365-password-hidding-icon-icon-for-data-privacy-and-sensitive-content-mark-vector-illustration |
+| email.png               | https://www.vecteezy.com/vector-art/6697974-mail-email-icon-template-black-color-editable-mail-email-icon-symbol-flat-vector-illustration-for-graphic-and-web-design |
+| lock.png               | https://www.clipartmax.com/middle/m2H7N4d3b1A0K9K9_lock-svg-png-icon-free-download-free-lock-icon-png/ |
+| currency.svg          | https://www.flaticon.com/free-icon/currency_3391888?term=currency&page=1&position=16&origin=tag&related_id=3391888 |
+| camera.png             | https://www.flaticon.com/free-icon/camera_2956744?term=camera&page=1&position=7&origin=search&related_id=2956744 |
+
 
 

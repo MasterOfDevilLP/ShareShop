@@ -1,0 +1,83 @@
+= Betriebsdokumentation
+Emil Hempel <s86451@htw-dresden.de>
+{localtime}
+:doctype: book
+
+include::_includes/default-attributes.inc.adoc[]
+
+``cwd> command`` Befehl `command`, welcher im Ordner `cwd` in einer posix-kompatiblen Shell (z.B. bash) ausgeführt wird.
+
+== Systemvoraussetzungen
+=== Host
+Der Host muss docker unterstützen, für den Gebrauch von anderen Geräten aus ist desweiteren eine Netzwerkverbindung notwendig. Für den Bau der Container wird eine Internetverbindung benötigt.
+Je nach Nutzeranzahl sollten mindestens 200MB RAM für die Container verfügbar sein. Für die Containerimages werden ca. 1.2GB Speicher benötigt, der für Nutzerdaten benötigte Speicher hängt ebenfalls von der Nutzeranzahl ab, es sollten jedoch mindestens 50MB bis 100MB eingeplant werden.
+
+Debian 12, Debian 13 und Ubuntu 24.04 LTS wurden als Host getestet, weitere Systeme sollten jedoch auch funktionieren. Die meisten gängigen Browser sollten als Client funktionieren, getestet wurde Firefox ESR 140.
+
+Docker und das Docker Compose Plugin müssen installiert sein.
+
+== Systemeinrichtung
+Es kann entweder die aktuelle https://github.com/MasterOfDevilLP/ShareShop/tree/develop[Entwicklungsversion] oder die aktuelle https://github.com/MasterOfDevilLP/ShareShop/tree/main[stabile Version] genutzt werden. Ein Downgrade von der Entwicklungsversion auf die stabile Version ist nicht vorgesehen und wird nicht unterstützt. Der Quellcode muss heruntergeladen werden, um die Container zu bauen.
+
+=== Konfiguration
+Die Standardkonfiguration ist für eine Entwicklungsumgebung gedacht und sollte vor dem Deployment angepasst werden.
+
+==== docker-compose.yml
+In `src/docker-compose.yml` werden die Container (oder Services) konfiguriert. Die Portmappings für die Services `backend` und `db` sollten entfernt oder auskommentiert werden, wenn diese nicht anderweitig benötigt werden.
+Beispiel: 
+```
+ports:
+      - 8001:8001
+``` 
+zu
+```
+ports:
+      #- 8001:8001
+```
+ändern, oder komplett entfernen.  
+
+Über den Service `frontend` wird die Anwendung nach außen bereitgestellt. 
+Standardmäßig ist dieser Service über Port 8080 erreichbar, dies kann bei Bedarf angepasst werden.
+
+==== Backendkonfiguration
+In der Datei `src/backend/config_docker.json` sollte die Option `corsAllowAll` auf `false` gesetzt werden, da diese nur für Testzwecke gedacht, in einer Entwicklungsumgebung aber sehr nützlich ist.  
+Die anderen Optionen sollten nicht verändert werden.
+
+==== weitere Komponenten
+Eine lokale Nutzung (ausschließlich über localhost) ist über HTTP möglich, für die Nutzung von anderen Geräten aus wird HTTPS benötigt, da der Sessioncookie sonst von Browsern nicht akzeptiert wird.
+
+Für die Verwendung von HTTPS wird ein externer reverse Proxy benötigt (z.B. nginx oder traefik), dessen Einrichtung wird hier nicht weiter beschrieben. Zu beachten ist dabei jedoch, dass sich die Anwendung direkt über das Wurzelverzeichnis erreichbar sein muss und nicht über Unterpfade wie `/shareshop`, dies wird nicht unterstützt.
+
+=== Start
+Mit `src/> docker compose build` werden alle benötigten Abhängigkeiten heruntergeladen und die Container gebaut. Mit `src/> docker compose up -d` werden alle Container gestartet.
+
+== Systembetreuung
+=== Nutzerdaten
+Alle Nutzerdaten werden in der PostgreSQL-Datenbank gespeichert. Diese befindet sich im Verzeichnis `src/postgres`.
+
+=== Updates
+Um die Anwendung zu aktualisieren muss die neue Version des Quellcodes heruntergeladen werden. Anschließend müssen die Container neu gebaut und neugestartet werden, siehe <<Start>>. 
+
+==== Datenbankmigration
+Wenn es Änderungen am Datenbankschema gab, befinden sich die benötigten Migrationsskripte im Ordner `src/backend/database/`. Alle neu hinzugekommenen SQL-Skripte müssen ausgeführt werden, bevor die Anwendung wieder in Betrieb genommen werden kann.
+
+Dazu muss zuerst der Datenbankcontainer mit `src/> docker compose up db -d` gestarted werden, anschließend können Skripte mit `src/> docker compose exec -T db psql -U backendusr -d shareshopdb < backend/database/<Skript>` in einer bash-kompatiblen Shell ausgeführt werden.
+
+=== Fehlerdiagnose
+==== Logs
+Logs der Container können mit `src/> docker compose logs [Containername] [-f]` (cwd ist `src/`) angezeigt und gegebenenfalls verfolgt werden.
+
+==== Datenbankzugriff
+Der Datenbankcontainer muss hierfür ausgeführt werden (siehe <<Datenbankmigration>>).  
+Eine Shell kann mit `src/> docker compose exec db psql -U backendusr -d shareshopdb` gestartet werden.  
+Wenn dies nicht in `src/docker-compose.yml` deaktiviert wurde, ist die Datenbank ebenfalls über Port 5434 verfügbar und kann mit gängigen Werkzeugen für PostgreSQL 17 verwendet werden. Die Standardzugangsdaten sind hierbei `backendusr:passwd`, die Datenbank heißt `shareshopdb`.
+
+==== häufige Fehler
+===== Container kann nicht starten
+Ein gemappter Port ist bereits in Verwendung.
+Es sollten die auf dem System verwendeten Ports geprüft und gegebenenfalls die Portmappings in `src/docker-compose.yml` angepasst werden.
+
+===== Zugriff verweigert/Login nicht möglich
+Die Anwendung wird nicht über HTTPS und nicht von localhost aus genutzt.
+
+Für den Sessioncookie wird das Secure-Attribut gesetzt, bei wessen Nutzung HTTPS vorausgesetzt wird. Zu Testzwecken akzeptieren einige Browser Cookies mit diesem Attribut auch von lokalen Webservern, mit Webservern unter anderen Adressen ist dies nicht möglich, es ist HTTPS erforderlich.

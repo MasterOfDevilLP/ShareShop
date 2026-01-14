@@ -9,23 +9,28 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
   font-family: "Inter", sans-serif;
   background-color: #f9f9f9;
-  display: flex;
-  justify-content: center;
 }
 
+
 .iphone-app {
-  position: relative;
-  width: 390px;
-  height: 844px;
-  background-color: white;
-  border-radius: 40px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  width: 100%;
+  max-width: 430px;       
+  height: 100dvh;         
+  margin: 0 auto;
+  background-color: #fff;
+
   display: flex;
   flex-direction: column;
+
+  overflow: hidden;
+
+  position: relative; 
 }
+
 .app-header {
   display: flex;
   align-items: center;
@@ -33,6 +38,7 @@ body {
   background-color: #f2f2f7;
   border-bottom: 1px solid #ddd;
   padding: 12px 16px;
+  padding-top: env(safe-area-inset-top);
 }
 .site-titel {
   flex: 2;
@@ -48,33 +54,137 @@ body {
 }
 
 .wg-selector {
+  padding-top: 15px;
   flex: 1;
   min-width: 150px;
   margin-right: 10px;
-  margin-top: 10px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 200px;
 }
 
 .dropdown-label {
-  display: inline-block;
-  padding: 8px 12px;
-  background-color: #fff;
-  border-radius: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1.5px solid #d0d0d0;
   cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  color: #333;
+  text-align: left;
+  position: relative;
 }
-.wg-name {
-  flex: 2;
-  font-weight: 600;
+
+.dropdown-label::after {
+  content: "▾";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #666;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-checkbox:checked ~ .dropdown-label::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.dropdown-label:hover {
+  border-color: #7dcfb6;
+  background-color: #fafafa;
+}
+
+.dropdown-label:active {
+  background-color: #f5f5f5;
+}
+
+.roll-enter-active, .roll-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 400px; /* Muss groß genug für deine Liste sein */
+  overflow: hidden;
+}
+
+/* Der Zustand, wenn das Dropdown komplett versteckt ist (Start/Ende) */
+.roll-enter, .roll-leave-to {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px); /* Schiebt es leicht nach oben während des Rollens */
+}
+
+.dropdown-options {
+  display: block;
+  position: absolute;
+  top: calc(100% + 4px);
+  width: 100%;
+  background-color: #ffffff;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 10px;
+  max-height: 0;
+  transition: max-height 0.3s ease, box-shadow 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+}
+
+.dropdown-checkbox:checked ~ .dropdown-options {
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-options li {
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 15px;
+  color: #333;
+}
+
+.dropdown-options li:first-child {
+  border-radius: 10px 10px 0 0;
+}
+
+.dropdown-options li:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+.dropdown-options li.create-action {
   text-align: center;
+  font-weight: 600;
+  color: #7dcfb6;
+  background-color: #f9f9f9; 
+  border-radius: 0;
+  border-top: 1px solid #eee; 
+  margin-top: 5px;
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
 }
+
+/* Hover-Effekt speziell für den Erstellen-Button */
+.dropdown-options li.create-action:hover {
+  background-color: #7dcfb6 !important;
+  color: white !important;
+}
+
 .icon-group {
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: flex-end;
   margin-left: auto;
-  padding-right: 8px;
 }
 
 .qr-btn,
@@ -96,6 +206,8 @@ body {
   justify-content: space-around;
   border-top: 1px solid #ddd;
   background-color: #f9f9f9;
+  padding-bottom: env(safe-area-inset-bottom);
+
 }
 
 .nav-item {
@@ -130,6 +242,7 @@ body {
   padding: 20px;
   overflow-y: auto;
   position: relative;
+  -webkit-overflow-scrolling: touch;
 }
 /* Abstand zum nav */
 .shopping-list {
@@ -138,7 +251,6 @@ body {
   gap: 16px;
   margin-bottom: 40px;
 }
-/* graue Einkaufslisten box */
 .list-card {
   display: flex;
   align-items: center;
@@ -147,11 +259,9 @@ body {
   padding: 35px;
   border-radius: 16px;
 }
-/* icon Abstand zum Wocheneinkauf */
 .list-card img {
   margin-right: 20px;
 }
-/* content in der box */
 .list-left {
   display: flex;
   align-items: center;
@@ -162,13 +272,22 @@ body {
 }
 
 .add-list {
+  display: inline-flex;  
+  align-items: center;
+  gap: 6px;             
   font-weight: bold;
   font-size: 15px;
-  text-align: right;
   background: none;
   border: none;
-  padding: 20px 15px;
+  padding: 15px 18px;      
+  cursor: pointer; 
 }
+
+.add-list-wrapper {
+  display: flex;
+  justify-content: flex-end; 
+}
+
 
 .add-list span {
   font-size: 24px;
@@ -191,10 +310,9 @@ body {
   background: none;
 }
 .list-card {
-  position: relative; /* damit neue Listen auch Einstellung haben*/
+  position: relative;
 }
 
-/* bottom sheet */
 .bottom-sheet {
   position: absolute;
   bottom: 0;
@@ -296,7 +414,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 15px;
-  border: 1px solid #ccc; /* optional, für sichtbaren Rahmen */
+  border: 1px solid #ccc; 
 }
 
 .dropdown-options {
@@ -327,11 +445,6 @@ body {
 
 .dropdown-options li:hover {
   background-color: #f0f0f0;
-}
-
-.divider {
-  color: #999;
-  cursor: default;
 }
 
 .dropdown-checkbox:checked ~ .dropdown-options {
@@ -369,61 +482,167 @@ body {
   z-index: 1000;
 }
 
+/* ========================================= */
+/* CREATE GROUP MODAL */
+/* ========================================= */
+
 .modal-content {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
-  width: 320px;
-  text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.modal-content h3 {
-  margin-bottom: 20px;
-  font-size: 18px;
-}
-
-.modal-content input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  background-color: white;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   box-sizing: border-box;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: space-between;
+.modal-content h3 {
+  margin: 0 0 24px 0;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: left;
+  color: #1a1a1a;
 }
 
-.modal-actions button {
-  flex: 1;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: normal;
-  border: none;
-  border-radius: 16px;
+.modal-content label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
+
+.modal-content label:first-of-type {
+  margin-top: 0;
+}
+
+.modal-content input[type="text"],
+.modal-content textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #d0d0d0;
+  background-color: #fafafa;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: #7dcfb6;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(125, 207, 182, 0.12);
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 90px;
+  max-height: 140px;
+}
+
+.modal-content input[type="file"] {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 14px;
+  box-sizing: border-box;
   cursor: pointer;
-  transition: transform 0.1s ease;
 }
 
-.modal-actions button:first-child {
-  margin-right: 8px;
-  background-color: #7dcfb6;
-  color: #fff;
+.modal-content input[type="file"]::file-selector-button {
+  padding: 8px 16px;
+  margin-right: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.modal-actions button:last-child {
-  margin-left: 8px;
-  background-color: #f39291;
-  color: #fff;
+.modal-content input[type="file"]::file-selector-button:hover {
+  background-color: #e8e8e8;
 }
 
-.modal-actions button:hover {
-  transform: scale(1.03);
+.modal-content img {
+  display: block;
+  margin-top: 12px;
+  border-radius: 10px;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #e5e5e5;
+}
+
+.error-text {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #dc3545;
+  text-align: left;
+}
+
+.success-text {
+  display: block;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #d4edda;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #155724;
+  text-align: center;
+}
+
+.btn-container {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn {
+  flex: 1;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-cancel {
+  background: #f0f0f0 !important;
+  color: #555 !important;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: #e0e0e0 !important;
+}
+
+.btn-green {
+  background: #7dcfb6 !important;
+  color: #ffffff !important;
+}
+
+.btn-green:hover:not(:disabled) {
+  background: #6bc0a9 !important;
+  box-shadow: 0 4px 12px rgba(125, 207, 182, 0.3);
+}
+
+.btn-green:disabled {
+  background: #b8e5d6 !important;
+  cursor: not-allowed !important;
+  opacity: 0.65 !important;
 }
 
 /*settings.html icons*/
@@ -637,7 +856,7 @@ body {
 }
 
 /* ========================================
-   MEMBERS LIST STYLES - Enhanced Version
+   MEMBERS LIST STYLES 
    ======================================== */
 
 .wg-members-section {

@@ -1,11 +1,26 @@
-/* Grundlayout */
 body {
-  font-family: "Inter", sans-serif;
-  background: #ffffff;
-  color: #000;
   margin: 0;
   padding: 0;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  background-color: #f9f9f9;
 }
+
+.iphone-app {
+  width: 100%;
+  max-width: 430px;       
+  height: 100dvh;         
+  margin: 0 auto;
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  position: relative; 
+}
+
 /* Bottom Navigation Bar */
 .nav-item {
   text-decoration: none;

@@ -108,9 +108,11 @@
         </main>
 
         <!-- Button: neues Produkt hinzufügen -->
-        <button class="add-product" @click="add_product">
-          <span>+</span> Artikel hinzufügen
-        </button>
+        <div class="add-product-wrapper">
+          <button class="add-product" @click="add_product">
+            <span>+</span> Artikel hinzufügen
+          </button>
+        </div>
 
         <!-- POPUP: neues Produkt hinzufügen oder bearbeiten -->
         <div class="bottom-sheet" :class="{ visible: showPopup }">
@@ -130,6 +132,7 @@
                 @input="onProductNameInput"
                 @focus="showDropdownForProductFromWG = true"
                 @blur="hideDropdown"
+                :readonly="isEditing"
               />
 
               <ul
@@ -146,16 +149,18 @@
               </ul>
             </div>
 
-            <label>Kategorie:</label>
-            <select
-              v-model="newProduct.kategorie"
-              :disabled="newProduct.fromWG"
-            >
-              <option value="">--Wähle Kategorie--</option>
-              <option v-for="k in kategorien" :key="k" :value="k">
-                {{ k }}
-              </option>
-            </select>
+            <div v-if="!isEditing">
+              <label>Kategorie:</label>
+              <select
+                v-model="newProduct.kategorie"
+                :disabled="newProduct.fromWG"
+              >
+                <option value="">--Wähle Kategorie--</option>
+                <option v-for="k in kategorien" :key="k" :value="k">
+                  {{ k }}
+                </option>
+              </select>
+            </div>
 
             <label>Menge:</label>
             <input

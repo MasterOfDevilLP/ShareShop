@@ -1,0 +1,144 @@
+:imagesdir: ../images
+= ShareShop – Anwenderdokumentation
+Stand: Januar 2026
+
+== 1. Einführung
+
+=== 1.1 Zweck der Anwendung
+ShareShop ist eine Web-Anwendung zur gemeinsamen Organisation von Einkäufen in Wohngemeinschaften (WGs).  
+Ziel der Anwendung ist es, den Einkaufsprozess innerhalb einer WG zu vereinfachen, indem Nutzerinnen und Nutzer sich anmelden, Wohngemeinschaften verwalten und gemeinsame Einkaufslisten mit Mengen und Preisen führen können.
+
+Die aktuelle Version konzentriert sich auf die Kernfunktionen *Login*, *WG-Verwaltung* und *Einkaufsliste*.
+
+=== 1.2 Funktionsumfang (Überblick)
+* Benutzerkonto mit Registrierung und Anmeldung (Login)
+* Erstellen und Verwalten von Wohngemeinschaften
+* Einladen und Verwalten von Mitgliedern
+* Kollaborative Einkaufslisten (gemeinsam bearbeiten)
+* Anzeige und Verwaltung von Produktmengen und Preisen
+
+== 2. Zugriff auf das System
+
+*URL:*  
+URL hier einfügen
+
+*Demo-Zugang:*  
+Benutzername: test123@gmail.com  
+Passwort: 123456
+
+
+== 3. Registrierung und Login
+
+_User Story:_  
+Als Nutzer möchte ich mich einloggen können, damit ich die Anwendung nutzen und mit ihr interagieren kann.
+
+*Vorgehen:*
+
+. Aufruf der ShareShop-Webseite
+. Klick auf *Jetzt registrieren*
+. Eingabe von E-Mail-Adresse und Passwort
+. Klick auf den Button *Registrieren*
+. Nach erfolgreicher Registrierung wird der Nutzer zum Login weitergeleitet
+. Eingabe von E-Mail-Adresse und Passwort
+. Klick auf *Login*
+
+image::Register.png[Registrierung]
+image::Login.png[Login]
+
+== 4. Aufbau der Benutzeroberfläche
+
+=== 4.1 Startseite / Dashboard
+Nach erfolgreicher Anmeldung gelangt der Nutzer auf das Dashboard der Anwendung. Dieses bietet einen Überblick über die wichtigsten Funktionen und ermöglicht einen schnellen Einstieg in die Nutzung von ShareShop.
+
+Das Dashboard umfasst:
+* Erstellen und Wechseln zwischen vorhandenen WGs
+* Erstellen sowie Anzeigen und Bearbeiten von Einkaufslisten
+* Zugriff auf persönliche Einstellungen (z. B. Name, Avatar)
+
+
+image::Bild_1.png[Dashboard der Anwendung]
+
+=== 4.2 Navigation
+Die Hauptnavigation befindet sich am unteren der Anwendung und ermöglicht den Zugriff auf die wichtigsten Bereiche.
+
+* *Liste:* Verwaltung gemeinsamer Einkaufslisten
+* *Rechnungen:* Geplante Funktion zur Verwaltung von Kosten und Abrechnungen (derzeit nicht implementiert)
+* *Kalender:* Geplante Funktion zur Organisation von Einkaufsterminen (derzeit nicht implementiert)
+* *Rezepte:* Geplante Funktion zur Anzeige von Rezeptvorschlägen und Mahlzeitenplanung (derzeit nicht implementiert)
+* *Profil:* Persönliche Einstellungen wie Name und Avatar
+
+*Hinweis:* Die Menüpunkte *Rechnungen*, *Kalender* und *Rezepte* sind in der aktuellen Version nicht implementiert und dienen als Platzhalter für zukünftige Erweiterungen.
+
+image::Bild_1 copy.png[Hauptnavigation der Anwendung]
+
+
+=== 4.2 Wohngemeinschaft erstellen und verwalten
+_User Story:_  
+Als Nutzer möchte ich eine WG erstellen, um gemeinsam einkaufen zu können.
+
+*WG erstellen:*
+
+. Dropdown *WG auswählen* öffnen
+. *+ Neue Gruppe* auswählen
+. Namen der WG eingeben optional Beschreibung und Bild hochladen
+. WG speichern
+
+*WG verwalten:*
+* Übersicht aller eigenen WGs
+* Wechsel zwischen verschiedenen WGs
+
+image::Bild_2.png[WG-Übersicht und WG-Erstellung]
+image::Bild_3.png[WG Erstellen]
+image::Bild_4.png[WG in Übersicht]
+
+
+=== 4.3 Einkaufsliste erstellen und nutzen
+_User Story:_  
+Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten Produkte für alle sichtbar sind.
+
+*Vorgehen:*
+
+. Auswahl einer WG
+. Menüpunkt *+Liste hinzufügen* öffnen
+. Listennamen eingeben
+. erstellte Einkaufsliste öffnen
+. *Produkt hinzufügen* auswählen
+. Produktname, Menge und Preis eingeben
+. Produkt speichern
+
+Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und jederzeit bearbeitbar.
+
+image::einkaufsliste.png[Einkaufsliste mit Mengen und Preisen]
+
+== 5. Nicht implementierte / geplante Funktionen
+Die folgenden Funktionen sind Teil der ursprünglichen Projektidee, wurden jedoch in der aktuellen Version nicht umgesetzt:
+
+* Automatische Kostenverteilung
+* Finanz- und Schuldenübersicht
+* Inventar- und Haltbarkeitsmanagement
+* Kalenderfunktionen
+* Rezeptvorschläge
+* Nachhaltigkeits-Tracking
+
+Diese Funktionen dienen als mögliche Erweiterungen für zukünftige Versionen der Anwendung.
+
+== 6. Häufige Fragen (FAQ)
+
+*Frage:* Können mehrere Nutzer dieselbe Einkaufsliste bearbeiten?  
+*Antwort:* Ja, alle Mitglieder einer WG haben Zugriff auf die gemeinsame Einkaufsliste.
+
+*Frage:* Werden Preise automatisch verrechnet?  
+*Antwort:* Nein, Preise werden aktuell nur angezeigt. Eine automatische Kostenabrechnung ist nicht implementiert.
+
+*Frage:* Kann ich mehreren WGs angehören?  
+*Antwort:* Ja, ein Nutzer kann Mitglied in mehreren Wohngemeinschaften sein.
+
+== 7. Tipps für eine reibungslose Nutzung
+* Regelmäßig die Einkaufsliste aktualisieren
+* Klare Produktbezeichnungen verwenden
+* Preise möglichst vollständig eintragen
+
+== 8. Kontakt und Support
+Bei Fragen oder Problemen:
+* In-App-Hilfe nutzen
+* Projektteam kontaktieren (z. B. per E-Mail oder GitHub)

@@ -84,6 +84,10 @@ Dieses Glossar erklärt die wichtigsten Begriffe der Einkaufslisten-App „Share
 | Verbindung eines Items mit einer Einkaufsliste, inkl. Menge und Zeitpunkt.
 | Allocation
 
+| cwd
+| current working directory, das aktuelle Arbeitsverzeichnis eines Prozesses
+|
+
 |===
 
 

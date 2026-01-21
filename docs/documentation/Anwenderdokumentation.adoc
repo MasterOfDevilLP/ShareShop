@@ -102,13 +102,40 @@ Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten P
 . Menüpunkt *+Liste hinzufügen* öffnen
 . Listennamen eingeben
 . erstellte Einkaufsliste öffnen
-. *Produkt hinzufügen* auswählen
+. *+Artikel hinzufügen* auswählen
 . Produktname, Menge und Preis eingeben
-. Produkt speichern
+. Produkt speichern ggf. ändern
+. Einkauf starten in dem man das Männchen mit Einkaufswagen klickt
 
 Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und jederzeit bearbeitbar.
 
-image::einkaufsliste.png[Einkaufsliste mit Mengen und Preisen]
+image::Bild_5.png[Einkaufsliste erstellen]
+image::Einkaufsliste.png[Namen Einkaufsliste geben]
+image::Einkaufsliste_2.png[Erstellte Einkaufsliste]
+image::EInkaufsliste_3.png[Artikel hinzufügen]
+image::EInkaufsliste_4.png[]
+image::EInkaufsliste_5.png[]
+image::EInkaufsliste_6.png[]
+image::EInkaufsliste_7.png[]
+image::EInkaufsliste_8.png[]
+image::EInkaufsliste_9.png[]
+image::EInkaufsliste_10.png[]
+image::EInkaufsliste_11.png[]
+
+=== 4.4 Mitglieder hinzufügen
+
+_User Story:_  
+Als Nutzer möchte ich Mitglieder zu einer WG einladen, damit alle Mitglieder gemeinsam einkaufen können.
+
+*Vorgehen:*
+
+. In der WG-Übersicht den Menüpunkt *Mitglieder einladen* auswählen
+. E-Mail-Adresse des zu einladenden Mitglieds eingeben
+. *Einladung senden* klicken
+. Das eingeladene Mitglied erhält eine E-Mail mit einem Link zum Beitritt zur WG
+
+image::Bild_6.png[Mitglieder hinzufügen]
+
 
 == 5. Nicht implementierte / geplante Funktionen
 Die folgenden Funktionen sind Teil der ursprünglichen Projektidee, wurden jedoch in der aktuellen Version nicht umgesetzt:

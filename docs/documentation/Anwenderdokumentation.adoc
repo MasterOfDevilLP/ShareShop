@@ -113,14 +113,14 @@ image::Bild_5.png[Einkaufsliste erstellen]
 image::Einkaufsliste.png[Namen Einkaufsliste geben]
 image::Einkaufsliste_2.png[Erstellte Einkaufsliste]
 image::EInkaufsliste_3.png[Artikel hinzufügen]
-image::EInkaufsliste_4.png[]
-image::EInkaufsliste_5.png[]
-image::EInkaufsliste_6.png[]
-image::EInkaufsliste_7.png[]
-image::EInkaufsliste_8.png[]
-image::EInkaufsliste_9.png[]
-image::EInkaufsliste_10.png[]
-image::EInkaufsliste_11.png[]
+image::EInkaufsliste_4.png[Artikel hinzufügen]
+image::EInkaufsliste_5.png[Artikel hinzufügen]
+image::EInkaufsliste_6.png[Artikel erstellen]
+image::EInkaufsliste_7.png[Einkaufmodus aktivieren]
+image::EInkaufsliste_8.png[Einkauf beginn]
+image::EInkaufsliste_9.png[Einkauf beenden]
+image::EInkaufsliste_10.png[Preis ggf aktualisieren]
+image::EInkaufsliste_11.png[Einkauf beendet]
 
 === 4.4 Mitglieder hinzufügen
 
@@ -130,11 +130,15 @@ Als Nutzer möchte ich Mitglieder zu einer WG einladen, damit alle Mitglieder ge
 *Vorgehen:*
 
 . In der WG-Übersicht den Menüpunkt *Mitglieder einladen* auswählen
-. E-Mail-Adresse des zu einladenden Mitglieds eingeben
-. *Einladung senden* klicken
+. *Link teilen* klicken
 . Das eingeladene Mitglied erhält eine E-Mail mit einem Link zum Beitritt zur WG
 
-image::Bild_6.png[Mitglieder hinzufügen]
+image::Mitglied.png[Settings öffnen]
+image::Mitglied_2.png[Mitglied hinzufügen]
+image::Mitglied_3.png[Link Teilen]
+image::Mitglied_4.png[Mitglied kann WG betreten]
+image::Mitglied_5.png[Mitgliederliste is aktualisiert]
+
 
 
 == 5. Nicht implementierte / geplante Funktionen
@@ -169,3 +173,5 @@ Diese Funktionen dienen als mögliche Erweiterungen für zukünftige Versionen d
 Bei Fragen oder Problemen:
 * In-App-Hilfe nutzen
 * Projektteam kontaktieren (z. B. per E-Mail oder GitHub)
+
+

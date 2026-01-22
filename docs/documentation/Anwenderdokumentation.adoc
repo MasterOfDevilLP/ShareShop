@@ -150,6 +150,25 @@ Als Mitglied möchte ich eine WG verlassen können, wenn ich nicht mehr teilnehm
 
 *Hinweis:* Das Verlassen einer WG kann nicht rückgängig gemacht werden. Falls du wieder beitreten möchtest, musst du eine Einladung erhalten.
 
+image::leave.png[WG verlassen button]
+image::leave_2.png[WG verlassen bestätigen]
+image::leave_3.png[WG verlassen]
+
+=== 4.7 WG löschen
+
+_User Story:_  
+Als Mitglied möchte ich eine WG löschen können, wenn sie nicht mehr benötigt wird.
+
+*Vorgehen:*
+. In der WG-Übersicht den Menüpunkt *WG löschen* auswählen
+. Bestätigen, dass alle Daten der WG gelöscht werden
+. Die WG wird dauerhaft gelöscht und ist nicht mehr verfügbar
+
+*Hinweis:* Aktuell können **alle Mitglieder** eine WG löschen, da **noch keine Admin-Rechte implementiert** sind. In zukünftigen Versionen wird das Löschen nur für den **WG-Administrator** verfügbar sein.
+
+image::delete.png[WG löschen]
+image::delete_2.png[WG löschen bestätigen]
+image::delete_3.png[WG gelöscht]
 
 === 4.6 Profil-Einstellungen
 

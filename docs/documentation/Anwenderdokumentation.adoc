@@ -1,6 +1,5 @@
 :imagesdir: ../images
 = ShareShop – Anwenderdokumentation
-Stand: Januar 2026
 
 == 1. Einführung
 
@@ -20,7 +19,7 @@ Die aktuelle Version konzentriert sich auf die Kernfunktionen *Login*, *WG-Verwa
 == 2. Zugriff auf das System
 
 *URL:*  
-URL hier einfügen
+http://127.0.0.1:50032/index.html
 
 *Demo-Zugang:*  
 Benutzername: test123@gmail.com  

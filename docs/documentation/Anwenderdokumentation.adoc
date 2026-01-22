@@ -1,4 +1,5 @@
 :imagesdir: ../images
+:imgwidth: 50%
 = ShareShop – Anwenderdokumentation
 
 == 1. Einführung
@@ -22,7 +23,7 @@ Die aktuelle Version konzentriert sich auf die Kernfunktionen *Login*, *WG-Verwa
 http://127.0.0.1:50032/index.html
 
 *Demo-Zugang:*  
-Benutzername: test123@gmail.com  
+Benutzername: test123@gmail.com 
 Passwort: 123456
 
 == 3. Registrierung und Login
@@ -31,6 +32,7 @@ _User Story:_
 Als Nutzer möchte ich mich einloggen können, damit ich die Anwendung nutzen und mit ihr interagieren kann.
 
 *Vorgehen:*
+
 . Aufruf der ShareShop-Webseite  
 . Klick auf *Jetzt registrieren*  
 . Eingabe von E-Mail-Adresse und Passwort  
@@ -40,8 +42,8 @@ Als Nutzer möchte ich mich einloggen können, damit ich die Anwendung nutzen un
 . Klick auf *Login*
 
 
-image::Register.png[Registrierung]  
-image::Login.png[Login]
+image::Register.png[Registrierung, width={imgwidth}]  
+image::Login.png[Login, width={imgwidth}]
 
 == 4. Aufbau der Benutzeroberfläche
 
@@ -49,11 +51,12 @@ image::Login.png[Login]
 Nach erfolgreicher Anmeldung gelangt der Nutzer auf das Dashboard der Anwendung. Es bietet einen Überblick über die wichtigsten Funktionen und ermöglicht einen schnellen Einstieg in die Nutzung von ShareShop.
 
 Das Dashboard umfasst:
+
 * Erstellen und Wechseln zwischen vorhandenen WGs
 * Erstellen sowie Anzeigen und Bearbeiten von Einkaufslisten
 * Zugriff auf persönliche Einstellungen (z. B. Name, Avatar)
 
-image::Startseite.png[Dashboard der Anwendung]
+image::Startseite.png[Dashboard der Anwendung, width={imgwidth}]
 
 
 === 4.2 Navigation
@@ -67,7 +70,7 @@ Die Hauptnavigation befindet sich am unteren Rand der Anwendung und ermöglicht 
 
 *Hinweis:* Die Menüpunkte *Rechnungen*, *Kalender* und *Rezepte* sind in der aktuellen Version nicht implementiert und werden in einer zukünftigen Version hinzugefügt.
 
-image::Navigation.png[Hauptnavigation der Anwendung]
+image::Navigation.png[Hauptnavigation der Anwendung, width={imgwidth}]
 
 
 === 4.3 Wohngemeinschaft erstellen und verwalten
@@ -75,18 +78,20 @@ _User Story:_
 Als Nutzer möchte ich eine WG erstellen, um gemeinsam einkaufen zu können.
 
 *WG erstellen:*
+
 . Dropdown *WG auswählen* öffnen  
 . *+ Neue Gruppe* auswählen  
 . Namen der WG eingeben (optional: Beschreibung und Bild hochladen)  
 . WG speichern  
 
 *WG verwalten:*
+
 * Übersicht aller eigenen WGs  
 * Wechsel zwischen verschiedenen WGs
 
-image::WG_Übersicht.png[WG-Übersicht und WG-Erstellung]
-image::WG_Erstellen.png[WG Erstellen]
-image::Erstellte_WG.png[WG in Übersicht]
+image::WG_Übersicht.png[WG-Übersicht und WG-Erstellung, width={imgwidth}]
+image::WG_Erstellen.png[WG Erstellen,width={imgwidth}]
+image::Erstellte_WG.png[WG in Übersicht, width={imgwidth}]
 
 
 === 4.4 Einkaufsliste erstellen und nutzen
@@ -94,6 +99,7 @@ _User Story:_
 Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten Produkte für alle sichtbar sind.
 
 *Vorgehen:*
+
 . Auswahl einer WG  
 . Menüpunkt *+Liste hinzufügen* öffnen  
 . Listennamen eingeben  
@@ -105,18 +111,18 @@ Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten P
 
 Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und kann jederzeit von allen bearbeitet werden.
 
-image::Einkaufsliste_Erstellen.png[Einkaufsliste erstellen]
-image::Einkaufsliste.png[Namen Einkaufsliste geben]
-image::Einkaufsliste_2.png[Erstellte Einkaufsliste]
-image::Einkaufsliste_3.png[Artikel hinzufügen]
-image::Einkaufsliste_4.png[Artikel hinzufügen]
-image::Einkaufsliste_5.png[Artikel hinzufügen]
-image::Einkaufsliste_6.png[Artikel erstellen]
-image::Einkaufsliste_7.png[Einkaufmodus aktivieren]
-image::Einkaufsliste_8.png[Einkauf beginn]
-image::Einkaufsliste_9.png[Einkauf beenden]
-image::Einkaufsliste_10.png[Preis ggf aktualisieren]
-image::Einkaufsliste_11.png[Einkauf beendet]
+image::Einkaufsliste_Erstellen.png[Einkaufsliste erstellen, width={imgwidth}]
+image::Einkaufsliste.png[Namen Einkaufsliste geben, width={imgwidth}]
+image::Einkaufsliste_2.png[Erstellte Einkaufsliste, width={imgwidth}]
+image::Einkaufsliste_3.png[Artikel hinzufügen, width={imgwidth}]
+image::Einkaufsliste_4.png[Artikel hinzufügen, width={imgwidth}]
+image::Einkaufsliste_5.png[Artikel hinzufügen, width={imgwidth}]
+image::Einkaufsliste_6.png[Artikel erstellen, width={imgwidth}]
+image::Einkaufsliste_7.png[Einkaufmodus aktivieren, width={imgwidth}]
+image::Einkaufsliste_8.png[Einkauf beginn, width={imgwidth}]
+image::Einkaufsliste_9.png[Einkauf beenden, width={imgwidth}]
+image::Einkaufsliste_10.png[Preis ggf aktualisieren, width={imgwidth}]
+image::Einkaufsliste_11.png[Einkauf beendet, width={imgwidth}]
 
 === 4.5 Mitglieder hinzufügen
 
@@ -124,15 +130,16 @@ _User Story:_
 Als Nutzer möchte ich Mitglieder zu einer WG einladen, damit alle Mitglieder gemeinsam einkaufen können.
 
 *Vorgehen:*
+
 . In der WG-Übersicht den Menüpunkt *Mitglieder einladen* auswählen  
 . *Link teilen* klicken  
 . Das eingeladene Mitglied erhält eine E-Mail mit einem Link zum Beitritt zur WG
 
-image::Mitglied.png[Settings öffnen]
-image::Mitglied_2.png[Mitglied hinzufügen]
-image::Mitglied_3.png[Link Teilen]
-image::Mitglied_4.png[Mitglied kann WG betreten]
-image::Mitglied_5.png[Mitgliederliste is aktualisiert]
+image::Mitglied.png[Settings öffnen, width={imgwidth}]
+image::Mitglied_2.png[Mitglied hinzufügen, width={imgwidth}]
+image::Mitglied_3.png[Link Teilen, width={imgwidth}]
+image::Mitglied_4.png[Mitglied kann WG betreten, width={imgwidth}]
+image::Mitglied_5.png[Mitgliederliste is aktualisiert, width={imgwidth}]
 
 === 4.6 WG verlassen
 
@@ -140,15 +147,16 @@ _User Story:_
 Als Mitglied möchte ich eine WG verlassen können, wenn ich nicht mehr teilnehmen möchte.
 
 *Vorgehen:*  
+
 . In der WG-Übersicht den Menüpunkt *WG verlassen* auswählen  
 . Bestätigen, dass du die WG verlassen möchtest  
 . Du bist nun nicht mehr Mitglied der WG und hast keinen Zugriff mehr auf deren Daten
 
 *Hinweis:* Das Verlassen einer WG kann nicht rückgängig gemacht werden. Falls du wieder beitreten möchtest, musst du eine Einladung erhalten.
 
-image::Leave.png[WG verlassen button]
-image::Leave_2.png[WG verlassen bestätigen]
-image::Leave_3.png[WG verlassen]
+image::Leave.png[WG verlassen button, width={imgwidth}]
+image::Leave_2.png[WG verlassen bestätigen, width={imgwidth}]
+image::Leave_3.png[WG verlassen, width={imgwidth}]
 
 === 4.7 WG löschen
 
@@ -156,15 +164,16 @@ _User Story:_
 Als Mitglied möchte ich eine WG löschen können, wenn sie nicht mehr benötigt wird.
 
 *Vorgehen:*  
+
 . In der WG-Übersicht den Menüpunkt *WG löschen* auswählen  
 . Bestätigen, dass alle Daten der WG gelöscht werden und die WG dauerhaft gelöscht wird  
 . Die WG wird nicht mehr verfügbar sein
 
 *Hinweis:* Aktuell können **alle Mitglieder** eine WG löschen, da die **Admin-Rechte noch nicht implementiert** sind. In zukünftigen Versionen wird das Löschen nur für den **WG-Administrator** verfügbar sein.
 
-image::Delete.png[WG löschen]
-image::Delete_2.png[WG löschen bestätigen]
-image::Delete_3.png[WG gelöscht]
+image::Delete.png[WG löschen, width={imgwidth}]
+image::Delete_2.png[WG löschen bestätigen, width={imgwidth}]
+image::Delete_3.png[WG gelöscht, width={imgwidth}]
 
 === 4.8 Profil-Einstellungen
 
@@ -172,6 +181,7 @@ _User Story:_
 Als Nutzer möchte ich mein Profil bearbeiten, um meine persönlichen Daten wie Name, Profilbild und Sprache anzupassen.
 
 *Vorgehen:*
+
 . In der Hauptnavigation den Menüpunkt *Profil* auswählen  
 . Auf das Profilbild klicken, um ein neues Bild hochzuladen (Profilbild ist lokal gespeichert)  
 . Den Namen ändern, indem der *Bearbeiten*-Button gedrückt wird (Änderungen werden lokal gespeichert)  
@@ -179,13 +189,13 @@ Als Nutzer möchte ich mein Profil bearbeiten, um meine persönlichen Daten wie 
 . *Hinweis:* Das Erscheinungsbild (Hell/Dunkel) und die Standardwährung sind derzeit **nicht implementiert** und werden in einer zukünftigen Version verfügbar sein  
 . Auf *Konto löschen* klicken, um das Konto zu löschen
 
-image::Profil_0.png[Profil auswählen]
-image::Profil.png[Profileinstellungen]
-image::Profil_2.png[Profilbild ändern]
-image::Profil_3.png[User name ändern]
-image::Profil_4.png[Sprache wechseln]
-image::Profil_5.png[Benachrichtigungen einstellen]
-image::Profil_6.png[Konto löschen]
+image::Profil_0.png[Profil auswählen, width={imgwidth}]
+image::Profil.png[Profileinstellungen, width={imgwidth}]
+image::Profil_2.png[Profilbild ändern, width={imgwidth}]
+image::Profil_3.png[User name ändern, width={imgwidth}]
+image::Profil_4.png[Sprache wechseln, width={imgwidth}]
+image::Profil_5.png[Benachrichtigungen einstellen, width={imgwidth}]
+image::Profil_6.png[Konto löschen, width={imgwidth}]
 
 == 5. Nicht implementierte / geplante Funktionen
 Die folgenden Funktionen sind Teil der ursprünglichen Projektidee, wurden jedoch in der aktuellen Version nicht umgesetzt:

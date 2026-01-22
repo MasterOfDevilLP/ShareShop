@@ -138,7 +138,27 @@ image::Mitglied_3.png[Link Teilen]
 image::Mitglied_4.png[Mitglied kann WG betreten]
 image::Mitglied_5.png[Mitgliederliste is aktualisiert]
 
+=== 4.5 Profil-Einstellungen
 
+_User Story:_  
+Als Nutzer möchte ich mein Profil bearbeiten, um meine persönlichen Daten wie Name, Profilbild und Sprache anzupassen.
+
+*Vorgehen:*
+
+. In der Hauptnavigation den Menüpunkt *Profil* auswählen
+. Auf das Profilbild klicken, um ein neues Bild hochzuladen (Profilbild ist lokal gespeichert)
+. Den Namen ändern, indem der *Bearbeiten*-Button gedrückt wird (Änderungen werden lokal gespeichert)
+. Die Sprache auf Deutsch oder Englisch einstellen (Änderungen werden lokal gespeichert)
+. *Hinweis:* Das Erscheinungsbild (Hell/Dunkel) ist derzeit **nicht implementiert** und wird in einer zukünftigen Version verfügbar sein
+. Auf *Konto löschen* klicken, um das Konto zu löschen
+
+image::Profil_0.png[Profil auswählen]
+image::Profil.png[Profileinstellungen]
+image::Profil_2.png[Profilbild ändern]
+image::Profil_3.png[User name ändern]
+image::Profil_4.png[Sprache wechseln]
+image::Profil_5.png[Benachrichtigungen einstellen]
+image::Profil_6.png[Konto löschen]
 
 == 5. Nicht implementierte / geplante Funktionen
 Die folgenden Funktionen sind Teil der ursprünglichen Projektidee, wurden jedoch in der aktuellen Version nicht umgesetzt:

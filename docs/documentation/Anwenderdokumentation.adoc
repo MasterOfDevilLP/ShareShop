@@ -5,7 +5,7 @@
 
 === 1.1 Zweck der Anwendung
 ShareShop ist eine Web-Anwendung zur gemeinsamen Organisation von Einkäufen in Wohngemeinschaften (WGs).  
-Ziel der Anwendung ist es, den Einkaufsprozess innerhalb einer WG zu vereinfachen, indem Nutzerinnen und Nutzer sich anmelden, Wohngemeinschaften verwalten und gemeinsame Einkaufslisten mit Mengen und Preisen führen können.
+Ziel der Anwendung ist es, den Einkaufsprozess innerhalb einer WG zu vereinfachen, indem Nutzer sich anmelden, Wohngemeinschaften verwalten und gemeinsame Einkaufslisten mit Mengen und Preisen führen können.
 
 Die aktuelle Version konzentriert sich auf die Kernfunktionen *Login*, *WG-Verwaltung* und *Einkaufsliste*.
 
@@ -25,50 +25,49 @@ http://127.0.0.1:50032/index.html
 Benutzername: test123@gmail.com  
 Passwort: 123456
 
-
 == 3. Registrierung und Login
 
 _User Story:_  
 Als Nutzer möchte ich mich einloggen können, damit ich die Anwendung nutzen und mit ihr interagieren kann.
 
 *Vorgehen:*
-
-. Aufruf der ShareShop-Webseite
-. Klick auf *Jetzt registrieren*
-. Eingabe von E-Mail-Adresse und Passwort
-. Klick auf den Button *Registrieren*
-. Nach erfolgreicher Registrierung wird der Nutzer zum Login weitergeleitet
-. Eingabe von E-Mail-Adresse und Passwort
+. Aufruf der ShareShop-Webseite  
+. Klick auf *Jetzt registrieren*  
+. Eingabe von E-Mail-Adresse und Passwort  
+. Klick auf den Button *Registrieren*  
+. Nach erfolgreicher Registrierung wird der Nutzer zum Login weitergeleitet  
+. Eingabe von E-Mail-Adresse und Passwort  
 . Klick auf *Login*
 
-image::Register.png[Registrierung]
+
+image::Register.png[Registrierung]  
 image::Login.png[Login]
 
 == 4. Aufbau der Benutzeroberfläche
 
 === 4.1 Startseite / Dashboard
-Nach erfolgreicher Anmeldung gelangt der Nutzer auf das Dashboard der Anwendung. Dieses bietet einen Überblick über die wichtigsten Funktionen und ermöglicht einen schnellen Einstieg in die Nutzung von ShareShop.
+Nach erfolgreicher Anmeldung gelangt der Nutzer auf das Dashboard der Anwendung. Es bietet einen Überblick über die wichtigsten Funktionen und ermöglicht einen schnellen Einstieg in die Nutzung von ShareShop.
 
 Das Dashboard umfasst:
 * Erstellen und Wechseln zwischen vorhandenen WGs
 * Erstellen sowie Anzeigen und Bearbeiten von Einkaufslisten
 * Zugriff auf persönliche Einstellungen (z. B. Name, Avatar)
 
-
 image::Startseite.png[Dashboard der Anwendung]
 
-=== 4.2 Navigation
-Die Hauptnavigation befindet sich am unteren der Anwendung und ermöglicht den Zugriff auf die wichtigsten Bereiche.
 
-* *Liste:* Verwaltung gemeinsamer Einkaufslisten
-* *Rechnungen:* Geplante Funktion zur Verwaltung von Kosten und Abrechnungen (derzeit nicht implementiert)
-* *Kalender:* Geplante Funktion zur Organisation von Einkaufsterminen (derzeit nicht implementiert)
-* *Rezepte:* Geplante Funktion zur Anzeige von Rezeptvorschlägen und Mahlzeitenplanung (derzeit nicht implementiert)
+=== 4.2 Navigation
+Die Hauptnavigation befindet sich am unteren Rand der Anwendung und ermöglicht den Zugriff auf die wichtigsten Bereiche.
+
+* *Liste:* Verwaltung gemeinsamer Einkaufslisten  
+* *Rechnungen:* Geplante Funktion zur Verwaltung von Kosten und Abrechnungen (derzeit nicht implementiert)  
+* *Kalender:* Geplante Funktion zur Organisation von Einkaufsterminen (derzeit nicht implementiert)  
+* *Rezepte:* Geplante Funktion zur Anzeige von Rezeptvorschlägen und Mahlzeitenplanung (derzeit nicht implementiert)  
 * *Profil:* Persönliche Einstellungen wie Name und Avatar
 
-*Hinweis:* Die Menüpunkte *Rechnungen*, *Kalender* und *Rezepte* sind in der aktuellen Version nicht implementiert und dienen als Platzhalter für zukünftige Erweiterungen.
+*Hinweis:* Die Menüpunkte *Rechnungen*, *Kalender* und *Rezepte* sind in der aktuellen Version nicht implementiert und werden in einer zukünftigen Version hinzugefügt.
 
-image::Bild_1 copy.png[Hauptnavigation der Anwendung]
+image::Navigation.png[Hauptnavigation der Anwendung]
 
 
 === 4.3 Wohngemeinschaft erstellen und verwalten
@@ -76,14 +75,13 @@ _User Story:_
 Als Nutzer möchte ich eine WG erstellen, um gemeinsam einkaufen zu können.
 
 *WG erstellen:*
-
-. Dropdown *WG auswählen* öffnen
-. *+ Neue Gruppe* auswählen
-. Namen der WG eingeben optional Beschreibung und Bild hochladen
-. WG speichern
+. Dropdown *WG auswählen* öffnen  
+. *+ Neue Gruppe* auswählen  
+. Namen der WG eingeben (optional: Beschreibung und Bild hochladen)  
+. WG speichern  
 
 *WG verwalten:*
-* Übersicht aller eigenen WGs
+* Übersicht aller eigenen WGs  
 * Wechsel zwischen verschiedenen WGs
 
 image::WG_Übersicht.png[WG-Übersicht und WG-Erstellung]
@@ -96,15 +94,14 @@ _User Story:_
 Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten Produkte für alle sichtbar sind.
 
 *Vorgehen:*
-
-. Auswahl einer WG
-. Menüpunkt *+Liste hinzufügen* öffnen
-. Listennamen eingeben
-. erstellte Einkaufsliste öffnen
-. *+Artikel hinzufügen* auswählen
-. Produktname, Menge und Preis eingeben
-. Produkt speichern ggf. ändern
-. Einkauf starten in dem man das Männchen mit Einkaufswagen klickt
+. Auswahl einer WG  
+. Menüpunkt *+Liste hinzufügen* öffnen  
+. Listennamen eingeben  
+. Erstellte Einkaufsliste öffnen  
+. *+Artikel hinzufügen* auswählen  
+. Produktname, Menge und Preis eingeben  
+. Produkt speichern, ggf. ändern  
+. Einkauf starten, indem man das Männchen mit Einkaufswagen klickt
 
 Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und kann jederzeit von allen bearbeitet werden.
 
@@ -127,9 +124,8 @@ _User Story:_
 Als Nutzer möchte ich Mitglieder zu einer WG einladen, damit alle Mitglieder gemeinsam einkaufen können.
 
 *Vorgehen:*
-
-. In der WG-Übersicht den Menüpunkt *Mitglieder einladen* auswählen
-. *Link teilen* klicken
+. In der WG-Übersicht den Menüpunkt *Mitglieder einladen* auswählen  
+. *Link teilen* klicken  
 . Das eingeladene Mitglied erhält eine E-Mail mit einem Link zum Beitritt zur WG
 
 image::Mitglied.png[Settings öffnen]
@@ -143,9 +139,9 @@ image::Mitglied_5.png[Mitgliederliste is aktualisiert]
 _User Story:_  
 Als Mitglied möchte ich eine WG verlassen können, wenn ich nicht mehr teilnehmen möchte.
 
-*Vorgehen:*
-. In der WG-Übersicht den Menüpunkt *WG verlassen* auswählen
-. Bestätigen, dass du die WG verlassen möchtest
+*Vorgehen:*  
+. In der WG-Übersicht den Menüpunkt *WG verlassen* auswählen  
+. Bestätigen, dass du die WG verlassen möchtest  
 . Du bist nun nicht mehr Mitglied der WG und hast keinen Zugriff mehr auf deren Daten
 
 *Hinweis:* Das Verlassen einer WG kann nicht rückgängig gemacht werden. Falls du wieder beitreten möchtest, musst du eine Einladung erhalten.
@@ -159,12 +155,12 @@ image::Leave_3.png[WG verlassen]
 _User Story:_  
 Als Mitglied möchte ich eine WG löschen können, wenn sie nicht mehr benötigt wird.
 
-*Vorgehen:*
-. In der WG-Übersicht den Menüpunkt *WG löschen* auswählen
-. Bestätigen, dass alle Daten der WG gelöscht werden
-. Die WG wird dauerhaft gelöscht und ist nicht mehr verfügbar
+*Vorgehen:*  
+. In der WG-Übersicht den Menüpunkt *WG löschen* auswählen  
+. Bestätigen, dass alle Daten der WG gelöscht werden und die WG dauerhaft gelöscht wird  
+. Die WG wird nicht mehr verfügbar sein
 
-*Hinweis:* Aktuell können **alle Mitglieder** eine WG löschen, da **noch keine Admin-Rechte implementiert** sind. In zukünftigen Versionen wird das Löschen nur für den **WG-Administrator** verfügbar sein.
+*Hinweis:* Aktuell können **alle Mitglieder** eine WG löschen, da die **Admin-Rechte noch nicht implementiert** sind. In zukünftigen Versionen wird das Löschen nur für den **WG-Administrator** verfügbar sein.
 
 image::Delete.png[WG löschen]
 image::Delete_2.png[WG löschen bestätigen]
@@ -176,12 +172,11 @@ _User Story:_
 Als Nutzer möchte ich mein Profil bearbeiten, um meine persönlichen Daten wie Name, Profilbild und Sprache anzupassen.
 
 *Vorgehen:*
-
-. In der Hauptnavigation den Menüpunkt *Profil* auswählen
-. Auf das Profilbild klicken, um ein neues Bild hochzuladen (Profilbild ist lokal gespeichert)
-. Den Namen ändern, indem der *Bearbeiten*-Button gedrückt wird (Änderungen werden lokal gespeichert)
-. Die Sprache auf Deutsch oder Englisch einstellen (Änderungen werden lokal gespeichert)
-. *Hinweis:* Das Erscheinungsbild (Hell/Dunkel) und die Standardwährung ist derzeit **nicht implementiert** und wird in einer zukünftigen Version verfügbar sein
+. In der Hauptnavigation den Menüpunkt *Profil* auswählen  
+. Auf das Profilbild klicken, um ein neues Bild hochzuladen (Profilbild ist lokal gespeichert)  
+. Den Namen ändern, indem der *Bearbeiten*-Button gedrückt wird (Änderungen werden lokal gespeichert)  
+. Die Sprache auf Deutsch oder Englisch einstellen (Änderungen werden lokal gespeichert)  
+. *Hinweis:* Das Erscheinungsbild (Hell/Dunkel) und die Standardwährung sind derzeit **nicht implementiert** und werden in einer zukünftigen Version verfügbar sein  
 . Auf *Konto löschen* klicken, um das Konto zu löschen
 
 image::Profil_0.png[Profil auswählen]
@@ -195,11 +190,11 @@ image::Profil_6.png[Konto löschen]
 == 5. Nicht implementierte / geplante Funktionen
 Die folgenden Funktionen sind Teil der ursprünglichen Projektidee, wurden jedoch in der aktuellen Version nicht umgesetzt:
 
-* Automatische Kostenverteilung
-* Finanz- und Schuldenübersicht
-* Inventar- und Haltbarkeitsmanagement
-* Kalenderfunktionen
-* Rezeptvorschläge
+* Automatische Kostenverteilung  
+* Finanz- und Schuldenübersicht  
+* Inventar- und Haltbarkeitsmanagement  
+* Kalenderfunktionen  
+* Rezeptvorschläge  
 * Nachhaltigkeits-Tracking
 
 Diese Funktionen dienen als mögliche Erweiterungen für zukünftige Versionen der Anwendung.
@@ -216,13 +211,10 @@ Diese Funktionen dienen als mögliche Erweiterungen für zukünftige Versionen d
 *Antwort:* Ja, ein Nutzer kann Mitglied in mehreren Wohngemeinschaften sein.
 
 == 7. Tipps für eine reibungslose Nutzung
-* Regelmäßig die Einkaufsliste aktualisieren
-* Klare Produktbezeichnungen verwenden
+* Regelmäßig die Einkaufsliste aktualisieren  
+* Klare Produktbezeichnungen verwenden  
 * Preise möglichst vollständig eintragen
 
 == 8. Kontakt und Support
-Bei Fragen oder Problemen:
-* In-App-Hilfe nutzen
-* Projektteam kontaktieren (z. B. per E-Mail oder GitHub)
-
-
+Bei Fragen oder Problemen: 
+* Projektteam kontaktieren (z. B. per E-Mail)

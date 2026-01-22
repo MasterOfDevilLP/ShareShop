@@ -71,7 +71,7 @@ Die Hauptnavigation befindet sich am unteren der Anwendung und ermöglicht den Z
 image::Bild_1 copy.png[Hauptnavigation der Anwendung]
 
 
-=== 4.2 Wohngemeinschaft erstellen und verwalten
+=== 4.3 Wohngemeinschaft erstellen und verwalten
 _User Story:_  
 Als Nutzer möchte ich eine WG erstellen, um gemeinsam einkaufen zu können.
 
@@ -91,7 +91,7 @@ image::Bild_3.png[WG Erstellen]
 image::Bild_4.png[WG in Übersicht]
 
 
-=== 4.3 Einkaufsliste erstellen und nutzen
+=== 4.4 Einkaufsliste erstellen und nutzen
 _User Story:_  
 Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten Produkte für alle sichtbar sind.
 
@@ -106,7 +106,7 @@ Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten P
 . Produkt speichern ggf. ändern
 . Einkauf starten in dem man das Männchen mit Einkaufswagen klickt
 
-Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und jederzeit bearbeitbar.
+Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und kann jederzeit von allen bearbeitet werden.
 
 image::Bild_5.png[Einkaufsliste erstellen]
 image::Einkaufsliste.png[Namen Einkaufsliste geben]
@@ -121,7 +121,7 @@ image::EInkaufsliste_9.png[Einkauf beenden]
 image::EInkaufsliste_10.png[Preis ggf aktualisieren]
 image::EInkaufsliste_11.png[Einkauf beendet]
 
-=== 4.4 Mitglieder hinzufügen
+=== 4.5 Mitglieder hinzufügen
 
 _User Story:_  
 Als Nutzer möchte ich Mitglieder zu einer WG einladen, damit alle Mitglieder gemeinsam einkaufen können.
@@ -138,7 +138,20 @@ image::Mitglied_3.png[Link Teilen]
 image::Mitglied_4.png[Mitglied kann WG betreten]
 image::Mitglied_5.png[Mitgliederliste is aktualisiert]
 
-=== 4.5 Profil-Einstellungen
+=== 4.6 WG verlassen
+
+_User Story:_  
+Als Mitglied möchte ich eine WG verlassen können, wenn ich nicht mehr teilnehmen möchte.
+
+*Vorgehen:*
+. In der WG-Übersicht den Menüpunkt *WG verlassen* auswählen
+. Bestätigen, dass du die WG verlassen möchtest
+. Du bist nun nicht mehr Mitglied der WG und hast keinen Zugriff mehr auf deren Daten
+
+*Hinweis:* Das Verlassen einer WG kann nicht rückgängig gemacht werden. Falls du wieder beitreten möchtest, musst du eine Einladung erhalten.
+
+
+=== 4.6 Profil-Einstellungen
 
 _User Story:_  
 Als Nutzer möchte ich mein Profil bearbeiten, um meine persönlichen Daten wie Name, Profilbild und Sprache anzupassen.
@@ -149,7 +162,7 @@ Als Nutzer möchte ich mein Profil bearbeiten, um meine persönlichen Daten wie 
 . Auf das Profilbild klicken, um ein neues Bild hochzuladen (Profilbild ist lokal gespeichert)
 . Den Namen ändern, indem der *Bearbeiten*-Button gedrückt wird (Änderungen werden lokal gespeichert)
 . Die Sprache auf Deutsch oder Englisch einstellen (Änderungen werden lokal gespeichert)
-. *Hinweis:* Das Erscheinungsbild (Hell/Dunkel) ist derzeit **nicht implementiert** und wird in einer zukünftigen Version verfügbar sein
+. *Hinweis:* Das Erscheinungsbild (Hell/Dunkel) und die Standardwährung ist derzeit **nicht implementiert** und wird in einer zukünftigen Version verfügbar sein
 . Auf *Konto löschen* klicken, um das Konto zu löschen
 
 image::Profil_0.png[Profil auswählen]

@@ -55,7 +55,7 @@ Das Dashboard umfasst:
 * Zugriff auf persönliche Einstellungen (z. B. Name, Avatar)
 
 
-image::Bild_1.png[Dashboard der Anwendung]
+image::Startseite.png[Dashboard der Anwendung]
 
 === 4.2 Navigation
 Die Hauptnavigation befindet sich am unteren der Anwendung und ermöglicht den Zugriff auf die wichtigsten Bereiche.
@@ -86,9 +86,9 @@ Als Nutzer möchte ich eine WG erstellen, um gemeinsam einkaufen zu können.
 * Übersicht aller eigenen WGs
 * Wechsel zwischen verschiedenen WGs
 
-image::Bild_2.png[WG-Übersicht und WG-Erstellung]
-image::Bild_3.png[WG Erstellen]
-image::Bild_4.png[WG in Übersicht]
+image::WG_Übersicht.png[WG-Übersicht und WG-Erstellung]
+image::WG_Erstellen.png[WG Erstellen]
+image::Erstellte_WG.png[WG in Übersicht]
 
 
 === 4.4 Einkaufsliste erstellen und nutzen
@@ -108,18 +108,18 @@ Als WG-Mitglied möchte ich eine Einkaufsliste führen, damit alle benötigten P
 
 Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und kann jederzeit von allen bearbeitet werden.
 
-image::Bild_5.png[Einkaufsliste erstellen]
+image::Einkaufsliste_Erstellen.png[Einkaufsliste erstellen]
 image::Einkaufsliste.png[Namen Einkaufsliste geben]
 image::Einkaufsliste_2.png[Erstellte Einkaufsliste]
-image::EInkaufsliste_3.png[Artikel hinzufügen]
-image::EInkaufsliste_4.png[Artikel hinzufügen]
-image::EInkaufsliste_5.png[Artikel hinzufügen]
-image::EInkaufsliste_6.png[Artikel erstellen]
-image::EInkaufsliste_7.png[Einkaufmodus aktivieren]
-image::EInkaufsliste_8.png[Einkauf beginn]
-image::EInkaufsliste_9.png[Einkauf beenden]
-image::EInkaufsliste_10.png[Preis ggf aktualisieren]
-image::EInkaufsliste_11.png[Einkauf beendet]
+image::Einkaufsliste_3.png[Artikel hinzufügen]
+image::Einkaufsliste_4.png[Artikel hinzufügen]
+image::Einkaufsliste_5.png[Artikel hinzufügen]
+image::Einkaufsliste_6.png[Artikel erstellen]
+image::Einkaufsliste_7.png[Einkaufmodus aktivieren]
+image::Einkaufsliste_8.png[Einkauf beginn]
+image::Einkaufsliste_9.png[Einkauf beenden]
+image::Einkaufsliste_10.png[Preis ggf aktualisieren]
+image::Einkaufsliste_11.png[Einkauf beendet]
 
 === 4.5 Mitglieder hinzufügen
 
@@ -150,9 +150,9 @@ Als Mitglied möchte ich eine WG verlassen können, wenn ich nicht mehr teilnehm
 
 *Hinweis:* Das Verlassen einer WG kann nicht rückgängig gemacht werden. Falls du wieder beitreten möchtest, musst du eine Einladung erhalten.
 
-image::leave.png[WG verlassen button]
-image::leave_2.png[WG verlassen bestätigen]
-image::leave_3.png[WG verlassen]
+image::Leave.png[WG verlassen button]
+image::Leave_2.png[WG verlassen bestätigen]
+image::Leave_3.png[WG verlassen]
 
 === 4.7 WG löschen
 
@@ -166,9 +166,9 @@ Als Mitglied möchte ich eine WG löschen können, wenn sie nicht mehr benötigt
 
 *Hinweis:* Aktuell können **alle Mitglieder** eine WG löschen, da **noch keine Admin-Rechte implementiert** sind. In zukünftigen Versionen wird das Löschen nur für den **WG-Administrator** verfügbar sein.
 
-image::delete.png[WG löschen]
-image::delete_2.png[WG löschen bestätigen]
-image::delete_3.png[WG gelöscht]
+image::Delete.png[WG löschen]
+image::Delete_2.png[WG löschen bestätigen]
+image::Delete_3.png[WG gelöscht]
 
 === 4.8 Profil-Einstellungen
 

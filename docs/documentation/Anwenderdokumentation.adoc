@@ -170,7 +170,7 @@ image::delete.png[WG löschen]
 image::delete_2.png[WG löschen bestätigen]
 image::delete_3.png[WG gelöscht]
 
-=== 4.6 Profil-Einstellungen
+=== 4.8 Profil-Einstellungen
 
 _User Story:_  
 Als Nutzer möchte ich mein Profil bearbeiten, um meine persönlichen Daten wie Name, Profilbild und Sprache anzupassen.

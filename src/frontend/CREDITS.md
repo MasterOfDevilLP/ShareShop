@@ -20,10 +20,12 @@ Liste der Bilder, die im Frontend verwendet werden, und deren Quellen:
 | haushalt.png                   | https://www.flaticon.com/de/kostenloses-icon/reinigung_995053                    |
 | Kalender.png                   | https://www.flaticon.com/free-icon/calendar_161862                 |
 | Liste.png                   | https://www.vecteezy.com/vector-art/42387816-assessment-checklist-icon-line-vector-illustration                   |
+| Listen.png                    |  https://www.flaticon.com/de/kostenloses-icon/menu-offnen_3817569?term=menü&page=1&position=16&origin=tag&related_id=3817569          |
 | obst.png                   | https://onlinebeej.com/categoryDetail/11                  |
 | Profil.png                   | https://www.flaticon.com/de/kostenloses-icon/nutzer_1159740                  |
 | Rechnung.png                   | https://www.onlinewebfonts.com/icon/552448                     |
-| Rezepte.png                   | https://www.shutterstock.com/image-vector/recipe-icon-thin-linear-style-design-2625579993       
+| Rezepte.png                   | https://www.shutterstock.com/image-vector/recipe-icon-thin-linear-style-design-2625579993    
+|settings.svg                   | https://www.figma.com/design/Jy8K6AWDpyIeXRxoFEjyiq/Material-Design-Icons--Community-?node-id=6-16286&p=f&t=B6snuZi8JOWErS0p-0 |
 | snacks.png                   | https://www.flaticon.com/free-icon/potato-chips_3050217?term=chips                 |
 | Stift.png                   | https://www.flaticon.com/free-icon/pencil_1166723                               |
 | Trashcan.png                   | https://www.flaticon.com/free-icon/trash-can_3515498?term=bin                      |

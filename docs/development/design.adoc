@@ -142,27 +142,26 @@ Client 2                      Backend
 === Frontend-Architektur & Designentscheidungen
 
 * **Framework & Build-Tool**  
-  Vue.js (3.5.x) verwendet mit Vite (inkl. @vitejs/plugin-vue) für schnelles Entwickeln und Bauen
+  HTML, CSS und Javascript mit Vue (2 & 3) framework für die Entwicklung der Anwendung.
 
 * **Projektstruktur (`src/`)**  
-  - `main.js`: Einstiegspunkt, lädt `App.vue` und CSS  
   - `App.vue`: Root-Komponente, zeigt `AuthWrapper`  
   - `components/`:  
     • `AuthWrapper.vue`: Umschaltung zwischen Login und Registrierung  
     • `LoginForm.vue` & `RegisterForm.vue`: Formulare mit reaktiven Eingaben und Sprachumschaltung (DE/EN)
 
-* **Formular‑ & Sprach-Logik**  
+* **Formular- & Sprach-Logik**  
   - `LoginForm.vue`:  
     • `v-model` für Benutzername und Passwort  
     • DE/EN-Toggle über Buttons  
     • Event `switchMode` zum Wechsel der Formulare
 
-* **Styling**  
-  - Global: `style.css` aus `src`  
-  - Komponenten-spezifisch: Scoped CSS in `.vue`-Dateien (Cards, Buttons etc.)   
-  - Einheitliches Design: z. B. abgerundete Ecken, Schatten, mobile Breite
+* **Styling**   
+  - Komponenten-spezifisches Styling: Mehrere style.css-Dateien, die jeweils für spezifische Komponenten zuständig sind. Diese sind lokal und wirken sich nur auf die jeweilige Komponente aus.
+  - Einheitliches Design: z. B. abgerundete Ecken, Schatten, mobile Breite. 
 
 * **Tooling & Dev-Workflow**  
-  - Entwicklung: `npm run dev` (Vite) → Live-Reload  
-  - Build: `npm run build`; lokale Vorschau mit `npm run preview`  
-  - Dev-Setup unterstützt durch `docker-compose.yml`, `.editorconfig`, `.markdownlint.json`
+  - Entwicklung: `npm run start` → Startet den Live Server und öffnet die Anwendung im Browser.
+  - Testen: Die Anwendung wird direkt im Browser über Live Server getestet.
+
+  

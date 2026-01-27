@@ -37,9 +37,9 @@ image::Login.png[Login, width={imgwidth}]
 == 3. Aufbau der Benutzeroberfläche
 
 === 3.1 Startseite / Dashboard
-Nach erfolgreicher Anmeldung gelangt der Nutzer auf das Dashboard der Anwendung. Es bietet einen Überblick über die wichtigsten Funktionen und ermöglicht einen schnellen Einstieg in die Nutzung von ShareShop.
+Nach erfolgreicher Anmeldung gelangt der Nutzer auf die Startseite der Anwendung. Es bietet einen Überblick über die wichtigsten Funktionen und ermöglicht einen schnellen Einstieg in die Nutzung von ShareShop.
 
-Das Dashboard umfasst:
+Die Startseite umfasst:
 
 * Erstellen und Wechseln zwischen vorhandenen WGs
 * Erstellen sowie Anzeigen und Bearbeiten von Einkaufslisten
@@ -143,8 +143,6 @@ image::Leave_3.png[WG verlassen, width={imgwidth}]
 . In der WG-Übersicht den Menüpunkt *WG löschen* auswählen  
 . Bestätigen, dass alle Daten der WG gelöscht werden und die WG dauerhaft gelöscht wird  
 . Die WG wird nicht mehr verfügbar sein
-
-*Hinweis:* Aktuell können **alle Mitglieder** eine WG löschen, da die **Admin-Rechte noch nicht implementiert** sind. In zukünftigen Versionen wird das Löschen nur für den **WG-Administrator** verfügbar sein.
 
 image::Delete.png[WG löschen, width={imgwidth}]
 image::Delete_2.png[WG löschen bestätigen, width={imgwidth}]

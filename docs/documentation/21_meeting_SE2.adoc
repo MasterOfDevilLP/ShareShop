@@ -1,0 +1,78 @@
+= ShareShop Projekt, Meeting 21 (SE2)
+Kevin (Product Owner)
+19.11.2025
+
+== Teilnehmer
+* Kevin
+* Benni
+* Emil
+* Valencia
+* Han
+* Anni (abwesend)
+
+== Ort
+Online-Meeting (Discord)
+
+== Themenübersicht
+
+=== 1) Frontend-Reviews + Aufgabenverteilung
+* Frontend-Tickets (z. B. Login, Rechnungen) sollen von FE untereinander reviewed werden.
+* Kevin kann bei Bedarf FE-Reviews übernehmen, Benni fokussiert sich eher auf Backend-Reviews.
+* Ziel: klare Zuständigkeiten, kein „Self-Review“.
+
+=== 2) WG-Invites, Ticketlage geklärt
+* Hinweis von Emil: Für Invites fehlten scheinbar Tickets.
+* Im Epic **„WG-Bedienung“** existiert bereits Ticket **#227 „[WG-Bedienung] Invites“**.
+* Ticket wird in den aktuellen Sprint gezogen; weitere relevante Invite-Tickets werden ebenfalls in den Sprint aufgenommen.
+
+=== 3) Tests: Fokus vorerst auf Funktionalität
+* Voll ausgebaute Unit-/Systemtests für alle Features wären aktuell **zu zeitaufwendig**.
+* Vorgehen:
+** Test-Hinweise in bestehenden Tickets (Systemtests/Unit-Tests) vorerst **nicht blockierend**.
+** Später im Projekt: einige (z. B. für ausgewählte API-Endpunkte) ergänzen, um Prüfungsanforderung zu zeigen.
+
+=== 4) Ticket #172, „Performance der Item-Abfragen prüfen“
+* Emil fragt nach Konkretisierung; aktuelle Formulierung ist zu ungenau.
+* Kevin: Performance-Hinweis war eher allgemein gedacht, nicht als spezielles Kriterium nur an dieser Stelle.
+* Tendenz:
+** Entweder Performance-Hinweis aus #172 entfernen oder generell/breiter formulieren.
+** Backend wird als hinreichend performant eingeschätzt; keine spezifische Zeitvorgabe.
+
+=== 5) Frontend-Branches, Develop-Stand + Live-Umgebung
+* Aktueller Stand:
+** Mehrere FE-Branches mit einzelnen Features (Login, Item-UI, Listenformular etc.), teils mit **hardcodierten IDs/Logins**.
+** `develop` spiegelt den tatsächlichen FE-Zustand nicht sauber wider.
+* Vereinbarter Fokus für die nächsten Tage:
+** Frontend-Arbeit an neuen Features kurz pausieren.
+** **Branches aufräumen**:
+*** Hardcodierte Logins, WG-/Listen-IDs entfernen.
+*** Views mit Startseite und Backend-API verbinden.
+*** Für fertig nutzbare Teile **Pull-Requests auf `develop`** erstellen.
+** Ziel: ein **sauberer, lauffähiger `develop`-Stand** für das gesamte Frontend.
+* Live-Umgebung:
+** Emil hostet bereits das Backend auf einem Server.
+** Neues Ticket: **„Live-Umgebung bereitstellen (Backend + Frontend)“**.
+*** Frontend soll zusätzlich auf dem Server laufen (ggf. via Docker, mit HTTP Basic Auth).
+*** Basis-Branch voraussichtlich `develop`.
+
+=== 6) Repo-Hygiene + Dateinamen
+* Bitte nicht pauschal alle lokalen Dateien committen, nur **notwendige Projektdateien** ins Repo.
+* Hinweis für Frontend:
+** Icon-Dateien derzeit teils mit **uneinheitlicher Groß-/Kleinschreibung**.
+** Auf dem Linux-Server führt das zu fehlenden Icons (case-sensitive Filesystem) -> Dateinamen konsistent halten.
+
+== Aufgaben / ToDos
+
+* **Frontend**
+** FE-Reviews: Tickets im Frontend gegenseitig reviewen (kein Self-Review).
+** Branches aufräumen: Hardcodierte Logins/IDs entfernen, echte API-Calls einbauen.
+** Fertige Stände per Pull-Request auf `develop` mergen, damit ein konsistenter Frontend-Stand entsteht.
+
+* **Repo-Hygiene**
+** Beim Committen nur relevante Dateien hinzufügen (kein lokaler „Müll“ im Repo).
+** Frontend: Konsistente Groß-/Kleinschreibung bei Icon-Dateien sicherstellen.
+
+== Nächste Schritte
+* Frontend bringt `develop` auf einen sauberen, funktionierenden Stand (inkl. API-Anbindung, ohne Hardcodes).
+* Emil richtet auf Basis von `develop` eine **Live-Instanz** für das spätere Review ein.
+* Reviews zwischen FE-/BE-Teammitgliedern werden klar verteilt und regelmäßig durchgeführt.

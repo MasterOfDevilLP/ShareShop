@@ -1,0 +1,66 @@
+= ShareShop Projekt, Meeting 23 (SE2)
+25.11.2025
+
+== Teilnehmer
+* Kevin
+* Emil
+* Han
+* Valencia
+* (Anni abwesend)
+
+== Ort
+Online-Meeting (Discord)
+
+== 1) Startseite & Termin mit Anni
+* Han berichtet: Startseite hat viele Probleme; Code ist unübersichtlich und enthält viele Hardcodes (localStorage).
+* Han & Valencia haben versucht, Annis Code zu verstehen, sind aber unsicher, ob Anni den neuesten Stand gepusht hat.
+* Geplanter Termin: Donnerstag, 15:00 Uhr (bei Anni 13:00 Uhr).
+* Ziel: Anni soll den aktuellen Stand erklären, damit Han & Valencia die Aufgabe übernehmen können.
+* Emil erwähnt: Auf dem aktuellen `develop` nutzt die Login-Seite noch nicht den API-Basenpfad aus der Config -> das muss angepasst werden.
+
+== 2) API-Probleme bei Han
+* Han: API-Endpunkte funktionieren bei ihr nicht (WG-Erstellung, Listenerstellung).
+* In Annis Review-Kommentar stand aber, dass es funktionieren soll.
+* Daher direkte Klärung mit Anni notwendig.
+
+== 3) Aufgaben im Frontend
+* Tickets, die im Scope liegen: Registrierung, Startseite, Listenerstellung, WG-Erstellung.
+* Han/Valencia können Aufgaben aus „To Do“ übernehmen, solange sie im Scope sind.
+* Noch nicht beginnen: Rechnungen, spätere Features.
+* Han: Valencia hat evtl. Blocker und keine konkrete Aufgabe, Responsive Design wäre möglich, aber eher später.
+
+== 4) Abhängigkeit von Anni
+* Team möchte Startseite-Verantwortung übernehmen, sobald Anni den Code erklärt.
+* Es ist schwierig, Aufgaben zu vergeben, solange Anni den aktuellen Stand nicht präsentiert hat.
+* Kevin soll bei Bedarf Unterstützung leisten. (dafür pingen)
+
+== 5) Backend-Status
+* Emil: Diese Woche weniger geschafft; ist aber okay.
+* Backend hat noch Aufgaben, z. B.:
+** Invites weiterführen
+** Permissions-System für WG
+
+== 6) Neues Thema: Berechtigungssystem / Permissions
+* Emil möchte ein Berechtigungssystem einführen.
+* Es gibt noch kein Ticket dafür.
+* Anmerkung: Andere Tickets gehen bereits davon aus, dass es Permissions gibt.
+* Entscheidung:
+** Kevin soll ein Ticket für das Berechtigungssystem erstellen.
+** Es gehört ins Epic „WG-Bedienung“.
+** Story + Subtasks müssen erstellt werden.
+
+* Emil beschreibt die Grundidee:
+** WG soll einen Owner haben.
+** Owner darf:
+*** WG löschen
+*** Nutzer entfernen
+** Owner kann an nächsten Nutzer übergeben werden, falls nötig.
+** Erweiterungen später möglich (mehr Permissions).
+
+== 7) Ticket-Organisation
+* Kevin fragt: Was machen wir mit alten Tickets ohne Status?
+* Diese liegen im Board auf „No Status“ herum.
+* Kevin soll sie prüfen und ggf. als „Deprecated“ markieren oder neu einordnen.
+* Kevin soll Vorschläge machen, welche Tickets veraltet sind -> Benni gibt Feedback.
+* Möglichkeit: Filter/Ansichten für Sprint- und Product-Backlog verbessern.
+

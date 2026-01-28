@@ -1,0 +1,38 @@
+= Persönliche Reflexion
+Kevin Bürger <s86415@htw-dresden.de>
+{localtime}
+include::../_includes/default-attributes.inc.adoc[]
+
+.Ausgangssituation und eigene Aufgaben
+
+Im Projekt zu Software Engineering II habe ich weieterhin die Rolle des Product Owners übernommen. Mein Schwerpunkt lag dabei auf der Strukturierung und Pflege des Product Backlogs. Konkret war ich für die Erstellung und Überarbeitung von Epics, User Stories und Tasks verantwortlich sowie für deren sinnvolle Aufteilung und Einordnung im Projektverlauf.
+
+Aus den Erfahrungen aus Software Engineering I war mir bereits bewusst, dass eine unklare Ticket-Struktur schnell zu Missverständnissen führen kann. Im ersten Semester kam es häufiger vor, dass fachliche Anforderungen und technische Details vermischt wurden oder Aufgaben zu ungenau formuliert waren. Dies führte teilweise dazu, dass Entwickler Aufgaben unterschiedlich interpretierten oder später nachgebessert werden mussten. Ziel im zweiten Semester war es daher, eine klarere und nachvollziehbarere Struktur für die Ticket-Erstellung zu etablieren.
+
+Meine Tätigkeit ist hauptsächlich dem Anforderungsmanagement sowie dem Projektmanagement im Software-Engineering-Prozess zuzuordnen.
+
+.Lösungsweg
+
+Zu Beginn des Projekts habe ich die Ticket-Struktur klar gegliedert. Epics wurden genutzt, um übergeordnete fachliche Themen abzubilden. User Stories beschrieben die gewünschte Funktionalität aus Nutzersicht, ohne technische Details vorwegzunehmen. Die konkrete technische Umsetzung wurde anschließend in Tasks ausgelagert.
+
+Im Unterschied zu Software Engineering I habe ich darauf geachtet, technische Anforderungen nicht in den User Stories zu platzieren, sondern diese gezielt auf Task-Ebene zu formulieren. Neben Implementierungs-Tasks wurden zusätzlich Analyse-Tasks eingeführt. Diese sollten nach der eigentlichen Umsetzung sicherstellen, dass Frontend und Backend auf einem einheitlichen Stand sind und die Funktionalität vollständig und konsistent umgesetzt wurde.
+
+Die Analyse-Tasks dienten unter anderem dazu, Schnittstellen abzugleichen, Validierungen zu überprüfen und sicherzustellen, dass die umgesetzte Funktion aus Nutzersicht wie erwartet funktioniert. Ziel war es, durch diese zusätzlichen Aufgaben eine höhere Qualität und Einheitlichkeit im Gesamtsystem zu erreichen.
+
+Darüber hinaus wurde zu Beginn des Projekts eine strukturierte Dokumentation der Meetings durchgeführt. Diese half insbesondere am Anfang dabei, Entscheidungen festzuhalten und offene Punkte transparent zu machen. Im Laufe des Semesters wurde die Dokumentation jedoch zunehmend in den Hintergrund gestellt. In den Retrospektiven wurde deutlich, dass die Protokolle dem Team nur einen begrenzten Mehrwert boten und offene Fragen meist schneller und effizienter direkt im Gespräch oder über Discord geklärt wurden. Entsprechend passten wir unsere Arbeitsweise an und verzichteten bewusst auf eine ausführliche Dokumentation zugunsten direkter Kommunikation.
+
+.Bewertung der Lösung
+
+Die gewählte Ticket-Struktur mit der klaren Trennung zwischen Epic, Story und Task hat sich grundsätzlich als hilfreich erwiesen. Insbesondere die Einführung von Analyse-Tasks stellte einen sinnvollen Versuch dar, nach der Implementierung einen einheitlichen Stand zwischen Frontend und Backend herzustellen.
+
+In der Praxis zeigte sich jedoch, dass dieses Vorgehen nicht immer wie geplant funktionierte. Frontend und Backend waren im Projektverlauf häufig nicht vollständig synchron, wodurch Analyse-Tasks teilweise erst spät oder unter Zeitdruck bearbeitet wurden. Dadurch konnten einige Inkonsistenzen nicht vollständig vermieden werden. Dennoch halfen die Analyse-Tasks dabei, Probleme sichtbar zu machen und strukturiert zu benennen, anstatt sie erst sehr spät zu entdecken.
+
+Auch die Anpassung der Meeting-Dokumentation erwies sich rückblickend als sinnvoll. Durch den Fokus auf direkte Kommunikation konnten Fragen schneller geklärt und Abstimmungen effizienter durchgeführt werden, auch wenn dadurch weniger formale Dokumentation entstand.
+
+Die von mir erstellten und überarbeiteten Tickets sind im GitHub-Projektboard sowie in den zugehörigen Issues dokumentiert und dienen als Beleg für meinen Beitrag.
+
+.Erkenntnisse und Lernerfahrungen
+
+Durch meine Rolle als Product Owner habe ich ein besseres Verständnis dafür entwickelt, wie wichtig eine saubere Trennung zwischen fachlichen Anforderungen, technischer Umsetzung und nachgelagerter Analyse ist. Besonders deutlich wurde mir, dass zusätzliche Analyse-Schritte zwar sinnvoll sind, ihre Wirksamkeit jedoch stark von der zeitlichen und organisatorischen Abstimmung im Team abhängt.
+
+Zudem habe ich gelernt, dass Prozesse und Arbeitsweisen regelmäßig hinterfragt und an die tatsächlichen Bedürfnisse des Teams angepasst werden sollten. Nicht jede Form der Dokumentation bringt automatisch einen Mehrwert. Diese Erkenntnisse nehme ich als wichtige Lernerfahrungen aus Software Engineering II mit.

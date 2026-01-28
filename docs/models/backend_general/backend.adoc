@@ -14,30 +14,53 @@ Logik und Datenbankanbindung lassen sich aktuell nicht ganz klar in separate Mod
 == 1. REST-API
 Der Code für die REST-API muss unter den spezifizierten Endpoints die angegebenen Funktionen bereitstellen. Dabei werden in diesem Teil nur die nötigen Parameter entgegengenommen und so wie benötigt umgeformt, gegebenfalls Validiert oder bereinigt, und an die weiteren Teile des Backends weitergegeben. Die Ergebnisse werden (wenn es welche gibt) entsprechend serialisiert und zurückgegeben.  
 
-Authentifizierung wird hier geprüft, die Implementierung davon erfolg aber in anderen Teilen (es werden dann also nur Aufrufe wie `getUser(<auth parameters>)` oder `Liste.userCanRead(user)` genutzt)
+Authentifizierung wird hier geprüft, die Implementierung davon erfolg aber in anderen Teilen (es werden dann also nur Aufrufe wie `getAuthorizedUser()` oder `Liste.userCanRead(user)` genutzt, oder einfach IDs verglichen).
 
-Serialization und Deserialization kann entweder manuell implementiert werden (lässt sich an einigen Stellen nicht vermeiden), kann aber Teilweise auch mit Bibliotheken wie gson vereinfacht werden (hier ist dann aktuell noch fraglich, wie sich am besten verschiedene Zugriffslevel umsetzen lassen wenn nötig, es scheint aber über abgeleitete Klassen relativ einfach zu gehen). gson müsste im weiteren Backendcode integriert werden, oder dies kann alternativ über abgeleitete Klassen im API-Code gemacht werden (bessere Codetrennung, aber mehr Aufwand).
+Serialization und Deserialization wird mit `gson` umgesetzt. Dabei gibt es pro Objekt jeweils eine Klasse. Objekte, welche deserialisiert werden, haben zusätzlich eine Methode, um die Daten zu validieren. Respose-Objekte werden im Konstruktor befüllt.
 
 === Beispiel
-Pseudocode Beispiel für `GET /wg/{wid}/list/{lid}`, wie die Implementierung in etwa aussehen könnte
+Beispiel für `GET /wg/{wid}/list/{lid}` (weniger relevante Teile gekürzt)
 ----
-int wgGetListState(<args>){
-    User user = getAuthenticatedUser(<auth parameters>);    // impl im weiteren Backend
-    if(user == null){
-        return 401;
+public static void epGet(Context ctx) {
+    Key<AppContext> ctxKey = new Key<AppContext>("Context");
+    
+    AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+    User usr = RestUtils.getAuthorizedUser(ctx);
+    
+    if(usr == null) {
+        RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+        return;
     }
-    WG wg = getWG(wgId);
-    if(wg == null || !wg.hasUser(user)){
-        return 401;
+    
+    UUID wgid = RestUtils.getPathParamUUIDSafe(ctx, "wid");
+    
+    try {
+        if(!usr.isUserInWG(wgid)) {
+            ...
+            return;
+        }
+        
+        WG wg = appCtx.wgManager.getWG(wgid);
+        if(wg == null) {
+            ...
+            return;
+        }
+    
+        ShoppingList slist = wg.getList(RestUtils.getPathParamUUIDSafe(ctx, "lid"););
+        if(slist == null) {
+            ...
+            return;
+        }
+        
+        ListContentResponse resp = new ListContentResponse(slist);
+        
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        ctx.contentType(ContentType.JSON);
+        ctx.result(gson.toJson(resp));
+        ctx.status(HttpStatus.OK);
+    } catch(SQLException e) {
+        ...
     }
-    ShoppingList slist = wg.getShoppingList(listId);   // impl im weiteren Backend
-    if(slist == null){
-        return 401;
-    }
-
-    ShoppingListItem[] items = slist.getCurrentState(); // impl im weiteren Backend
-    sendBody(serialize(items)); // impl. im API code
-    return 200;
 }
 ----
 
@@ -49,14 +72,12 @@ Falls eine Trennung trotzdem gewünscht ist, würde dies erstmal viel doppelten 
 == 3. Logik
 Der Logiklayer umfasst alles zwischen der Datenbank und der REST-API.
 
-Die angegebenen Funktionen sind nur ein Überblick darüber, was die Klassen können müssen und stellen keine genaue Schnittstelle dar. Es können in der Implementierung auch, wenn es sich anbietet, mehrere Funktionen in einer vereint werden, oder (wahrscheinlicher) eine Funktion auf mehrere aufgeteilt werden. Zur Veranschaulichung werden sie hier aber wie Methoden gehandhabt.
+Die angegebenen Funktionen sind nur ein Überblick darüber, was die Klassen können müssen und stellen keine genaue Schnittstelle dar, sollten aber als grobe Orientierung dienen. Es können in der Implementierung auch, wenn es sich anbietet, mehrere Funktionen in einer vereint werden, oder (wahrscheinlicher) eine Funktion auf mehrere aufgeteilt werden. Zur Veranschaulichung werden sie hier aber wie Methoden gehandhabt.
 Properties werden nur angegeben, wenn diese nicht anderweitig (z.B. aus der DB) einfach ersichtlich sind.
 
 Um generelle Anforderungen an Klassen anzuzeigen werden Tags zugewiesen:
 
-- `gson`: Klasse benötigt gson-Funktionalität
 - `DB`: Klasse kommuniziert mit der Datenbank
-- `internal`: Klasse soll nur in einem beschränkten Scope genutzt werden
 
 === UserManager
 Verwaltet Nutzer. Unterstützt Aktionen, bei welchen noch kein Handle für den User vorliegt. Alles andere wird direkt über den User gemacht.
@@ -79,34 +100,6 @@ Klasse, welche einen Nutzer repräsentiert.
 
 ==== Tags
 - `DB`
-- `gson`
-
-=== SessionsManager
-Verwaltet aktive Sessions (eingeloggte User). Zuordnung User <--> Session Token.
-
-Erstmal nur in-memory, kann eventuell auch noch mit in die Datenbank aufgenommen werden, damit Sessions länger gültig bleiben können.
-
-==== benötigte Funktionen
-- `registerSession -> token` (durch `UserManager.login`)
-- `getUser(token)` (aktualisiert `lastUsed`)
-- `checkExpireds` (regelmäßige Prüfung auf abgelaufene Sessions)
-
-==== Tags
-- `DB`
-
-=== Session
-Repräsentiert eine Session
-
-==== benötigte Funktionen
-- `close` (logout oder expired)
-- `boop` (hatte jetzt keinen besseren Namen, aktualisiert, wann die Session zuletzt genutzt wurde; für Session expiration)
-
-==== Properties
-- `lastUsed` (Timestamp)
-- `usedId`/`user`
-
-==== Tags
-- `internal`: soll nur im `SessionManager` genutzt werden, außerhalb werden Sessions immer über Token identifiziert
 
 === WGManager
 
@@ -118,7 +111,7 @@ Repräsentiert eine Session
 - `DB`
 
 === WG
-TODO: WG-spezifische Nutzerinformationen könnten entweder über `User` oder `WG` abgefragt werden, `WG` ist m.M.n sinnvoller.
+TODO: WG-spezifische Nutzerinformationen könnten entweder über `User` oder `WG` abgefragt werden, `WG` ist m.M.n sinnvoller. Aktuell gibt es außer Nutzerzugehörigkeit und Berechtigungen noch keine.
 
 ==== Funktionen
 - `set...`
@@ -133,7 +126,6 @@ TODO: WG-spezifische Nutzerinformationen könnten entweder über `User` oder `WG
 
 ==== Tags
 - `DB`
-- `gson`
 
 === ShoppingList
 
@@ -142,13 +134,12 @@ TODO: WG-spezifische Nutzerinformationen könnten entweder über `User` oder `WG
 - `get...`
 - `getCurrentList` (aktueller Stand der Liste)
 - `getListLog`  (Änderungen, ideal noch mit pagination)
-- `updateCache` (Änderungen auf gecachten Zustand übertragen, erst sinnvoll, wenn die Änderungsliste geführt wird)
+- `updateCache` (Änderungen auf gecachten Zustand übertragen, erst sinnvoll, wenn die Änderungsliste geführt wird, aktuell nicht genutzt)
 - `addChange(user, change...)` (Listenänderung eintragen)
 - `remove`
 
 ==== Tags
 - `DB`
-- `gson`
 
 === ItemManager
 
@@ -169,4 +160,3 @@ TODO: WG-spezifische Nutzerinformationen könnten entweder über `User` oder `WG
 
 ==== Tags
 - `DB`
-- `gson`

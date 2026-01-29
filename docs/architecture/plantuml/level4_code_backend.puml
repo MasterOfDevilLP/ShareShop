@@ -1,0 +1,89 @@
+@startuml c4_level4_code
+title C4-4 Code-Level
+
+skinparam classAttributeIconSize 0
+
+package "backend.managers" {
+
+  class UserManager {
+    +create(email: String, pwd: String): User
+    +login(email: String, pwd: String): User
+  }
+
+  class SessionManager {
+    logik in Session-Klasse enthalten
+  }
+
+  class WGManager {
+    +create(owner: User, name: String): WG
+    +getWG(wgId: UUID): WG
+  }
+
+  class ItemManager {
+    +createItem(wg: WG, user: User, name: String, description: String, price: BigDecimal): Item
+    +getItem(itemId: UUID): Item
+    +search(wg: WG, query: String): Item[]
+  }
+}
+
+package "backend.model" {
+
+  class User {
+    +setEmail(email: String)
+    +setPassword(password: String)
+    +getUserID(): UUID
+    +getWgIDList(): ArrayList<UUID>
+    +isUserInWG(wgId: UUID): boolean
+    +remove()
+  }
+
+  class WG {
+    +addUser(user: User)
+    +hasUser(user: User): boolean
+    +isOwner(user: User): boolean
+    +createList(user: User, name: String): ShoppingList
+    +getList(listId: UUID): ShoppingList
+    +lists(conn): ArrayList<ShoppingList>
+    +remove()
+  }
+
+  class ShoppingList {
+    +addChange(user: User, item: Item, change: Change, args...)
+    +getItemsOnList(): ArrayList<Pair<Item,Integer>>
+    +getChangeLog(start: int, end: int): ArrayList<ListChange>
+    +getShoppingListId(): UUID
+    +getName(): String
+  }
+
+  class Item {
+    +setItemName(name: String)
+    +remove()
+    +getItemID(): UUID
+    +weitere
+  }
+
+  class Session {
+    +boop()
+    +close()
+  }
+}
+
+class Database {
+  PostgreSQL
+}
+
+UserManager --> Database : JDBC
+WGManager --> Database : JDBC
+ItemManager --> Database : JDBC
+
+User --> Database : JDBC
+WG --> Database : JDBC
+ShoppingList --> Database : JDBC
+
+WG "1" o-- "0..*" ShoppingList
+ShoppingList "1" o-- "0..*" Item
+
+
+Session --> User
+
+@enduml

@@ -1,4 +1,5 @@
 = Glossar: ShareShop
+
 * Benjamin Banse Benjamin.Banse@stud.htw-dresden.de
 * Kevin Bürger Kevin.Buerger@stud.htw-dresden.de
 * Anni Nguyen Anni.Nguyen@stud.htw-dresden.de
@@ -89,7 +90,3 @@ Dieses Glossar erklärt die wichtigsten Begriffe der Einkaufslisten-App „Share
 |
 
 |===
-
-
-== Domänenmodell
-image::[width=max, title="Entity-Relationship-Modell der Einkaufslistenanwendung"]

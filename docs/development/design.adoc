@@ -82,7 +82,7 @@ Fast alle Endpunkte benötigen eine gültige Session. Fehler wie „nicht eingel
 
 Unsere Endpunkte sind mit Javalin umgesetzt. Jeder Bereich (z.B. Listen, Items) hat eine eigene Klasse, in der alle zugehörigen Routen registriert werden z.B. `ListEndpoints.java` oder `ItemEndpoints.java`. Die API prüft bei jeder Anfrage, ob der Nutzer eingeloggt ist und zur jeweiligen WG gehört.
 
-Für Anfragen nutzen wir eigene Request-Objekte wie `CreateItemRequest`. JSON wird mit `gson` (de)serialisiert. Felder ohne `@Expose`-Annotation werden dabei ignoriert.
+Für Anfragen nutzen wir eigene Request-Objekte wie `CreateItemRequest.java` wird mit `gson` (de)serialisiert. Felder ohne `@Expose`-Annotation werden dabei ignoriert.
 
 Ein typischer Ablauf für `POST /wg/{wid}/item` sieht so aus:
 
@@ -91,26 +91,25 @@ Ein typischer Ablauf für `POST /wg/{wid}/item` sieht so aus:
 - Request wird validiert
 - Neues Item wird erstellt und als JSON zurückgegeben
 
-Mehr Infos zum genauen Aufbau der Logik gibt es hier:  
+Mehr Infos zum genauen Aufbau der Logik gibt es hier:
 <<../models/backend_general/backend.adoc#, backend.adoc>>
 
 === Invite-System
 
-Nutzer können einer WG nur über Einladungen hinzugefügt werden. Der Einfachheit halber werden keine Einladungen direkt verschickt (Einbindung von E-Mailversand wäre zu viel unnötiger Aufwand, und ein Versand innerhalb der Applikation würde ebenfalls mehr zusätzlichen Aufwand bedeuten), sondern nur Einladungscodes generiert, welche über externe Wege an die Zielnutzer weitergegeben werden müssen.
-Die Nutzerfreundlichkeit dieses Systems ist nicht ideal, Erweiterungen für einfachere Bedienung wären jedoch nicht zu kompliziert umzusetzen.
+Nutzer können einer WG nur über Einladungen hinzugefügt werden. Dafür wird ein Einladungscode generiert, welchen man dann als Link direkt teilen kann, oder durch einen QR-Code direkt scannen kann.
 
 Ablauf:
 ```
 Nutzer A                      Anwendung
     Invite für meine WG x bitte
   -------------------------------->
-        Invite-Code
+        Invite-Link
   <--------------------------------
 
-Nutzer A schickt Code an Nutzer B
+Nutzer A schickt Link an Nutzer B
 
 Nutzer B                      Anwendung
-        Invite Code y einlösen
+        Invite Link aufrufen
   -------------------------------->
                 OK
   <--------------------------------
@@ -121,19 +120,19 @@ Detailliert
 Client                        Backend
      POST create invite for WG
   ------------------------------->
-          Invite code/Error
+          Invite Link/Error
   <-------------------------------
 
 
 Client 2                      Backend
 |---                               ---|
-|      GET invite info for code       |
+|      GET invite info for Link       |
 |  ------------------------------->   |
 |        Invite info/Error            |
 |  <-------------------------------   |
 |___                               ___|
 
-      POST accept invite code
+      POST accept invite link
   ------------------------------->
             OK/Error
   <-------------------------------
@@ -141,28 +140,26 @@ Client 2                      Backend
 
 === Frontend-Architektur & Designentscheidungen
 
-* **Framework & Build-Tool**  
-  Vue.js (3.5.x) verwendet mit Vite (inkl. @vitejs/plugin-vue) für schnelles Entwickeln und Bauen
+* **Framework & Build-Tool**
+  HTML, CSS und Javascript mit Vue (2 & 3) framework für die Entwicklung der Anwendung.
 
-* **Projektstruktur (`src/`)**  
-  - `main.js`: Einstiegspunkt, lädt `App.vue` und CSS  
-  - `App.vue`: Root-Komponente, zeigt `AuthWrapper`  
-  - `components/`:  
-    • `AuthWrapper.vue`: Umschaltung zwischen Login und Registrierung  
+* **Projektstruktur (`src/`)**
+  - `App.vue`: Root-Komponente, zeigt `AuthWrapper`
+  - `components/`:
+    • `AuthWrapper.vue`: Umschaltung zwischen Login und Registrierung
     • `LoginForm.vue` & `RegisterForm.vue`: Formulare mit reaktiven Eingaben und Sprachumschaltung (DE/EN)
 
-* **Formular‑ & Sprach-Logik**  
-  - `LoginForm.vue`:  
-    • `v-model` für Benutzername und Passwort  
-    • DE/EN-Toggle über Buttons  
+* **Formular- & Sprach-Logik**
+  - `LoginForm.vue`:
+    • `v-model` für Benutzername und Passwort
+    • DE/EN-Toggle über Buttons
     • Event `switchMode` zum Wechsel der Formulare
 
-* **Styling**  
-  - Global: `style.css` aus `src`  
-  - Komponenten-spezifisch: Scoped CSS in `.vue`-Dateien (Cards, Buttons etc.)   
-  - Einheitliches Design: z. B. abgerundete Ecken, Schatten, mobile Breite
+* **Styling**
+  - Komponenten-spezifisches Styling: Mehrere style.css-Dateien, die jeweils für spezifische Komponenten zuständig sind. Diese sind lokal und wirken sich nur auf die jeweilige Komponente aus.
+  - Einheitliches Design: z. B. abgerundete Ecken, Schatten, mobile Breite.
 
-* **Tooling & Dev-Workflow**  
-  - Entwicklung: `npm run dev` (Vite) → Live-Reload  
-  - Build: `npm run build`; lokale Vorschau mit `npm run preview`  
-  - Dev-Setup unterstützt durch `docker-compose.yml`, `.editorconfig`, `.markdownlint.json`
+* **Tooling & Dev-Workflow**
+  - Entwicklung: `npm run start` → Startet den Live Server und öffnet die Anwendung im Browser.
+  - Testen: Die Anwendung wird direkt im Browser über Live Server getestet.
+

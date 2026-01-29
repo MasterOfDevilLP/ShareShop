@@ -13,18 +13,18 @@ Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Be
 //Anmerkung: Die Architektur legt wesentliche EINSCHRÄNKUNGEN für den Systementwurf fest und ist ein Schlüssel für die Erfüllung nicht-funktionaler Eigenschaften!
 
 
-== Architekturziele 
+== Architekturziele
 .Als Ansatz wurden folgende Kriterien besonders hervorgehoben, um unsere Architektur sicher und wartbar zu machen:
 * Sicherheit: Da viele User unser Produkt benutzen werden, ist es von nöten, dass man als Aussenstehender keinen Zugriff auf persönliche Informationen erhält. Darunter zählt auch das Kaufverhalten der Nutzer, welches sich durch unsere App ableiten lassen kann.
-* Offline-Funktionalität: Unser Produkt soll zwar schnell synchronisierbar sein, um den Austausch innerhalb einer WG gewährleisten zu können, jedoch benötigt man (leider) auch eine Offline-Funktionalität für den Einkaufsprozess. Da in Deutschland die Netzabdeckung als auch die Verbindungsqualität eher schwach ist, kann es daher vorkommen, dass man in Einkaufszentren keinerlei Netz hat, um sich dort die Einkaufsliste der WG abzufragen. 
+* Offline-Funktionalität: Unser Produkt soll zwar schnell synchronisierbar sein, um den Austausch innerhalb einer WG gewährleisten zu können, jedoch benötigt man (leider) auch eine Offline-Funktionalität für den Einkaufsprozess. Da in Deutschland die Netzabdeckung als auch die Verbindungsqualität eher schwach ist, kann es daher vorkommen, dass man in Einkaufszentren keinerlei Netz hat, um sich dort die Einkaufsliste der WG abzufragen.
 * Wartbarkeit: Durch ein hohes Kundenaufkommen ist es sehr wahrscheinlich, dass sich schnell Bugs als auch Feature-Wünsche äußern werden. Vorallem auf den Aspekt Features müssen wir gewährleisten, dass der Code strukturiert und wartbar ist. Nur so können wir in einer wachsenden Branche dafür sorgen, dass unser Produkt stets das beste Produkt ist.
-* Hardware unabhängig: Als Vertriebler können wir nicht sagen, mit welcher Hardware die Nutzer unser Produkt verwenden wollen. Daher ist es wichtig dass wir unser Produkt so aufbauen, dass es nicht zu rechenaufwändig ist und die Logik eher auf unseren Servern gehostet wird. Ob sich diese geforderte Eigenschaft mit der Offline-Funktionalität beißt, wird sich in Zukunft zeigen... 
-* PWA: Wir gehen davon aus, dass alle Nutzer diese Webapp auf ihren mobilen Geräten nutzen wollen. Daher ist es sinnvoll eine geeignete PWA zu bauen, die das gewährleistet. Eine Webanwendung für den PC ist zwar auch angebracht, jedoch nicht unser Hauptaugenmerk.
+* Hardware unabhängig: Als Vertriebler können wir nicht sagen, mit welcher Hardware die Nutzer unser Produkt verwenden wollen. Daher ist es wichtig dass wir unser Produkt so aufbauen, dass es nicht zu rechenaufwändig ist und die Logik eher auf unseren Servern gehostet wird.
+
 
 == Annahmen und Abhängigkeiten
 .Annahmen an das Team:
 * Grundkenntnisse, welche für das jeweilige Team (Backend/Frontend/Organisation) geeignet sind.
-* Grundkenntnisse in Organisationstools wie Github. 
+* Grundkenntnisse in Organisationstools wie Github.
 * Fähigkeit, zu kommunizieren, sachlich zu diskutieren und Kompromisse zu schaffen.
 * Die Technische Möglichkeit haben, an Meetings teilzunehmen und zu programmieren/organisieren.
 * Die Organisation kümmert sich regelmäßig um Fragen und Dokumentation
@@ -44,25 +44,24 @@ Dieses Dokument beschreibt die Philosophie, Entscheidungen, Nebenbedingungen, Be
 
 == Entscheidungen, Nebenbedingungen und Begründungen
 //[List the decisions that have been made regarding architectural approaches and the constraints being placed on the way that the developers build the system. These will serve as guidelines for defining architecturally significant parts of the system. Justify each decision or constraint so that developers understand the importance of building the system according to the context created by those decisions and constraints. This may include a list of DOs and DON’Ts to guide the developers in building the system.]
-TODO:
-. Entscheidung für DB PostgreSQL: offen, läuft auf allen Betriebssystemen, einfache Benutzung
-. Entscheidung für Javalin statt Spring, da für unseren Anwendungsfall Spring zu kompliziert ist + weniger Erfahrung als mit Javalin
-. Entscheidung für Vue.js statt plain js, damit Code übersichtlicher bleibt
-. Entscheidung für Java als Programmiersprache, da mehr Erfahrung vorhanden als bei Python+Flask
+. Entscheidung für DB `PostgreSQL`: offen, läuft auf allen Betriebssystemen, einfache Benutzung
+. Entscheidung für `Javalin` statt Spring, da für unseren Anwendungsfall Spring zu kompliziert ist + weniger Erfahrung als mit Javalin
+. Entscheidung für `Vue.js` statt plain js, damit Code übersichtlicher bleibt
+. Entscheidung für `Java` als Programmiersprache, da mehr Erfahrung vorhanden als bei Python+Flask
 
 === Einkaufslistenbearbeitung über Diffs
 Einkaufslisten werden bearbeitet, indem nicht der neue Zustand geschickt wird, sondern was wie verändert wurde. Dies hat mehrere Gründe:
 
 - für die meisten Änderungen ist der genaue Zustand der Liste wenig relevant. Wenn etwas benötigt wird, wird es mit auf die Liste geschrieben (sofern nicht schon vorhanden, dies müsste der Nutzer jedoch in jedem Fall prüfen), und wenn etwas gekauft wurde, kann die entsprechende Menge abgehakt werden. Dafür ist es jeweils nicht nötig, den genauen neuen Zustand direkt zu schreiben, da der Nutzer jeweils nur die Änderungen sicher kennt, die er vornehmen möchte.
-- abgesehen von potentiell negativen Anzahlen ist so keine Synchronisierung der Clients nötig, ohne welche es sonst zum Lost Update kommen könnte (eine alternative, deutlich sinnvollere Lösung wäre hier, dass die Clients immer einen Zeitstempel des letzten ihnen bekannten Zustands mit schicken, woraus die Differenzen berechnet werden können, was jedoch unnötig kompliziert ist).  
-- für den Offlinemodus können so einfach alle Änderungen aufgezeichnet und später abgeschickt werden  
+- abgesehen von potentiell negativen Anzahlen ist so keine Synchronisierung der Clients nötig, ohne welche es sonst zum Lost Update kommen könnte (eine alternative, deutlich sinnvollere Lösung wäre hier, dass die Clients immer einen Zeitstempel des letzten ihnen bekannten Zustands mit schicken, woraus die Differenzen berechnet werden können, was jedoch unnötig kompliziert ist).
+- für den Offlinemodus können so einfach alle Änderungen aufgezeichnet und später abgeschickt werden
 - für den Audit Log einer Liste müssen Diffs ebenfalls nicht extra berechnen werden, was den Code vereinfacht
 - Diff-Berechnung auf den Client ist simpler, da dieser nur einen möglichen Zustand zum Vergleichen hat
 
 == Schichten oder Architektur-Framework
 //[Describe the architectural pattern that you will use or how the architecture will be consistent and uniform. This could be a simple reference to an existing or well-known architectural pattern, such as the Layer framework, a reference to a high-level model of the framework, or a description of how the major system components should be put together.]
 .Beschreibung
-* Die Basis unserer Architektur bildet das Backend, welches eine Verbindung zu der Datenbank besitzt. Hierüber wird die Logik für das erstellen, bearbeiten und löschen von Daten implementiert. Über eine REST-Schnittstelle kann das Frontend mit dem Backend kommunizieren. Diese REST-Schnittstelle sorgt dafür, dass mithilfe von User-Input aus dem Frontend die jeweilige Logik im Backend angestoßen wird. Unser System wird, abgesehen von der Offline-Funktionalität, Serverseitig funktionieren. 
+* Die Basis unserer Architektur bildet das Backend, welches eine Verbindung zu der Datenbank besitzt. Hierüber wird die Logik für das erstellen, bearbeiten und löschen von Daten implementiert. Über eine REST-Schnittstelle kann das Frontend mit dem Backend kommunizieren. Diese REST-Schnittstelle sorgt dafür, dass mithilfe von User-Input aus dem Frontend die jeweilige Logik im Backend angestoßen wird. Unser System wird, abgesehen von der Offline-Funktionalität, Serverseitig funktionieren.
 
 
 == Architektursichten (Views)
@@ -72,22 +71,14 @@ Einkaufslisten werden bearbeitet, indem nicht der neue Zustand geschickt wird, s
 //Level 1 im C4-Modell
 
 === Container
-//Level 2 im C4-Modell
-[plantuml, "{diagramsdir}/c4", svg]
-....
-include::plantuml/container.puml[]
-....
-==== As Picture:
-image::../images/container_puml.png[Container Diagram]
+image::../images/C4_2_container_puml.png[Container Diagram]
 
 === Components
-//Level 3 im C4-Modell
-[plantuml, "{diagramsdir}/c4", svg]
-----
-include::plantuml/components.puml[]
-----
-==== As Picture:
-image::../images/components_puml.png[Component Diagram]
+image::../images/C4_3_components_puml.png[Component Diagram]
+
+=== Code
+image::../images/C4_4_backend_puml.png[Code Diagram Backend]
+image::../images/C4_4_frontend_puml.png[Code Diagram Backend]
 
 === Verteilungsdiagramm (Deployment Diagramm)
 //Beschreibt die physischen Knoten (Rechner) des Systems und Komponenten, die in diesen Knoten ausgeführt werden. Diese Sicht wird nicht benötigt, wenn das System in einem einzelnen Prozess oder Thread ausgeführt wird.

@@ -1,0 +1,12 @@
+@startuml c4_level1_context
+!include <c4/C4_Context.puml>
+
+title C4-1 System Context: ShareShop
+
+Person(user, "User", "Mitbewohner:in, der/die Einkaufslisten in einer WG verwaltet")
+
+System(wgSystem, "ShareShop", "WG Shopping System: Verwaltet WG, Nutzer und erstellt Einkaufslisten")
+
+Rel(user, wgSystem, "Nutzt", "HTTPS (PWA)")
+
+@enduml

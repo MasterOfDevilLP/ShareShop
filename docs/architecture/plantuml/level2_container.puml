@@ -1,0 +1,27 @@
+@startuml c4_level2_container
+!include <c4/C4_Container.puml>
+
+LAYOUT_WITH_LEGEND()
+
+title C4-2 Container: ShareShop
+
+Person(user, "User")
+
+System_Boundary(wgSystem, "WG Shopping System") {
+
+    Container(spa, "Web App (PWA)", "Vue.js", "UI für Login, WG-Auswahl, Einkaufslisten & Items")
+
+    Container(nginx, "Nginx", "Reverse Proxy + Static Hosting","proxy't API Requests an das Backend")
+
+    Container(api, "Backend API", "Java (Javalin)", "REST API für User, WG, Sessions, Shopping Lists, Items")
+
+    ContainerDb(db, "Database", "Relationale DB (postgreSQL)", "Persistiert User/WG/Listen/Items/sessions/...")
+}
+
+Rel(user, spa, "Bedient", "HTTPS")
+Rel(spa, nginx, "Lädt Assets / nutzt API über", "HTTPS")
+
+Rel(nginx, api, "Reverse proxy", "HTTP/HTTPS")
+Rel(api, db, "Liest/schreibt", "JDBC")
+
+@enduml

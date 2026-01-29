@@ -1,0 +1,37 @@
+= Projektreflexion: Einzelleistung
+Benjamin Banse <s86480@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Ausgangssituation / Aufgaben
+
+.Meine Aufgaben umfassten unter anderem:
+* Anwendung und Erforschung gängiger SCRUM-Methodiken
+* Moderation von Dailies, Reviews & Retrospektiven
+* Code-Reviews für Backend
+* Durchführung von Sprint-Planning, Workload-Schätzung und Brücke zwischen den Teams bei Problemen
+
+== Einordnung in den SE-Prozess:
+Ich habe als Scrum-Master und Projektleiter im wesentlichen versucht, dem Team so viele Hindernisse aus dem Weg zu räumen, die sie am bewältigen ihrer Aufgaben hindern würde.
+Ich habe z.B. die Brücke zwischen Front- und Backend Aufrecht erhalten, in dem ich aktiv Partner aus beiden Sub-Teams zusammengebracht habe und Termine vereinbart habe, sodass diese dann das Problem beseitigen können.
+Desweiteren habe ich darauf geachtet, dass Tickets für das Team verständlich sind und der Workload sich bei beiden  Teams in Grenzen hält. Gelegentlich habe ich auch Tickets selbst neu verfasst, wenn die Anforderungen zu ungenau waren.
+Ich habe Termine moderiert, sodass Gespräche nicht untergingen und jeder seine Probleme oder Anregungen anmerken konnte.
+
+Neben der Tätigkeit eines Scrum-Masters habe ich auch Code-Reviews für das Backend übernommen, da diese unterbesetzt waren (2 Backend vs 3 Frontend).
+Außerdem habe ich bei leichteren Code-Problemen ausgeholfen, sofern es mir meines Wissenstandes möglich war.
+
+Ein weiterer Aspekt ist die Dokumentation. Da Ich als Scrum-Master nicht die besten Übersichten des Codes habe, setzte ich andere Team-Mitglieder auf die Bewältigung dieser Dokumentationen an.
+Das sorgt zum einen für eine klar-dokumentierte Umgebung, aber auch als Entlastung für Aufgaben, welche ich für andere Mitglieder erledigt habe.
+
+Ein weiterer Aspekt war die Erstellung und Haltung jeglichster Präsentationen in diesem Semester. Ich habe mich freiwillig dazu entschieden diese Arbeiten alleine zu bewältigen, da mein Team bereits voll ausgelastet war mit der eigentlichen Entwicklung.
+Die Arbeit in 2 Zeitzonen hat da natürlich extremst gegengewirkt, sodass die Balance für Frontend und Backend zunehmend weiter unterschied.
+
+
+== Bewertung
+Insgesamt konnte ich meine Aufgaben insgesamt mittelmäßig bis gut umsetzen. Die Bewältigung von meinen Scrum-Master Aufgaben ist jedoch teilweise eingebrochen, da andere Aufgaben wie zb. die Vorstellungen des Wissensaustausches viel Arbeit gekostet hatten. Auch die Kommunikation bzw. Durchsetzung einiger Methodiken war manchmal schwer.
+
+Ein deutliches Problem war meinerseits der fehlende Wissensaustausch an mich. Ich konnte mir mein Wissen nur durch dailies oder Chatverläufe aufgreifen, was es schwieriger gemacht hat anderen helfen zu können.
+
+Einen Punkt, den ich mir selbst ankreide, ist das fehlende Sprint-Planning mit dem kompletten Team. Meistens habe ich das Planning alleine oder mit dem PO gemacht, was dafür sorgte, dass ich schlechter einschätzen konnte, wie lange das Team für die Aufgaben des jeweiligen Sprints braucht. Hätte ich hier mich durchgesetzt und den Termin eingeführt (obwohl es seitens des Teams Ablehnung für einen weiteren Termin gab), dann wäre die Balance im Team bestehen geblieben.
+
+Die wichtigste Erkenntnis aus diesem Projekt ist für mich, wie wichtig gute Kommunikation im Team ist. Als Scrum-Master ist die besonderheit, jedem Teammitglied zuzuhören und Vorschläge anzunehmen, jedoch auch eigene Ideen durchzusetzen, um andere Methodiken auszuprobieren.

@@ -75,7 +75,7 @@ Wir arbeiten im vierwöchigen Sprint-Zyklus. Das Team nutzt ein gemeinsames Kanb
 
 == Deployment (bereitstellung der Software)
 
-Aktuell arbeiten wir daran, unsere Software so vorzubereiten, dass sie einfach gestartet und genutzt werden kann. 
+Aktuell arbeiten wir daran, unsere Software so vorzubereiten, dass sie einfach gestartet und genutzt werden kann.
 Das für uns im Team als auch später für andere.
 
 Neu: Aktuell arbeiten wir daran, den Prototypen vorführfertig zu machen, und gewisse Features zu überarbeiten, sodass im nächsten Sprint jeder weiß, was noch auf uns zu kommt.
@@ -100,6 +100,26 @@ Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwen
 * Als ProjektOwner/Scrum-Master muss man aktiv auf seine Kollegen zugehen - Fragen werden damit schneller geklärt.
 * Code-Spezifikationen wie Schreibweise (CamelCase oder snake_case) sowie die Strukturierung und Namensgebung von Ordner und Dateien sollte wenn möglich bereits zu Beginn des Projektes festgehalten sein, damit NameErrors nicht passieren und der Code strukturiert bleibt.
 * Die Aufteilung des Teams in einzelne Unterteams war zwar anfangs effektiv, jedoch hat sich zum Ende des 1. Semesters gezeigt, dass die Kommunikation bzw. auch die Kompetenz gefehlt hat, um die jeweiligen Fachgebiete wieder zusammen zu führen. Hier hätte man für mehr Kommunikation sorgen sollen, sodass beide Teams wissen, wie die Verbindung gebaut werden kann.
+
+== Risiken während der Entwicklung
+
+Es gibt während der Entwicklungszeit auch Risiken, mit der man im Team rechnen muss und welche man auch bewältigen muss,
+ohne dabei die Effektivität des Teams bzw. der Entwicklung einzuschränken.
+
+* Krankheitsausfall:
+** Gegenmaßnahme/Umgang: Bei Krankheitsbedingtem Ausfall muss man durch Vertretungsregelung, Wissensdokumentation oder Pufferzeiten gegensteuern. Da Eine Vertretung in einem solch kleinen Team jedoch schwer realisierbar ist, sprechen die anderen beiden Punkte mehr auf das Ziel an.
+
+* Zeitdruck:
+** Gegenmaßnahme/Umgang: Bei Zeitdruck muss die Aufwandsschätzung neu überarbeitet werden, damit sich Altlasten nicht über mehrere Sprints ziehen. Das sorgt für Zeitdruck innerhalb des Teams. Auch regelmäßige Status-Abfragen können dazu beitragen, solche Krisen frühzeitig zu erkennen.
+
+* Inhaltliche Unklarheit:
+** Gegenmaßnahme/Umgang: Bei diesem Risiko muss man eine gute Balance zwischen Absprachen in Dailies, Wissensdokumentation als auch klare Anforderungsdefinitionen finden. Je besser die Tickets vorher besprochen (bspw. in Plannings) wurden, desto besser sind die inhaltlichen Anforderungen und desto geringer ist das Risiko inhaltlich festzustecken.
+
+* Technische Risiken:
+** Gegenmaßnahme/Umgang: Man kann das Risiko, an einer unreifen Technologie festzustecken, verhindern, indem man vorher Machbarkeitsanalysen durchführt. Diese können anhand eines Prototypen oder genauerer Recherche absolviert werden.
+
+* Rechtliche Risiken:
+** Gegenmaßnahme/Umgang: Sollte sich etwas an den Gesetzen durch den Gesetzesgeber ändern, so sollte man möglichst schnell handeln und jeglichste Themen, welche damit zu tun haben, gut dokumentieren. So kann später schneller und effektiver gehandelt werden.
 
 == Links
 * GitHub Sprint-Backlog:

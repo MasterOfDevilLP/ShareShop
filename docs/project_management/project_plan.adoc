@@ -75,23 +75,15 @@ Wir arbeiten im vierwöchigen Sprint-Zyklus. Das Team nutzt ein gemeinsames Kanb
 
 == Deployment (bereitstellung der Software)
 
-Aktuell arbeiten wir daran, unsere Software so vorzubereiten, dass sie einfach gestartet und genutzt werden kann.
-Das für uns im Team als auch später für andere.
+Die Software wird auf einem Server deployed, zu welchem der Betreiber Zugang erhält. Nutzer können sich dann über eine gewählte URL mit der App kommunizieren und sie verwenden.
 
-Neu: Aktuell arbeiten wir daran, den Prototypen vorführfertig zu machen, und gewisse Features zu überarbeiten, sodass im nächsten Sprint jeder weiß, was noch auf uns zu kommt.
-
-Folgende Schritte haben wir bereits unternommen:
-
-* **Datenbank vorbereiten**: Florian hat eine Test-Datenbank erstellt und ein Skript entwickelt, mit dem diese Datenbank automatisch eingerichtet werden kann. Das bedeutet, dass niemand die Datenbank manuell einrichten muss; das Skript übernimmt das für uns.
-
-* **Automatischer Start der Anwendung**: Wir planen, unsere Anwendung so zu verpacken, dass sie mit einem einzigen Befehl gestartet werden kann. Dafür nutzen wir ein Tool namens Docker. Es sorgt dafür, dass alle benötigten Teile der Anwendung zusammenarbeiten und auf jedem Computer gleich funktionieren.
-
-Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwendung problemlos starten und verwenden kann, ohne sich um technische Details kümmern zu müssen.
-
-* **Entwicklung Frontend**: Wir haben zuerst das Design und Anwendung des Frontends geplant und nun in Code übersetzt. Funktionen, welche durch die REST-API noch nicht übernommen werden, sind momentan durch plain json/js "gemocked".
+Die Software unterteilt sich momentan noch in einzelne Docker-Container, welche untereinander Kommunizieren. Für den momentan Stand reicht dieses Deployment vollkommen aus.
+Sobald die Software jedoch in eine Live-Umgebung wechselt (also für Kunden sichtbar), so müsste eine andere Methode fürs Deployment gesucht werden, da sonst der Traffic für die Docker-Container zu groß wäre.
+Für die Produktiv/Live-Umgebung werden wir wahrscheinlich auf Docker-Swarm zurückgreifen, da man damit sein Produkt skalierbar anhand des Traffics ausrollen kann.
 
 == Erkenntnisse (Lessons Learned)
 
+=== Erkenntnisse aus SE1
 * Zwei Pflicht-Dailies pro Woche waren zunächst zu viel – Donnerstagstermin wurde als freiwillig deklariert.
 * Das frühzeitige Definieren von Branching- und Pull-Request-Standards war sinnvoll zur Qualitätssicherung.
 * Modellierung ist essenziell für gute Sprintplanung – besonders beim Backend hilfreich für Ticketdefinition.
@@ -100,6 +92,15 @@ Unser Ziel ist es, dass jeder im Team (und später auch andere Nutzer) die Anwen
 * Als ProjektOwner/Scrum-Master muss man aktiv auf seine Kollegen zugehen - Fragen werden damit schneller geklärt.
 * Code-Spezifikationen wie Schreibweise (CamelCase oder snake_case) sowie die Strukturierung und Namensgebung von Ordner und Dateien sollte wenn möglich bereits zu Beginn des Projektes festgehalten sein, damit NameErrors nicht passieren und der Code strukturiert bleibt.
 * Die Aufteilung des Teams in einzelne Unterteams war zwar anfangs effektiv, jedoch hat sich zum Ende des 1. Semesters gezeigt, dass die Kommunikation bzw. auch die Kompetenz gefehlt hat, um die jeweiligen Fachgebiete wieder zusammen zu führen. Hier hätte man für mehr Kommunikation sorgen sollen, sodass beide Teams wissen, wie die Verbindung gebaut werden kann.
+
+=== Erkenntnisse aus SE2
+* Fehlendes Sprint-Planning hat dazu geführt, dass Unklarheiten der Themen entstanden sind und die Work-Balance zwischen den beiden Sub-Teams sehr schlecht war.
+* Die Einführung eines PR-Kanals in Discord hat das Problem der dauerhaft-offenen Pull-Requests deutlich verringert.
+* Die Einhaltung von "Definition of Done" hätte uns einiges an Problemen in der Sturktur als auch in Merge-Conflicts erspart.
+* Ohne gute Vorbereitung und Alternativen Kommunikationswegen war es schwierig, in 2 verschiedenen Zeitzonen miteinander zu arbeiten
+* Automatisierte Github-Checks hätten uns bei sturkturellen Problemen (Einhaltung der Code-Richtlinien) geholfen.
+* Innere Reviews haben kleinere Bugs vorgehoben, welche sonst untergegangen werden.
+* Retrospektiven haben geholfen, Probleme anzusprechen und dementsprechende Lösungen auszuprobieren.
 
 == Risiken während der Entwicklung
 

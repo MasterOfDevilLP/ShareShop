@@ -1,5 +1,5 @@
 // --- 1. Projektthema -------------------------
-= SE I - Belegabgabe: {project-name}
+= SE II - Belegabgabe: {project-name}
 // --- 2. Teammitglieder -----------------------
 Benjamin Banse <s86480@htw-dresden.de>; Kevin Buerger <s86415@htw-dresden.de>; Emil Hempel <s86451@htw-dresden.de>; Florian Suessmann <s86423@htw-dresden.de>; Phuong Anh Nguyen <s87098@htw-dresden.de>; Huyen-Bao-Han Nguyen <s87044@htw-dresden.de>; Valencia Melvika <s86971@htw-dresden.de>
 // --- 3. Abgabedatum --------------------------

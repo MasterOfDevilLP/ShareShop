@@ -1,4 +1,5 @@
 = Test Cases: {project-name}
+
 * Benjamin Banse benjamin.banse@stud.htw-dresden.de
 * Kevin Bürger kevin.buerger@stud.htw-dresden.de
 * Anni Nguyen anni.nguyen@stud.htw-dresden.de
@@ -8,12 +9,74 @@
 * Han Nguyen huyenbaohan.nguyen@stud.htw-dresden.de
 
 {localdatetime}
-include::../_includes/default-attributes.inc.adoc[]
-// Platzhalter für weitere Dokumenten-Attribute
-
+include::../_includes/default-attributes.inc
 
 == Allgemeine Informationen
-Hier werden in Zukunft Test-Cases festgehalten. zum jetzigen Stand wurden aus zeitlichen Gründen und fehlender Kompetenz zu diesem Thema keine Testcases mit Unittest o.ä. erstellt. Um die Kompetenz hier zu steigern, wird die Organisation (Scrum-Master) im nächsten Zyklus dazu einen Termin pflegen. In diesem Termin werden grundlegende Ideen und Funktionalitäten zu Test-Cases erklärt.
+Hier werden Test-Cases festgehalten. In diesem Projekt wurden zu beginn Integration-Tests geschrieben, später dann nur noch System-Tests. Dafür hat es den Grund, dass Unittests zu spät eingeführt wurden und Integration-Tests später zu aufwendig wurden, um die Persistenz-Schicht zu testen. Daher wurde die Gesamtheit getestet in Form von System-Tests. Diese begannen bei der REST-API und überprüften die Rückgabe an das Frontend.
 
-== Test Cases
-**Noch keine**
+== Test Cases (Backend)
+=== `TCItem.java`
+
+
+- `testItemConstructorFromUUID`` – Prüft das Erstellen eines Items aus bestehender UUID
+
+- `testItemConstructorNewItem` – Prüft das Erstellen eines neuen Items
+
+- `testItemSetter` – Testet Setter-Methoden
+
+- `testItemRemove` – Prüft korrektes Entfernen eines Items aus DB
+
+=== `TCShoppingList.java`
+
+- `testListSetName` – Prüft Setzen & Aktualisieren des Namens einer Einkaufsliste
+
+- `testListGetItems` – Prüft Laden der Items einer Einkaufsliste
+
+- `testListChanges` – Testet Änderungen an Liste
+
+=== `TCUser.java`
+
+- `testUserConstructorFromUUID` – Prüft das Erstellen eines Users aus einer bestehenden UUID
+
+- `testUserConstructorNewUser` – Prüft das Anlegen eines neuen Users
+
+- `testUserGetWgList` – Testet WG-Zugehörigkeit eines Users
+
+- `testUserInWg` – Prüft Mitgliedschaft eines Users in WG
+
+- `testUserRemove` – Prüft Entfernen eines Users aus DB
+
+
+=== `TCWG.java`
+
+- `testWgConstructorFromUUID` – Prüft das Erstellen einer WG aus bestehenden UUID
+
+- `testWgConstructorFromWriteUser` – Prüft Erstellen einer WG mit Ersteller-User
+
+- `testWgAddUser` – Testet Hinzufügen eines Users zur WG
+
+- `testWgRemoveUser` – Testet Entfernen eines Users aus WG
+
+- `testWgShoppingList` – Prüft Verknüpfung und Verwaltung von Einkaufslisten einer WG
+
+=== `TCRestUser.java`
+
+- `testEpCreate` – Prüft erfolgreiches Erstellen eines Users
+
+- `testEpCreateExisting` – Prüft Fehlerfall bei Erstellung eines existierenden Users
+
+- `testEpLogin` – Testet erfolgreichen Login
+
+- `testEpLoginFail` – Testet fehlgeschlagenen Login
+
+- `testLogout` – Prüft korrektes Logout-Verhalten
+
+=== `TCRestWG.java`
+
+- `testEpCreate` – Prüft Erstellen einer WG
+
+- `testEpCreateNoUser` – Prüft Fehlerfall beim Erstellen von WG ohne gültigen User
+
+- `testEpPatch` – Testet das Aktualisieren einer WG
+
+- `testEpPatchWrongWID` – Prüft Fehlerbehandlung bei ungültiger WG-ID

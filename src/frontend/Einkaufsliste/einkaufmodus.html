@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Einkaufsmodus</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <div class="iphone-app">
+        <header class="app-header">
+          <a href="einkaufsliste.html">
+            <button class="icon-btn"><img src="icons/arrow_back.png" /></button>
+          </a>
+          <span class="site-titel">{{ list_name }}</span>
+        </header>
+
+        <main class="app-content">
+          <div class="product-list">
+            <div
+              v-for="product in listItems"
+              :key="product.iid"
+              class="product-card"
+              :class="{ 'product-ticked': isTicked(product) }"
+            >
+              <div class="product-icon">
+                <img :src="getIcon(product.kategorie)" />
+              </div>
+              <div class="product-info">
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-meta">
+                  Menge: {{ product.amount }} {{ product.einheit }}
+                </div>
+              </div>
+              <div class="product-price-wrapper">
+                <img
+                  src="icons/Stift.png"
+                  class="edit-price-icon"
+                  @click="openPriceModal(product)"
+                />
+                <span class="product-price">{{ product.preis || '—' }} €</span>
+              </div>
+              <!-- Einkaufsmodus Buttons immer sichtbar -->
+              <button
+                class="btn btn-outline-success custom-button"
+                @click="toggleLocalTick(product)"
+              >
+                <span v-if="isTicked(product)">✓</span>
+              </button>
+            </div>
+          </div>
+        </main>
+
+        <button class="button" @click="openPriceModalForFertig">
+          Einkaufen beenden
+        </button>
+
+        <!-- Ein Modal für Preis ändern -->
+        <div class="modal-backdrop" v-if="showPriceModal">
+          <div class="modal-content">
+            <h3>
+              {{ modalTickOnSave ? 'Gesamtpreis ändern (€):' : 'Preis ändern(€):' }}
+            </h3>
+            <div>
+              <label>
+                {{ modalTickOnSave ? 'Gesamtpreis (€):' : 'Preis (€):' }}</label>
+              </label>
+              <input type="number" v-model="modalProduct.preis" step="0.01" />
+            </div>
+            <div class="modal-actions">
+              <!-- Dynamisch die richtige Methode aufrufen -->
+              <button @click="savePrice">
+                {{ modalTickOnSave ? 'Als gekauft markieren' : 'Preis speichern' }}
+              </button>
+              <button @click="closePriceModal">Abbrechen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

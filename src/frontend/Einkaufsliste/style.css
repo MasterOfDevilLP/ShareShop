@@ -1,315 +1,647 @@
-
 * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        }
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f9f9f9;
-        display: flex;
-        justify-content: center;
-        }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-      .iphone-app {
-        position: relative;
-        width: 390px;
-        height: 844px;
-        background-color: white;
-        border-radius: 40px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
+[v-cloak] {
+  display: none;
+}
 
-      /*Header*/
-      .app-header {
-        display: flex;
-        align-items: center;
-        padding: 24px 20px 22px 20px  ;/*padding top->right->bottom->left*/
-        justify-content: space-between; 
-        background-color: #f2f2f7;
-        border-bottom: 1px solid #ddd;
-        gap: 10px;
-      }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  background-color: #f9f9f9;
+}
 
 
+.iphone-app {
+  width: 100%;
+  max-width: 430px;       
+  height: 100dvh;         
+  margin: 0 auto;
+  background-color: #fff;
 
-      .site-titel {
-        flex: 2;
-        font-weight: bold;
-        font-size: 18px;
-        text-align: left;
-      }
-      .settings_btn {
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-        padding: 10px;
-        padding-right: 30px;
-        text-align: center;
-        font-size: 14px;
-        border-top: 2px solid transparent;
-        background: none;
-        border: none;
-      }
-      .einkaufmodus_btn {
-        width: 36px;
-        height: 36px;
-        flex-shrink: 0;
-        padding: 10px;
-        text-align: center;
-        font-size: 14px;
-        border-top: 2px solid transparent;
-        background: none;
-        border: none;
-      }
+  display: flex;
+  flex-direction: column;
 
-      .icon-btn {
-        width: 24px;
-        height: 24px;
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .icon-btn img {
-        width: 24px;
-        height: 24px;
-        object-fit: cover;
-        display: block;
-      }
-    
-    /*Navigation*/
-     .bottom-nav {
-      margin-top: auto;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      border-top: 1px solid #ddd;
-      background-color: #f9f9f9;
-    }
-      .nav-item {
-        flex: 1;
-        padding: 10px 0;
-        text-align: center;
-        font-size: 14px;
-        border-top: 2px solid transparent;
-        background: none;
-        border: none;
-      }
+  overflow: hidden;
 
-      .nav-icon {
-        width: 30px;
-        height: 30px;
-        margin-bottom: 4px;
-        }
-
-      .nav-item.active {
-        color: #7DCFB6;
-        border-top: 2px solid #7DCFB6;
-        font-weight: 600;
-      }
-    
+  position: relative; 
+}
 
 
-      /* Hauptcontent */
-      .app-content {
-        flex: 1;
-        padding: 12px;
-        overflow-y: auto;
-        position: relative; 
-      }
-      .product-list {
-        display: flex;
-        flex-direction: column;
-        gap: 13px;
-        padding: 13px;
-      }
-      .product-card {
-        display: flex;
-        align-items: center;
-        background: #fff;
-        border-radius: 12px;
-        padding: 12px 18px;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-        border: 1px solid #ddd;
-        transition: transform 0.3s ease;
-      }
+/*Header*/
+.app-header {
+  padding-top: env(safe-area-inset-top);
+  display: flex;
+  align-items: center;
+  padding: 24px 20px 22px 20px; 
+  justify-content: space-between;
+  background-color: #f2f2f7;
+  border-bottom: 1px solid #ddd;
+  gap: 10px;
+}
 
-      .product-card:hover {
-        transform: scale(1.05); /* zoom 5% with hover */
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
-        cursor: pointer; 
-      }
-      .product-icon img {
-        width: 40px;
-        height: 40px;
-        object-fit: contain;
-        margin-right: 16px;
-      }
-      .product-info {
-        flex: 1;
-      }
-      .product-name {
-        font-weight: bold;
-        font-size: 14px;
-      }
-      .product-meta {
-        font-size: 11px;
-        color: #888;
-      }
-      .product-price {
-        font-weight: bold;
-        font-size: 12px;
-        color: #333;
-        margin-right: 7px;
-      }
+.site-titel {
+  flex: 2;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: left;
+}
+.settings_btn {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  padding: 10px;
+  padding-right: 30px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 2px solid transparent;
+  background: none;
+  border: none;
+}
+.einkaufmodus_btn {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 2px solid transparent;
+  background: none;
+  border: none;
+}
 
-      .custom-button {
-        margin-right: 5px;
-        padding: 0.24rem 0.2rem;
-        font-size: 5px;
-        min-width: 20px;
-      }
+.icon-btn {
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  display: block;
+}
 
-      /*Produkte hinzufugen Button*/
-      .add-product {
-        font-weight: bold;
-        font-size: 15px;
-        text-align: right;
-        background: none;
-        border: none;
-        padding: 20px 15px
-      }
+.icon-btn-pencil {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
 
-      .popup-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-      }
+.icon-btn-pencil:focus {
+  outline: none;
+}
 
-      .popup-content {
-        background-color: white;
-        padding: 20px;
-        width: 70%;
-        border-radius: 12px;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      }
+.icon-btn-pencil img {
+  width: 17px;
+  height: 17px;
+}
 
+/*Navigation*/
+.bottom-nav {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-item {
+  flex: 1;
+  color: inherit;
+  text-decoration: none;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 14px;
+  border-top: 2px solid transparent;
+  background: none;
+  border: none;
+}
 
-      /*settings*/
-      .settings-options{
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px;
-      }
+.nav-icon {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 4px;
+}
 
-      .change-listTitel{
-        font-weight: bold;
-        font-size: 18px;
-        text-align: center;
-      }
+.nav-item.active {
+  color: #7dcfb6;
+  border-top: 2px solid #7dcfb6;
+  font-weight: 600;
+}
 
-      .delete-list{
-        color:rgb(219, 52, 52);
-        font-weight: bold;
-      }
+/* Hauptcontent */
+.app-content {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
 
-        /* bottom sheet */
-      .bottom-sheet {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
-      padding: 1.5rem;
-      z-index: 10;
-      transform: translateY(100%);
-      transition: transform 0.3s ease-in-out;
-    }
+}
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 13px;
+}
+.product-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+.delete-product-button {
+  position: absolute;
+  top: -2.25px;
+  right: -2.25px;
+  color: rgb(180, 54, 54);
+  border: 1px solid rgba(219, 52, 52, 0.2);
+  background: transparent;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
 
-    .bottom-sheet.visible {
-      transform: translateY(0);
-    }
+.delete-product-button:hover {
+  background: rgb(247, 179, 179);
+}
 
-    .sheet-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
+.product-card:hover {
+  transform: scale(1.05); /* zoom 5% with hover */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+.product-icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-right: 16px;
+}
+.product-info {
+  flex: 1;
+}
+.product-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+.product-meta {
+  font-size: 11px;
+  color: #888;
+}
+.product-price {
+  font-weight: bold;
+  font-size: 12px;
+  color: #333;
+  margin-right: 7px;
+}
 
-    .sheet-body {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
+.custom-button {
+  min-width: 30px;
+  min-height: 30px;
+  margin-right: 5px;
+  font-size: 16px;
+  padding: 0.25rem;
+  border-radius: 6px;
+  border: 1px solid #28a745;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
 
-    }
+.custom-button:hover {
+  background-color: #28a745;
+  color: white;
+}
 
-    .sheet-body input {
-      margin-bottom: 10px;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 1rem;
+/*Produkte hinzufugen Button*/
+.add-product {
+  display: inline-flex;  
+  font-weight: bold;
+  font-size: 15px;
+  background: none;
+  border: none;
+  padding: 15px 18px;  
+  cursor: pointer; 
+  color: #000;
+}
 
-    }
+.add-product-wrapper {
+  display: flex;
+  justify-content: flex-end; 
+}
 
-    .sheet-body button {
-      margin-top: 10px;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 10px;
-      background-color: #7DCFB6;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .sheet-body button:hover {
-      background-color: #5aa88a;
-    }
+.add-product:hover {
+  color: #7dcfb6;
+}
+.add-product:active {
+  transform: scale(0.98);
+}
 
-    .sheet-body button:disabled {
-      background-color: #bbb;
-      cursor: not-allowed;
-    }
+.popup-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
 
-    .sheet-body select {
-      padding: 0.95rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      width: 100%; 
-      box-sizing: border-box;
-      margin-bottom: 10px;
-    }
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  width: 70%;
+  border-radius: 12px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
 
+/*settings*/
+.settings-options {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+}
 
-    .close-btn {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #999;
-    }
-    
+.change-listTitel {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+}
+
+.delete-list {
+  color: rgb(219, 52, 52);
+  font-weight: bold;
+}
+
+/* bottom sheet */
+.bottom-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  z-index: 20;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  max-height: 90dvh;
+  overflow-y: auto;
+  display: none;   
+}
+
+.bottom-sheet.visible {
+  display: block;
+  transform: translateY(0);
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sheet-body input {
+  margin-bottom: 10px;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.sheet-body button {
+  margin-top: 10px;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #7dcfb6;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.sheet-body button:hover {
+  background-color: #5aa88a;
+}
+
+.sheet-body button:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+
+.sheet-body select {
+  padding: 0.95rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+}
+
+.sheet-body input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+}
+
+.product-price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.edit-price-icon {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.iphone-app .modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); 
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Modal Box */
+.iphone-app .modal-content {
+  background: white;
+  padding: 24px;
+  border-radius: 20px; 
+  width: 85%;
+  max-width: 300px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  text-align: center; 
+  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Titel & Label */
+.iphone-app .modal-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1c1c1e;
+  margin-bottom: 8px;
+  letter-spacing: -0.4px;
+}
+
+.iphone-app .modal-content label {
+  font-size: 14px;
+  color: #8e8e93; /* Typisches iOS Grau */
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* Input Feld */
+.iphone-app .modal-content input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #f2f2f7; 
+  border: none;
+  border-radius: 10px;
+  font-size: 17px; 
+  font-weight: 600;
+  text-align: center;
+  color: #1c1c1e;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+/* Button Layout */
+.iphone-app .modal-actions {
+  display: flex;
+  flex-direction: column; 
+  gap: 8px;
+}
+
+.iphone-app .modal-actions button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.iphone-app .modal-actions button:first-child {
+  background-color: #7dcfb6;
+  color: white;
+}
+
+.iphone-app .modal-actions button:last-child {
+  background-color: transparent;
+  color: #d56559; 
+  font-weight: 500;
+}
+
+.iphone-app .modal-actions button:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.mini-modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(50, 50, 50, 0.9);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  z-index: 999999;
+  opacity: 1;
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.3s ease-out;
+}
+.mini-modal.fade-out {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.autocomplete-wrapper {
+  position: relative;
+}
+
+.autocomplete-wrapper input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #a89e9e;
+  border-top: none;
+  background: #fff;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+}
+
+.autocomplete-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.autocomplete-list li:hover {
+  background: #f0f0f0;
+}
+
+.bottom-action-bar {
+  position: absolute;
+  bottom: 75px;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  z-index: 15;
+}
+
+.bottom-action-bar .icon-btn {
+  width: 40px;
+  height: 40px;
+}
+
+.bottom-action-bar .add-product {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.product-ticked {
+  opacity: 0.5;
+}
+
+.product-ticked .product-name {
+  text-decoration: line-through;
+}
+
+.product-ticked .product-meta,
+.product-ticked .product-price {
+  color: #999;
+}
+
+.button {
+  background-color: #5fb974;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  width: 85%;
+  margin: 30px auto;
+  display: block;
+}
+
+.empty-list-message {
+  display: flex;         
+  flex-direction: column;
+  text-align: center;
+  padding: 15px 25px;
+  color: #555;
+  align-items: center;
+}
+
+.empty-list-message 
+.empty-list-img {
+  width: 100%;
+  width: 300px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+  display: block; 
+  height: auto;  
+}
+
+.empty-list-message p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+ty-list-message p {
+  font-size: 12px;
+  line-height: 1.5;
+}

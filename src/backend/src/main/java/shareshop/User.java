@@ -1,6 +1,5 @@
 package shareshop;
 
-import java.lang.reflect.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +20,7 @@ public class User {
 
     /**
      * Constructor of Class User
+     * @param connectionHandler
      * @param userID
      * @param firstName can be null
      * @param lastName  can be null
@@ -38,27 +38,32 @@ public class User {
     
     // Constructors using the DB
     
-    // Creates a new user
+    /** 
+     * Constructor that creates a new user
+     * @param conn
+     * @param email
+     * @param pwdhash
+     * @throws SQLException
+     */
     public User(DBConnectionHandler conn, String email, String pwdhash) throws SQLException {
         this.connectionHandler = conn;
     	conn.makeSureItsOpen();
     	String statementStr = "INSERT INTO users (userid, email, pwd) VALUES (?, ?, ?)";
-        conn.makeSureItsOpen();
-    	PreparedStatement statement = conn.conn.prepareStatement(statementStr);
     	conn.conn.setAutoCommit(true);
+    	PreparedStatement statement = conn.conn.prepareStatement(statementStr);
     	UUID uuid = UUID.randomUUID();
     	statement.setObject(1, uuid);
     	statement.setString(2, email);
     	statement.setString(3, pwdhash);
     	statement.execute();
-    	statement.close();
     	this.userID = uuid;
     	this.email = email;
     	this.pwd = pwdhash;
+    	statement.close();
     }
 
     /**
-     * Construcot of Class User via userID and DB query
+     * Constructor of Class User via userID and DB query
      * @param connectionHandler
      * @param userID
      * @throws SQLException
@@ -67,6 +72,7 @@ public class User {
         this.connectionHandler = connectionHandler;
         String selectString = new String ("SELECT * FROM users WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, userID);
         ResultSet rs = select.executeQuery();
@@ -86,15 +92,13 @@ public class User {
 
     /**
      * private function to update the DB after a change of any attribute of the user
-     * @param connectionHandler
      * @param firstName
      * @param lastName
      * @param email
      * @param pwd
      * @throws SQLException
      */
-    private void updateDB(DBConnectionHandler connectionHandler, String firstName, String lastName, String email, String pwd) throws SQLException {
-        this.connectionHandler = connectionHandler;
+    private void updateDB(String firstName, String lastName, String email, String pwd) throws SQLException {
         String updateString = new String("UPDATE users SET firstname = ?, lastname = ?, email = ?, pwd = ? WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(updateString)) {
@@ -133,8 +137,8 @@ public class User {
      * @param firstName
      * @throws SQLException
      */
-    public void setFirstName(DBConnectionHandler connectionHandler, String firstName) throws SQLException {
-        this.updateDB(connectionHandler, firstName, this.lastName, this.email, this.pwd);
+    public void setFirstName(String firstName) throws SQLException {
+        this.updateDB(firstName, this.lastName, this.email, this.pwd);
         this.firstName = firstName;
     }
 
@@ -143,8 +147,8 @@ public class User {
      * @param lastName
      * @throws SQLException
      */
-    public void setLastName(DBConnectionHandler connectionHandler, String lastName) throws SQLException {
-        this.updateDB(connectionHandler, this.firstName, lastName, this.email, this.pwd);
+    public void setLastName(String lastName) throws SQLException {
+        this.updateDB(this.firstName, lastName, this.email, this.pwd);
         this.lastName = lastName;
     }
 
@@ -153,8 +157,8 @@ public class User {
      * @param email
      * @throws SQLException
      */
-    public void setEmail(DBConnectionHandler connectionHandler, String email) throws SQLException {
-        this.updateDB(connectionHandler, this.firstName, this.lastName, email, this.pwd);
+    public void setEmail(String email) throws SQLException {
+        this.updateDB(this.firstName, this.lastName, email, this.pwd);
         this.email = email;
     }
 
@@ -163,8 +167,8 @@ public class User {
      * @param password
      * @throws SQLException
      */
-    public void setPassword(DBConnectionHandler connectionHandler, String password) throws SQLException {
-        this.updateDB(connectionHandler, this.firstName, this.lastName, this.email, pwd);
+    public void setPassword(String password) throws SQLException {
+        this.updateDB(this.firstName, this.lastName, this.email, pwd);
         this.pwd = password;
     }
 
@@ -200,14 +204,14 @@ public class User {
 
     /**
      * returns an ArrayList containing the UUID's of the WG's the user is part of
-     * @param connectionHandler
-     * @return
+     * @return ArrayList&lt;UUID&gt;
      * @throws SQLException
      */
     public ArrayList<UUID> getWgIDList() throws SQLException {
         ArrayList<UUID> wgidlist = new ArrayList<UUID>();
         String selectString = new String ("SELECT wgid FROM userallocation WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
+        connectionHandler.conn.setAutoCommit(true);
         PreparedStatement select = connectionHandler.conn.prepareStatement(selectString);
         select.setObject(1, userID);
         ResultSet rs = select.executeQuery();
@@ -230,10 +234,9 @@ public class User {
 
     /**
      * removes the user from the database
-     * @param connectionHandler
      * @throws SQLException
      */
-    public void remove(DBConnectionHandler connectionHandler) throws SQLException {
+    public void remove() throws SQLException {
         String removeUser = new String("DELETE FROM users WHERE userid = ?");
         connectionHandler.makeSureItsOpen();
         try (PreparedStatement deleteUser = connectionHandler.conn.prepareStatement(removeUser)) {

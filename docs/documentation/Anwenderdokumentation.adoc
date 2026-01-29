@@ -1,0 +1,186 @@
+:imagesdir: ../images
+:imgwidth: 50%
+= ShareShop – Anwenderdokumentation
+
+== 1. Einführung
+
+=== 1.1 Zweck der Anwendung
+ShareShop ist eine Web-Anwendung zur gemeinsamen Organisation von Einkäufen in Wohngemeinschaften (WGs).  
+Ziel der Anwendung ist es, den Einkaufsprozess innerhalb einer WG zu vereinfachen, indem Nutzer sich anmelden, Wohngemeinschaften verwalten und gemeinsame Einkaufslisten mit Mengen und Preisen führen können.
+
+Die aktuelle Version konzentriert sich auf die Kernfunktionen *Login*, *WG-Verwaltung* und *Einkaufsliste*.
+
+=== 1.2 Funktionsumfang (Überblick)
+* Benutzerkonto mit Registrierung und Anmeldung (Login)
+* Erstellen und Verwalten von Wohngemeinschaften
+* Einladen und Verwalten von Mitgliedern
+* Kollaborative Einkaufslisten (gemeinsam bearbeiten)
+* Anzeige und Verwaltung von Produktmengen und Preisen
+
+
+== 2. Registrierung und Login
+
+*Vorgehen:*
+
+. Aufruf der ShareShop-Webseite  
+. Klick auf *Jetzt registrieren*  
+. Eingabe von E-Mail-Adresse und Passwort  
+. Klick auf den Button *Registrieren*  
+. Nach erfolgreicher Registrierung wird der Nutzer zum Login weitergeleitet  
+. Eingabe von E-Mail-Adresse und Passwort  
+. Klick auf *Login*
+
+
+image::Register.png[Registrierung, width={imgwidth}]  
+image::Login.png[Login, width={imgwidth}]
+
+== 3. Aufbau der Benutzeroberfläche
+
+=== 3.1 Startseite / Dashboard
+Nach erfolgreicher Anmeldung gelangt der Nutzer auf die Startseite der Anwendung. Es bietet einen Überblick über die wichtigsten Funktionen und ermöglicht einen schnellen Einstieg in die Nutzung von ShareShop.
+
+Die Startseite umfasst:
+
+* Erstellen und Wechseln zwischen vorhandenen WGs
+* Erstellen sowie Anzeigen und Bearbeiten von Einkaufslisten
+* Zugriff auf persönliche Einstellungen (z. B. Name, Avatar)
+
+image::Startseite.png[Dashboard der Anwendung, width={imgwidth}]
+
+
+=== 3.2 Navigation
+Die Hauptnavigation befindet sich am unteren Rand der Anwendung und ermöglicht den Zugriff auf die wichtigsten Bereiche.
+
+* *Liste:* Verwaltung gemeinsamer Einkaufslisten  
+* *Rechnungen:* Geplante Funktion zur Verwaltung von Kosten und Abrechnungen (derzeit nicht implementiert)  
+* *Kalender:* Geplante Funktion zur Organisation von Einkaufsterminen (derzeit nicht implementiert)  
+* *Rezepte:* Geplante Funktion zur Anzeige von Rezeptvorschlägen und Mahlzeitenplanung (derzeit nicht implementiert)  
+* *Profil:* Persönliche Einstellungen wie Name und Avatar
+
+
+image::Navigation.png[Hauptnavigation der Anwendung, width={imgwidth}]
+
+
+=== 3.3 Wohngemeinschaft erstellen und verwalten
+
+*WG erstellen:*
+
+. Dropdown *WG auswählen* öffnen  
+. *+ Neue Gruppe* auswählen  
+. Namen der WG eingeben (optional: Beschreibung und Bild hochladen)  
+. WG speichern  
+
+*WG verwalten:*
+
+* Übersicht aller eigenen WGs  
+* Wechsel zwischen verschiedenen WGs
+
+image::WG_Übersicht.png[WG-Übersicht und WG-Erstellung, width={imgwidth}]
+image::WG_Erstellen.png[WG Erstellen,width={imgwidth}]
+image::Erstellte_WG.png[WG in Übersicht, width={imgwidth}]
+
+
+=== 3.4 Einkaufsliste erstellen und nutzen
+
+*Vorgehen:*
+
+. Auswahl einer WG  
+. Menüpunkt *+Liste hinzufügen* öffnen  
+. Listennamen eingeben  
+. Erstellte Einkaufsliste öffnen  
+. *+Artikel hinzufügen* auswählen  
+. Produktname, Menge und Preis eingeben  
+. Produkt speichern, ggf. ändern  
+. Einkauf starten, indem man das Männchen mit Einkaufswagen klickt
+
+Die Einkaufsliste ist für alle Mitglieder der jeweiligen WG sichtbar und kann jederzeit von allen bearbeitet werden.
+
+image::Einkaufsliste_Erstellen.png[Einkaufsliste erstellen, width={imgwidth}]
+image::Einkaufsliste.png[Namen Einkaufsliste geben, width={imgwidth}]
+image::Einkaufsliste_2.png[Erstellte Einkaufsliste, width={imgwidth}]
+image::Einkaufsliste_3.png[Artikel hinzufügen, width={imgwidth}]
+image::Einkaufsliste_4.png[Artikel hinzufügen, width={imgwidth}]
+image::Einkaufsliste_5.png[Artikel hinzufügen, width={imgwidth}]
+image::Einkaufsliste_6.png[Artikel erstellen, width={imgwidth}]
+image::Einkaufsliste_7.png[Einkaufmodus aktivieren, width={imgwidth}]
+image::Einkaufsliste_8.png[Einkauf beginn, width={imgwidth}]
+image::Einkaufsliste_9.png[Einkauf beenden, width={imgwidth}]
+image::Einkaufsliste_10.png[Preis ggf aktualisieren, width={imgwidth}]
+image::Einkaufsliste_11.png[Einkauf beendet, width={imgwidth}]
+
+=== 3.5 Mitglieder hinzufügen
+
+*Vorgehen:*
+
+. In der WG-Übersicht den Menüpunkt *Mitglieder einladen* auswählen  
+. *Link teilen* klicken  
+. Das eingeladene Mitglied erhält eine E-Mail mit einem Link zum Beitritt zur WG
+
+image::Mitglied.png[Settings öffnen, width={imgwidth}]
+image::Mitglied_2.png[Mitglied hinzufügen, width={imgwidth}]
+image::Mitglied_3.png[Link Teilen, width={imgwidth}]
+image::Mitglied_4.png[Mitglied kann WG betreten, width={imgwidth}]
+image::Mitglied_5.png[Mitgliederliste is aktualisiert, width={imgwidth}]
+
+=== 3.6 WG verlassen
+
+*Vorgehen:*  
+
+. In der WG-Übersicht den Menüpunkt *WG verlassen* auswählen  
+. Bestätigen, dass du die WG verlassen möchtest  
+. Du bist nun nicht mehr Mitglied der WG und hast keinen Zugriff mehr auf deren Daten
+
+*Hinweis:* Das Verlassen einer WG kann nicht rückgängig gemacht werden. Falls du wieder beitreten möchtest, musst du eine Einladung erhalten.
+
+image::Leave.png[WG verlassen button, width={imgwidth}]
+image::Leave_2.png[WG verlassen bestätigen, width={imgwidth}]
+image::Leave_3.png[WG verlassen, width={imgwidth}]
+
+=== 3.7 WG löschen
+
+*Vorgehen:*  
+
+. In der WG-Übersicht den Menüpunkt *WG löschen* auswählen  
+. Bestätigen, dass alle Daten der WG gelöscht werden und die WG dauerhaft gelöscht wird  
+. Die WG wird nicht mehr verfügbar sein
+
+image::Delete.png[WG löschen, width={imgwidth}]
+image::Delete_2.png[WG löschen bestätigen, width={imgwidth}]
+image::Delete_3.png[WG gelöscht, width={imgwidth}]
+
+=== 4.8 Profil-Einstellungen
+
+*Vorgehen:*
+
+. In der Hauptnavigation den Menüpunkt *Profil* auswählen  
+. Auf das Profilbild klicken, um ein neues Bild hochzuladen (Profilbild ist lokal gespeichert)  
+. Den Namen ändern, indem der *Bearbeiten*-Button gedrückt wird (Änderungen werden lokal gespeichert)  
+. Die Sprache auf Deutsch oder Englisch einstellen (Änderungen werden lokal gespeichert)  
+. Das Erscheinungsbild (Hell/Dunkel), die Benachrichtigung und die Standardwährung sind derzeit **nicht implementiert** 
+
+image::Profil_0.png[Profil auswählen, width={imgwidth}]
+image::Profil.png[Profileinstellungen, width={imgwidth}]
+image::Profil_2.png[Profilbild ändern, width={imgwidth}]
+image::Profil_3.png[User name ändern, width={imgwidth}]
+image::Profil_4.png[Sprache wechseln, width={imgwidth}]
+
+
+== 5. Häufige Fragen (FAQ)
+
+*Frage:* Können mehrere Nutzer dieselbe Einkaufsliste bearbeiten?  
+*Antwort:* Ja, alle Mitglieder einer WG haben Zugriff auf die gemeinsame Einkaufsliste.
+
+*Frage:* Werden Preise automatisch verrechnet?  
+*Antwort:* Nein, Preise werden aktuell nur angezeigt. Eine automatische Kostenabrechnung ist nicht implementiert.
+
+*Frage:* Kann ich mehreren WGs angehören?  
+*Antwort:* Ja, ein Nutzer kann Mitglied in mehreren Wohngemeinschaften sein.
+
+== 6. Tipps für eine reibungslose Nutzung
+* Regelmäßig die Einkaufsliste aktualisieren  
+* Klare Produktbezeichnungen verwenden  
+* Preise möglichst vollständig eintragen
+
+== 7. Kontakt und Support
+Bei Fragen oder Problemen: 
+* Projektteam kontaktieren (z. B. per E-Mail)

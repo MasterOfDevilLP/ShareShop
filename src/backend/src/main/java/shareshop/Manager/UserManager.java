@@ -14,16 +14,28 @@ import org.slf4j.LoggerFactory;
 import shareshop.DBConnectionHandler;
 import shareshop.User;
 
+/**
+ * Helper class for handling users
+ */
 public class UserManager {
 	
 	private DBConnectionHandler conn;
 	Logger logger;
-	
+	/**
+	 * Create a new UserManager
+	 * @param conn the DBConnection to use
+	 */
 	public UserManager(DBConnectionHandler conn) {
 		this.conn = conn;
 		logger = LoggerFactory.getLogger(getClass());
 	}
 	
+	/**
+	 * create a new user
+	 * @param email the email/username of the user
+	 * @param pwd the password of the user
+	 * @return the new user, or null if an error occurred
+	 */
 	public User create(String email, String pwd) {
 		logger.info("Creating a new user");
 		try {
@@ -42,6 +54,12 @@ public class UserManager {
 	
 	// for better authentication, this could probably be done with things jetty provides,
 	// but this is good enough for now
+	/**
+	 * attempt to log in
+	 * @param email email/username of the user
+	 * @param pwd password of the user
+	 * @return the user, or null if login failed
+	 */
 	public User login(String email, String pwd) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -75,6 +93,11 @@ public class UserManager {
 		}
 	}
 	
+	/**
+	 * Get a user by UUID
+	 * @param userID the UUID of the user
+	 * @return the requested user, or null if it doesn't exist
+	 */
 	public User getUser(UUID userID) {
 		try {
 			return new User(conn, userID);

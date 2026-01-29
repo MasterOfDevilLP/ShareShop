@@ -1,0 +1,36 @@
+@startuml c4_level3_component_backend
+!include <c4/C4_Component.puml>
+
+LAYOUT_WITH_LEGEND()
+
+title C4-3 Component Diagram
+
+Container_Boundary(backend, "Backend (Java / Javalin)") {
+
+    Component(api, "REST-API", "JSON", "öffentliche Endpunkte für User, WG, Shoppinglists, Items")
+
+    Component(userMgr, "UserManager","User-Logik","Verwaltung von Benutzern und Benutzerzugriffen")
+
+    Component(wgMgr, "WGManager","WG-Logik","Verwaltung von WGs")
+
+    Component(itemMgr, "ItemManager","Item-Logik","Verwaltung von Items")
+
+    Component(db_obj, "DB-Objekte","DB Mapping", "Bilden die Datenbank auf Java-Klassen ab")
+}
+
+ContainerDb(db, "Database", "PostgreSQL")
+
+Rel(api, userMgr, "ruft auf")
+Rel(api, wgMgr, "ruft auf")
+Rel(api, itemMgr, "ruft auf")
+
+Rel(userMgr, db_obj, "nutzt")
+Rel(wgMgr, db_obj, "nutzt")
+Rel(itemMgr, db_obj, "nutzt")
+Rel(api, db_obj, "nutzt")
+
+Rel(db_obj, db, "persistiert")
+Rel(itemMgr, db, "liest")
+Rel(userMgr, db, "liest")
+
+@enduml

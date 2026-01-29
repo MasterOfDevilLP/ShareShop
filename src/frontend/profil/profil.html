@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../Startseitendesign/style.css" />
+    <link rel="stylesheet" href="profil.css" />
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    
+    <style>
+      /* v-cloak to prevent flash of unstyled content */
+      [v-cloak] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <span>{{ t('Benutzerprofil', 'User Profile') }}</span>
+        </header>
+
+        <main class="app-content profile-page">
+          <section class="profile-section">
+            <!-- Profile Header with Picture & Name -->
+            <div class="profile-header">
+              <div class="profile-pic-container">
+                <div 
+                  class="profile-pic avatar-display"
+                  :style="{ backgroundColor: getAvatarData(user.avatar).color }"
+                >
+                  <span class="avatar-emoji">{{ getAvatarData(user.avatar).emoji }}</span>
+                </div>
+                <button class="edit-pic-btn" @click="showAvatarPicker = true">
+                  <img src="../Startseitendesign/icons/camera.svg" alt="Edit" />
+                </button>
+              </div>
+              <div class="profile-info">
+                <h3>{{ user.name }}</h3>
+                <button class="edit-btn" @click="showEditProfile = true">
+                  <img src="../Startseitendesign/icons/pen.svg" alt="Edit" />
+                </button>
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- Appearance Theme Toggle -->
+            <div class="profile-option">
+              <img
+                src="../Startseitendesign/icons/brightness.png"
+                alt="Theme"
+              />
+              <span>{{ t('Erscheinungsbild', 'Appearance') }}</span>
+              <div class="toggle">
+                <button
+                  :class="{active: theme==='light'}"
+                  @click="setTheme('light')"
+                >
+                  {{ t('Hell', 'Light') }}
+                </button>
+                <button
+                  :class="{active: theme==='dark'}"
+                  @click="setTheme('dark')"
+                >
+                  {{ t('Dunkel', 'Dark') }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="profile-option">
+              <img
+                src="../Startseitendesign/icons/translate.png"
+                alt="Sprache"
+              />
+              <span>{{ t('Sprache', 'Language') }}</span>
+              <div class="lang-buttons">
+                <button
+                  :class="{active: language==='de'}"
+                  @click="setLanguage('de')"
+                >
+                  🇩🇪 Deutsch
+                </button>
+                <button
+                  :class="{active: language==='en'}"
+                  @click="setLanguage('en')"
+                >
+                  🇬🇧 English
+                </button>
+              </div>
+            </div>
+
+            <!-- Additional Settings Links -->
+            <div class="profile-links">
+              <div class="profile-link" @click="showNotificationSettings = true">
+                <div class="link-left">
+                  <img src="../Startseitendesign/icons/bell.svg" alt="Notifications" />
+                  <span>{{ t('Benachrichtigungseinstellungen', 'Notification Settings') }}</span>
+                </div>
+                <span class="right">›</span>
+              </div>
+
+              <div class="profile-link" @click="showCurrencySettings = true">
+                <div class="link-left">
+                  <img src="../Startseitendesign/icons/currency.svg" alt="Currency" />
+                  <span>{{ t('Standardwährung', 'Default Currency') }}</span>
+                </div>
+                <span class="right">EUR ›</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Delete Account Section -->
+          <section class="delete-account-section">
+            <button @click="showDeleteAccount = true" class="delete-account-btn">
+              <img src="../Startseitendesign/icons/trash.svg" alt="Delete" />
+              {{ t('Konto löschen', 'Delete Account') }}
+            </button>
+          </section>
+
+          <!-- Logout Section -->
+          <section class="logout-section">
+            <button @click="showLogoutModal = true" class="logout-btn">
+              <img src="../Startseitendesign/icons/logout.svg" alt="Logout" />
+              {{ t('Logout', 'Log out') }}
+            </button>
+            <p v-if="message" class="logout-message">{{ message }}</p>
+          </section>
+        </main>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+          <a href="../Startseitendesign/startseite.html" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Liste.png"
+              class="nav-icon"
+            /><br />Liste
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Rechnung.png"
+              class="nav-icon"
+            /><br />Rechnungen
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Kalender.png"
+              class="nav-icon"
+            /><br />Kalender
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="../Startseitendesign/icons/Rezepte.png"
+              class="nav-icon"
+            /><br />Rezepte
+          </a>
+          <a href="profil.html" class="nav-item active">
+            <img
+              src="../Startseitendesign/icons/Profil.png"
+              class="nav-icon"
+            /><br />Profil
+          </a>
+        </nav>
+
+        <!-- Logout Modal -->
+        <div v-if="showLogoutModal" v-cloak class="modal-overlay" @click="showLogoutModal = false">
+          <div class="modal-container" @click.stop>
+            <div class="modal-header">
+              <h3>{{ t('Abmelden', 'Log Out') }}</h3>
+            </div>
+            <div class="modal-body">
+              <p>{{ t('Möchtest du dich wirklich ausloggen?', 'Are you sure you want to log out?') }}</p>
+            </div>
+            <div class="modal-actions">
+              <button @click="showLogoutModal = false" class="btn-cancel">
+                {{ t('Abbrechen', 'Cancel') }}
+              </button>
+              <button @click="confirmLogout" class="btn-delete" :disabled="isLoggingOut">
+                <span v-if="!isLoggingOut">{{ t('Ausloggen', 'Log Out') }}</span>
+                <span v-else>{{ t('Wird ausgeloggt...', 'Logging out...') }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Avatar Picker Modal -->
+        <div v-if="showAvatarPicker" v-cloak class="modal-overlay" @click="showAvatarPicker = false">
+          <div class="modal-container avatar-picker-modal" @click.stop>
+            <div class="modal-header">
+              <h3>{{ t('Avatar auswählen', 'Choose Avatar') }}</h3>
+            </div>
+            <div class="modal-body">
+              <div class="avatar-grid">
+                <div 
+                  v-for="avatar in avatars" 
+                  :key="avatar.id"
+                  class="avatar-option"
+                  :class="{ selected: user.avatar === avatar.id }"
+                  :style="{ backgroundColor: avatar.color }"
+                  @click="selectAvatar(avatar.id)"
+                >
+                  <span class="avatar-emoji-large">{{ avatar.emoji }}</span>
+                  <span class="avatar-name">{{ avatar.name }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button @click="showAvatarPicker = false" class="btn-cancel">
+                {{ t('Schließen', 'Close') }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div v-if="showEditProfile" v-cloak class="modal-overlay" @click="showEditProfile = false">
+          <div class="modal-container" @click.stop>
+            <div class="modal-header">
+              <h3>{{ t('Konto Einstellung', 'Account Settings') }}</h3>
+            </div>
+            <div class="modal-body edit-profile-form">
+              <div class="form-group">
+                <label>{{ t('Vorname', 'First Name') }}</label>
+                <input 
+                  v-model="editUser.firstName" 
+                  type="text" 
+                  class="form-input"
+                  :placeholder="t('Dein Vorname', 'Your First Name')"
+                />
+              </div>
+              <div class="form-group">
+                <label>{{ t('Nachname', 'Last Name') }}</label>
+                <input 
+                  v-model="editUser.lastName" 
+                  type="text" 
+                  class="form-input"
+                  :placeholder="t('Dein Nachname', 'Your Last Name')"
+                />
+              </div>
+              <div class="form-group">
+                <label>{{ t('Passwort', 'Password') }}</label>
+                <input 
+                  v-model="editUser.password" 
+                  type="password" 
+                  class="form-input"
+                  :placeholder="t('••••••••', '••••••••')"
+                />
+                <small class="form-hint">{{ t('Leer lassen, um unverändert zu bleiben', 'Leave empty to keep unchanged') }}</small>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button @click="showEditProfile = false" class="btn-cancel">
+                {{ t('Abbrechen', 'Cancel') }}
+              </button>
+              <button @click="saveProfile" class="btn-save">
+                {{ t('Änderung speichern', 'Save Changes') }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Deletion Modal -->
+        <div v-if="showDeleteAccount" v-cloak class="modal-overlay" @click="showDeleteAccount = false">
+          <div class="modal-container" @click.stop>
+            <div class="modal-header">
+              <h3>{{ t('Konto löschen', 'Delete Account') }}</h3>
+            </div>
+            <div class="modal-body">
+              <p class="warning-text">
+                {{ t('⚠️ Bist du sicher, dass du dein Konto löschen möchtest? Dieser Vorgang ist nicht rückgängig zu machen.', 
+                     '⚠️ Are you sure you want to delete your account? This action cannot be undone.') }}
+              </p>
+              <p class="warning-subtext">
+                {{ t('Alle deine Daten und Listen werden dauerhaft gelöscht.', 
+                     'All your data and lists will be permanently deleted.') }}
+              </p>
+              <div class="form-group">
+                <label>{{ t('Bitte gib dein Passwort ein, um dein Konto zu löschen:', 
+                            'Please enter your password to delete your account:') }}</label>
+                <input 
+                  v-model="deletePassword" 
+                  type="password" 
+                  class="form-input"
+                  :placeholder="t('Dein Passwort', 'Your Password')"
+                />
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button @click="showDeleteAccount = false" class="btn-cancel">
+                {{ t('Abbrechen', 'Cancel') }}
+              </button>
+              <button @click="confirmDeleteAccount" class="btn-delete" :disabled="!deletePassword">
+                {{ t('Konto löschen', 'Delete Account') }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification Settings Modal -->
+        <div v-if="showNotificationSettings" v-cloak class="modal-overlay" @click="showNotificationSettings = false">
+          <div class="modal-container" @click.stop>
+            <div class="modal-header">
+              <h3>{{ t('Benachrichtigungseinstellungen', 'Notification Settings') }}</h3>
+            </div>
+            <div class="modal-body notification-settings">
+              <div class="notification-option">
+                <div class="notification-info">
+                  <span class="notification-icon">📋</span>
+                  <div class="notification-text">
+                    <strong>{{ t('Listen-Updates', 'List Updates') }}</strong>
+                    <small>{{ t('Benachrichtigungen über Änderungen an Listen', 'Notifications about changes to lists') }}</small>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input 
+                    type="checkbox" 
+                    :checked="notifications.listUpdates"
+                    @change="toggleNotification('listUpdates')"
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="notification-option">
+                <div class="notification-info">
+                  <span class="notification-icon">🛒</span>
+                  <div class="notification-text">
+                    <strong>{{ t('Neue Artikel', 'New Items') }}</strong>
+                    <small>{{ t('Benachrichtigungen über neue Artikel', 'Notifications about new items') }}</small>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input 
+                    type="checkbox" 
+                    :checked="notifications.newItems"
+                    @change="toggleNotification('newItems')"
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="notification-option">
+                <div class="notification-info">
+                  <span class="notification-icon">👥</span>
+                  <div class="notification-text">
+                    <strong>{{ t('Geteilte Listen', 'Shared Lists') }}</strong>
+                    <small>{{ t('Benachrichtigungen über geteilte Listen', 'Notifications about shared lists') }}</small>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input 
+                    type="checkbox" 
+                    :checked="notifications.sharedLists"
+                    @change="toggleNotification('sharedLists')"
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="notification-option">
+                <div class="notification-info">
+                  <span class="notification-icon">⏰</span>
+                  <div class="notification-text">
+                    <strong>{{ t('Erinnerungen', 'Reminders') }}</strong>
+                    <small>{{ t('Erinnerungen für Einkäufe', 'Reminders for shopping') }}</small>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input 
+                    type="checkbox" 
+                    :checked="notifications.reminders"
+                    @change="toggleNotification('reminders')"
+                  />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button @click="saveNotificationSettings" class="btn-save">
+                {{ t('Fertig', 'Done') }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Alert/Confirm Modal -->
+        <div v-if="customModal.show" v-cloak class="modal-overlay" @click="closeModal">
+          <div class="modal-container custom-alert-modal" @click.stop>
+            <div class="modal-header" :class="'alert-' + customModal.type">
+              <div class="alert-icon">
+                <span v-if="customModal.type === 'success'">✓</span>
+                <span v-else-if="customModal.type === 'error'">✕</span>
+                <span v-else-if="customModal.type === 'warning'">⚠</span>
+                <span v-else>ℹ</span>
+              </div>
+              <h3>{{ customModal.title }}</h3>
+            </div>
+            <div class="modal-body">
+              <p class="alert-message">{{ customModal.message }}</p>
+            </div>
+            <div class="modal-actions">
+              <button 
+                v-for="(button, index) in customModal.buttons" 
+                :key="index"
+                @click="button.action"
+                :class="button.class"
+              >
+                {{ button.text }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script type="module" src="profil.js"></script>
+  </body>
+</html>

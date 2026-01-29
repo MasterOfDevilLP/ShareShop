@@ -1,0 +1,34 @@
+= Projektreflexion
+Phuong Anh Nguyen <s87098@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Ausgangssituationen: Welche Aufgaben habe ich im Projekt gemacht?
+
+Ich war Hauptsächlich an der Implementierung und Verbesserung von bereits vorhandenen Funktionen beteiligt die im Software Engineering Projekt I durchgeführt wurden. Sowie kleinere Aufgaben wie die Durchführung von code Review Arbeit und Pull Requests. Zu meinen Hauptaufgaben gehörten
+
+* Formular zur Erstellung und bearbeiten von WGs -> link:https://github.com/users/MasterOfDevilLP/projects/3/views/1?filterQuery=&pane=issue&itemId=135062512&issue=MasterOfDevilLP%7CShareShop%7C146[WG Formular]
+* WG auflösen/verlassen -> https://github.com/users/MasterOfDevilLP/projects/3/views/1?filterQuery=&pane=issue&itemId=135064732&issue=MasterOfDevilLP%7CShareShop%7C157[WG verlassen]
+* WG Berechtigung -> https://github.com/users/MasterOfDevilLP/projects/3/views/1?filterQuery=&pane=issue&itemId=142041814&issue=MasterOfDevilLP%7CShareShop%7C244[Berechtigungen]
+* Logout -> https://github.com/users/MasterOfDevilLP/projects/3/views/1?filterQuery=&pane=issue&itemId=134782044&issue=MasterOfDevilLP%7CShareShop%7C141[Logout]
+
+== Lösungsweg: Wie bin ich diese Herausforderungen angegangen?
+
+Da ich aufgrund meines Auslandssemesters nicht regelmäßig an den Team-Meetings teilnehmen konnte, war mir der aktuelle Stand der Arbeit meiner Teammitglieder zunächst nicht immer vollständig bekannt. Um dennoch effizient arbeiten zu können, habe ich mich stark auf die Dokumentationen der Meetings und Git-Issues verlassen.
+
+Die meisten meiner Aufgaben konnte ich daher selbstständig erledigen. Allerdings trat bei der WG-Erstellung ein Problem auf: Wenn sich ein anderer Benutzer anmeldete, wurde die gleiche WG angezeigt, was dazu führte, dass die WG-Daten für verschiedene Benutzer nicht korrekt dargestellt wurden. Da ich nicht wusste, wie ich das Problem beheben sollte, organisierte ich ein Frontend-Meeting mit meinen Teammitgliedern. Eine Teamkollegin konnte das Problem durch eine kleine Anpassung der Logik in der WG-Ansicht lösen, sodass nun die richtigen WG-Daten angezeigt wurden.
+
+Besonders hilfreich war die Aufteilung der Issues in Frontend und Backend, da ich so nachverfolgen konnte, wann das Backend mit der Implementierung der Endpunkte fertig war und ich diese im Frontend integrieren konnte.
+Für die API-Integration nutzte ich die bereitgestellte api.yaml, um herauszufinden, welche Endpunkte zur Verfügung standen. Zum Testen und Validieren der Endpunkte verwendete ich hauptsächlich Insomnia, um sicherzustellen, dass die API korrekt funktionierte.
+
+Ein weiterer Vorteil war, dass die Issues zu Beginn weitgehend unabhängig voneinander waren, was es mir ermöglichte, viele Aufgaben eigenständig zu lösen. Gegen Ende des Projekts wurden die Aufgaben jedoch zunehmend miteinander verbunden, was mehr Zusammenarbeit erforderte.
+
+== Bewertung: Was habe ich daraus gelernt?
+
+Die selbstständige Arbeit und der starke Fokus auf Dokumentationen und Git-Issues haben mir geholfen, meine Aufgaben zu erledigen, auch ohne ständig an den Meetings teilzunehmen. Die Lösung des Problems bei der WG-Erstellung konnte erfolgreich durch die Anpassung der Logik im Team gefunden werden.
+
+Da meine Kommunikation innerhalb des Teams zu Beginn nicht immer optimal war, da ich viel eigenständig arbeitete. Mit der Zeit, insbesondere bei den Pull Requests und dem Mergen der Branches, wurde die Zusammenarbeit jedoch intensiver. Die Absprachen und Zusammenarbeit wurden gegen Ende des Projekts besser, auch wenn die Kommunikation durch den Zeitunterschied manchmal verzögert war, konnten wir dennoch effektiv zusammenarbeiten und die letzten Schritte erfolgreich abschließen.
+
+Ein Punkt, den ich erst zu spät bemerkt habe, war die Notwendigkeit einer Abstimmung des Code-Stils im Frontend. Da wir unterschiedliche Stile verwendeten (sowie unterschiedliche Vue Versionen), wurde das Mergen sehr chaotisch und undurchsichtig. In Zukunft würde ich empfehlen, gleich zu Beginn klare Code-Conventions festzulegen, um solchen Problemen vorzubeugen und den Code clean zu halten.
+
+Insgesamt war das Projekt eine wertvolle Erfahrung für mich. Rückblickend würde ich jedoch anmerken, dass ich nicht alle meine Erkenntnisse aus dem Software Engineering I Projekt in dieses Projekt einfließen lassen konnte, die für eine erfolgreiche Projektarbeit erforderlich gewesen wären. Insgesamt war das Projekt eine wertvolle Erfahrung für mich.

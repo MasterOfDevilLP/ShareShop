@@ -22,13 +22,21 @@ import shareshop.WG;
 import shareshop.rest.requests.CreateWGRequest;
 import shareshop.rest.requests.CreateWGResponse;
 import shareshop.rest.requests.ListContentResponse;
+import shareshop.rest.requests.PatchWGRequest;
 import shareshop.rest.requests.WGAddUserRequest;
 import shareshop.rest.requests.WGInformationResponse;
 
+/**
+ * Implementation of the WG endpoints (under /wg) 
+ */
 public class WGEndpoints {
 	
 	private final static String basepath = "/wg";
 	
+	/**
+	 * Register all endpoints to the Javalin instance
+	 * @param app The Javalin instance
+	 */
 	public static void register(Javalin app) {
 		registerCreate(app);
 		registerGet(app);
@@ -44,6 +52,10 @@ public class WGEndpoints {
 		registerGetLists(app);
 	}
 	
+	/**
+	 * Implementation of POST /wg/create
+	 * @param ctx The Javalin request context
+	 */
 	public static void epCreate(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		try {
@@ -84,6 +96,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of GET /wg/{wid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGet(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
@@ -133,12 +149,50 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of DELETE /wg/{wid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epDelete(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
-		System.out.printf("Delete WG %s\n", wid);
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
 		
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			// point of (almost) no return
+			// TODO: at some point, there should maybe be a permission system
+			wg.remove();
+			ctx.status(HttpStatus.OK);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerDelete(Javalin app) {
@@ -147,13 +201,61 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of PATCH /wg/{wid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epPatch(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
-		System.out.printf("Patch WG %s\n", wid);
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
 		
-		// TODO: the request body for this will probably use the regular WG class
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		PatchWGRequest req = gson.fromJson(ctx.body(), PatchWGRequest.class);
+		
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		if(!req.validate()) {
+			RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad or missing parameters");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			// now check whatever needs to be changed (probably more in the future)
+			// once permissions are a thing, also check for those
+			if(req.name != null) {
+				wg.setWgName(req.name);
+			}
+			
+			ctx.status(HttpStatus.OK);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerPatch(Javalin app) {
@@ -164,12 +266,43 @@ public class WGEndpoints {
 	
 	// WG User endpoints
 	
+	/**
+	 * Implementation of GET /wg/{wid}/user (stubbed)
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGetUsers(Context ctx) {
-		String wid = ctx.pathParam("wid");
-		System.out.printf("Get WG %s users\n", wid);
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
+		if(usr == null) {
+			// noone's logged in
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		UUID wgid = RestUtils.getPathParamUUIDSafe(ctx, "wid");
+		if(wgid == null) {
+			return;
+		}
+		WG wg = RestUtils.getWGAsMember(ctx, wgid, usr, appCtx);
+		if(wg == null) {
+			// errors are already set
+			return;
+		}
 		
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		try {
+			var users = wg.getUsers();
+			ArrayList<UUID> resp = new ArrayList<UUID>();
+			for(var user : users) {
+				resp.add(user.getUserID());
+			}
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			ctx.contentType(ContentType.JSON);
+			ctx.result(gson.toJson(resp));
+			ctx.status(HttpStatus.OK);
+			return;
+		} catch(SQLException e) {
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerGetUsers(Javalin app) {
@@ -178,6 +311,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of POST /wg/{wid}/user (stubbed)
+	 * @param ctx The Javalin request context
+	 */
 	public static void epWGAddUser(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		try {
@@ -205,7 +342,10 @@ public class WGEndpoints {
 	}
 	
 	// single user endpoints
-	
+	/**
+	 * Implementation of GET /wg/{wid}/user/{uid} (stubbed)
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGetUser(Context ctx) {
 		String wid = ctx.pathParam("wid");
 		String uid = ctx.pathParam("uid");
@@ -221,13 +361,71 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of DELETE /wg/{wid}/user/{uid}
+	 * @param ctx The Javalin request context
+	 */
 	public static void epDeleteUser(Context ctx) {
+		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");
 		String uid = ctx.pathParam("uid");
-		System.out.printf("Remove WG %s user %s\n", wid, uid);
+		Logger logger = LoggerFactory.getLogger(WGEndpoints.class);
+		AppContext appCtx = (AppContext) ctx.appData(ctxKey);
+		User usr = RestUtils.getAuthorizedUser(ctx);
 		
-		// TODO: functionality
-		RestUtils.setResponseError(ctx, HttpStatus.NOT_IMPLEMENTED, "Not yet implemented");
+		if(usr == null) {
+			// noone's logged in
+			logger.debug("no user logged in");
+			RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "not logged in");
+			return;
+		}
+		
+		UUID wgid = UUID.fromString(wid);
+		UUID userid = UUID.fromString(uid);
+		try {
+			if(!usr.isUserInWG(wgid)) {
+				// wrong WG
+				logger.debug("wrong WG. Expected {}, got {}", usr.getWgIDList().toString(), wgid);
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			WG wg = appCtx.wgManager.getWG(UUID.fromString(wid));
+			if(wg == null) {
+				// no such WG exists, respond with 401 to not leak information about which ones exist and which don't
+				logger.debug("no such WG");
+				RestUtils.setResponseError(ctx, HttpStatus.UNAUTHORIZED, "incorrect WG");
+				return;
+			}
+			
+			User targetusr = null;
+			try{
+				targetusr = new User(appCtx.conn, userid);
+			} catch(SQLException e) {
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad user ID");
+				return;
+			}
+			if(targetusr == null || !targetusr.isUserInWG(wgid)) {
+				RestUtils.setResponseError(ctx, HttpStatus.BAD_REQUEST, "bad user ID");
+				return;
+			}
+			
+			// point of (almost) no return
+			// TODO: at some point, there should maybe be a permission system
+			// since you currently leave a wg by removing yourself, that should work for everyone, but the owner can remove anyone
+			if(userid.equals(usr.getUserID()) || wg.isOwner(usr)) {
+				wg.removeUser(targetusr);				
+			} else {
+				RestUtils.setResponseError(ctx, HttpStatus.FORBIDDEN, "permission denied");
+				return;
+			}
+			
+			ctx.status(HttpStatus.OK);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			RestUtils.setResponseError(ctx, HttpStatus.INTERNAL_SERVER_ERROR, "internal error");
+		}
 	}
 	
 	private static void registerDeleteUser(Javalin app) {
@@ -236,6 +434,10 @@ public class WGEndpoints {
 		});
 	}
 	
+	/**
+	 * Implementation of GET /wg/{wid}/list
+	 * @param ctx The Javalin request context
+	 */
 	public static void epGetLists(Context ctx) {
 		Key<AppContext> ctxKey = new Key<AppContext>("Context");
 		String wid = ctx.pathParam("wid");

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WG Invite</title>
+    <link rel="stylesheet" href="invite.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <span class="site-titel"> WG Einladung</span>
+        </header>
+
+        <!-- Inhalt -->
+        <main class="app-content settings-page" v-if="loaded">
+          <div v-if="errorMsg">
+            <p class="text-danger">{{ errorMsg }}</p>
+            <button
+              class="btn btn-primary"
+              @click="window.location.href='../Startseitendesign/startseite.html'"
+            >
+              Zur Startseite zurückkehren
+            </button>
+          </div>
+          <div v-else>
+            <p>Du wurdest eingeladen, der WG beizutreten:</p>
+            <h2 class="qr-card-title">{{ 'WG: ' + wgName }}</h2>
+
+            <button class="btn btn-primary" @click="joinWG" :disabled="joining">
+              {{ joining ? "Beitreten..." : "WG beitreten" }}
+            </button>
+
+            <p v-if="successMsg" class="text-success">{{ successMsg }}</p>
+          </div>
+        </main>
+
+        <main v-else>
+          <p>Lade Einladung...</p>
+        </main>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script type="module" src="invite.js"></script>
+  </body>
+</html>

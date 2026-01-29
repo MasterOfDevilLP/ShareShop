@@ -1,0 +1,57 @@
+@startuml c4_level4_code_frontend
+!include <c4/C4_Component.puml>
+
+LAYOUT_WITH_LEGEND()
+
+title C4-4 Code Diagram – Frontend
+
+Container_Boundary(frontend, "Frontend (PWA / Vue im Browser)") {
+
+    Component(authUI, "Auth UI (Login/Register)", "Login/auth.js", "Register, Login, Authentifizierung, Redirect nach erfolgreichem Login")
+
+    Component(startUI, "Startseite UI", "Startseitendesign/app.js","WG-Auswahl, Listenübersicht, Navigation zu Einkaufslisten")
+
+    Component(listUI, "Einkaufsliste UI", "Einkaufsliste/app.js","Anzeige und Bearbeitung von Einkaufslisten und Items")
+
+    Component(inviteUI, "Invite UI", "invite/invite.js \n Startseitendesign/app.js","Beitritt zu WG über Invite-Link")
+
+    Component(logoutUI, "Logout UI", "Logout/logout.js","Logout, Löschen lokaler Daten, Redirect")
+
+    Component(userSettingsUI, "User & Mitgliederverwaltung UI", "Startseitendesign/settings.js", "Profilverwaltung, WG-Mitglieder anzeigen/entfernen")
+
+    Component(apiConfig, "API Konfiguration", "config.js / config-docker.js","Definition der Backend-Basis-URL")
+
+    Component(httpClient, "HTTP Client", "fetch API","Kommunikation mit dem Backend über JSON/HTTP(S)")
+
+    Component(localStore, "Local Storage", "window.localStorage","Speichert Session- und UI-Zustand (z. B. WG-ID, Listen-ID)")
+}
+
+System_Ext(backend, "Backend (Java)", "REST API")
+
+' --- Nutzung gemeinsamer Infrastruktur ---
+Rel(loginUI, apiConfig, "nutzt")
+Rel(startUI, apiConfig, "nutzt")
+Rel(listUI, apiConfig, "nutzt")
+Rel(inviteUI, apiConfig, "nutzt")
+Rel(logoutUI, apiConfig, "nutzt")
+
+Rel(loginUI, httpClient, "ruft Backend auf")
+Rel(startUI, httpClient, "ruft Backend auf")
+Rel(listUI, httpClient, "ruft Backend auf")
+Rel(inviteUI, httpClient, "ruft Backend auf")
+Rel(userSettingsUI, httpClient, "ruft Backend auf")
+Rel(logoutUI, httpClient, "ruft Backend auf (optional)")
+
+Rel(httpClient, backend, "JSON/HTTP(S)")
+
+Rel(authUI, localStore, "liest/löscht", "Redirect-Info (Invite-Flow)")
+Rel(startUI, localStore, "liest/schreibt/löscht", "WG-Auswahl, Listen-Auswahl, InviteLink")
+Rel(listUI, localStore, "liest/schreibt", "Listen-/WG-ID")
+Rel(inviteUI, localStore, "liest/schreibt", "Invite-Status")
+Rel(userSettingsUI, localStore, "liest/schreibt", "User-Information")
+Rel(logoutUI, localStore, "löscht", "Session-Daten")
+
+
+
+
+@enduml

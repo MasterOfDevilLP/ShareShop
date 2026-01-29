@@ -1,6 +1,11 @@
 package shareshop;
 
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.UUID;
 
 import shareshop.Manager.ItemManager;
 import shareshop.Manager.UserManager;
@@ -36,6 +41,7 @@ public class Main {
         UserManager userManager = new UserManager(connectionHandler);
         WGManager wgManager = new WGManager(connectionHandler);
         ItemManager itemManager = new ItemManager(connectionHandler);
+        
         
         AppContext ctx = new AppContext(userManager, wgManager, itemManager, connectionHandler, config);
         

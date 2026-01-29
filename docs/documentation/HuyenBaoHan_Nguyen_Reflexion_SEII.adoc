@@ -1,0 +1,41 @@
+= Projektreflexion: Einzelleistung
+Huyen Bao Han Nguyen <s87044@htw-dresden.de>
+{localdatetime}
+include::../_includes/default-attributes.inc.adoc[]
+
+== Ausgangssituation / Aufgaben
+
+.Meine Aufgaben umfassten unter anderem:
+* Implementierung und Nutzung von Backend-Endpunkten
+* Weiterentwicklung des Frontends basierend auf den bestehenden UI-Komponenten
+* Anbindung des Frontends an die Backend-API
+
+Da im vorherigen Semester bereits eine grundlegende UI vorhanden war, lag der Fokus weniger auf der Neuentwicklung, sondern vor allem auf der Anpassung und Stabilisierung der bestehenden Implementierung.
+
+== Lösungsweg
+Die Arbeit erfolgte größtenteils issue-basiert. Zuerst habe ich mir passende Issues selbst zugewiesen. Für jedes Issue habe ich anschließend einen eigenen Branch erstellt, der sich direkt auf das jeweilige Ticket bezog.
+
+Bei der Implementierung der Backend-Endpunkte konnte ich auf eine vorhandene `api.yaml`-Datei zurückgreifen. Diese habe ich mit Scalar angesehen, um einen Überblick über die verfügbaren Endpunkte, Parameter und Responses zu bekommen. Dadurch war es meistens möglich, die Anbindung im Frontend selbstständig umzusetzen.
+
+Wenn etwas unklar war oder Fragen zu einem bestimmten Endpunkt aufkamen, habe ich direkt die zuständigen Backend-Entwickler gefragt. Die Kommunikation lief hauptsächlich über Discord, was in der Regel schnell und unkompliziert war.
+
+.Die Frontend-Arbeit bestand vor allem aus:
+* Anpassung vorhandener Komponenten an neue oder geänderte API-Responses
+* Verbinden mehrerer Seiten miteinander
+* Beheben von Fehlern, die erst beim Zusammenspiel mehrerer Seiten auftraten
+* Testen der Anwendung mit den Browser-Dev-Tools
+* Erstellen von Pull Requests und Einarbeiten von Feedback
+* Mergen der Branches und Beheben von Merge-Konflikten
+
+Auch wenn die Frontend-Entwicklung in diesem Semester nicht der Hauptteil meiner Arbeit war, hat die Integration von Frontend und Backend dennoch viel Zeit und Abstimmung erfordert.
+
+== Bewertung
+Insgesamt konnte ich meine Aufgaben technisch gut umsetzen. Besonders hilfreich war die vorhandene API-Dokumentation, da sie mir die Arbeit mit den Endpunkten deutlich erleichtert hat. Durch regelmäßiges manuelles Testen konnte ich viele Fehler frühzeitig erkennen und beheben.
+
+Probleme gab es vor allem in der Zusammenarbeit innerhalb des Frontend-Teams. Viele Aufgaben waren voneinander abhängig, sodass wir häufig aufeinander warten mussten. Besonders schwierig war es, Endpunkte zu testen, wenn vorherige Seiten noch nicht vollständig funktionierten, da deren Responses als Parameter für weitere Requests benötigt wurden.
+
+Ein weiteres Problem war, dass es keine einheitlichen Regeln für den Code-Stil im Frontend gab. Dadurch sah der Code teilweise sehr unterschiedlich aus. In den Pull-Request-Reviews wurde deshalb meist nur geprüft, ob die Funktion funktioniert, und weniger, wie der Code aufgebaut ist.
+
+Ein Punkt, den ich mir selbst ankreide, ist die fehlende frühzeitige Abstimmung mit dem Backend. Bei einzelnen Features habe ich nicht am Anfang geklärt, ob alle benötigten Endpunkte bereits umgesetzt sind. Dadurch kam es vor, dass das Backend seine Arbeit eigentlich schon abgeschlossen hatte, später aber noch zusätzliche Endpunkte nachliefern musste. Das hätte durch bessere Planung vermieden werden können.
+
+Die wichtigste Erkenntnis aus diesem Projekt ist für mich, wie wichtig gute Kommunikation im Team ist. Besonders die frühe Abstimmung zwischen Frontend und Backend ist entscheidend, um unnötige Probleme und Verzögerungen zu vermeiden. Diese Erfahrung werde ich in zukünftigen Projekten stärker berücksichtigen.

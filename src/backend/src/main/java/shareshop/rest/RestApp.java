@@ -21,8 +21,17 @@ import io.javalin.config.Key;
 import io.javalin.json.JsonMapper;
 import shareshop.AppContext;
 
+/**
+ * Main class for the REST application.
+ */
 public class RestApp {
 	private Javalin app;
+	/**
+	 * Create and start a new instance of the REST application
+	 * @param host the address to listen on
+	 * @param port the port to listen on
+	 * @param ctx the AppContext to pass to endpoint handlers
+	 */
 	public RestApp(String host, int port, AppContext ctx) {		
 		Key ctxKey = new Key<AppContext>("Context");
 		app = Javalin.create(config -> {
@@ -47,10 +56,14 @@ public class RestApp {
 		ListEndpoints.register(app);
 		ItemEndpoints.register(app);
 		CategoryEndpoints.register(app);
+		InviteEndpoints.register(app);
 		
 		app.start(host, port);
 	}
 	
+	/**
+	 * Stop the REST application
+	 */
 	public void stop() {
 		app.stop();
 	}

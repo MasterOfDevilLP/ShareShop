@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code zum Einladen</title>
+    <link rel="stylesheet" href="wg_qr_code_style.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <div class="iphone-app">
+        <!-- Header -->
+        <header class="app-header">
+          <a
+            href="startseite.html"
+            class="back-link"
+            title="Zurück zur WG Einstellungen"
+          >
+            <img src="icons/arrow_back.png" class="back-icon" alt="Zurück" />
+          </a>
+          <span class="site-titel">QR Code zum Einladen</span>
+        </header>
+
+        <!-- Hauptinhalt -->
+        <main class="app-content settings-page">
+          <p class="qr-card-text">
+            Scannen Sie diesen QR-Code, um der WG beizutreten.
+          </p>
+          <hr />
+
+          <!-- QR Code Karte -->
+          <div class="qr-card">
+            <div class="qr-card-icon">
+              <img src="icons/User_alt.svg" alt="WG Icon" />
+            </div>
+
+            <!-- WG Name -->
+            <h2 class="qr-card-title">
+              {{ 'WG: ' + (selectedWGName || 'WG Name') }}
+            </h2>
+
+            <!-- QR Code Bild -->
+            <div class="qr-code-container">
+              <img
+                v-if="qrCodeDataUrl"
+                :src="qrCodeDataUrl"
+                alt="WG Einladungs QR-Code"
+                class="qr-code-image"
+              />
+              <p v-else>Lädt QR-Code...</p>
+            </div>
+          </div>
+
+          <!-- Button zum Beitreten anderer WG -->
+          <button class="scan-btn" @click="scanOtherQR">
+            Andere WG beitreten
+          </button>
+
+          <!-- Video & File Input für QR-Scan -->
+          <video
+            ref="video"
+            class="qr-video"
+            autoplay
+            playsinline
+            style="display: none"
+          ></video>
+          <input
+            type="file"
+            ref="fileInput"
+            accept="image/*"
+            style="display: none"
+            @change="handleFileUpload"
+          />
+
+          <!-- Error Modal -->
+          <div v-if="showErrorModal" class="modal-backdrop" @click.self="showErrorModal=false">
+            <div class="modal-content">
+              <h3>Fehler</h3>
+              <p>{{ errorMessage }}</p>
+              <button @click="showErrorModal=false">Schließen</button>
+            </div>
+          </div>
+
+          <!-- Modal für QR-Optionen -->
+          <div
+            v-if="showQRChoiceModal"
+            class="modal-backdrop"
+            @click.self="showQRChoiceModal=false"
+          >
+            <div class="modal-actions">
+              <button @click="startCameraScan">QR-Code scannen</button>
+              <button
+                @click="$refs.fileInput.click(); showQRChoiceModal=false"
+              >
+                Bild hochladen
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Bibliotheken -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+
+<script type="module">
+  import { API_BASE } from "../config.js";
+
+  new Vue({
+    el: "#app",
+    data: {
+      qrCodeDataUrl: null,
+      baseUrl: window.location.origin,
+      selectedWGName: localStorage.getItem("selectedWGName") || "",
+      frontendLink: null,
+      inviteLinkfromAPI: null,
+      token: null,
+      showQRChoiceModal: false,
+      selectedWG: localStorage.getItem("selectedWG") || null,
+      showErrorModal: false,
+      errorMessage: "",
+    },
+    mounted() {
+      this.generateQRCode();
+    },
+    methods: {
+      async generateQRCode() {
+        try {
+          // WG-Liste vom Backend laden
+          const userResp = await fetch(`${API_BASE}/user`, { credentials: "include" });
+          if (!userResp.ok) throw new Error("Fehler beim Laden der User-Daten");
+          const userData = await userResp.json();
+
+          let widList = userData.wid;
+          if (!widList || widList.length === 0) throw new Error("User hat keine WG");
+
+          if (typeof widList === "string") widList = widList.split(",").map(s => s.trim());
+
+          const wgDetails = [];
+          for (const wid of widList) {
+            try {
+              const wgResp = await fetch(`${API_BASE}/wg/${wid}`, { credentials: "include" });
+              if (!wgResp.ok) continue;
+              const wgData = await wgResp.json();
+              wgDetails.push(wgData);
+            } catch (err) {
+              console.error("Fehler beim Laden einer WG:", err);
+            }
+          }
+
+          // WG auswählen: falls selectedWG fehlt
+          if (!this.selectedWG && wgDetails.length > 0) {
+            this.selectedWG = wgDetails[0].wid;
+            this.selectedWGName = wgDetails[0].name;
+            localStorage.setItem("selectedWG", this.selectedWG);
+            localStorage.setItem("selectedWGName", this.selectedWGName);
+          }
+
+          // Invite-Link erstellen
+          const resp = await fetch(`${API_BASE}/wg/${this.selectedWG}/invite`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ expires: null, targetUser: null }),
+          });
+
+          if (!resp.ok) {
+            const text = await resp.text();
+            this.errorMessage = text || `Fehler ${resp.status}`;
+            this.showErrorModal = true;
+            return; // Modal anzeigen, kein Alert
+          }
+
+          const data = await resp.json();
+          this.token = data.id;
+
+          this.inviteLinkfromAPI = `${API_BASE}/wg/${this.selectedWG}/invite/${this.token}`;
+          this.frontendLink = `${this.baseUrl}/invite/invite.html?token=${this.token}`;
+
+          localStorage.setItem("inviteLinkfromAPI", this.inviteLinkfromAPI);
+          localStorage.setItem("frontendLink", this.frontendLink);
+
+          // QR-Code generieren
+          this.qrCodeDataUrl = await QRCode.toDataURL(this.frontendLink);
+          localStorage.setItem("qrCodeDataUrl", this.qrCodeDataUrl);
+
+        } catch (err) {
+          console.error(err);
+          this.errorMessage = err.message;
+          this.showErrorModal = true;
+        }
+      },
+      scanOtherQR() {
+        this.showQRChoiceModal = true;
+      },
+      async startCameraScan() {
+        try {
+          const video = this.$refs.video;
+          video.style.display = "block";
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" },
+          });
+          video.srcObject = stream;
+
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+
+          const scan = () => {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              context.drawImage(video, 0, 0, canvas.width, canvas.height);
+              const code = jsQR(
+                context.getImageData(0, 0, canvas.width, canvas.height).data,
+                canvas.width,
+                canvas.height
+              );
+              if (code) {
+                window.location.href = code.data;
+                stream.getTracks().forEach(track => track.stop());
+                video.style.display = "none";
+                return;
+              }
+            }
+            requestAnimationFrame(scan);
+          };
+          scan();
+        } catch (err) {
+          this.errorMessage = "Kamera konnte nicht geöffnet werden: " + err.message;
+          this.showErrorModal = true;
+        }
+      },
+      handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            const code = jsQR(
+              ctx.getImageData(0, 0, canvas.width, canvas.height).data,
+              canvas.width,
+              canvas.height
+            );
+            if (code) {
+              window.location.href = code.data;
+            } else {
+              this.errorMessage = "Kein QR Code gefunden!";
+              this.showErrorModal = true;
+            }
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      },
+    },
+  });
+</script>
+
+  </body>
+</html>

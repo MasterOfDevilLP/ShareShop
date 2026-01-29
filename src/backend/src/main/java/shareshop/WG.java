@@ -207,7 +207,7 @@ public class WG {
 
     /**
      * Returns an ArrayList containing all users inside the WG. The List is empty if there are no users inside the WG (which shouldn't happen)
-     * @return ArrayList<User>
+     * @return ArrayList&lt;User&gt;
      * @throws SQLException
      */
     public ArrayList<User> getUsers() throws SQLException {
@@ -403,7 +403,7 @@ public class WG {
 
     /**
      * get a list of ShoppingList Objects from the wg
-     * @return ArrayList<ShoppingList>
+     * @return ArrayList&lt;ShoppingList&gt;
      * @throws SQLException
      */
     public ArrayList<ShoppingList> lists(DBConnectionHandler connectionHandler) throws SQLException {
@@ -437,7 +437,7 @@ public class WG {
 
     /**
      * returns a list of all invites of this WG
-     * @return ArrayList<Invite>
+     * @return ArrayList&lt;Invite&gt;
      * @throws SQLException
      */
     public ArrayList<Invite> getInvites() throws SQLException {

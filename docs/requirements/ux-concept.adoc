@@ -39,6 +39,9 @@ In diesem Dokument werden die Benutzeroberflächen des Systems ShareShop beschri
 
 | Max
 | Möchte volle Kontrolle über Daten und Funktionen, benötigt einfache, ressourcensparende App ohne Online-Zwang.
+
+| Maxine Mustermann
+| Braucht klare, einfache Struktur und Planbarkeit. Möchte nicht anderen wegen unbeglichenen Rechnungen hinterher laufen.
 |===
 
 == Nutzungskontext
@@ -47,7 +50,7 @@ Das System wird von typischen WG-Mitgliedern genutzt, die digital affin sind, je
 
 === Planungssituation (zu Hause / gemeinsam)
 
-*Kontext:*  
+*Kontext:*
 WG-Mitglieder planen Einkäufe gemeinsam, meistens zuhause (z. B. Küche oder Wohnzimmer).
 
 *Ziele:*
@@ -70,7 +73,7 @@ WG-Mitglieder planen Einkäufe gemeinsam, meistens zuhause (z. B. Küche oder Wo
 
 === Einkaufssituation/modus (unterwegs / im Supermarkt)
 
-*Kontext:*  
+*Kontext:*
 Ein einzelnes WG-Mitglied befindet sich im Supermarkt oder auf dem Weg dorthin.
 
 *Ziele:*
@@ -93,7 +96,7 @@ Ein einzelnes WG-Mitglied befindet sich im Supermarkt oder auf dem Weg dorthin.
 
 === Spontane Nutzung
 
-*Kontext:*  
+*Kontext:*
 Kurzfristiges Hinzufügen von Artikeln, z. B. beim Feststellen leerer Produkte zu Hause oder unterwegs.
 
 *Ziele:*
@@ -113,7 +116,7 @@ Kurzfristiges Hinzufügen von Artikeln, z. B. beim Feststellen leerer Produkte z
 
 === 4. Organisations- und Verwaltungssituation (selten, bewusst)
 
-*Kontext:*  
+*Kontext:*
 Verwaltung von WGs, Mitgliedern oder grundlegenden Systemeinstellungen.
 
 *Ziele:*
@@ -193,20 +196,20 @@ weitere Userstories sind in github oder miro zu finden.
 
 | Clickflow A: Erstellung einer WG
 a|
-. App öffnen  
-. Auswahl „Neue Gruppe erstellen“  
-. Eingabe des Gruppennamens  
-. „Weiter“ → Mitglieder einladen per WhatsApp  
+. App öffnen
+. Auswahl „Neue Gruppe erstellen“
+. Eingabe des Gruppennamens
+. „Weiter“ → Mitglieder einladen per WhatsApp
 . Abschluss oder „Jetzt nicht“ → Gruppe erstellt und gespeichert
 
 | Clickflow B: Bearbeiten einer Einkaufsliste
 a|
-. App öffnen  
-. Auswahl einer WG → Öffnen der Einkaufsliste  
-. Artikelliste erscheint (z.B. „Wocheneinkauf“)  
-. Artikel können bearbeitet, gelöscht oder als erledigt markiert werden  
-. Über das „Stern“-Symbol lassen sich Favoriten setzen  
-. In den Einstellungen kann die Liste exportiert, sortiert, gespeichert oder gelöscht werden  
+. App öffnen
+. Auswahl einer WG → Öffnen der Einkaufsliste
+. Artikelliste erscheint (z.B. „Wocheneinkauf“)
+. Artikel können bearbeitet, gelöscht oder als erledigt markiert werden
+. Über das „Stern“-Symbol lassen sich Favoriten setzen
+. In den Einstellungen kann die Liste exportiert, sortiert, gespeichert oder gelöscht werden
 . In der Historie ist der Änderungverlauf lesbar
 |===
 

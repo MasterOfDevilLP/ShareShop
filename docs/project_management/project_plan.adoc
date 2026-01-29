@@ -34,19 +34,21 @@ In diesem Dokument werden die Abläufe rund um das Projekt beschrieben. Teil dav
 
 === Termine
 * **Dailies**:
-** Dienstags: 18:30 Uhr – 19:00 Uhr (Pflicht)
-** Donnerstags: 20:30 Uhr – 21:00 Uhr (Freiwillig)
+** Dienstags: 17:00 Uhr – 17:30 Uhr (Pflicht)
 
 * **Sprint-Planning**:
-** Immer mittwochs vor Sprintbeginn, Zeit wird flexibel im Team abgestimmt (z. B. 21.05.2025, 17:00 Uhr)
+** Immer mittwochs vor Sprintbeginn, (Nur PO & Scrum-Master)
 
 * **Sprint-Review**:
-**Hat stattgefunden am 15.06.2025, Feedback wurde in Tickets umgewandelt, konnte jedoch für den Prototypen aus zeitlichen Gründen nicht mehr umgesetzt werden.
+** Hat stattgefunden am 15.06.2025, Feedback wurde in Tickets umgewandelt, konnte jedoch für den Prototypen aus zeitlichen Gründen nicht mehr umgesetzt werden.
+** Hat intern stattgefunden am 12.01.2026
 
 * **Sprint-Retrospektive**:
-** Jeweils freitags, eine Woche vor Sprint-Ende, 14:00 Uhr – 15:00 Uhr
+** Jeweils eine Woche vor Sprint-Ende, Zeiten werden spontan gesucht, da Festlegung nicht gut geklappt hat
 ** Erste Retro fand am 16.05.2025 statt (Meeting 09)
 ** Zweite Retro fand am 20.06.2025 statt
+** Dritte Retro fand am 20.11.2025 statt
+** Vierte Retro fand am 19.12.2025 statt
 
 
 == Praktiken und Bewertung

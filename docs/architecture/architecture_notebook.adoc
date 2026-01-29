@@ -71,10 +71,14 @@ Einkaufslisten werden bearbeitet, indem nicht der neue Zustand geschickt wird, s
 //Level 1 im C4-Modell
 
 === Container
-image::../images/container_puml.png[Container Diagram]
+image::../images/C4_2_container_puml.png[Container Diagram]
 
 === Components
-image::../images/components_puml.png[Component Diagram]
+image::../images/C4_3_components_puml.png[Component Diagram]
+
+=== Code
+image::../images/C4_4_backend_puml.png[Code Diagram Backend]
+image::../images/C4_4_frontend_puml.png[Code Diagram Backend]
 
 === Verteilungsdiagramm (Deployment Diagramm)
 //Beschreibt die physischen Knoten (Rechner) des Systems und Komponenten, die in diesen Knoten ausgeführt werden. Diese Sicht wird nicht benötigt, wenn das System in einem einzelnen Prozess oder Thread ausgeführt wird.

@@ -1,9 +1,9 @@
-@startuml c4_level3_components_frontend
+@startuml c4_level4_code_frontend
 !include <c4/C4_Component.puml>
 
 LAYOUT_WITH_LEGEND()
 
-title C4-3 Component Diagram – Frontend
+title C4-4 Code Diagram – Frontend
 
 Container_Boundary(frontend, "Frontend (PWA / Vue im Browser)") {
 
